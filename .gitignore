@@ -1,0 +1,20 @@
+# C# Bin directories
+docu/cstpm/cstpm/libtpm/bin
+docu/cstpm/cstpm/pcrread/bin
+docu/cstpm/cstpm/tpmproxyserver/bin
+
+# Any kernel driver temps
+TPMEmulator/tpmd_dev/.tmp*
+
+# Any binaries
+TPMEmulator/tddl/test_tddl
+
+*.ko
+*.o
+*.cdtproject
+*.project
+*.prefs
+*.kdev4
+*.class
+*~
+.metadata/*
