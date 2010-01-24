@@ -1,13 +1,13 @@
-// ///
-// ///
-// /// Author: Andreas Reiter <andreas.reiter@student.tugraz.at>
-// /// Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
+//
+//
+// Author: Andreas Reiter <andreas.reiter@student.tugraz.at>
+// Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace iaik.utils
+namespace Iaik.Utils
 {
 	
 	/// <summary>
@@ -21,6 +21,14 @@ namespace iaik.utils
 	///</remarks>
 	public class CommandLineHandler
 	{
+        private const string NAME_VALUE_SEPERATOR = "=";
+        private static string[] Prefixes = new string[] { "--", "-" };
+
+        /// <summary>
+        /// Raised if an unregistered CommandOption is detected
+        /// </summary>
+        public event Action<string> UnknownCommandOption;
+
 		/// <summary>
 		/// Saves the CommandOption callback for each command
 		/// </summary>
@@ -39,10 +47,89 @@ namespace iaik.utils
 			else
 				_optionCallbacks.Add(name, callback);
 		}
-		
-		public CommandLineHandler()
-		{
-		}
+
+        /// <summary>
+        /// Parses the given command line options, raises the callback events if any specified
+        /// and returns all parsed CommandOption objects
+        /// </summary>
+        /// <param name="commandLineOptions"></param>
+        /// <returns></returns>
+        public CommandOption[] Parse(string[] commandLineOptions)
+        {
+            List<CommandOption> parsedCommandOptions = new List<CommandOption>();
+
+            foreach (string option in commandLineOptions)
+            {
+                int? prefixLength = HasValidPrefix(option);
+
+                if (prefixLength == null || prefixLength.Value == option.Length)
+                {
+                    RaiseUnknownCommandOptionEvent(option);
+                    continue;
+                }
+                int nameValueSeperatorPosition = option.IndexOf(NAME_VALUE_SEPERATOR, prefixLength.Value);
+
+                //Not found? it is a binary command line option
+                if (nameValueSeperatorPosition == -1)
+                {
+                    CommandOption newBinaryCommandOption = new CommandOption(CommandOption.CommandOptionType.Binary, option.Substring(prefixLength.Value));
+                    ProcessCommandOption(newBinaryCommandOption);
+                    parsedCommandOptions.Add(newBinaryCommandOption);
+                }
+                else
+                {
+                    CommandOption newCommandOption = new CommandOption(CommandOption.CommandOptionType.Value,
+                        option.Substring(prefixLength.Value, nameValueSeperatorPosition - prefixLength.Value),
+                        option.Substring(nameValueSeperatorPosition + 1)
+                        );
+                    ProcessCommandOption(newCommandOption);
+                    parsedCommandOptions.Add(newCommandOption);
+                }
+            }
+
+            return parsedCommandOptions.ToArray();
+        }
+
+        /// <summary>
+        /// Raises the callback associated with this command option,
+        /// or the unknown command if no command option callback is registered
+        /// </summary>
+        /// <param name="commandOption"></param>
+        private void ProcessCommandOption(CommandOption commandOption)
+        {
+            if (_optionCallbacks.ContainsKey(commandOption.Name) == false)
+                RaiseUnknownCommandOptionEvent(commandOption.Name);
+            else
+                _optionCallbacks[commandOption.Name](commandOption);
+        }
+
+
+        /// <summary>
+        /// Checks if the given command line option has a valid Prefix (defined in Prefixes)
+        /// </summary>
+        /// <param name="option"></param>
+        /// <returns>returns null on invalid prefix otherwise length of prefix</returns>
+        private int? HasValidPrefix(string option)
+        {
+            foreach (string prefix in Prefixes)
+            {
+                if (option.StartsWith(prefix))
+                    return prefix.Length;
+            }
+
+            return null;
+            
+        }
+
+        /// <summary>
+        /// Null-Safe Event raiser
+        /// </summary>
+        /// <param name="option"></param>
+        private void RaiseUnknownCommandOptionEvent(string option)
+        {
+            if (UnknownCommandOption != null)
+                UnknownCommandOption(option);
+        }
 		
 		/// <summary>
 		/// Represents a single CommandOption parsed from the CommanLineHandler
