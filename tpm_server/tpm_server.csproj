@@ -90,6 +90,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\tpm_core\tpm_core.csproj">
+      <Project>{4D1DBB08-821E-44F4-BE21-B9695E4EE8F1}</Project>
+      <Name>tpm_core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\utils\utils.csproj">
       <Project>{892CAB5C-D501-47B1-82E2-BE8492E7E378}</Project>
       <Name>utils</Name>

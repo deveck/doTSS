@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tpm_server", "tpm_server\tp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "utils", "utils\utils.csproj", "{892CAB5C-D501-47B1-82E2-BE8492E7E378}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tpm_core", "tpm_core\tpm_core.csproj", "{4D1DBB08-821E-44F4-BE21-B9695E4EE8F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{892CAB5C-D501-47B1-82E2-BE8492E7E378}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{892CAB5C-D501-47B1-82E2-BE8492E7E378}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{892CAB5C-D501-47B1-82E2-BE8492E7E378}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D1DBB08-821E-44F4-BE21-B9695E4EE8F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D1DBB08-821E-44F4-BE21-B9695E4EE8F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D1DBB08-821E-44F4-BE21-B9695E4EE8F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D1DBB08-821E-44F4-BE21-B9695E4EE8F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
