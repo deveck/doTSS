@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\tpm_core.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -45,16 +46,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connection\ClientConnections\AbstractConnection.cs" />
+    <Compile Include="Connection\ClientConnections\NamedPipeConnection.cs" />
     <Compile Include="Connection\ClientContext.cs" />
+    <Compile Include="Connection\Exceptions.cs" />
     <Compile Include="Connection\IFrontEndConnection.cs" />
     <Compile Include="Connection\IFrontEndServerListener.cs" />
-    <Compile Include="Connection\DataPacket.cs" />
+    <Compile Include="Connection\Packets\DataPacket.cs" />
+    <Compile Include="Connection\Packets\DataPacketTypeAttribute.cs" />
+    <Compile Include="Connection\Packets\RequestDataPacket.cs" />
+    <Compile Include="Connection\Packets\ResponseDataPacket.cs" />
+    <Compile Include="Connection\ServerListeners\NamedPipeListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Subsystems\SubsystemConstants.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\utils\utils.csproj">
+      <Project>{892CAB5C-D501-47B1-82E2-BE8492E7E378}</Project>
+      <Name>utils</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Connection\Authentication\" />
-    <Folder Include="Connection\ClientConnections\" />
-    <Folder Include="Connection\ServerListeners\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

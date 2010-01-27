@@ -12,11 +12,35 @@ using System.Text;
 namespace Iaik.Tc.Tpm.Connection
 {
     /// <summary>
+    /// Delegate used to indicate that a client connected to the server
+    /// </summary>
+    /// <param name="client"></param>
+    public delegate void ClientConnectedDelegate(ClientContext client);
+
+    /// <summary>
     /// Abstracts the listening connection on the server side.
     /// there is typically only one listeniong connection of each 
     /// supported type on the server
     /// </summary>
-    public interface IFrontEndServerListener
+    public interface IFrontEndServerListener : IDisposable
     {
+        /// <summary>
+        /// Indicates that a client connected to the server
+        /// Attention: This event can be raised in context of ANY thread,
+        /// thread synchroization needs to be done outside
+        /// </summary>
+        event ClientConnectedDelegate ClientConnected;
+
+        /// <summary>
+        /// Starts/Resumes the listener
+        /// </summary>
+        void Listen();
+
+        /// <summary>
+        /// Suspends the listener, no further connections are accepted.
+        /// Already existing connections are not affected in any way
+        /// </summary>
+        void SuspendListener();
+
     }
 }
