@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +12,7 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
     /// Implements the FrontEndConnection for named pipes.
     /// This can be used on Server and client side
     /// </summary>
-    public class NamedPipeConnection : AbstractConnection
+    public class NamedPipeConnection : FrontEndConnection
     {
         /// <summary>
         /// Indicates if the Connection was created using a preconnected PipeStream
@@ -30,15 +30,6 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
         /// </summary>
         private string _pipeName = null;
 
-        protected override Stream InputStream
-        {
-            get { return _pipeStream; }
-        }
-
-        protected override Stream OutputStream
-        {
-            get { return _pipeStream; }
-        }
 
         public NamedPipeConnection(PipeStream pipeStream)
         {
@@ -53,11 +44,18 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
         }
 
 
+		public override bool Connected 
+		{
+			get{ return _pipeStream != null; }
+		}
+
+		
         public override void Connect()
         {
             if (_pipeStream == null)
             {
                 _pipeStream = new NamedPipeClientStream("localhost", _pipeName, PipeDirection.InOut);
+				RaiseConnectedEvent();
             }
         }
 
@@ -67,6 +65,7 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
             {
                 _pipeStream.Dispose();
                 _pipeStream = null;
+				RaiseDisconnectedEvent();
             }
         }
 
@@ -76,20 +75,45 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
             Close();
         }
 
-        protected override void WriteBytes(byte[] buffer, int offset, int length)
+        public override void Write(byte[] buffer, int offset, int length)
         {
-            if (_pipeStream == null)
-                throw new ConnectionException("Pipe is not connected");
-
+            AssertPipeStream();
             _pipeStream.Write(buffer, offset, length);
         }
 
-        protected override int ReadBytes(byte[] buffer, int offset, int length)
+        public override int Read(byte[] buffer, int offset, int length)
         {
-            if (_pipeStream == null)
-                throw new ConnectionException("Pipe is not connected");
-
+            AssertPipeStream();
             return _pipeStream.Read(buffer, offset, length);
         }
+		
+		public override int ReadByte ()
+		{
+			AssertPipeStream();
+			return _pipeStream.ReadByte();
+		}
+
+		public override void WriteByte (byte value)
+		{
+			AssertPipeStream();
+			_pipeStream.WriteByte(value);
+		}
+
+		public override void Flush ()
+		{
+			AssertPipeStream();
+			_pipeStream.Flush();
+		}
+
+		
+		/// <summary>
+		/// Checks if the PipeStream is available and connected
+		/// </summary>
+		private void AssertPipeStream()
+		{
+			if (_pipeStream == null)
+                throw new ConnectionException("Pipe is not connected");
+		}
+		
     }
 }

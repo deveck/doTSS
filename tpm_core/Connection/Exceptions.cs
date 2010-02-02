@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,9 +14,7 @@ namespace Iaik.Tc.Tpm.Connection
         public ConnectionException(string message)
             : base(message)
         {
-            IFrontEndConnection a;
-            AbstractConnection b;
-            
+          
         }
     }
 

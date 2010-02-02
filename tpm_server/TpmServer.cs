@@ -7,6 +7,8 @@ using System;
 using System.ServiceProcess;
 using Iaik.Utils;
 using System.Reflection;
+using Iaik.Tc.Tpm.Connection.ServerListeners;
+using System.Threading;
 
 namespace Iaik.Tc.Tpm
 {	
@@ -46,6 +48,13 @@ namespace Iaik.Tc.Tpm
             commandLineHandler.RegisterCallback("help", OutputHelp);
             commandLineHandler.RegisterCallback("h", OutputHelp);
             commandLineHandler.Parse(args);
+			
+			//TODO: Read configuration and do not load the hard coded listeners ;)
+			
+			NamedPipeListener listener = new NamedPipeListener();
+			listener.Listen();
+			
+			Thread.Sleep(Timeout.Infinite);
 		}
 		
 		protected override void OnStart (string[] args)

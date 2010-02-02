@@ -1,4 +1,4 @@
-﻿//
+//
 //
 // Author: Andreas Reiter <andreas.reiter@student.tugraz.at>
 // Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using Iaik.Utils.Serialization;
 using System.IO;
+using Iaik.Utils;
 
 namespace Iaik.Tc.Tpm.Connection.Packets
 {
@@ -22,39 +23,74 @@ namespace Iaik.Tc.Tpm.Connection.Packets
         /// Contains a continuous packet number, which is just for 
         /// identifying the response to a request.
         /// </summary>
-        private byte _packetNr = 0;
+        protected byte _packetNr = 0;
 
+		/// <summary>
+		/// Indicates if this is a response packet
+		/// </summary>
+		protected bool _isResponse = false;
+		
         /// <summary>
-        /// 
+        /// Specifies the target subsystem
+        /// This is only relevant for non-response packets, 
+        /// response packets are assigned to their request packets by_packtNr
         /// </summary>
-        private string _subsystem = "non";
+        protected string _subsystem;
 
-        /// <summary>
-        /// Create an empty packet by its type
-        /// </summary>
-        /// <param name="dataPacketType"></param>
-        /// <returns></returns>
-        public static DataPacket CreateByPacketType(DataPacketTypeAttribute.DataPacketTypeEnum dataPacketType)
-        {
-            if (dataPacketType == DataPacketTypeAttribute.DataPacketTypeEnum.RequestPacket)
-                return new RequestDataPacket();
-            else if (dataPacketType == DataPacketTypeAttribute.DataPacketTypeEnum.ResponsePacket)
-                return new ResponseDataPacket();
-            else
-                throw new ArgumentException(string.Format("PacketType '{0}' is not supported", dataPacketType));
-        }
+		/// <summary>
+		/// Specifies the payload of this DataPacket
+		/// </summary>
+		protected byte[] _payload;
+	
+		public bool IsResponse
+		{
+			get{ return _isResponse;}
+		}
+		
+		public byte PacketNr
+		{
+			get{ return _packetNr; }
+			set{ _packetNr = value;}
+		}
+		
+		public byte[] Payload
+		{
+			get{ return _payload; }
+		}
+		
+		public string Subsystem
+		{
+			get{ return _subsystem;}
+		}
 
-
+		public DataPacket(bool isResponse, string subsystem, byte[] payload)
+		{
+			_isResponse = isResponse;
+			_subsystem = subsystem;
+			_payload = payload;
+		}
+		
+		public DataPacket(Stream src)
+		{
+			Read(src);
+		}
+		
         #region IStreamSerializable Members
 
-        public void Write(Stream sink)
+        public virtual void Write(Stream sink)
         {
-            
+        	sink.WriteByte(_packetNr);
+			StreamHelper.WriteBool(_isResponse, sink);
+			StreamHelper.WriteString(_subsystem, sink);			
+			StreamHelper.WriteBytesSafe(_payload, sink);
         }
 
-        public void Read(Stream src)
+        public virtual void Read(Stream src)
         {
-            
+        	_packetNr = (byte)src.ReadByte();
+			_isResponse = StreamHelper.ReadBool(src);
+			_subsystem = StreamHelper.ReadString(src);	
+			_payload = StreamHelper.ReadBytesSafe(src);
         }
 
         #endregion

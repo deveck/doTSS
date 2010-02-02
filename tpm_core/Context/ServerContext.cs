@@ -1,0 +1,26 @@
+//
+//
+// Author: Andreas Reiter <andreas.reiter@student.tugraz.at>
+// Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
+
+
+using System;
+using Iaik.Tc.Tpm.Connection.ClientConnections;
+using Iaik.Tc.Tpm.Packets;
+using Iaik.Tc.Tpm.Subsystems.Debug;
+
+namespace Iaik.Tc.Tpm.Context
+{
+
+	/// <summary>
+	/// Adds server specific subsystems to the EndpointContext
+	/// </summary>
+	public class ServerContext : EndpointContext
+	{
+		public ServerContext (FrontEndConnection connection, PacketTransmitter packetTransmitter)
+			:base(connection, packetTransmitter)
+		{
+			RegisterSubsystem(new DebugSubsystem(this));
+		}
+	}
+}

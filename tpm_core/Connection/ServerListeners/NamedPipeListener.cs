@@ -1,4 +1,4 @@
-﻿//
+//
 //
 // Author: Andreas Reiter <andreas.reiter@student.tugraz.at>
 // Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.IO.Pipes;
 using System.Threading;
+using Iaik.Tc.Tpm.Connection.ClientConnections;
+using Iaik.Tc.Tpm.Context;
 
 namespace Iaik.Tc.Tpm.Connection.ServerListeners
 {
@@ -31,14 +33,14 @@ namespace Iaik.Tc.Tpm.Connection.ServerListeners
         /// This value is also dependent on the operating system because not all systems might
         /// support the same number of named pipe connections
         /// </summary>
-        private int _maxClients = 10;
+        private int _maxClients = 1;
 
         /// <summary>
         /// Specifies the minimum number of idle listening threads. 
         /// If this value is null all listening threads are started on startup, if not only _alwaysListeningClients-Listener
         /// threads are started, once a client connects another listening thread is started.
         /// </summary>
-        private int? _alwaysListeningClients = 4;
+        private int? _alwaysListeningClients = 1;
 
         /// <summary>
         /// Specifies the unique pipe name
@@ -114,18 +116,26 @@ namespace Iaik.Tc.Tpm.Connection.ServerListeners
                 NamedPipeServerStream serverPipe = new NamedPipeServerStream(_pipeName, PipeDirection.InOut, _maxClients);
                 serverPipe.WaitForConnection();
 
+				Console.WriteLine("Pipe connected");
+				
                 //Once the client is connected we "convert" the listener to a simple connection,
-                //there is no need to know afterwards that this was a Listener...long ago...
-
-                
+                //there is no need to know afterwards that this was a Listener...sometime ago...
+				NamedPipeConnection pipe = new NamedPipeConnection(serverPipe);
+				EndpointContext context = ClientContext.CreateServerEndpointContext(pipe);
+                RaiseClientConnectedEvent(context);
             }
             catch(ThreadAbortException ex)
             {
             }
         }
 
-
-        
+        private void RaiseClientConnectedEvent(EndpointContext context)
+		{
+			if(ClientConnected != null)
+				ClientConnected(context);
+		}
+		
+		
         /// <summary>
         /// Holds some information about a single listener thread
         /// </summary>

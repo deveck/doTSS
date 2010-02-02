@@ -1,4 +1,4 @@
-﻿//
+//
 //
 // Author: Andreas Reiter <andreas.reiter@student.tugraz.at>
 // Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Iaik.Tc.Tpm.Context;
 
 namespace Iaik.Tc.Tpm.Connection
 {
@@ -15,7 +16,7 @@ namespace Iaik.Tc.Tpm.Connection
     /// Delegate used to indicate that a client connected to the server
     /// </summary>
     /// <param name="client"></param>
-    public delegate void ClientConnectedDelegate(ClientContext client);
+    public delegate void ClientConnectedDelegate(EndpointContext client);
 
     /// <summary>
     /// Abstracts the listening connection on the server side.

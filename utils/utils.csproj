@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{892CAB5C-D501-47B1-82E2-BE8492E7E378}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>iaik.utils</RootNamespace>
+    <RootNamespace>Iaik.Utils</RootNamespace>
     <AssemblyName>utils</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -61,6 +61,8 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="CommandLineHandler.cs" />
     <Compile Include="Serialization\IStreamSerializable.cs" />
+    <Compile Include="StreamHelper.cs" />
+    <Compile Include="ByteStream.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -92,9 +94,9 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <MonoDevelop>
-      <Properties xmlns="">
+      <Properties>
         <Policies>
-          <StandardHeader Text="///&#xA;///&#xA;/// Author: Andreas Reiter &lt;andreas.reiter@student.tugraz.at&gt;&#xA;/// Author: Georg Neubauer &lt;georg.neubauer@student.tugraz.at&gt;" inheritsSet="MITX11License" />
+          <StandardHeader Text="//&#xA;//&#xA;// Author: Andreas Reiter &lt;andreas.reiter@student.tugraz.at&gt;&#xA;// Author: Georg Neubauer &lt;georg.neubauer@student.tugraz.at&gt;" inheritsSet="MITX11License" />
         </Policies>
       </Properties>
     </MonoDevelop>

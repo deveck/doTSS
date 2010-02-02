@@ -1,0 +1,18 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" ctype="Workspace" />
+  <MonoDevelop.Ide.DebuggingService>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService>
+  <MonoDevelop.Ide.Workbench ctype="Workbench">
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="tpm_server" expanded="True" />
+          <Node name="utils" expanded="True">
+            <Node name="CommandLineHandler.cs" selected="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+</Properties>
