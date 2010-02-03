@@ -54,7 +54,9 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
         {
             if (_pipeStream == null)
             {
-                _pipeStream = new NamedPipeClientStream("localhost", _pipeName, PipeDirection.InOut);
+                NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost", _pipeName, PipeDirection.InOut);
+                pipeClient.Connect();
+                _pipeStream = pipeClient;
 				RaiseConnectedEvent();
             }
         }
