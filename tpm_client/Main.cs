@@ -7,7 +7,7 @@ namespace Iaik.Tc.Tpm
 	{
 		public static void Main (string[] args)
 		{
-			FrontEndConnection tpmConnection = new NamedPipeConnection("TPM_csharp");
+			FrontEndConnection tpmConnection = new UnixSocketConnection("/home/andi/tpm_testsocket");
 			tpmConnection.Connect();
 		}
 	}

@@ -44,6 +44,7 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Mono.Posix" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Connection\ClientConnections\NamedPipeConnection.cs" />
@@ -66,6 +67,8 @@
     <Compile Include="Subsystems\SubsystemRequest.cs" />
     <Compile Include="Subsystems\Debug\RequestPrintOnServerConsole.cs" />
     <Compile Include="Context\DebugClient.cs" />
+    <Compile Include="Connection\ClientConnections\UnixSocketConnection.cs" />
+    <Compile Include="Connection\ServerListeners\UnixSocketListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">
@@ -85,4 +88,13 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <StandardHeader Text="&#xA;&#xA; Author: Andreas Reiter &lt;andreas.reiter@student.tugraz.at&gt;&#xA; Author: Georg Neubauer &lt;georg.neubauer@student.tugraz.at&gt;" inheritsSet="MITX11License" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
 </Project>

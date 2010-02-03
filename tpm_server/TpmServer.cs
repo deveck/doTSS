@@ -51,7 +51,7 @@ namespace Iaik.Tc.Tpm
 			
 			//TODO: Read configuration and do not load the hard coded listeners ;)
 			
-			NamedPipeListener listener = new NamedPipeListener();
+			UnixSocketListener listener = new UnixSocketListener("/home/andi/tpm_testsocket");
 			listener.Listen();
 			
 			Thread.Sleep(Timeout.Infinite);
