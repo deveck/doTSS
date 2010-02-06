@@ -50,10 +50,11 @@ namespace Iaik.Tc.Tpm.Subsystems
 		{
 			using(ByteStream src = new ByteStream(packet.Payload))
 			{
-				TRequest requestTypeIdentifier = (TRequest)Enum.ToObject(typeof(TRequest), src.ReadByte());
+				TRequest requestTypeIdentifier = (TRequest)Enum.ToObject(typeof(TRequest), StreamHelper.ReadUInt16(src));
 				SubsystemRequest request = CreateRequestFromIdentifier(requestTypeIdentifier);
 				request.Read(src);
 				
+				ExecuteRequest(requestTypeIdentifier, request);
 			}
 		}
 		

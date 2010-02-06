@@ -30,7 +30,7 @@ namespace Iaik.Tc.Tpm.Context
 		/// packet is sent. Only tests the case of simple-one-way-communication
 		/// </summary>
 		/// <param name="text">Text to display</param>
-		private void PrintOnServerConsole(string text)
+		public void PrintOnServerConsole(string text)
 		{
 			RequestPrintOnServerConsole request = new RequestPrintOnServerConsole(text);
 			_packetTransmitter.TransmitWithoutResponse(request.ConvertToDataPacket());

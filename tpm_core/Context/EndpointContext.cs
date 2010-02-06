@@ -11,6 +11,7 @@ using Iaik.Tc.Tpm.Connection.ClientConnections;
 using Iaik.Tc.Tpm.Packets;
 using Iaik.Tc.Tpm.Connection.Packets;
 using Iaik.Tc.Tpm.Subsystems;
+using System.Threading;
 
 namespace Iaik.Tc.Tpm.Context
 {
@@ -29,16 +30,18 @@ namespace Iaik.Tc.Tpm.Context
 		/// <summary>
 		/// Creates a ServerContext for the specified connection
 		/// </summary>
-		public static EndpointContext CreateServerEndpointContext(FrontEndConnection connection)
+		public static ServerContext CreateServerEndpointContext(FrontEndConnection connection)
 		{
+			Console.WriteLine("Creating Server Context");
 			return new ServerContext(connection, new PacketTransmitter(connection));
 		}
 		
 		/// <summary>
 		/// Creates a ClientContext for the specified connection
 		/// </summary>
-		public static EndpointContext CreateClientEndpointContext(FrontEndConnection connection)
+		public static ClientContext CreateClientEndpointContext(FrontEndConnection connection)
 		{
+			Console.WriteLine("Creating Client Context");
 			return new ClientContext(connection, new PacketTransmitter(connection));
 		}
 		
@@ -52,6 +55,13 @@ namespace Iaik.Tc.Tpm.Context
 		/// </summary>
 		protected PacketTransmitter _packetTransmitter;
 		
+		/// <summary>
+		/// Is set by the base class once the configuration is finished
+		/// </summary>
+		protected volatile bool _configured = false;
+		
+		protected AutoResetEvent _configuredEvent = new AutoResetEvent(false);
+		
 		public EndpointContext(FrontEndConnection connection, PacketTransmitter packetTransmitter)
 		{
 			_connection = connection;
@@ -64,6 +74,9 @@ namespace Iaik.Tc.Tpm.Context
 		/// </summary>
 		private void OnRequestPacketReceived (DataPacket packet)
 		{
+			if(_configured == false)
+				_configuredEvent.WaitOne();
+				
 			if(_subsystems.ContainsKey(packet.Subsystem))
 				_subsystems[packet.Subsystem].HandlePacket(packet);
 			else

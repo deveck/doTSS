@@ -44,12 +44,12 @@ namespace Iaik.Tc.Tpm.Subsystems.Debug
 		{
 		}
 		
-		public void Write (Stream sink)
+		public override void Write (Stream sink)
 		{
 			StreamHelper.WriteString(_text, sink);
 		}
 
-		public void Read (Stream src)
+		public override void Read (Stream src)
 		{
 			_text = StreamHelper.ReadString(src);
 		}

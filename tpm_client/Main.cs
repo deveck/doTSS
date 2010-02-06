@@ -1,5 +1,6 @@
 using System;
 using Iaik.Tc.Tpm.Connection.ClientConnections;
+using Iaik.Tc.Tpm.Context;
 
 namespace Iaik.Tc.Tpm
 {
@@ -14,6 +15,10 @@ namespace Iaik.Tc.Tpm
 			
 			FrontEndConnection tpmConnection = new UnixSocketConnection("/home/andi/tpm_testsocket");
 			tpmConnection.Connect();
+			
+			ClientContext ctx = EndpointContext.CreateClientEndpointContext(tpmConnection);
+			ctx.DebugClient.PrintOnServerConsole("Hello from client");
 		}
 	}
 }
+

@@ -138,5 +138,9 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
 			if(Disconnected != null)
 				Disconnected(this);
 		}
+		
+		public FrontEndConnection()
+		{
+		}
     }
 }

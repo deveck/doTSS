@@ -20,7 +20,10 @@ namespace Iaik.Tc.Tpm.Context
 		public ServerContext (FrontEndConnection connection, PacketTransmitter packetTransmitter)
 			:base(connection, packetTransmitter)
 		{
+			Console.WriteLine("Adding debug subsystem");
 			RegisterSubsystem(new DebugSubsystem(this));
+			_configured = true;
+			_configuredEvent.Set();
 		}
 	}
 }

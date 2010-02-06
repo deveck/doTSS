@@ -8,6 +8,7 @@ using Iaik.Tc.Tpm.Connection.ClientConnections;
 using Iaik.Tc.Tpm.Connection.Packets;
 using System.Threading;
 using System.Collections.Generic;
+using log4net;
 
 namespace Iaik.Tc.Tpm.Packets
 {
@@ -25,6 +26,11 @@ namespace Iaik.Tc.Tpm.Packets
 	/// </remarks>
 	public class PacketTransmitter : IDisposable
 	{	
+		/// <summary>
+		/// Logger
+		/// </summary>
+		protected ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		/// <summary>
 		/// Raised on packet receival
 		/// </summary>
@@ -110,6 +116,7 @@ namespace Iaik.Tc.Tpm.Packets
 		{
 			lock(_packetQueue)
 			{
+				Console.WriteLine("Enqueueing packet");
 				_packetQueue.Add(packetInfo);
 				_queueEvent.Set();
 			}
@@ -127,6 +134,7 @@ namespace Iaik.Tc.Tpm.Packets
 			{
 				if(_packetQueue.Count > 0)
 				{
+					Console.WriteLine("Dequeueing packet");
 					PacketInfo packetInfo = _packetQueue[0];
 					_packetQueue.RemoveAt(0);
 					return packetInfo;
@@ -211,6 +219,7 @@ namespace Iaik.Tc.Tpm.Packets
 					}
 					catch(NoPacketNumberException)
 					{
+						_logger.Warn("No more free packet numbers available, maybe something went wrong?");
 						//TODO: Log this
 						// This is not really an error, but generally this should not happen
 						// 254 outstanding packages are really enough
@@ -237,6 +246,7 @@ namespace Iaik.Tc.Tpm.Packets
 		{
 			if(packetInfo.AwaitsResponse)
 			{
+				_logger.DebugFormat("Transmitting packet with response {0}", packetInfo);
 				lock(_packetsWaitingForResponse)
 				{
 					byte? packetNr = FindFreePacketNr();
@@ -249,7 +259,10 @@ namespace Iaik.Tc.Tpm.Packets
 				}
 			}
 			else
+			{
+				_logger.DebugFormat("Transmitting packet without response {0}", packetInfo);
 				packetInfo.PacketToTransmit.PacketNr = 0;
+			}
 			
 			//DataPacketTypeAttribute attr = DataPacketTypeAttribute.FindAttributeForInstanceThrowException(packetInfo.PacketToTransmit.GetType());
 			//_connection.WriteByte((byte)attr.DataPacketType);
@@ -405,6 +418,13 @@ namespace Iaik.Tc.Tpm.Packets
 					_packetExpired = true;
 				}
 			}
+			
+			public override string ToString ()
+			{
+				return string.Format("[PacketInfo: length={0}, packetnr={1}, AwaitsResponse={2}]", 
+				                     PacketToTransmit.Payload.Length, PacketToTransmit.PacketNr, AwaitsResponse);
+			}
+
 		}
 	}
 }

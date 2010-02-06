@@ -70,6 +70,7 @@ namespace Iaik.Tc.Tpm.Subsystems.Debug
 			
 		private void HandlePrintOnServerConsoleRequest(RequestPrintOnServerConsole request)
 		{
+			Console.WriteLine(request.Text);
 		}
 
 	}
