@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.IO.Pipes;
+using Iaik.Utils;
 
 namespace Iaik.Tc.Tpm.Connection.ClientConnections
 {
@@ -17,6 +18,7 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
     /// Implements the FrontEndConnection for named pipes.
     /// This can be used on Server and client side
     /// </summary>
+	[FrontEndConnection("NamedPipe")]
     public class NamedPipeConnection : FrontEndConnection
     {
         /// <summary>
@@ -33,7 +35,7 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
         /// <summary>
         /// Contains the pipe name to connect to
         /// </summary>
-        private string _pipeName = null;
+        private string _pipeName = "TPM_csharp";
 
 
         public NamedPipeConnection(PipeStream pipeStream)
@@ -47,8 +49,22 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
             _connectedOnCreation = false;
             _pipeName = pipeName;
         }
-
-
+		
+		public NamedPipeConnection(CommandLineHandler.CommandLineOptions commandLine)
+		{
+			CommandLineHandler.CommandOption pipeNameOption = commandLine.FindCommandOptionByName("PipeName");
+			
+			if(pipeNameOption == null || pipeNameOption.OptionType != 
+			   CommandLineHandler.CommandOption.CommandOptionType.Value)
+				_logger.WarnFormat("No pipe name has beenspecified, using default '{0}'", _pipeName);
+			else
+			{
+				_pipeName = pipeNameOption.Arguments[0];
+				_logger.DebugFormat("Using pipe name '{0}'", _pipeName);
+			}
+				
+		}
+		
 		public override bool Connected 
 		{
 			get{ return _pipeStream != null; }

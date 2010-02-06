@@ -6,6 +6,8 @@
 using System;
 using Mono.Unix;
 using System.Net.Sockets;
+using log4net;
+using Iaik.Utils;
 
 namespace Iaik.Tc.Tpm.Connection.ClientConnections
 {
@@ -14,8 +16,11 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
 	/// Implements the named pipe replacement for unix systems,
 	/// as of Mono 2.6.1 NamedPipes are not yet supported on unix systems
 	/// </summary>
+	[FrontEndConnection("UnixSocket")]
 	public class UnixSocketConnection : FrontEndConnection
 	{
+
+		
 		/// <summary>
 		/// Specifies the unix socket file to use
 		/// </summary>
@@ -39,14 +44,31 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
 		
 		public UnixSocketConnection (string socketFile)
 		{
+			_logger.Debug(string.Format("Creating UnixSocketConnection with socketFile={0}", socketFile));
 			_socketFile = socketFile;
 			_endpoint = new UnixEndPoint(socketFile);
 		}
 		
 		public UnixSocketConnection(Socket socket)
 		{
+			_logger.Debug("Creating UnixSocketConnection with preconnected socket");
 			_socket = socket;
 			_createdFromSocket = true;
+		}
+		
+		public UnixSocketConnection(CommandLineHandler.CommandLineOptions commandLine)
+		{
+			CommandLineHandler.CommandOption socketFileOption = commandLine.FindCommandOptionByName("SocketFile");
+			
+			if(socketFileOption == null || socketFileOption.OptionType != 
+			   CommandLineHandler.CommandOption.CommandOptionType.Value)
+				throw new ArgumentException("No socket file specified!");
+			else
+			{
+				_socketFile = socketFileOption.Arguments[0];
+				_logger.DebugFormat("Using socket file '{0}'", _socketFile);
+			}
+				
 		}
 		
 		#region FrontEndConnection overrides
@@ -69,6 +91,7 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
 				
 			if(_socket == null || _socket.Connected == false)
 			{
+				_logger.Info(string.Format("Connecting to '{0}'", _socketFile));
 				try
 				{
 					_socket = new Socket(AddressFamily.Unix, SocketType.Stream, ProtocolType.IP);
@@ -83,6 +106,7 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
 		
 		public override void Close ()
 		{
+			_logger.Info(string.Format("Closing '{0}'", _socketFile));
 			_socket.Close();
 		}
 

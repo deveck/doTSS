@@ -10,6 +10,7 @@ using System.IO;
 using Iaik.Tc.Tpm.Connection.ClientConnections;
 using Iaik.Tc.Tpm.Context;
 using Iaik.Tc.Tpm.Packets;
+using log4net;
 
 namespace Iaik.Tc.Tpm.Connection.ServerListeners
 {
@@ -19,6 +20,11 @@ namespace Iaik.Tc.Tpm.Connection.ServerListeners
 	/// </summary>
 	public class UnixSocketListener : IFrontEndServerListener
 	{		
+		/// <summary>
+		/// Logger
+		/// </summary>
+		private ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+		
 		private object _syncLock = new object();
 		
 		/// <summary>
@@ -38,6 +44,7 @@ namespace Iaik.Tc.Tpm.Connection.ServerListeners
 		
 		public UnixSocketListener (string socketFile)
 		{
+			_logger.Debug(string.Format("Creating UnixSocketListener with socketFile={0}", socketFile));
 			_socketFile = socketFile;
 			_endpoint = new UnixEndPoint(socketFile);
 		}
@@ -45,6 +52,7 @@ namespace Iaik.Tc.Tpm.Connection.ServerListeners
 		#region IDisposable implementation
 		public void Dispose ()
 		{
+			_logger.Debug(string.Format("Disposing UnixSocketListener with socketFile={0}", _socketFile));
 			SuspendListener();
 		}
 		
@@ -56,6 +64,7 @@ namespace Iaik.Tc.Tpm.Connection.ServerListeners
 		{
 			SuspendListener();
 			
+			_logger.Info(string.Format("Listening for incoming connections on socketFile '{0}'", _socketFile));
 			lock(_syncLock)
 			{
 				//TODO: currently the socket file is deleted on every startup,
@@ -87,9 +96,9 @@ namespace Iaik.Tc.Tpm.Connection.ServerListeners
 				_listeningSocket.BeginAccept(AcceptCallback, null);
 			}
 			
+			_logger.Info("Accepted connection");
 			UnixSocketConnection connection = new UnixSocketConnection(clientSocket);
 			ServerContext context = new ServerContext(connection, new PacketTransmitter(connection));
-			Console.WriteLine("Client connected");
 			RaiseClientConnectedEvent(context);
 		}
 			                             
@@ -99,6 +108,7 @@ namespace Iaik.Tc.Tpm.Connection.ServerListeners
 			{
 				if(_listeningSocket != null)
 				{
+					_logger.Debug("Suspending listener");
 					_listeningSocket.Close();
 					_listeningSocket = null;
 				}

@@ -54,9 +54,9 @@ namespace Iaik.Utils
         /// </summary>
         /// <param name="commandLineOptions"></param>
         /// <returns></returns>
-        public CommandOption[] Parse(string[] commandLineOptions)
+        public CommandLineOptions Parse(string[] commandLineOptions)
         {
-            List<CommandOption> parsedCommandOptions = new List<CommandOption>();
+			CommandLineOptions parsedCommandOptions = new CommandLineOptions();
 
             foreach (string option in commandLineOptions)
             {
@@ -87,7 +87,7 @@ namespace Iaik.Utils
                 }
             }
 
-            return parsedCommandOptions.ToArray();
+            return parsedCommandOptions;
         }
 
         /// <summary>
@@ -189,6 +189,26 @@ namespace Iaik.Utils
 				_optionType = OptionType;
 				_name = name;
 				_arguments.AddRange(arguments);
+			}
+		}
+		
+		/// <summary>
+		/// Collects all parsed CommandOptionss
+		/// </summary>
+		public class CommandLineOptions : List<CommandOption>
+		{
+			/// <summary>
+			/// Looks for a parsed command option with the given name
+			/// </summary>
+			public CommandOption FindCommandOptionByName(string name)
+			{
+				foreach(CommandOption opt in this)
+				{
+					if(opt.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase))
+						return opt;
+				}
+				
+				return null;
 			}
 		}
 	}

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Iaik.Tc.Tpm.Connection.Packets;
+using log4net;
 
 namespace Iaik.Tc.Tpm.Connection.ClientConnections
 {
@@ -27,6 +28,12 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
 		/// Raised when the connection to the remote end is closed
 		/// </summary>
 		public event Action<FrontEndConnection> Disconnected;
+		
+		/// <summary>
+		/// Logger
+		/// </summary>
+		protected ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
 		
         /// <summary>
         /// Locks the connection, according to microsoft lock(this) is bad practise ;-)
