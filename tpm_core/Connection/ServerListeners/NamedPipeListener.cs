@@ -121,18 +121,17 @@ namespace Iaik.Tc.Tpm.Connection.ServerListeners
                 //Once the client is connected we "convert" the listener to a simple connection,
                 //there is no need to know afterwards that this was a Listener...sometime ago...
 				NamedPipeConnection pipe = new NamedPipeConnection(serverPipe);
-				EndpointContext context = ClientContext.CreateServerEndpointContext(pipe);
-                RaiseClientConnectedEvent(context);
+                RaiseClientConnectedEvent(pipe);
             }
             catch(ThreadAbortException ex)
             {
             }
         }
 
-        private void RaiseClientConnectedEvent(EndpointContext context)
+        private void RaiseClientConnectedEvent(FrontEndConnection connection)
 		{
 			if(ClientConnected != null)
-				ClientConnected(context);
+				ClientConnected(connection);
 		}
 		
 		

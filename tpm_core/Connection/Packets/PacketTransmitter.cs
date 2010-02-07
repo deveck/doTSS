@@ -9,6 +9,7 @@ using Iaik.Tc.Tpm.Connection.Packets;
 using System.Threading;
 using System.Collections.Generic;
 using log4net;
+using Iaik.Tc.Tpm.Connection;
 
 namespace Iaik.Tc.Tpm.Packets
 {
@@ -100,6 +101,15 @@ namespace Iaik.Tc.Tpm.Packets
 		{
 			_connection = connection;
 			_connection.ConnectionEstablished += OnConnectionEstablished;
+		}
+		
+		/// <summary>
+		/// Starts the Receive/Transmit threads.
+		/// This can only be called once and should be called only after the
+		/// subsystems have been added
+		/// </summary>
+		public void StartTransmitting()
+		{
 			_transmitThread = new Thread(TransmitProc);
 			_transmitThread.Start();
 			
@@ -153,20 +163,28 @@ namespace Iaik.Tc.Tpm.Packets
 		/// </summary>
 		private void ReceiveProc()
 		{
-			while(!_disposed)
+			try
 			{
-				if(_connection.Connected)
+				while(!_disposed)
 				{
-					DataPacket packet = new DataPacket(_connection);
-					
-					if(packet.IsResponse)
-						HandleResponsePackets(packet);
+					if(_connection.Connected)
+					{
+						DataPacket packet = new DataPacket(_connection);
+						
+						_logger.DebugFormat("Received DataPacket: {0}", packet);
+						if(packet.IsResponse)
+							HandleResponsePackets(packet);
+						else
+							HandleRequestPackets(packet);
+						
+					}
 					else
-						HandleRequestPackets(packet);
-					
+						_receiveThreadWaitEvent.WaitOne(_maxReceiveThreadWaitTime);		
 				}
-				else
-					_receiveThreadWaitEvent.WaitOne(_maxReceiveThreadWaitTime);		
+			}
+			catch(DisconnectedException)
+			{
+				Dispose();
 			}
 		}
 
@@ -315,6 +333,8 @@ namespace Iaik.Tc.Tpm.Packets
 		#region IDisposable implementation
 		public void Dispose ()
 		{
+			//TODO: Insert real identifier (from authentication subsystem) here
+			_logger.DebugFormat("Disposing packettransmitter for {0}", _connection);
 			_disposed = true;
 		}
 		

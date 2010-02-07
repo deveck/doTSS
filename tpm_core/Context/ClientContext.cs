@@ -30,6 +30,8 @@ namespace Iaik.Tc.Tpm.Context
 			:base(connection, packetTransmitter)
 		{			
 			_debugClient = new DebugClient(packetTransmitter);
+			_configured = true;
+			_configuredEvent.Set();
 		}
 	}
 }

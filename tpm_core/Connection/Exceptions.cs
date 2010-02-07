@@ -40,4 +40,15 @@ namespace Iaik.Tc.Tpm.Connection
         {
         }
     }
+	
+	/// <summary>
+	/// Is thrown by the connection if the connection to the client has been lost
+	/// </summary>
+	public class DisconnectedException : ConnectionException
+	{
+		public DisconnectedException()
+			:base ("This was not a graceful connection shutdown")
+		{
+		}
+	}
 }

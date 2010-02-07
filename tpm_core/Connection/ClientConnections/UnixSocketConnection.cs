@@ -124,7 +124,12 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
 			if(Connected == false)
 				throw new ConnectionException("Socket not connected");
 			
-			return _socket.Receive(buffer, offset, length, SocketFlags.None);
+			int read = _socket.Receive(buffer, offset, length, SocketFlags.None);
+			
+			if(read == 0)
+				throw new DisconnectedException();
+			
+			return read;
 		}
 
 

@@ -1,20 +1,25 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" ctype="Workspace" />
   <MonoDevelop.Ide.DebuggingService>
-    <BreakpointStore>
-      <Breakpoint file="/home/andi/Repos/IAIK_ITProject/TpmCSStack-impl/tpm_client/Main.cs" line="11" />
-      <Breakpoint file="/home/andi/Repos/IAIK_ITProject/TpmCSStack-impl/tpm_client/Main.cs" line="10" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService>
-  <MonoDevelop.Ide.Workbench ActiveDocument="tpm_core/Connection/ServerListeners/UnixSocketListener.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="tpm_client/Main.cs" ctype="Workbench">
     <Files>
-      <File FileName="tpm_core/Connection/ClientConnections/NamedPipeConnection.cs" Line="5" Column="1" />
-      <File FileName="tpm_core/Connection/ClientConnections/FrontEndConnection.cs" Line="19" Column="5" />
-      <File FileName="tpm_core/Connection/ClientConnections/UnixSocketConnection.cs" Line="68" Column="75" />
-      <File FileName="tpm_core/Connection/ServerListeners/UnixSocketListener.cs" Line="62" Column="77" />
-      <File FileName="tpm_core/Connection/ServerListeners/NamedPipeListener.cs" Line="124" Column="50" />
-      <File FileName="tpm_server/TpmServer.cs" Line="59" Column="3" />
-      <File FileName="tpm_client/Main.cs" Line="10" Column="90" />
+      <File FileName="tpm_core/Connection/ClientConnections/NamedPipeConnection.cs" Line="1" Column="1" />
+      <File FileName="tpm_core/Connection/ClientConnections/FrontEndConnection.cs" Line="1" Column="1" />
+      <File FileName="tpm_core/Connection/ClientConnections/UnixSocketConnection.cs" Line="1" Column="1" />
+      <File FileName="tpm_core/Connection/ServerListeners/NamedPipeListener.cs" Line="1" Column="1" />
+      <File FileName="tpm_server/TpmServer.cs" Line="74" Column="4" />
+      <File FileName="tpm_client/Main.cs" Line="24" Column="3" />
+      <File FileName="tpm_server/Tests.cs" Line="1" Column="1" />
+      <File FileName="tpm_core/Connection/ServerListeners/UnixSocketListener.cs" Line="1" Column="1" />
+      <File FileName="tpm_core/Connection/IFrontEndServerListener.cs" Line="1" Column="1" />
+      <File FileName="tpm_core/Context/ServerContext.cs" Line="1" Column="1" />
+      <File FileName="tpm_core/Subsystems/BaseSubsystem.cs" Line="1" Column="1" />
+      <File FileName="utils/StreamHelper.cs" Line="1" Column="1" />
+      <File FileName="tpm_core/Connection/Packets/DataPacket.cs" Line="1" Column="1" />
+      <File FileName="tpm_core/Connection/Packets/PacketTransmitter.cs" Line="165" Column="4" />
+      <File FileName="tpm_core/Connection/Exceptions.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -23,15 +28,14 @@
           <Option id="ShowAllFiles" value="False" />
           <Node name="tpm_client" expanded="True">
             <Node name="References" expanded="True" />
+            <Node name="Main.cs" selected="True" />
           </Node>
           <Node name="tpm_core" expanded="True">
             <Node name="References" expanded="True" />
             <Node name="Connection" expanded="True">
               <Node name="ClientConnections" expanded="True" />
               <Node name="Packets" expanded="True" />
-              <Node name="ServerListeners" expanded="True">
-                <Node name="UnixSocketListener.cs" selected="True" />
-              </Node>
+              <Node name="ServerListeners" expanded="True" />
             </Node>
             <Node name="Context" expanded="True" />
             <Node name="Subsystems" expanded="True">
@@ -39,6 +43,7 @@
             </Node>
           </Node>
           <Node name="tpm_server" expanded="True" />
+          <Node name="utils" expanded="True" />
         </State>
       </Pad>
       <Pad Id="ClassPad">

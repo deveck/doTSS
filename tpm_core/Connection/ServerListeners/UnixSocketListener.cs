@@ -97,9 +97,8 @@ namespace Iaik.Tc.Tpm.Connection.ServerListeners
 			}
 			
 			_logger.Info("Accepted connection");
-			UnixSocketConnection connection = new UnixSocketConnection(clientSocket);
-			ServerContext context = new ServerContext(connection, new PacketTransmitter(connection));
-			RaiseClientConnectedEvent(context);
+			UnixSocketConnection connection = new UnixSocketConnection(clientSocket);			
+			RaiseClientConnectedEvent(connection);
 		}
 			                             
 		public void SuspendListener ()
@@ -117,10 +116,10 @@ namespace Iaik.Tc.Tpm.Connection.ServerListeners
 		
 		#endregion
 
-		private void RaiseClientConnectedEvent(EndpointContext context)
+		private void RaiseClientConnectedEvent(FrontEndConnection connection)
 		{
 			if(ClientConnected != null)
-				ClientConnected(context);
+				ClientConnected(connection);
 		}
 	}
 }

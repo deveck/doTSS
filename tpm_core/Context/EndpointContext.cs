@@ -32,8 +32,10 @@ namespace Iaik.Tc.Tpm.Context
 		/// </summary>
 		public static ServerContext CreateServerEndpointContext(FrontEndConnection connection)
 		{
-			Console.WriteLine("Creating Server Context");
-			return new ServerContext(connection, new PacketTransmitter(connection));
+			PacketTransmitter packetTransmitter = new PacketTransmitter(connection);
+			ServerContext ctx = new ServerContext(connection, packetTransmitter);
+			packetTransmitter.StartTransmitting();
+			return ctx;
 		}
 		
 		/// <summary>
@@ -41,8 +43,10 @@ namespace Iaik.Tc.Tpm.Context
 		/// </summary>
 		public static ClientContext CreateClientEndpointContext(FrontEndConnection connection)
 		{
-			Console.WriteLine("Creating Client Context");
-			return new ClientContext(connection, new PacketTransmitter(connection));
+			PacketTransmitter packetTransmitter = new PacketTransmitter(connection);
+			ClientContext ctx = new ClientContext(connection, packetTransmitter);
+			packetTransmitter.StartTransmitting();
+			return ctx;			
 		}
 		
 		/// <summary>

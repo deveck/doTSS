@@ -57,7 +57,8 @@ namespace Iaik.Utils
 			int realReadLength = Math.Min(count, _data.Length - _currentPosition);			
 			
 			Array.Copy(_data, _currentPosition, buffer, offset, realReadLength);
-			
+
+			_currentPosition += realReadLength;
 			return realReadLength;
 		}
 		

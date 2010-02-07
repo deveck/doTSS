@@ -10,6 +10,8 @@ using System.Reflection;
 using Iaik.Tc.Tpm.Connection.ServerListeners;
 using System.Threading;
 using log4net;
+using Iaik.Tc.Tpm.Connection.ClientConnections;
+using Iaik.Tc.Tpm.Context;
 
 namespace Iaik.Tc.Tpm
 {	
@@ -60,9 +62,17 @@ namespace Iaik.Tc.Tpm
 			//TODO: Read configuration and do not load the hard coded listeners ;)
 			
 			UnixSocketListener listener = new UnixSocketListener("/home/andi/tpm_testsocket");
+			listener.ClientConnected += HandleListenerClientConnected;
 			listener.Listen();
 			
 			Thread.Sleep(Timeout.Infinite);
+		}
+
+		static void HandleListenerClientConnected (FrontEndConnection connection)
+		{
+			ServerContext ctx = EndpointContext.CreateServerEndpointContext(connection);
+			
+			//TODO: add generated context to some sort of list, to know which connections are open
 		}
 		
 		protected override void OnStart (string[] args)

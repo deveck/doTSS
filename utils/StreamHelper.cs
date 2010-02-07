@@ -78,7 +78,7 @@ namespace Iaik.Utils
 		private static byte[] ReadBytes(int length, Stream src)
 		{
 			byte[] buf = new byte[length];
-			src.Read(buf, 0, length);
+			int read = src.Read(buf, 0, length);
 			return buf;
 		}
 		
