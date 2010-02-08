@@ -32,6 +32,16 @@ namespace Iaik.Utils
 		{
 			return BitConverter.ToInt32(ReadBytes(4, src), 0);
 		}
+	
+		public static void WriteInt64(Int64 value, Stream sink)
+		{
+			WriteBytes(BitConverter.GetBytes(value), sink);
+		}
+		
+		public static Int64 ReadInt64(Stream src)
+		{
+			return BitConverter.ToInt64(ReadBytes(8, src), 0);
+		}
 		
 		public static void WriteString(String value, Stream sink)
 		{

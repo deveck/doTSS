@@ -23,25 +23,28 @@ namespace Iaik.Tc.Tpm.Subsystems.Debug
 			/// 
 			/// No Response 
 			/// </summary>
-			PrintOnServerConsole		= 0x0001
+			PrintOnServerConsole				= 0x0001,
+			
+			/// <summary>
+			/// Prints the transmitted text on the server console (log)
+			/// and sends a response packet back
+			/// </summary>
+			PrintOnServerConsoleWithResponse
 		}
 		
 		public DebugSubsystem(EndpointContext context)
 			:base (context)
 		{
-			_requestExecutionInfos.Add(
-			     DebugRequestsEnum.PrintOnServerConsole, 
-			     new RequestExecutionInfo(typeof(RequestPrintOnServerConsole), 
-			          new HandleSubsystemRequestDelegate<RequestPrintOnServerConsole, NoResponse>(HandlePrintOnServerConsoleRequest))
-			     );
+			_requestExecutionInfos.Add(DebugRequestsEnum.PrintOnServerConsole,  
+	        	BuildRequestExecutionInfo<RequestPrintOnServerConsole, NoResponse>(HandlePrintOnServerConsoleRequest));
 		}
+		
+		
 		
 		public override string SubsystemIdentifier 
 		{
 			get { return SubsystemConstants.SUBSYSTEM_DEBUG; }
-		}
-
-		
+		}		
 		
 		
 		protected override SubsystemRequest CreateRequestFromIdentifier (DebugSubsystem.DebugRequestsEnum requestType)
@@ -63,7 +66,16 @@ namespace Iaik.Tc.Tpm.Subsystems.Debug
 			
 		private void HandlePrintOnServerConsoleRequest(RequestContext<RequestPrintOnServerConsole, NoResponse> requestCtx)
 		{	
+			
 			Console.WriteLine(requestCtx.Request.Text);
+		}
+		
+		private void HandlePrintOnServerConsoleWithResponseRequest(RequestContext<RequestPrintOnServerConsoleWithResponse, ResponsePrintOnServerConsole> requestCtx)
+		{	
+			Console.WriteLine(requestCtx.Request.Text);
+			
+			ResponsePrintOnServerConsole response = requestCtx.CreateResponse();
+			
 		}
 
 	}

@@ -9,6 +9,7 @@ using System.IO;
 using Iaik.Tc.Tpm.Connection.Packets;
 using Iaik.Utils;
 using Iaik.Tc.Tpm.Context;
+using System.Reflection;
 
 namespace Iaik.Tc.Tpm.Subsystems
 {
@@ -57,6 +58,48 @@ namespace Iaik.Tc.Tpm.Subsystems
 		/// Gets the type of the response packet, or null if no response is sent
 		/// </summary>
 		public abstract Type ResponseType{get;}
+
+		
+		public SubsystemResponse CreateResponse()
+		{
+			if(ResponseType == typeof(NoResponse))
+				return null;
+			
+			ConstructorInfo ctor = ResponseType.GetConstructor(new Type[]{typeof(EndpointContext)});
+			
+			if(ctor == null)
+				throw new NotSupportedException(string.Format("{0} does not have ctor(EndpointContext)", ResponseType));
+			
+			return (SubsystemResponse)ctor.Invoke(new object[]{_ctx});
+		}
+		
+		/// <summary>
+		/// Executes this Request and waits for the response (if this request awaits response)
+		/// </summary>
+		public virtual SubsystemResponse Execute()
+		{
+			if(ResponseType == typeof(NoResponse))
+			{
+				_ctx.PacketTransmitter.TransmitWithoutResponse(ConvertToDataPacket());
+				return null;
+			}
+			else
+			{
+				DataPacket responseDataPacket = _ctx.PacketTransmitter.TransmitWithResponse(ConvertToDataPacket());
+				if(responseDataPacket.IsResponse == false)
+					throw new NotSupportedException("Received response packet with isResponse==false, something went wrong");
+				
+				using(ByteStream src = new ByteStream(responseDataPacket.Payload))
+				{
+					//Reads the RequestIdentifier, but this is not needed for response packets
+					StreamHelper.ReadUInt16(src);
+					
+					SubsystemResponse response = CreateResponse();
+					response.Read(src);
+					return response;
+				}
+			}
+		}
 		
 		#region IStreamSerializable implementation
 		public virtual void Write (Stream sink)

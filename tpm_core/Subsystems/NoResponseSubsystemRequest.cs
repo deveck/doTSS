@@ -23,5 +23,9 @@ namespace Iaik.Tc.Tpm.Subsystems
 	
 	public class NoResponse:SubsystemResponse
 	{
+		public NoResponse(SubsystemRequest request, EndpointContext ctx)
+			:base(request, ctx)
+		{
+		}
 	}
 }

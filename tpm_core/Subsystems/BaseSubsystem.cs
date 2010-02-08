@@ -9,6 +9,7 @@ using Iaik.Utils;
 using Iaik.Tc.Tpm.Context;
 using System.Collections.Generic;
 using System.Reflection;
+using log4net;
 
 namespace Iaik.Tc.Tpm.Subsystems
 {
@@ -26,6 +27,11 @@ namespace Iaik.Tc.Tpm.Subsystems
 	/// </remarks>
 	public abstract class BaseSubsystem<TRequest> : ISubsystem
 	{
+		/// <summary>
+		/// Logger
+		/// </summary>
+		protected ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+	
 		/// <summary>
 		/// The Client/Server context this subsystm runs in
 		/// </summary>
@@ -47,6 +53,18 @@ namespace Iaik.Tc.Tpm.Subsystems
 			
 			if(requestType.IsEnum == false || Enum.GetUnderlyingType(requestType) != typeof(ushort))
 				throw new ArgumentException("TypeArgument TRequest is not valid, it has to be an enum type with ushort as the underlying type");
+		}
+		
+		/// <summary>
+		/// Builds a RequestExecutionInfo object needed to register a new request in the BaseSubsystem
+		/// </summary>
+		protected RequestExecutionInfo BuildRequestExecutionInfo<TRequest, TResponse>(
+		        HandleSubsystemRequestDelegate<TRequest, TResponse> callback)
+			where TRequest: SubsystemRequest
+			where TResponse: SubsystemResponse
+		{
+			return new RequestExecutionInfo(typeof(TRequest), callback);
+			                                
 		}
 		
 		#region ISubsystem implementation
@@ -81,6 +99,7 @@ namespace Iaik.Tc.Tpm.Subsystems
 			
 			object requestContext = ctor.Invoke(new object[]{request, _context});
 			
+			_logger.DebugFormat("Executing request '{0}'", request);
 			_requestExecutionInfos[requestTypeIdentifier].Callback.DynamicInvoke(requestContext);
 		}
 		

@@ -41,15 +41,7 @@ namespace Iaik.Tc.Tpm.Subsystems
 		
 		public TResponse CreateResponse()
 		{
-			if(typeof(TResponse) == typeof(NoResponse))
-				return null;
-			
-			ConstructorInfo ctor = typeof(TResponse).GetConstructor(new Type[]{typeof(EndpointContext)});
-			
-			if(ctor == null)
-				throw new NotSupportedException(string.Format("{0} does not have ctor(EndpointContext)", typeof(TResponse)));
-			
-			return (TResponse)ctor.Invoke(new object[]{_ctx});
+			return (TResponse)_request.CreateResponse();
 		}
 	}
 }
