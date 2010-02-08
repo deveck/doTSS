@@ -6,6 +6,7 @@
 using System;
 using System.IO;
 using Iaik.Utils;
+using Iaik.Tc.Tpm.Context;
 
 namespace Iaik.Tc.Tpm.Subsystems.Debug
 {
@@ -13,7 +14,7 @@ namespace Iaik.Tc.Tpm.Subsystems.Debug
 	/// <summary>
 	/// Prints the specified text on the server console
 	/// </summary>
-	public class RequestPrintOnServerConsole : SubsystemRequest
+	public class RequestPrintOnServerConsole : NoResponseSubsystemRequest
 	{
 		private string _text;
 		
@@ -35,12 +36,14 @@ namespace Iaik.Tc.Tpm.Subsystems.Debug
 			get{ return (ushort)DebugSubsystem.DebugRequestsEnum.PrintOnServerConsole; }
 		}
 
-		public RequestPrintOnServerConsole (string text)
+		public RequestPrintOnServerConsole (string text, EndpointContext ctx)
+			:base(ctx)
 		{
 			_text = text;
 		}
 		
-		public RequestPrintOnServerConsole()
+		public RequestPrintOnServerConsole(EndpointContext ctx)
+			:base(ctx)
 		{
 		}
 		

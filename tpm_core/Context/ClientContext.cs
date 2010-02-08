@@ -29,7 +29,7 @@ namespace Iaik.Tc.Tpm.Context
 		public ClientContext (FrontEndConnection connection, PacketTransmitter packetTransmitter)
 			:base(connection, packetTransmitter)
 		{			
-			_debugClient = new DebugClient(packetTransmitter);
+			_debugClient = new DebugClient(this);
 			_configured = true;
 			_configuredEvent.Set();
 		}

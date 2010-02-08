@@ -32,7 +32,7 @@ namespace Iaik.Tc.Tpm.Subsystems.Debug
 			_requestExecutionInfos.Add(
 			     DebugRequestsEnum.PrintOnServerConsole, 
 			     new RequestExecutionInfo(typeof(RequestPrintOnServerConsole), 
-			          new Action<RequestPrintOnServerConsole>(HandlePrintOnServerConsoleRequest))
+			          new HandleSubsystemRequestDelegate<RequestPrintOnServerConsole, NoResponse>(HandlePrintOnServerConsoleRequest))
 			     );
 		}
 		
@@ -49,28 +49,21 @@ namespace Iaik.Tc.Tpm.Subsystems.Debug
 			if(_requestExecutionInfos.ContainsKey(requestType))
 			{
 				Type t = _requestExecutionInfos[requestType].RequestType;
-				ConstructorInfo ctor = t.GetConstructor(new Type[]{});
+				ConstructorInfo ctor = t.GetConstructor(new Type[]{typeof(EndpointContext)});
 				
 				if(ctor == null)
 					throw new NotSupportedException(string.Format("'{0}' does not have a default ctor!",t));
 				
-				return (SubsystemRequest)ctor.Invoke(new object[]{});
+				return (SubsystemRequest)ctor.Invoke(new object[]{_context});
 			}
 			else
 				throw new NotImplementedException(string.Format("Request type '{0}' not implemented", requestType));
-			//switch(requestType)
-			//{
-			//case DebugRequestsEnum.PrintOnServerConsole:
-			//	return new RequestPrintOnServerConsole();
-			//default:
-			//	throw new NotImplementedException(string.Format("Request type '{0}' not implemented", requestType));
-			//}
 		}
 
 			
-		private void HandlePrintOnServerConsoleRequest(RequestPrintOnServerConsole request)
-		{
-			Console.WriteLine(request.Text);
+		private void HandlePrintOnServerConsoleRequest(RequestContext<RequestPrintOnServerConsole, NoResponse> requestCtx)
+		{	
+			Console.WriteLine(requestCtx.Request.Text);
 		}
 
 	}

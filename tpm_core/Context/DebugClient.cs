@@ -18,11 +18,11 @@ namespace Iaik.Tc.Tpm.Context
 		/// <summary>
 		/// Transmits the packets to the server
 		/// </summary>
-		private PacketTransmitter _packetTransmitter;
+		private EndpointContext _ctx;
 		
-		public DebugClient (PacketTransmitter packetTransmitter)
+		public DebugClient (EndpointContext ctx)
 		{
-			_packetTransmitter = packetTransmitter;
+			_ctx = ctx;
 		}
 		
 		/// <summary>
@@ -32,8 +32,8 @@ namespace Iaik.Tc.Tpm.Context
 		/// <param name="text">Text to display</param>
 		public void PrintOnServerConsole(string text)
 		{
-			RequestPrintOnServerConsole request = new RequestPrintOnServerConsole(text);
-			_packetTransmitter.TransmitWithoutResponse(request.ConvertToDataPacket());
+			RequestPrintOnServerConsole request = new RequestPrintOnServerConsole(text, _ctx);
+			_ctx.PacketTransmitter.TransmitWithoutResponse(request.ConvertToDataPacket());
 		}
 	}
 }

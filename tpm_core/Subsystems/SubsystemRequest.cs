@@ -8,6 +8,7 @@ using Iaik.Utils.Serialization;
 using System.IO;
 using Iaik.Tc.Tpm.Connection.Packets;
 using Iaik.Utils;
+using Iaik.Tc.Tpm.Context;
 
 namespace Iaik.Tc.Tpm.Subsystems
 {
@@ -16,7 +17,16 @@ namespace Iaik.Tc.Tpm.Subsystems
 	/// </summary>
 	public abstract class SubsystemRequest : IStreamSerializable
 	{
-
+		/// <summary>
+		/// The context this request belongs to
+		/// </summary>
+		protected EndpointContext _ctx;
+		
+		public SubsystemRequest(EndpointContext ctx)
+		{
+			_ctx = ctx;
+		}
+		
 		/// <summary>
 		/// Converts this request to a default representation of a DataPacket
 		/// </summary>
@@ -42,6 +52,11 @@ namespace Iaik.Tc.Tpm.Subsystems
 
 		public abstract string Subsystem{get;}
 		public abstract ushort RequestIdentifier{get;}
+	
+		/// <summary>
+		/// Gets the type of the response packet, or null if no response is sent
+		/// </summary>
+		public abstract Type ResponseType{get;}
 		
 		#region IStreamSerializable implementation
 		public virtual void Write (Stream sink)

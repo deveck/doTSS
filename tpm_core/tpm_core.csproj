@@ -74,6 +74,10 @@
     <Compile Include="Connection\ClientConnections\UnixSocketConnection.cs" />
     <Compile Include="Connection\ServerListeners\UnixSocketListener.cs" />
     <Compile Include="Connection\ClientConnections\FrontEndConnectionAttribute.cs" />
+    <Compile Include="Subsystems\RequestContext.cs" />
+    <Compile Include="Subsystems\SubsystemResponse.cs" />
+    <Compile Include="Subsystems\TypedSubsystemRequest.cs" />
+    <Compile Include="Subsystems\NoResponseSubsystemRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">

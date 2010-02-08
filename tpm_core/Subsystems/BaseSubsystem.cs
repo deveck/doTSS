@@ -8,10 +8,14 @@ using Iaik.Tc.Tpm.Connection.Packets;
 using Iaik.Utils;
 using Iaik.Tc.Tpm.Context;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Iaik.Tc.Tpm.Subsystems
 {
 
+	public delegate void HandleSubsystemRequestDelegate<T, U>(RequestContext<T, U> requestCtx)
+		where T: SubsystemRequest
+		where U: SubsystemResponse;
 	/// <summary>
 	/// Implements a basic subsystem, where all requests are
 	/// build like the standard requests
@@ -65,9 +69,19 @@ namespace Iaik.Tc.Tpm.Subsystems
 		private void ExecuteRequest(TRequest requestTypeIdentifier, SubsystemRequest request)
 		{
 			if(_requestExecutionInfos.ContainsKey(requestTypeIdentifier) == false)
-				throw new NotSupportedException("Detected not supported request");
+				throw new NotSupportedException("Not supported request detected");
 			
-			_requestExecutionInfos[requestTypeIdentifier].Callback.DynamicInvoke(request);
+			
+			Type requestCtxType = typeof(RequestContext<,>);
+			requestCtxType = requestCtxType.MakeGenericType(request.GetType(), request.ResponseType);
+			
+			ConstructorInfo ctor = requestCtxType.GetConstructor(new Type[]{request.GetType(), typeof(EndpointContext)});
+			if(ctor == null)
+				throw new NotSupportedException("RequestContext does not contain apropriate constructor");
+			
+			object requestContext = ctor.Invoke(new object[]{request, _context});
+			
+			_requestExecutionInfos[requestTypeIdentifier].Callback.DynamicInvoke(requestContext);
 		}
 		
 		/// <summary>
