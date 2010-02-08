@@ -14,7 +14,8 @@ namespace Iaik.Tc.Tpm
 			appender.Layout = new log4net.Layout.PatternLayout("[%date{dd.MM.yyyy HH:mm:ss,fff}]-%-5level-[%type]: %message%newline");
 			log4net.Config.BasicConfigurator.Configure(appender);
 			
-			FrontEndConnection tpmConnection = new UnixSocketConnection("/home/andi/tpm_testsocket");
+			//FrontEndConnection tpmConnection = new UnixSocketConnection("/home/andi/tpm_testsocket");
+            FrontEndConnection tpmConnection = new NamedPipeConnection("TPM_csharp");
 			tpmConnection.Connect();
 			
 			

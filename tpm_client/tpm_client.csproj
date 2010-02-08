@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -45,6 +45,10 @@
     <ProjectReference Include="..\tpm_core\tpm_core.csproj">
       <Project>{4D1DBB08-821E-44F4-BE21-B9695E4EE8F1}</Project>
       <Name>tpm_core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\utils\utils.csproj">
+      <Project>{892CAB5C-D501-47B1-82E2-BE8492E7E378}</Project>
+      <Name>utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

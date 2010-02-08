@@ -75,7 +75,7 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
         {
             if (_pipeStream == null)
             {
-                NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost", _pipeName, PipeDirection.InOut);
+                NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost", _pipeName, PipeDirection.InOut,  PipeOptions.Asynchronous);
                 pipeClient.Connect();
                 _pipeStream = pipeClient;
 				RaiseConnectedEvent();
@@ -107,7 +107,10 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
         public override int Read(byte[] buffer, int offset, int length)
         {
             AssertPipeStream();
-            return _pipeStream.Read(buffer, offset, length);
+            int read = _pipeStream.Read(buffer, offset, length);
+            if (read == 0)
+                throw new DisconnectedException();
+            return read;
         }
 		
 		public override int ReadByte ()
@@ -119,7 +122,7 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
 		public override void WriteByte (byte value)
 		{
 			AssertPipeStream();
-			_pipeStream.WriteByte(value);
+            Write(new byte[] { value }, 0, 1);
 		}
 
 		public override void Flush ()

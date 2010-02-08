@@ -11,6 +11,7 @@ using System.IO.Pipes;
 using System.Threading;
 using Iaik.Tc.Tpm.Connection.ClientConnections;
 using Iaik.Tc.Tpm.Context;
+using log4net;
 
 namespace Iaik.Tc.Tpm.Connection.ServerListeners
 {
@@ -26,14 +27,18 @@ namespace Iaik.Tc.Tpm.Connection.ServerListeners
     /// </remarks>
     public class NamedPipeListener : IFrontEndServerListener
     {
-        
+
+        /// <summary>
+        /// Logger
+        /// </summary>
+        private ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         /// <summary>
         /// Specifies the maximum number of clients that can be connected at once to the pipe server.
         /// This value is also dependent on the operating system because not all systems might
         /// support the same number of named pipe connections
         /// </summary>
-        private int _maxClients = 1;
+        private int _maxClients = 15;
 
         /// <summary>
         /// Specifies the minimum number of idle listening threads. 
@@ -59,29 +64,45 @@ namespace Iaik.Tc.Tpm.Connection.ServerListeners
 
         #region IFrontEndServerListener Members
 
+        /// <summary>
+        /// Is raised on client connection
+        /// </summary>
         public event ClientConnectedDelegate ClientConnected;
         
+        /// <summary>
+        /// Starts the listening process
+        /// </summary>
+        /// <remarks>
+        /// This method is also called internally after a client connection has been
+        /// established, to refresh the count of listeners
+        /// </remarks>
         public void Listen()
-        {
+        {          
+
             lock (_listeners)
             {
                 int listenersToStart = Math.Max(0, _maxClients - _listeners.Count);
-
                 if (_alwaysListeningClients != null)
                     listenersToStart = Math.Min(_alwaysListeningClients.Value, listenersToStart);
 
+                _logger.InfoFormat("Starting {0}-Listeners on pipe '{1}'", listenersToStart, _pipeName);
 
                 for (int listenerCounter = 0; listenerCounter < listenersToStart; listenerCounter++)
                 {
-                    Thread listenerThread = new Thread(new ThreadStart(ListenerThreadProc));
-                    _listeners.Add(new ListenerInfo(DateTime.Now, listenerThread));
-                    listenerThread.Start();
+                    Thread listenerThread = new Thread(new ParameterizedThreadStart(ListenerThreadProc));
+                    ListenerInfo currentListenerInfo = new ListenerInfo(DateTime.Now, listenerThread);
+                    _listeners.Add(currentListenerInfo);
+                    listenerThread.Start(currentListenerInfo);
                 }
             }
         }
 
+        /// <summary>
+        /// Suspends all currently listening listeners
+        /// </summary>
         public void SuspendListener()
         {
+            _logger.InfoFormat("Suspending listeners on '{0}'", _pipeName);
             lock (_listeners)
             {
                 foreach (ListenerInfo listenerInfo in _listeners)
@@ -109,21 +130,29 @@ namespace Iaik.Tc.Tpm.Connection.ServerListeners
         /// <summary>
         /// Thread method for a single listener thread
         /// </summary>
-        private void ListenerThreadProc()
+        private void ListenerThreadProc(object listenerInfo)
         {
+            ListenerInfo myListenerInfo = (ListenerInfo)listenerInfo;
             try
             {
-                NamedPipeServerStream serverPipe = new NamedPipeServerStream(_pipeName, PipeDirection.InOut, _maxClients);
+                NamedPipeServerStream serverPipe = new NamedPipeServerStream(_pipeName, PipeDirection.InOut, _maxClients, PipeTransmissionMode.Byte, PipeOptions.Asynchronous);
                 serverPipe.WaitForConnection();
 
-				Console.WriteLine("Pipe connected");
+                _logger.InfoFormat("New client connection to '{0}'", _pipeName);
 				
                 //Once the client is connected we "convert" the listener to a simple connection,
                 //there is no need to know afterwards that this was a Listener...sometime ago...
 				NamedPipeConnection pipe = new NamedPipeConnection(serverPipe);
                 RaiseClientConnectedEvent(pipe);
+
+                lock (_listeners)
+                {
+                    _listeners.Remove(myListenerInfo);
+                }
+
+                Listen();
             }
-            catch(ThreadAbortException ex)
+            catch(ThreadAbortException)
             {
             }
         }
