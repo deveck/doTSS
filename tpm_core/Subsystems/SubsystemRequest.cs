@@ -23,6 +23,19 @@ namespace Iaik.Tc.Tpm.Subsystems
 		/// </summary>
 		protected EndpointContext _ctx;
 		
+		/// <summary>
+		/// If we are at the packet receiver this uniquely identifies the request packet on
+		/// the client and is used for proper response packet generation
+		/// </summary>
+		protected PacketIdentifier _packetIdentifier = null;
+		
+		
+		public PacketIdentifier PacketIdentifier
+		{
+			get{ return _packetIdentifier; }
+			set{ _packetIdentifier = value; }
+		}
+		
 		public SubsystemRequest(EndpointContext ctx)
 		{
 			_ctx = ctx;
@@ -65,12 +78,12 @@ namespace Iaik.Tc.Tpm.Subsystems
 			if(ResponseType == typeof(NoResponse))
 				return null;
 			
-			ConstructorInfo ctor = ResponseType.GetConstructor(new Type[]{typeof(EndpointContext)});
+			ConstructorInfo ctor = ResponseType.GetConstructor(new Type[]{this.GetType(), typeof(EndpointContext)});
 			
 			if(ctor == null)
 				throw new NotSupportedException(string.Format("{0} does not have ctor(EndpointContext)", ResponseType));
 			
-			return (SubsystemResponse)ctor.Invoke(new object[]{_ctx});
+			return (SubsystemResponse)ctor.Invoke(new object[]{this, _ctx});
 		}
 		
 		/// <summary>
@@ -78,7 +91,7 @@ namespace Iaik.Tc.Tpm.Subsystems
 		/// </summary>
 		public virtual SubsystemResponse Execute()
 		{
-			if(ResponseType == typeof(NoResponse))
+			if(ResponseType == null || ResponseType == typeof(NoResponse))
 			{
 				_ctx.PacketTransmitter.TransmitWithoutResponse(ConvertToDataPacket());
 				return null;

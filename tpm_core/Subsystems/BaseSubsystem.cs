@@ -75,6 +75,7 @@ namespace Iaik.Tc.Tpm.Subsystems
 				TRequest requestTypeIdentifier = (TRequest)Enum.ToObject(typeof(TRequest), StreamHelper.ReadUInt16(src));
 				SubsystemRequest request = CreateRequestFromIdentifier(requestTypeIdentifier);
 				request.Read(src);
+				request.PacketIdentifier = new PacketIdentifier(packet.PacketNr);
 				
 				ExecuteRequest(requestTypeIdentifier, request);
 			}

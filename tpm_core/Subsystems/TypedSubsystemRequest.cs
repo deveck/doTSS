@@ -26,5 +26,10 @@ namespace Iaik.Tc.Tpm.Subsystems
 			get { return typeof(TResponse);}
 		}
 
+		public virtual TResponse TypedExecute()
+		{
+			return (TResponse)Execute();
+		}
+		
 	}
 }

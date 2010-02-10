@@ -55,6 +55,8 @@ namespace Iaik.Tc.Tpm.Subsystems
 				
 				sink.Flush();
 				DataPacket packet = new DataPacket(true, Subsystem, sink.ToArray());
+				packet.PacketNr = _request.PacketIdentifier.PacketNr;
+				
 				return packet;
 			}
 			

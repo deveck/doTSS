@@ -37,6 +37,9 @@ namespace Iaik.Tc.Tpm.Subsystems.Debug
 		{
 			_requestExecutionInfos.Add(DebugRequestsEnum.PrintOnServerConsole,  
 	        	BuildRequestExecutionInfo<RequestPrintOnServerConsole, NoResponse>(HandlePrintOnServerConsoleRequest));
+			
+			_requestExecutionInfos.Add(DebugRequestsEnum.PrintOnServerConsoleWithResponse,  
+	        	BuildRequestExecutionInfo<RequestPrintOnServerConsoleWithResponse, ResponsePrintOnServerConsole>(HandlePrintOnServerConsoleWithResponseRequest));
 		}
 		
 		
@@ -75,6 +78,7 @@ namespace Iaik.Tc.Tpm.Subsystems.Debug
 			Console.WriteLine(requestCtx.Request.Text);
 			
 			ResponsePrintOnServerConsole response = requestCtx.CreateResponse();
+			response.Execute();
 			
 		}
 

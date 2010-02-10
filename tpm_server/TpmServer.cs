@@ -61,8 +61,8 @@ namespace Iaik.Tc.Tpm
 			
 			//TODO: Read configuration and do not load the hard coded listeners ;)
 			
-			//UnixSocketListener listener = new UnixSocketListener("/home/andi/tpm_testsocket");
-            NamedPipeListener listener = new NamedPipeListener();
+			UnixSocketListener listener = new UnixSocketListener("/tmp/tpm_testsocket");
+            //NamedPipeListener listener = new NamedPipeListener();
 			listener.ClientConnected += HandleListenerClientConnected;
 			listener.Listen();
 			

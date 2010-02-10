@@ -33,7 +33,18 @@ namespace Iaik.Tc.Tpm.Context
 		public void PrintOnServerConsole(string text)
 		{
 			RequestPrintOnServerConsole request = new RequestPrintOnServerConsole(text, _ctx);
-			_ctx.PacketTransmitter.TransmitWithoutResponse(request.ConvertToDataPacket());
+			request.Execute();
+		}
+		
+		/// <summary>
+		/// Prints the specified text on the server console, with ticks at execution of server
+		/// packet is sent. Only tests the case of simple-one-way-communication
+		/// </summary>
+		/// <param name="text">Text to display</param>
+		public long PrintOnServerConsoleWithResponse(string text)
+		{
+			RequestPrintOnServerConsoleWithResponse request = new RequestPrintOnServerConsoleWithResponse(text, _ctx);
+			return request.TypedExecute().ServerTicks;
 		}
 	}
 }

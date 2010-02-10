@@ -72,6 +72,7 @@
     <Compile Include="Subsystems\TypedSubsystemRequest.cs" />
     <Compile Include="Subsystems\NoResponseSubsystemRequest.cs" />
     <Compile Include="Subsystems\Debug\RequestPrintOnServerConsoleWithResponse.cs" />
+    <Compile Include="Subsystems\PacketIdentifier.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">
