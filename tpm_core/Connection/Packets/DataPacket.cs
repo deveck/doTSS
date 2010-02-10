@@ -94,5 +94,11 @@ namespace Iaik.Tc.Tpm.Connection.Packets
         }
 
         #endregion
+		
+		public override string ToString ()
+		{
+			return string.Format("[DataPacket: IsResponse={0}, PacketNr={1}, Payload=[length={2}], Subsystem={3}]", IsResponse, PacketNr, Payload.Length, Subsystem);
+		}
+ 
     }
 }

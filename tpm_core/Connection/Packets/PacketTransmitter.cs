@@ -279,7 +279,7 @@ namespace Iaik.Tc.Tpm.Packets
 			else
 			{
 				_logger.DebugFormat("Transmitting packet without response {0}", packetInfo);
-				packetInfo.PacketToTransmit.PacketNr = 0;
+				//packetInfo.PacketToTransmit.PacketNr = 0;
 			}
 			
 			//DataPacketTypeAttribute attr = DataPacketTypeAttribute.FindAttributeForInstanceThrowException(packetInfo.PacketToTransmit.GetType());

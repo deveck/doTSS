@@ -33,7 +33,7 @@ Global
 		{892CAB5C-D501-47B1-82E2-BE8492E7E378}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = tpm_server\tpm_server.csproj
+		StartupItem = tpm_client\tpm_client.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
