@@ -8,10 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Iaik.Tc.Tpm.Context;
-using Iaik.Tc.Tpm.Connection.ClientConnections;
+using Iaik.Connection.ClientConnections;
 
-namespace Iaik.Tc.Tpm.Connection
+namespace Iaik.Connection
 {
     /// <summary>
     /// Delegate used to indicate that a client connected to the server

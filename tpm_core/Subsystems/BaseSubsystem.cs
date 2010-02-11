@@ -4,7 +4,7 @@
 // Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 
 using System;
-using Iaik.Tc.Tpm.Connection.Packets;
+using Iaik.Connection.Packets;
 using Iaik.Utils;
 using Iaik.Tc.Tpm.Context;
 using System.Collections.Generic;
@@ -58,12 +58,12 @@ namespace Iaik.Tc.Tpm.Subsystems
 		/// <summary>
 		/// Builds a RequestExecutionInfo object needed to register a new request in the BaseSubsystem
 		/// </summary>
-		protected RequestExecutionInfo BuildRequestExecutionInfo<TRequest, TResponse>(
-		        HandleSubsystemRequestDelegate<TRequest, TResponse> callback)
-			where TRequest: SubsystemRequest
-			where TResponse: SubsystemResponse
+		protected RequestExecutionInfo BuildRequestExecutionInfo<T, U>(
+		        HandleSubsystemRequestDelegate<T, U> callback)
+			where T: SubsystemRequest
+			where U: SubsystemResponse
 		{
-			return new RequestExecutionInfo(typeof(TRequest), callback);
+			return new RequestExecutionInfo(typeof(T), callback);
 			                                
 		}
 		

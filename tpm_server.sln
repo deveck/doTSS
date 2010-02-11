@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tpm_core", "tpm_core\tpm_co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tpm_client", "tpm_client\tpm_client.csproj", "{4299FAC7-1E40-4530-AB1E-EA1CC963F913}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "connection_lib", "connection_lib\connection_lib.csproj", "{F6681243-5DCF-4B0B-BC85-0F1290CF0334}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,9 +33,13 @@ Global
 		{892CAB5C-D501-47B1-82E2-BE8492E7E378}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{892CAB5C-D501-47B1-82E2-BE8492E7E378}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{892CAB5C-D501-47B1-82E2-BE8492E7E378}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6681243-5DCF-4B0B-BC85-0F1290CF0334}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6681243-5DCF-4B0B-BC85-0F1290CF0334}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6681243-5DCF-4B0B-BC85-0F1290CF0334}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6681243-5DCF-4B0B-BC85-0F1290CF0334}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = tpm_client\tpm_client.csproj
+		StartupItem = tpm_server\tpm_server.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,7 +9,7 @@ using System.Net.Sockets;
 using log4net;
 using Iaik.Utils;
 
-namespace Iaik.Tc.Tpm.Connection.ClientConnections
+namespace Iaik.Connection.ClientConnections
 {
 
 	/// <summary>

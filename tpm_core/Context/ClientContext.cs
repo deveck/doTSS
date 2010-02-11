@@ -4,8 +4,8 @@
 // Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 
 using System;
-using Iaik.Tc.Tpm.Connection.ClientConnections;
-using Iaik.Tc.Tpm.Packets;
+using Iaik.Connection.ClientConnections;
+using Iaik.Connection.Packets;
 
 namespace Iaik.Tc.Tpm.Context
 {

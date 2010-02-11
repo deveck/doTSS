@@ -11,7 +11,7 @@ using Iaik.Utils.Serialization;
 using System.IO;
 using Iaik.Utils;
 
-namespace Iaik.Tc.Tpm.Connection.Packets
+namespace Iaik.Connection.Packets
 {
     /// <summary>
     /// Raw Request that is sent from the client to the server, it does not need to be

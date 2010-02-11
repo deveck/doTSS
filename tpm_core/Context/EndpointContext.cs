@@ -7,9 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Iaik.Tc.Tpm.Connection.ClientConnections;
-using Iaik.Tc.Tpm.Packets;
-using Iaik.Tc.Tpm.Connection.Packets;
+using Iaik.Connection.ClientConnections;
+using Iaik.Connection.Packets;
 using Iaik.Tc.Tpm.Subsystems;
 using System.Threading;
 

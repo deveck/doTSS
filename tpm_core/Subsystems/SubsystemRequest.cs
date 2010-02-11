@@ -6,7 +6,7 @@
 using System;
 using Iaik.Utils.Serialization;
 using System.IO;
-using Iaik.Tc.Tpm.Connection.Packets;
+using Iaik.Connection.Packets;
 using Iaik.Utils;
 using Iaik.Tc.Tpm.Context;
 using System.Reflection;

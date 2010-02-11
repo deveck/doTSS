@@ -1,5 +1,5 @@
 using System;
-using Iaik.Tc.Tpm.Connection.ClientConnections;
+using Iaik.Connection.ClientConnections;
 using Iaik.Tc.Tpm.Context;
 using System.Threading;
 

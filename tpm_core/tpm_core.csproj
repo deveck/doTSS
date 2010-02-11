@@ -44,16 +44,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connection\ClientConnections\NamedPipeConnection.cs" />
-    <Compile Include="Connection\Exceptions.cs" />
-    <Compile Include="Connection\IFrontEndServerListener.cs" />
-    <Compile Include="Connection\Packets\DataPacket.cs" />
-    <Compile Include="Connection\ServerListeners\NamedPipeListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Subsystems\SubsystemConstants.cs" />
-    <Compile Include="Connection\ClientConnections\FrontEndConnection.cs" />
-    <Compile Include="Connection\Packets\PacketTransmitter.cs" />
-    <Compile Include="Connection\Packets\Exceptions.cs" />
     <Compile Include="Subsystems\ISubsystem.cs" />
     <Compile Include="Context\EndpointContext.cs" />
     <Compile Include="Context\ClientContext.cs" />
@@ -64,9 +56,6 @@
     <Compile Include="Subsystems\SubsystemRequest.cs" />
     <Compile Include="Subsystems\Debug\RequestPrintOnServerConsole.cs" />
     <Compile Include="Context\DebugClient.cs" />
-    <Compile Include="Connection\ClientConnections\UnixSocketConnection.cs" />
-    <Compile Include="Connection\ServerListeners\UnixSocketListener.cs" />
-    <Compile Include="Connection\ClientConnections\FrontEndConnectionAttribute.cs" />
     <Compile Include="Subsystems\RequestContext.cs" />
     <Compile Include="Subsystems\SubsystemResponse.cs" />
     <Compile Include="Subsystems\TypedSubsystemRequest.cs" />
@@ -78,6 +67,10 @@
     <ProjectReference Include="..\utils\utils.csproj">
       <Project>{892CAB5C-D501-47B1-82E2-BE8492E7E378}</Project>
       <Name>utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\connection_lib\connection_lib.csproj">
+      <Project>{F6681243-5DCF-4B0B-BC85-0F1290CF0334}</Project>
+      <Name>connection_lib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

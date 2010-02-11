@@ -5,7 +5,7 @@
 
 using System;
 
-namespace Iaik.Tc.Tpm.Connection.ClientConnections
+namespace Iaik.Connection.ClientConnections
 {
 
 	/// <summary>

@@ -8,10 +8,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using Iaik.Tc.Tpm.Connection.Packets;
+using Iaik.Connection.Packets;
 using log4net;
 
-namespace Iaik.Tc.Tpm.Connection.ClientConnections
+namespace Iaik.Connection.ClientConnections
 {
     /// <summary>
     /// Implements the IFrontEndConnection interface for common usage.
@@ -54,16 +54,19 @@ namespace Iaik.Tc.Tpm.Connection.ClientConnections
         /// <summary>
         /// Closes the connection to the remote host
         /// </summary>
-        public abstract void Close();
+        public override abstract void Close();
 
 		
         #region IDisposable Members
 
-        public virtual void Dispose()
+        public new virtual void Dispose()
         {
 			Close();
         }
 
+
+
+		
         #endregion
 
         #region Stream overrides

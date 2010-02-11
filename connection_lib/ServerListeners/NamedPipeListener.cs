@@ -9,11 +9,10 @@ using System.Linq;
 using System.Text;
 using System.IO.Pipes;
 using System.Threading;
-using Iaik.Tc.Tpm.Connection.ClientConnections;
-using Iaik.Tc.Tpm.Context;
+using Iaik.Connection.ClientConnections;
 using log4net;
 
-namespace Iaik.Tc.Tpm.Connection.ServerListeners
+namespace Iaik.Connection.ServerListeners
 {
     /// <summary>
     /// Implements the IFrontEndServerListener for NamedPipes compatible

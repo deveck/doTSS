@@ -103,6 +103,10 @@
       <Project>{892CAB5C-D501-47B1-82E2-BE8492E7E378}</Project>
       <Name>utils</Name>
     </ProjectReference>
+    <ProjectReference Include="..\connection_lib\connection_lib.csproj">
+      <Project>{F6681243-5DCF-4B0B-BC85-0F1290CF0334}</Project>
+      <Name>connection_lib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

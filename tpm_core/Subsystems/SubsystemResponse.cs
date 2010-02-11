@@ -5,7 +5,7 @@
 
 using System;
 using Iaik.Tc.Tpm.Context;
-using Iaik.Tc.Tpm.Connection.Packets;
+using Iaik.Connection.Packets;
 using System.IO;
 using Iaik.Utils;
 

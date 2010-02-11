@@ -5,8 +5,8 @@
 
 
 using System;
-using Iaik.Tc.Tpm.Connection.ClientConnections;
-using Iaik.Tc.Tpm.Packets;
+using Iaik.Connection.ClientConnections;
+using Iaik.Connection.Packets;
 using Iaik.Tc.Tpm.Subsystems.Debug;
 
 namespace Iaik.Tc.Tpm.Context

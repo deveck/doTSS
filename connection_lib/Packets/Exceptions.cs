@@ -1,7 +1,7 @@
 
 using System;
 
-namespace Iaik.Tc.Tpm.Connection.Packets
+namespace Iaik.Connection.Packets
 {
 	public class PacketException : Exception
 	{

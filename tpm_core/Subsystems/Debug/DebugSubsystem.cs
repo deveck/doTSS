@@ -4,7 +4,7 @@
 // Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 
 using System;
-using Iaik.Tc.Tpm.Connection.Packets;
+using Iaik.Connection.Packets;
 using Iaik.Tc.Tpm.Context;
 using System.Reflection;
 

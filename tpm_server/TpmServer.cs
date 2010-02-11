@@ -7,10 +7,10 @@ using System;
 using System.ServiceProcess;
 using Iaik.Utils;
 using System.Reflection;
-using Iaik.Tc.Tpm.Connection.ServerListeners;
+using Iaik.Connection.ServerListeners;
 using System.Threading;
 using log4net;
-using Iaik.Tc.Tpm.Connection.ClientConnections;
+using Iaik.Connection.ClientConnections;
 using Iaik.Tc.Tpm.Context;
 
 namespace Iaik.Tc.Tpm

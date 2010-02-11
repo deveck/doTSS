@@ -11,7 +11,7 @@ using System.IO;
 using System.IO.Pipes;
 using Iaik.Utils;
 
-namespace Iaik.Tc.Tpm.Connection.ClientConnections
+namespace Iaik.Connection.ClientConnections
 {
 
     /// <summary>

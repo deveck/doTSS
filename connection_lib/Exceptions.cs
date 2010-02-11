@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Iaik.Tc.Tpm.Connection.ClientConnections;
+using Iaik.Connection.ClientConnections;
 
-namespace Iaik.Tc.Tpm.Connection
+namespace Iaik.Connection
 {
     /// <summary>
     /// Base class for all connection related exceptions

@@ -7,12 +7,11 @@ using System;
 using Mono.Unix;
 using System.Net.Sockets;
 using System.IO;
-using Iaik.Tc.Tpm.Connection.ClientConnections;
-using Iaik.Tc.Tpm.Context;
-using Iaik.Tc.Tpm.Packets;
+using Iaik.Connection.ClientConnections;
+using Iaik.Connection.Packets;
 using log4net;
 
-namespace Iaik.Tc.Tpm.Connection.ServerListeners
+namespace Iaik.Connection.ServerListeners
 {
 
 	/// <summary>

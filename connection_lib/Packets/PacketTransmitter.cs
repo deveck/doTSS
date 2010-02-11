@@ -4,14 +4,14 @@
 // Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 
 using System;
-using Iaik.Tc.Tpm.Connection.ClientConnections;
-using Iaik.Tc.Tpm.Connection.Packets;
+using Iaik.Connection.ClientConnections;
+using Iaik.Connection.Packets;
 using System.Threading;
 using System.Collections.Generic;
 using log4net;
-using Iaik.Tc.Tpm.Connection;
+using Iaik.Connection;
 
-namespace Iaik.Tc.Tpm.Packets
+namespace Iaik.Connection.Packets
 {
 
 	/// <summary>
