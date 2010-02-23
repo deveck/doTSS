@@ -15,7 +15,10 @@ namespace Iaik.Connection.ClientConnections
 {
     /// <summary>
     /// Implements the IFrontEndConnection interface for common usage.
-    /// This class can not be instantiated, use one of the implementations
+    /// This class can not be instantiated, use one of the implementations.
+    /// Derived classes need to specify the FrontEndConnectionAttribute to
+    /// identify the connections. If the attribute is not defined a 
+    /// <see>NotSupportedException</see> is thrown
     /// </summary>
     public abstract class FrontEndConnection : Stream
     {
@@ -29,18 +32,19 @@ namespace Iaik.Connection.ClientConnections
 		/// </summary>
 		public event Action<FrontEndConnection> Disconnected;
 		
+		
 		/// <summary>
 		/// Logger
 		/// </summary>
 		protected ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-		
+				
         /// <summary>
         /// Locks the connection, according to microsoft lock(this) is bad practise ;-)
         /// </summary>
         protected object _syncLock = new object();
 
-		
+	
 		/// <summary>
 		/// Indicates if the Connection is connected
 		/// </summary>
@@ -62,11 +66,7 @@ namespace Iaik.Connection.ClientConnections
         public new virtual void Dispose()
         {
 			Close();
-        }
-
-
-
-		
+        }		
         #endregion
 
         #region Stream overrides
@@ -130,6 +130,20 @@ namespace Iaik.Connection.ClientConnections
 	
 		#endregion
 		
+		/// <summary>
+		/// Gets the unique identifier of this connection,
+		/// defined in the FrontEndConnectionAttribute
+		/// </summary>
+		public string Name
+		{
+			get
+			{
+				//No bounds checking is required because this is done in the ctor
+				return ((FrontEndConnectionAttribute)this.GetType().
+				        GetCustomAttributes(typeof(FrontEndConnection), false)[0]).ConnectionName;
+			}
+		}
+		
 		protected void RaiseConnectedEvent()
 		{
 			if(ConnectionEstablished != null)
@@ -144,6 +158,12 @@ namespace Iaik.Connection.ClientConnections
 		
 		public FrontEndConnection()
 		{
+			//Checks if the resulting type has the FrontEndConnectionAttribute defined
+			object[] attributes = this.GetType().GetCustomAttributes(typeof(FrontEndConnectionAttribute), false);
+			if(attributes == null || attributes.Length == 0)
+				throw new NotSupportedException("FrontEndConnectionAttribute is not defined");
+			else if(attributes.Length > 1)
+				throw new NotSupportedException("FrontEndConnectionAttribute is defined more than once");
 		}
     }
 }

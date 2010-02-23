@@ -16,8 +16,8 @@ namespace Iaik.Connection.ClientConnections
 	/// Implements the named pipe replacement for unix systems,
 	/// as of Mono 2.6.1 NamedPipes are not yet supported on unix systems
 	/// </summary>
-	[FrontEndConnection("UnixSocket")]
-	public class UnixSocketConnection : FrontEndConnection
+	[FrontEndConnection("unix_socket")]
+	public sealed class UnixSocketConnection : FrontEndConnection
 	{
 
 		

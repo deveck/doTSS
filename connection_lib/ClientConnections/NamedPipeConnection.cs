@@ -18,8 +18,8 @@ namespace Iaik.Connection.ClientConnections
     /// Implements the FrontEndConnection for named pipes.
     /// This can be used on Server and client side
     /// </summary>
-	[FrontEndConnection("NamedPipe")]
-    public class NamedPipeConnection : FrontEndConnection
+	[FrontEndConnection("named_pipe")]
+    public sealed class NamedPipeConnection : FrontEndConnection
     {
         /// <summary>
         /// Indicates if the Connection was created using a preconnected PipeStream
