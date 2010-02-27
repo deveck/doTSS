@@ -50,21 +50,7 @@ namespace Iaik.Tc.Tpm.Subsystems.Debug
 		}		
 		
 		
-		protected override SubsystemRequest CreateRequestFromIdentifier (DebugSubsystem.DebugRequestsEnum requestType)
-		{
-			if(_requestExecutionInfos.ContainsKey(requestType))
-			{
-				Type t = _requestExecutionInfos[requestType].RequestType;
-				ConstructorInfo ctor = t.GetConstructor(new Type[]{typeof(EndpointContext)});
-				
-				if(ctor == null)
-					throw new NotSupportedException(string.Format("'{0}' does not have a default ctor!",t));
-				
-				return (SubsystemRequest)ctor.Invoke(new object[]{_context});
-			}
-			else
-				throw new NotImplementedException(string.Format("Request type '{0}' not implemented", requestType));
-		}
+		
 
 			
 		private void HandlePrintOnServerConsoleRequest(RequestContext<RequestPrintOnServerConsole, NoResponse> requestCtx)

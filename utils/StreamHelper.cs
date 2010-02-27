@@ -43,6 +43,25 @@ namespace Iaik.Utils
 			return BitConverter.ToInt64(ReadBytes(8, src), 0);
 		}
 		
+		public static void WriteNullableInt32(Int32? value, Stream sink)
+		{
+			if(value == null)
+				WriteBool(false, sink);
+			else
+			{
+				WriteBool(true, sink);
+				WriteInt32(value.Value, sink);
+			}
+		}
+		
+		public static Int32? ReadNullableInt32(Stream src)
+		{
+			if(ReadBool(src))
+				return ReadInt32(src);
+			else
+				return null;
+		}
+		
 		public static void WriteString(String value, Stream sink)
 		{
 			if(value == null)

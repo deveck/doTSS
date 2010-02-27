@@ -65,6 +65,10 @@ namespace Iaik.Tc.Tpm.Context
 		
 		protected AutoResetEvent _configuredEvent = new AutoResetEvent(false);
 		
+		public FrontEndConnection Connection
+		{
+			get{ return _connection; }
+		}
 		
 		public PacketTransmitter PacketTransmitter
 		{
