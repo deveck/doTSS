@@ -23,43 +23,17 @@ namespace Iaik.Tc.Tpm.Configuration
 		private const string PROP_UID = "uid";
 		private const string PROP_NAME = "name";
 		
-		#region Static fields
-		/// <summary>
-		/// Settings for the Uid property
-		/// </summary>
-		private static ConfigurationProperty _propUid;
-		
-		/// <summary>
-		/// Settings for the Name property
-		/// </summary>
-		private static ConfigurationProperty _propName;
-		
-		/// <summary>
-		/// Collects all Configuration Properties
-		/// </summary>
-		private static ConfigurationPropertyCollection _propCollection = new ConfigurationPropertyCollection();
-		
-		static UserElement()
-		{
-			_propUid = new ConfigurationProperty(PROP_UID, typeof(string), null, 
-			                                   ConfigurationPropertyOptions.IsRequired);
-			_propCollection.Add(_propUid);
-			_propName = new ConfigurationProperty(PROP_NAME, typeof(string), null, 
-			                                   ConfigurationPropertyOptions.IsRequired);
-			_propCollection.Add(_propName);
-		}
-		#endregion
 
 		[ConfigurationProperty(PROP_UID, IsRequired=true, IsKey=true)]
 		public string Uid
 		{
-			get{ return (string)base[_propUid]; }
+			get{ return (string)base[PROP_UID]; }
 		}
 		
 		[ConfigurationProperty(PROP_NAME, IsRequired=true)]
 		public string Name
 		{
-			get{ return (string)base[_propName]; } 
+			get{ return (string)base[PROP_NAME]; } 
 		}
 
 		public override ConfigurationElementCollectionType CollectionType 
@@ -82,12 +56,6 @@ namespace Iaik.Tc.Tpm.Configuration
 		{
 			return (element as UserMemberShipElement).Gid;
 		}
-		
-		protected override ConfigurationPropertyCollection Properties 
-		{
-			get { return _propCollection; }
-		}
-
 	}
 	
 	/// <summary>

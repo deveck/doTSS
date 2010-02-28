@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -71,7 +71,6 @@
     <Compile Include="Configuration\AccessControlListSection.cs" />
     <Compile Include="Configuration\GroupElement.cs" />
     <Compile Include="Configuration\UserElement.cs" />
-    <Compile Include="Configuration\UserMemberShipElement.cs" />
     <Compile Include="Configuration\Permission.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -83,13 +82,6 @@
       <Project>{F6681243-5DCF-4B0B-BC85-0F1290CF0334}</Project>
       <Name>connection_lib</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Context\" />
-    <Folder Include="Subsystems\Debug\" />
-    <Folder Include="Authentication\" />
-    <Folder Include="Subsystems\Authentication\" />
-    <Folder Include="Configuration\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -107,5 +99,6 @@
         </Policies>
       </Properties>
     </MonoDevelop>
+    <VisualStudio />
   </ProjectExtensions>
 </Project>
