@@ -8,5 +8,6 @@ namespace Iaik.Tc.Tpm.Subsystems
 	public static class SubsystemConstants
 	{
 		public const string SUBSYSTEM_DEBUG = "debug";
+		public const string SUBSYSTEM_AUTH = "auth";
 	}
 }

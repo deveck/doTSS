@@ -59,6 +59,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TpmServer.cs">
@@ -119,4 +120,9 @@
     </MonoDevelop>
     <VisualStudio />
   </ProjectExtensions>
+  <ItemGroup>
+    <Content Include="tpm_server.exe.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 </Project>

@@ -107,7 +107,21 @@ namespace Iaik.Tc.Tpm.Subsystems
 		/// <summary>
 		/// Creates a SubsystemRequest from an identifier extracted from the DataPacket
 		/// </summary>
-		protected abstract SubsystemRequest CreateRequestFromIdentifier(TRequest requestType);
+		protected virtual SubsystemRequest CreateRequestFromIdentifier (TRequest requestType)
+		{
+			if(_requestExecutionInfos.ContainsKey(requestType))
+			{
+				Type t = _requestExecutionInfos[requestType].RequestType;
+				ConstructorInfo ctor = t.GetConstructor(new Type[]{typeof(EndpointContext)});
+				
+				if(ctor == null)
+					throw new NotSupportedException(string.Format("'{0}' does not have a default ctor!",t));
+				
+				return (SubsystemRequest)ctor.Invoke(new object[]{_context});
+			}
+			else
+				throw new NotImplementedException(string.Format("Request type '{0}' not implemented", requestType));
+		}
 		
 		
 		/// <summary>

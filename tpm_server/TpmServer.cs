@@ -12,6 +12,8 @@ using System.Threading;
 using log4net;
 using Iaik.Connection.ClientConnections;
 using Iaik.Tc.Tpm.Context;
+using System.Configuration;
+using Iaik.Tc.Tpm.Configuration;
 
 namespace Iaik.Tc.Tpm
 {	
@@ -47,6 +49,12 @@ namespace Iaik.Tc.Tpm
 		/// <param name="args">Command line arguments. you can override the default config file by supplying "--config=/path/to/configfile.conf"</param>
 		public static void Main(string[] args)
 		{
+			AccessControlListSection sect = (AccessControlListSection)System.Configuration.ConfigurationManager.GetSection("accessControlList");
+			foreach(string key in System.Configuration.ConfigurationManager.AppSettings.AllKeys)
+				Console.WriteLine(key);
+			
+			Environment.Exit(0);
+			
 			log4net.Appender.ConsoleAppender appender = new log4net.Appender.ConsoleAppender();
 			appender.Name = "ConsoleAppender";
 			appender.Layout = new log4net.Layout.PatternLayout("[%date{dd.MM.yyyy HH:mm:ss,fff}]-%-5level-[%type]: %message%newline");
