@@ -6,7 +6,7 @@
 using System;
 using System.Configuration;
 
-namespace Iaik.Tc.Tpm.Configuration
+namespace Iaik.Tc.Tpm.Configuration.DotNetConfiguration.Elements
 {
 	/// <summary>
 	/// Identifies a single group in the access control list

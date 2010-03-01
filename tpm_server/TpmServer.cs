@@ -14,6 +14,7 @@ using Iaik.Connection.ClientConnections;
 using Iaik.Tc.Tpm.Context;
 using System.Configuration;
 using Iaik.Tc.Tpm.Configuration;
+using Iaik.Tc.Tpm.Configuration.DotNetConfiguration.Elements;
 
 namespace Iaik.Tc.Tpm
 {	
