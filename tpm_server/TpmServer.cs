@@ -15,6 +15,7 @@ using Iaik.Tc.Tpm.Context;
 using System.Configuration;
 using Iaik.Tc.Tpm.Configuration;
 using Iaik.Tc.Tpm.Configuration.DotNetConfiguration.Elements;
+using Iaik.Tc.Tpm.Configuration.DotNetConfiguration;
 
 namespace Iaik.Tc.Tpm
 {	
@@ -50,9 +51,7 @@ namespace Iaik.Tc.Tpm
 		/// <param name="args">Command line arguments. you can override the default config file by supplying "--config=/path/to/configfile.conf"</param>
 		public static void Main(string[] args)
 		{
-			AccessControlListSection sect = (AccessControlListSection)System.Configuration.ConfigurationManager.GetSection("accessControlList");
-			foreach(string key in System.Configuration.ConfigurationManager.AppSettings.AllKeys)
-				Console.WriteLine(key);
+			Tests.TestIt();
 			
 			Environment.Exit(0);
 			

@@ -1,4 +1,4 @@
-﻿//
+//
 //
 // Author: Andreas Reiter <andreas.reiter@student.tugraz.at>
 // Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
@@ -18,15 +18,28 @@ namespace Iaik.Tc.Tpm.Configuration
         protected IDictionary<string, Group> _memberOf;
 
         /// <summary>
-        /// Gets the list of associated groups
+        /// Enumerates thoug all associated groups
         /// </summary>
-        public IDictionary<string, Group> MemberOf
+        public IEnumerable<Group> MemberOf
         {
-            get { return _memberOf; }
+            get { return _memberOf.Values; }
         }
 
+		/// <summary>
+		/// Contains all Authentications that are supported
+		/// </summary>
+		protected IDictionary<string, Authentication> _authentications;
+	
+		/// <summary>
+		/// Enumerates through all associated authentications
+		/// </summary>
+		public virtual IEnumerable<Authentication> Authentications
+		{
+			get{ return _authentications.Values; }
+		}
+		
         /// <summary>
-        /// Gets the id of the user
+        /// Gets the unique id of the user
         /// </summary>
         public abstract string Uid { get; }
 
@@ -35,11 +48,55 @@ namespace Iaik.Tc.Tpm.Configuration
         /// </summary>
         public abstract string Name { get; }
 
+		/// <summary>
+		/// Checks if the user is a member of group
+		/// </summary>
+		/// <param name="group">The group to check</param>
+		/// <returns>
+		/// </returns>
         public virtual bool IsMemberOf(Group group)
         {
-            return MemberOf.ContainsKey(group.Gid);
+            return _memberOf.ContainsKey(group.Gid);
         }
+		
+		/// <summary>
+		/// Checks if the authentication method with the specified name is supported by this user
+		/// </summary>
+		/// <param name="name">Name to check</param>
+		/// <returns>
+		/// </returns>
+		public virtual bool SupportsAuthentication(string name)
+		{
+			return _authentications.ContainsKey(name);
+		}
 
+		/// <summary>
+		/// Checks if the specified authentication type is supported by this user
+		/// </summary>
+		/// <param name="type">type to check</param>
+		/// <returns>
+		/// </returns>
+		public virtual bool SupportsAuthentication(Type type)
+		{
+			foreach(Authentication auth in Authentications)
+			{
+				if(type.IsAssignableFrom(auth.GetType()))
+					return true;
+			}
+			
+			return false;
+		}
+		
+		/// <summary>
+		/// Checks if the specified authentication method is supported by this user
+		/// </summary>
+		/// <returns>
+		/// </returns>
+		public virtual bool SupportsAuthentication<T>() where T: Authentication
+		{
+			return SupportsAuthentication(typeof(T));
+		}
+		
         public override bool Equals(object obj)
         {
             if (obj is User)

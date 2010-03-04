@@ -72,6 +72,7 @@ namespace Iaik.Tc.Tpm.Configuration.DotNetConfiguration.Elements
         {
             return (element as AuthenticationType).Type;
         }
+	
     }
 
     [ConfigurationCollection(typeof(AuthenticationParameter), AddItemName="addAuthParam", CollectionType=ConfigurationElementCollectionType.BasicMap)]
@@ -104,6 +105,11 @@ namespace Iaik.Tc.Tpm.Configuration.DotNetConfiguration.Elements
         {
             return (element as AuthenticationParameter).Name;
         }
+		
+		new public AuthenticationParameter this[string name]
+		{
+			get{ return (AuthenticationParameter)base[name]; }
+		}
     }
 
     public class AuthenticationParameter : ConfigurationElement
