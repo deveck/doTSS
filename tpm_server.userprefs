@@ -3,64 +3,76 @@
   <MonoDevelop.Ide.DebuggingService>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService>
-  <MonoDevelop.Ide.Workbench ActiveDocument="tpm_lib/tpm_lowlvl/TPM.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="tpm_lib/TPMCommandRequest.cs" ctype="Workbench">
     <Files>
       <File FileName="tpm_server/TpmServer.cs" Line="1" Column="1" />
-      <File FileName="tpm_client/Main.cs" Line="1" Column="1" />
+      <File FileName="tpm_client/Main.cs" Line="3" Column="26" />
       <File FileName="tpm_server/Tests.cs" Line="1" Column="1" />
       <File FileName="tpm_core/Context/ServerContext.cs" Line="1" Column="1" />
       <File FileName="tpm_core/Subsystems/BaseSubsystem.cs" Line="1" Column="1" />
       <File FileName="utils/StreamHelper.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Subsystems/Debug/DebugSubsystem.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Context/EndpointContext.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Context/DebugClient.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Subsystems/SubsystemRequest.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Subsystems/SubsystemResponse.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Context/ClientContext.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Subsystems/NoResponseSubsystemRequest.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Subsystems/SubsystemHelpers.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Subsystems/Debug/RequestPrintOnServerConsoleWithResponse.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Subsystems/RequestContext.cs" Line="1" Column="1" />
-      <File FileName="connection_lib/AssemblyInfo.cs" Line="1" Column="1" />
-      <File FileName="connection_lib/ClientConnections/FrontEndConnection.cs" Line="1" Column="1" />
-      <File FileName="connection_lib/IFrontEndServerListener.cs" Line="1" Column="1" />
-      <File FileName="connection_lib/Packets/DataPacket.cs" Line="1" Column="1" />
-      <File FileName="connection_lib/ClientConnections/NamedPipeConnection.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Subsystems/ISubsystem.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Authentication/AuthenticationMechanism.cs" Line="1" Column="1" />
-      <File FileName="tpm_lib/tpm_lowlvl/AssemblyInfo.cs" Line="27" Column="47" />
-      <File FileName="tpm_lib/tpm_lowlvl/backends/win32/StMicroTPM.cs" Line="7" Column="31" />
-      <File FileName="tpm_lib/tpm_lowlvl/backends/win32/TpmBaseServices.cs" Line="6" Column="1" />
-      <File FileName="tpm_lib/commands/TpmCommand.cs" Line="6" Column="19" />
-      <File FileName="tpm_lib/TpmConstants.cs" Line="11" Column="35" />
+      <File FileName="tpm_lib/commands/Capability/TPM_GetCapability.cs" Line="16" Column="1" />
+      <File FileName="tpm_lib/commands/TpmCommand.cs" Line="40" Column="32" />
+      <File FileName="tpm_lib/TpmConstants.cs" Line="154" Column="44" />
       <File FileName="tpm_lib/commands/TpmCommandsAttribute.cs" Line="9" Column="49" />
-      <File FileName="tpm_lib/tpm_lowlvl/TpmBlob.cs" Line="7" Column="30" />
-      <File FileName="tpm_lib/commands/TpmCommandFactory.cs" Line="22" Column="21" />
-      <File FileName="tpm_lib/commands/Capability/TPM_GetCapability.cs" Line="9" Column="14" />
-      <File FileName="tpm_lib/commands/TPMCommandNames.cs" Line="11" Column="16" />
-      <File FileName="tpm_lib/tpm_lowlvl/TPM.cs" Line="122" Column="23" />
+      <File FileName="tpm_lib/commands/TpmCommandFactory.cs" Line="42" Column="15" />
+      <File FileName="tpm_lib/commands/TPMCommandNames.cs" Line="11" Column="26" />
+      <File FileName="tpm_lib/tpm_lowlvl/TPM.cs" Line="122" Column="21" />
       <File FileName="tpm_lib/tpm_lowlvl/TpmProviderAttribute.cs" Line="8" Column="1" />
       <File FileName="tpm_lib/tpm_lowlvl/TpmProviders.cs" Line="8" Column="31" />
-      <File FileName="tpm_lib/commands/Integrity/TPM_PCRRead.cs" Line="17" Column="4" />
+      <File FileName="tpm_lib/commands/Integrity/TPM_PCRRead.cs" Line="24" Column="1" />
       <File FileName="tpm_lib/exceptions/TpmLibraryException.cs" Line="38" Column="35" />
       <File FileName="tpm_lib/tpm_lowlvl/exceptions/TpmLowLvlException.cs" Line="6" Column="30" />
-      <File FileName="tpm_lib/tpm_lowlvl/backends/linux/Tddl.cs" Line="8" Column="22" />
-      <File FileName="tpm_storage/TpmStorage.cs" Line="16" Column="3" />
+      <File FileName="tpm_lib/tpm_lowlvl/backends/linux/Tddl.cs" Line="67" Column="35" />
+      <File FileName="tpm_storage/TpmStorage.cs" Line="18" Column="1" />
+      <File FileName="tpm_lib/TPMCommandRequest.cs" Line="21" Column="1" />
+      <File FileName="tpm_lib/TPMCommandResponse.cs" Line="13" Column="3" />
+      <File FileName="tpm_lib/tpm_lowlvl/data/GenericBlob.cs" Line="144" Column="10" />
+      <File FileName="tpm_lib/tpm_lowlvl/data/TpmBlob.cs" Line="18" Column="4" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Option id="ShowVersionControlOverlays" value="True" />
           <Option id="ShowAllFiles" value="False" />
-          <Node name="Client" expanded="True" />
+          <Node name="Client" expanded="True">
+            <Node name="tpm_client" expanded="True">
+              <Node name="References" expanded="True" />
+            </Node>
+          </Node>
+          <Node name="Keystore" expanded="True">
+            <Node name="tpm_keystore" expanded="True">
+              <Node name="References" expanded="True" />
+            </Node>
+          </Node>
+          <Node name="Runtime" expanded="True">
+            <Node name="connection_lib" expanded="True">
+              <Node name="ClientConnections" expanded="True" />
+              <Node name="Packets" expanded="True" />
+            </Node>
+            <Node name="tpm_core" expanded="True">
+              <Node name="Authentication" expanded="True" />
+              <Node name="Context" expanded="True" />
+              <Node name="Subsystems" expanded="True">
+                <Node name="Debug" expanded="True" />
+              </Node>
+            </Node>
+          </Node>
           <Node name="Storage" expanded="True">
-            <Node name="tpm_storage" selected="True" />
+            <Node name="tpm_storage" expanded="True" />
           </Node>
           <Node name="TPM" expanded="True">
             <Node name="tpm_lib" expanded="True">
-              <Node name="commands" expanded="True" />
+              <Node name="commands" expanded="True">
+                <Node name="Capability" expanded="True" />
+                <Node name="Integrity" expanded="True" />
+              </Node>
+              <Node name="TPMCommandRequest.cs" selected="True" />
             </Node>
-            <Node name="tpm_lowlvl" expanded="True" />
+            <Node name="tpm_lowlvl" expanded="True">
+              <Node name="data" expanded="True" />
+            </Node>
+            <Node name="tpm_test" expanded="True" />
           </Node>
         </State>
       </Pad>

@@ -2,13 +2,16 @@
 // Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 
 using System;
+using System.Collections.Generic;
 
 namespace Iaik.Tc.Tpm.library
 {
 
 
-	public class TPMCommandResponse
+	public sealed class TPMCommandResponse
 	{
+		private String name_;
+		private IDictionary<String, byte[]> parameters_;
 
 		public TPMCommandResponse ()
 		{
