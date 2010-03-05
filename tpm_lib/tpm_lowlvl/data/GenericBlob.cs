@@ -5,16 +5,29 @@
 using System;
 using System.IO;
 
-namespace Iaik.Tc.Tpm.lowlevel
+namespace Iaik.Tc.Tpm.lowlevel.data
 {
-
-
-	public class TpmBlob : MemoryStream
+	/// <summary>
+    /// An extended version of the System.IO.MemoryStream with
+    /// support for TCG specific read and write operations.
+    /// </summary>
+	public class GenericBlob : MemoryStream
 	{
 
-		public TpmBlob ()
+		/// <summary>
+        /// Constructs a new writeable, resizeable memory stream.
+        /// </summary>
+		public GenericBlob()
 		{
 		}
+		
+		/// <summary>
+        /// Constructs a read-only memory stream wrapping the given blob
+        /// </summary>
+        /// <param name="blob"></param>
+        public GenericBlob(byte[] blob) : this(blob, false)
+        {            
+        }
 		
 		#region Reading data
         /// <summary>
@@ -28,10 +41,11 @@ namespace Iaik.Tc.Tpm.lowlevel
         public new byte ReadByte()
         {
             int in_byte = base.ReadByte();
-            if (in_byte < 0)
+            
+			if (in_byte < 0)
                 throw new EndOfStreamException();
-
-            return (byte)in_byte;
+         
+			return (byte)in_byte;
         }
 
         /// <summary>
@@ -64,7 +78,7 @@ namespace Iaik.Tc.Tpm.lowlevel
         }
 
         /// <summary>
-        /// Reads a 16bit unsigned integer from the stream.
+        /// Reads a 32bit unsigned integer from the stream.
         /// </summary>
         /// <returns></returns>
         public UInt32 ReadUInt32()
@@ -78,7 +92,7 @@ namespace Iaik.Tc.Tpm.lowlevel
         }
 
         /// <summary>
-        /// Reads a 16bit unsigned integer from the stream.
+        /// Reads a 64bit unsigned integer from the stream.
         /// </summary>
         /// <returns></returns>
         public UInt64 ReadUInt64()
@@ -96,7 +110,7 @@ namespace Iaik.Tc.Tpm.lowlevel
         }
 
         /// <summary>
-        /// Extract a new byte blob from the TPM blob
+        /// Extract a new byte blob from the blob
         /// </summary>
         /// <param name="size"></param>
         /// <returns></returns>
@@ -109,49 +123,15 @@ namespace Iaik.Tc.Tpm.lowlevel
             return result;
         }
         #endregion
-		
-		 #region Writing data
-        /// <summary>
-        /// Write a TPM command header (with size 0, assuming that
-        /// WriteCmdSize will be called later)
-        /// </summary>
-        /// <param name="tag"></param>
-        /// <param name="ordinal"></param>
-        public void WriteCmdHeader(UInt16 tag, UInt32 ordinal)
-        {
-            WriteCmdHeader(tag, ordinal, 0);
-        }
 
+        #region Writing data
         /// <summary>
         /// Write an object to the TPM blob
         /// </summary>
         /// <param name="obj"></param>
-        public void Write(ITpmBlobSerializable obj)
+        public void Write(IBlobSerializable obj)
         {
             obj.WriteToBlob(this);
-        }
-
-        /// <summary>
-        /// Write the TPM command header
-        /// </summary>
-        /// <param name="?"></param>
-        public void WriteCmdHeader(UInt16 tag, UInt32 ordinal, int size)
-        {
-            WriteUInt16(tag);
-            WriteUInt32((UInt32)size);
-            WriteUInt32(ordinal);            
-        }
-
-        /// <summary>
-        /// Backpatch the command size
-        /// </summary>
-        public void WriteCmdSize()
-        {            
-            long current = this.Position;
-
-            Position = 2;
-            WriteUInt32((UInt32)this.Length);
-            Position = current;
         }
 
         /// <summary>
@@ -201,8 +181,5 @@ namespace Iaik.Tc.Tpm.lowlevel
             WriteByte((byte)(value));
         }
         #endregion
-		
-		
 	}
 }
-

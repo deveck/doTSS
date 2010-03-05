@@ -36,6 +36,11 @@ namespace Iaik.Tc.Tpm.library.commands
 				}
 			}
 		}
+		
+		public static TpmCommand Create(TPMCommandRequest request)
+		{
+			//create();
+		}
 	}
 	
 }
