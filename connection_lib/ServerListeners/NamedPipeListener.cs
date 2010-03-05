@@ -11,6 +11,8 @@ using System.IO.Pipes;
 using System.Threading;
 using Iaik.Connection.ClientConnections;
 using log4net;
+using Iaik.Utils.CommonAttributes;
+using Iaik.Connection.Configuration;
 
 namespace Iaik.Connection.ServerListeners
 {
@@ -24,6 +26,7 @@ namespace Iaik.Connection.ServerListeners
     /// get populated one after another, just as the client "connections" come in.
     /// This could be seen as a simulation of a TCP connection listener! :-)
     /// </remarks>
+    [ClassIdentifier("named_pipe")]
     public class NamedPipeListener : IFrontEndServerListener
     {
 
@@ -68,6 +71,17 @@ namespace Iaik.Connection.ServerListeners
         /// </summary>
         public event ClientConnectedDelegate ClientConnected;
         
+		
+		public NamedPipeListener(string pipeName)
+		{
+			_pipeName = pipeName;
+		}
+		
+		public NamedPipeListener(IListenerConfiguration listenerConfig)
+			:this(listenerConfig.FindParameter("pipe_name"))
+		{
+		}
+		
         /// <summary>
         /// Starts the listening process
         /// </summary>

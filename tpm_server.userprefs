@@ -1,37 +1,45 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" ctype="Workspace" />
   <MonoDevelop.Ide.DebuggingService>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/home/andi/Repos/IAIK_ITProject/TpmCSStack-impl/tpm_server/TpmServer.cs" line="59" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService>
-  <MonoDevelop.Ide.Workbench ActiveDocument="connection_lib/Configuration/DotNetConfiguration/Connections.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="tpm_server/Configuration/DotNetConfiguration/AuthenticationMethosCollection.cs" ctype="Workbench">
     <Files>
-      <File FileName="tpm_server/tpm_server.exe.config" Line="162" Column="29" />
-      <File FileName="connection_lib/Configuration/DotNetConfiguration/Connections.cs" Line="4" Column="59" />
-      <File FileName="connection_lib/ServerListeners/UnixSocketListener.cs" Line="1" Column="1" />
+      <File FileName="utils/CommonFactories/GenericClassIdentifierFactory.cs" Line="25" Column="45" />
+      <File FileName="tpm_server/TpmServer.cs" Line="66" Column="1" />
+      <File FileName="tpm_server/TpmServerContext.cs" Line="65" Column="1" />
+      <File FileName="connection_lib/ClientConnections/FrontEndConnection.cs" Line="143" Column="82" />
+      <File FileName="tpm_server/Configuration/DotNetConfiguration/Connections.cs" Line="18" Column="58" />
+      <File FileName="tpm_server/Configuration/DotNetConfiguration/Listener.cs" Line="21" Column="61" />
+      <File FileName="tpm_server/tpm_server.exe.config" Line="210" Column="4" />
+      <File FileName="tpm_server/Configuration/DotNetConfiguration/AuthenticationMethosCollection.cs" Line="8" Column="11" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True" selected="True">
+        <State expanded="True">
           <Option id="ShowVersionControlOverlays" value="True" />
           <Option id="ShowAllFiles" value="False" />
           <Node name="Runtime" expanded="True">
             <Node name="connection_lib" expanded="True">
-              <Node name="References" expanded="True" />
-              <Node name="Configuration" expanded="True">
-                <Node name="DotNetConfiguration" expanded="True" />
-              </Node>
+              <Node name="ClientConnections" expanded="True" />
+              <Node name="Configuration" expanded="True" />
               <Node name="ServerListeners" expanded="True" />
             </Node>
             <Node name="tpm_core" expanded="True">
               <Node name="Authentication" expanded="True" />
-              <Node name="Subsystems" expanded="True">
-                <Node name="Debug" expanded="True" />
-              </Node>
             </Node>
-            <Node name="utils" expanded="True" />
+            <Node name="utils" expanded="True">
+              <Node name="CommonFactories" expanded="True" />
+            </Node>
           </Node>
           <Node name="Server" expanded="True">
-            <Node name="tpm_server" expanded="True" />
+            <Node name="tpm_server" expanded="True" selected="True">
+              <Node name="Configuration" expanded="True">
+                <Node name="DotNetConfiguration" expanded="True" />
+              </Node>
+            </Node>
           </Node>
         </State>
       </Pad>

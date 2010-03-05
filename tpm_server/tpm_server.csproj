@@ -8,7 +8,7 @@
     <ProjectGuid>{2880E558-F34E-4AA5-A7CB-E6EB68B490EA}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AssemblyName>tpm_server</AssemblyName>
-    <RootNamespace>iaik.tc.tpm</RootNamespace>
+    <RootNamespace>Iaik.Tc.Tpm</RootNamespace>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -67,12 +67,13 @@
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Tests.cs" />
-    <Compile Include="Configuration\IConnectionsConfiguration.cs" />
-    <Compile Include="Configuration\IListenerConfiguration.cs" />
     <Compile Include="Configuration\DotNetConfiguration\Connections.cs" />
     <Compile Include="Configuration\DotNetConfiguration\Listener.cs" />
     <Compile Include="Configuration\DotNetConfiguration\ListenersCollection.cs" />
     <Compile Include="Configuration\DotNetConfiguration\Parameter.cs" />
+    <Compile Include="TpmServerContext.cs" />
+    <Compile Include="Configuration\DotNetConfiguration\AuthenticationMethodCollection.cs" />
+    <Compile Include="Configuration\DotNetConfiguration\AuthenticationElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -120,7 +121,7 @@
     <MonoDevelop>
       <Properties>
         <Policies>
-          <StandardHeader Text="///&#xA;///&#xA;/// Author: Andreas Reiter &lt;andreas.reiter@student.tugraz.at&gt;&#xA;/// Author: Georg Neubauer &lt;georg.neubauer@student.tugraz.at&gt;" inheritsSet="MITX11License" />
+          <StandardHeader Text="&#xA;&#xA;Author: Andreas Reiter &lt;andreas.reiter@student.tugraz.at&gt;&#xA;Author: Georg Neubauer &lt;georg.neubauer@student.tugraz.at&gt;" inheritsSet="MITX11License" />
         </Policies>
       </Properties>
     </MonoDevelop>

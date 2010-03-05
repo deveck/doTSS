@@ -7,6 +7,7 @@ using System;
 using System.Configuration;
 using System.Collections.Generic;
 using Iaik.Tc.Tpm.Configuration;
+using Iaik.Connection.Configuration;
 
 namespace Iaik.Tc.Tpm.Configuration.DotNetConfiguration
 {
@@ -22,6 +23,11 @@ namespace Iaik.Tc.Tpm.Configuration.DotNetConfiguration
 		private const string PROP_LISTENERS = "listeners";
 		
 		/// <summary>
+		/// Authentication methods tag
+		/// </summary>
+		private const string PROP_AUTHENTICATIONMETHODS = "authenticationMethods";
+		
+		/// <summary>
 		/// Returns the collection of configured listeners
 		/// </summary>
 		[ConfigurationProperty(PROP_LISTENERS)]
@@ -30,6 +36,11 @@ namespace Iaik.Tc.Tpm.Configuration.DotNetConfiguration
 			get{ return (ListenersCollection)base[PROP_LISTENERS]; }
 		}
 
+		[ConfigurationProperty(PROP_AUTHENTICATIONMETHODS)]
+		public AuthenticationMethodCollection AuthenticationMethods
+		{
+			get{ return (AuthenticationMethodCollection)base[PROP_AUTHENTICATIONMETHODS];}
+		}
 		
 		#region IConnectionsConfiguration implementation
 		
@@ -46,6 +57,19 @@ namespace Iaik.Tc.Tpm.Configuration.DotNetConfiguration
 					listenerConfigurations.Add(listenerConfiguration);
 				
 				return listenerConfigurations;
+			}
+		}
+		
+		IEnumerable<IAuthenticationMethod> IConnectionsConfiguration.AuthenticationMethods
+		{
+			get
+			{
+				List<IAuthenticationMethod> authenticationMethods = new List<IAuthenticationMethod>();
+				
+				foreach(IAuthenticationMethod authMethod in AuthenticationMethods)
+					authenticationMethods.Add(authMethod);
+				
+				return authenticationMethods;
 			}
 		}
 		

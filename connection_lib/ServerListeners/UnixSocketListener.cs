@@ -10,6 +10,8 @@ using System.IO;
 using Iaik.Connection.ClientConnections;
 using Iaik.Connection.Packets;
 using log4net;
+using Iaik.Utils.CommonAttributes;
+using Iaik.Connection.Configuration;
 
 namespace Iaik.Connection.ServerListeners
 {
@@ -17,6 +19,7 @@ namespace Iaik.Connection.ServerListeners
 	/// <summary>
 	/// Implements a listener which spawns UnixSocketConnections
 	/// </summary>
+	[ClassIdentifier("unix_socket")]
 	public class UnixSocketListener : IFrontEndServerListener
 	{		
 		/// <summary>
@@ -46,6 +49,11 @@ namespace Iaik.Connection.ServerListeners
 			_logger.Debug(string.Format("Creating UnixSocketListener with socketFile={0}", socketFile));
 			_socketFile = socketFile;
 			_endpoint = new UnixEndPoint(socketFile);
+		}
+		
+		public UnixSocketListener(IListenerConfiguration listenerConfig)
+			:this(listenerConfig.FindParameter("socket_file"))
+		{
 		}
 		
 		#region IDisposable implementation

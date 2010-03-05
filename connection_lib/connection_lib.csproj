@@ -52,6 +52,9 @@
     <Compile Include="Packets\PacketTransmitter.cs" />
     <Compile Include="ServerListeners\NamedPipeListener.cs" />
     <Compile Include="ServerListeners\UnixSocketListener.cs" />
+    <Compile Include="Configuration\IConnectionsConfiguration.cs" />
+    <Compile Include="Configuration\IListenerConfiguration.cs" />
+    <Compile Include="Configuration\IAuthenticationMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">
@@ -61,6 +64,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="Configuration\DotNetConfiguration\" />
+    <Folder Include="Configuration\" />
   </ItemGroup>
 </Project>

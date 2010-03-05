@@ -17,6 +17,8 @@ using Iaik.Tc.Tpm.Configuration;
 using Iaik.Tc.Tpm.Configuration.DotNetConfiguration.Elements;
 using Iaik.Tc.Tpm.Configuration.DotNetConfiguration;
 using System.Collections.Generic;
+using Iaik.Utils.CommonFactories;
+using Iaik.Connection.Configuration;
 
 namespace Iaik.Tc.Tpm
 {	
@@ -44,6 +46,8 @@ namespace Iaik.Tc.Tpm
             Console.WriteLine("-help | -h              Show this fancy help");
             Console.WriteLine("-install-service | -i   Invoke Windows/Mono service installer");
             Console.WriteLine("-uninstall-service | -u Invoke Windows/Mono service uninstaller"); 
+			
+			Environment.Exit(0);
         }
 
 		/// <summary>
@@ -52,60 +56,16 @@ namespace Iaik.Tc.Tpm
 		/// <param name="args">Command line arguments. you can override the default config file by supplying "--config=/path/to/configfile.conf"</param>
 		public static void Main(string[] args)
 		{
-			IConnectionsConfiguration connectionConfig = (IConnectionsConfiguration)ConfigurationManager.GetSection("connections");
-			
-			foreach(IListenerConfiguration listenerConfig in connectionConfig.Listeners)
-			{
-				Console.WriteLine("Found configured listener: {0}", listenerConfig.ListenerType);
-				Console.WriteLine("\tWith parameters:");
-				
-				foreach(KeyValuePair<string, string> parameter in listenerConfig.Parameters)
-					Console.WriteLine("\tname={0}; value={1}", parameter.Key, parameter.Value);
-				
-			}
-			
-	
-			Environment.Exit(0);
-			
-			log4net.Appender.ConsoleAppender appender = new log4net.Appender.ConsoleAppender();
-			appender.Name = "ConsoleAppender";
-			appender.Layout = new log4net.Layout.PatternLayout("[%date{dd.MM.yyyy HH:mm:ss,fff}]-%-5level-[%type]: %message%newline");
-			log4net.Config.BasicConfigurator.Configure(appender);
-			
-			ILog logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-			
             CommandLineHandler commandLineHandler = new CommandLineHandler();
             commandLineHandler.RegisterCallback("help", OutputHelp);
             commandLineHandler.RegisterCallback("h", OutputHelp);
             commandLineHandler.Parse(args);
 			
-			//TODO: Read configuration and do not load the hard coded listeners ;)
-			
-			UnixSocketListener listener = new UnixSocketListener("/tmp/tpm_testsocket");
-            //NamedPipeListener listener = new NamedPipeListener();
-			listener.ClientConnected += HandleListenerClientConnected;
-			listener.Listen();
+	
+			TpmServerContext ctx = new TpmServerContext();
+			ctx.Start();
 			
 			Thread.Sleep(Timeout.Infinite);
 		}
-
-		static void HandleListenerClientConnected (FrontEndConnection connection)
-		{
-			ServerContext ctx = EndpointContext.CreateServerEndpointContext(connection);
-			
-			//TODO: add generated context to some sort of list, to know which connections are open
-		}
-		
-		protected override void OnStart (string[] args)
-		{
-			base.OnStart (args);
-		}
-		
-		protected override void OnStop ()
-		{
-			base.OnStop ();
-		}
-
-
 	}
 }
