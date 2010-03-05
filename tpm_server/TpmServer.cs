@@ -16,6 +16,7 @@ using System.Configuration;
 using Iaik.Tc.Tpm.Configuration;
 using Iaik.Tc.Tpm.Configuration.DotNetConfiguration.Elements;
 using Iaik.Tc.Tpm.Configuration.DotNetConfiguration;
+using System.Collections.Generic;
 
 namespace Iaik.Tc.Tpm
 {	
@@ -51,8 +52,19 @@ namespace Iaik.Tc.Tpm
 		/// <param name="args">Command line arguments. you can override the default config file by supplying "--config=/path/to/configfile.conf"</param>
 		public static void Main(string[] args)
 		{
-			Tests.TestIt();
+			IConnectionsConfiguration connectionConfig = (IConnectionsConfiguration)ConfigurationManager.GetSection("connections");
 			
+			foreach(IListenerConfiguration listenerConfig in connectionConfig.Listeners)
+			{
+				Console.WriteLine("Found configured listener: {0}", listenerConfig.ListenerType);
+				Console.WriteLine("\tWith parameters:");
+				
+				foreach(KeyValuePair<string, string> parameter in listenerConfig.Parameters)
+					Console.WriteLine("\tname={0}; value={1}", parameter.Key, parameter.Value);
+				
+			}
+			
+	
 			Environment.Exit(0);
 			
 			log4net.Appender.ConsoleAppender appender = new log4net.Appender.ConsoleAppender();

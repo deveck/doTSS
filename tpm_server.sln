@@ -53,6 +53,10 @@ Global
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = tpm_server\tpm_server.csproj
+		Policies = $0
+		$0.StandardHeader = $1
+		$1.Text = @\n\n Author: Andreas Reiter <andreas.reiter@student.tugraz.at>\n Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
+		$1.inheritsSet = MITX11License
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

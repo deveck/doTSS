@@ -67,6 +67,12 @@
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Tests.cs" />
+    <Compile Include="Configuration\IConnectionsConfiguration.cs" />
+    <Compile Include="Configuration\IListenerConfiguration.cs" />
+    <Compile Include="Configuration\DotNetConfiguration\Connections.cs" />
+    <Compile Include="Configuration\DotNetConfiguration\Listener.cs" />
+    <Compile Include="Configuration\DotNetConfiguration\ListenersCollection.cs" />
+    <Compile Include="Configuration\DotNetConfiguration\Parameter.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

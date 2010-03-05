@@ -3,55 +3,40 @@
   <MonoDevelop.Ide.DebuggingService>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService>
-  <MonoDevelop.Ide.Workbench ActiveDocument="connection_lib/ClientConnections/NamedPipeConnection.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="connection_lib/Configuration/DotNetConfiguration/Connections.cs" ctype="Workbench">
     <Files>
-      <File FileName="tpm_server/TpmServer.cs" Line="53" Column="24" />
-      <File FileName="tpm_client/Main.cs" Line="1" Column="1" />
-      <File FileName="tpm_server/Tests.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Context/ServerContext.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Subsystems/BaseSubsystem.cs" Line="1" Column="1" />
-      <File FileName="utils/StreamHelper.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Subsystems/Debug/DebugSubsystem.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Context/EndpointContext.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Context/DebugClient.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Subsystems/SubsystemRequest.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Subsystems/SubsystemResponse.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Context/ClientContext.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Subsystems/NoResponseSubsystemRequest.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Subsystems/SubsystemHelpers.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Subsystems/Debug/RequestPrintOnServerConsoleWithResponse.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Subsystems/RequestContext.cs" Line="1" Column="1" />
-      <File FileName="../../../mono-src/mono-2.6/mcs/class/corlib/System.Threading/Thread.cs" Line="1" Column="1" />
-      <File FileName="connection_lib/AssemblyInfo.cs" Line="1" Column="1" />
-      <File FileName="connection_lib/ClientConnections/FrontEndConnection.cs" Line="1" Column="1" />
-      <File FileName="connection_lib/IFrontEndServerListener.cs" Line="1" Column="1" />
-      <File FileName="connection_lib/Packets/DataPacket.cs" Line="1" Column="1" />
-      <File FileName="connection_lib/ClientConnections/NamedPipeConnection.cs" Line="11" Column="22" />
-      <File FileName="tpm_core/Subsystems/ISubsystem.cs" Line="1" Column="1" />
-      <File FileName="tpm_core/Authentication/AuthenticationMechanism.cs" Line="1" Column="1" />
+      <File FileName="tpm_server/tpm_server.exe.config" Line="162" Column="29" />
+      <File FileName="connection_lib/Configuration/DotNetConfiguration/Connections.cs" Line="4" Column="59" />
+      <File FileName="connection_lib/ServerListeners/UnixSocketListener.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True">
+        <State expanded="True" selected="True">
           <Option id="ShowVersionControlOverlays" value="True" />
           <Option id="ShowAllFiles" value="False" />
-          <Node name="connection_lib" expanded="True" selected="True">
-            <Node name="References" expanded="True" />
-            <Node name="ClientConnections" expanded="True" />
+          <Node name="Runtime" expanded="True">
+            <Node name="connection_lib" expanded="True">
+              <Node name="References" expanded="True" />
+              <Node name="Configuration" expanded="True">
+                <Node name="DotNetConfiguration" expanded="True" />
+              </Node>
+              <Node name="ServerListeners" expanded="True" />
+            </Node>
+            <Node name="tpm_core" expanded="True">
+              <Node name="Authentication" expanded="True" />
+              <Node name="Subsystems" expanded="True">
+                <Node name="Debug" expanded="True" />
+              </Node>
+            </Node>
+            <Node name="utils" expanded="True" />
           </Node>
-          <Node name="tpm_core" expanded="True">
-            <Node name="Authentication" expanded="True" />
-            <Node name="Context" expanded="True" />
-          </Node>
-          <Node name="tpm_server" expanded="True">
-            <Node name="References" expanded="True" />
+          <Node name="Server" expanded="True">
+            <Node name="tpm_server" expanded="True" />
           </Node>
         </State>
       </Pad>
       <Pad Id="ClassPad">
-        <State expanded="True" selected="True">
-          <Node name="tpm_core" expanded="True" />
-        </State>
+        <State expanded="True" selected="True" />
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
