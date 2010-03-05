@@ -8,7 +8,7 @@ namespace Iaik.Tc.Tpm.library.commands
 {
 	public static class TPMCommandNames
 	{
-		// TODO: tbd.
+		// TODO: tbd. DELETE!!!
 #region balbla
 		public const String r ="t";
 #endregion	

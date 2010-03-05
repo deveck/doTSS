@@ -3,7 +3,7 @@
   <MonoDevelop.Ide.DebuggingService>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService>
-  <MonoDevelop.Ide.Workbench ActiveDocument="tpm_lib/backends/linux/Tddl.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="tpm_lib/tpm_lowlvl/TPM.cs" ctype="Workbench">
     <Files>
       <File FileName="tpm_server/TpmServer.cs" Line="1" Column="1" />
       <File FileName="tpm_client/Main.cs" Line="1" Column="1" />
@@ -28,27 +28,65 @@
       <File FileName="connection_lib/ClientConnections/NamedPipeConnection.cs" Line="1" Column="1" />
       <File FileName="tpm_core/Subsystems/ISubsystem.cs" Line="1" Column="1" />
       <File FileName="tpm_core/Authentication/AuthenticationMechanism.cs" Line="1" Column="1" />
-      <File FileName="tpm_lib/backends/linux/Tddl.cs" Line="5" Column="1" />
+      <File FileName="tpm_lib/tpm_lowlvl/AssemblyInfo.cs" Line="27" Column="47" />
+      <File FileName="tpm_lib/tpm_lowlvl/backends/win32/StMicroTPM.cs" Line="7" Column="31" />
+      <File FileName="tpm_lib/tpm_lowlvl/backends/win32/TpmBaseServices.cs" Line="6" Column="1" />
+      <File FileName="tpm_lib/commands/TpmCommand.cs" Line="6" Column="19" />
+      <File FileName="tpm_lib/TpmConstants.cs" Line="11" Column="35" />
+      <File FileName="tpm_lib/commands/TpmCommandsAttribute.cs" Line="9" Column="49" />
+      <File FileName="tpm_lib/tpm_lowlvl/TpmBlob.cs" Line="7" Column="30" />
+      <File FileName="tpm_lib/commands/TpmCommandFactory.cs" Line="22" Column="21" />
+      <File FileName="tpm_lib/commands/Capability/TPM_GetCapability.cs" Line="9" Column="14" />
+      <File FileName="tpm_lib/commands/TPMCommandNames.cs" Line="11" Column="16" />
+      <File FileName="tpm_lib/tpm_lowlvl/TPM.cs" Line="122" Column="23" />
+      <File FileName="tpm_lib/tpm_lowlvl/TpmProviderAttribute.cs" Line="8" Column="1" />
+      <File FileName="tpm_lib/tpm_lowlvl/TpmProviders.cs" Line="8" Column="31" />
+      <File FileName="tpm_lib/commands/Integrity/TPM_PCRRead.cs" Line="17" Column="4" />
+      <File FileName="tpm_lib/exceptions/TpmLibraryException.cs" Line="38" Column="35" />
+      <File FileName="tpm_lib/tpm_lowlvl/exceptions/TpmLowLvlException.cs" Line="6" Column="30" />
+      <File FileName="tpm_lib/tpm_lowlvl/backends/linux/Tddl.cs" Line="8" Column="22" />
+      <File FileName="tpm_storage/TpmStorage.cs" Line="16" Column="3" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True" selected="True">
+        <State expanded="True">
           <Option id="ShowVersionControlOverlays" value="True" />
           <Option id="ShowAllFiles" value="False" />
           <Node name="Client" expanded="True" />
-          <Node name="Runtime" expanded="True" />
-          <Node name="Server" expanded="True">
-            <Node name="tpm_server" expanded="True" />
+          <Node name="Storage" expanded="True">
+            <Node name="tpm_storage" selected="True" />
           </Node>
           <Node name="TPM" expanded="True">
             <Node name="tpm_lib" expanded="True">
-              <Node name="backends" expanded="True" />
+              <Node name="commands" expanded="True" />
             </Node>
+            <Node name="tpm_lowlvl" expanded="True" />
           </Node>
         </State>
       </Pad>
       <Pad Id="ClassPad">
-        <State expanded="True" selected="True" />
+        <State expanded="True">
+          <Option id="ShowProjects" value="True" />
+          <Option id="NestedNamespaces" value="True" />
+          <Option id="PublicProtectedApiOnly" value="False" />
+          <Option id="PublicApiOnly" value="False" />
+          <Option id="GroupByAccess" value="False" />
+          <Option id="GroupByType" value="True" />
+          <Node name="TPM" expanded="True">
+            <Node name="tpm_lib" expanded="True">
+              <Node name="Iaik" expanded="True">
+                <Node name="Tc" expanded="True">
+                  <Node name="Tpm" expanded="True">
+                    <Node name="library" expanded="True">
+                      <Node name="commands" expanded="True" />
+                    </Node>
+                  </Node>
+                </Node>
+              </Node>
+            </Node>
+            <Node name="tpm_lowlvl" expanded="True" />
+          </Node>
+        </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>

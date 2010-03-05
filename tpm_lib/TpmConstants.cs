@@ -148,4 +148,10 @@ namespace Iaik.Tc.Tpm.library
         public const UInt32 TSC_ORD_PhysicalPresence = 0x4000000A;
         public const UInt32 TSC_ORD_ResetEstablishmentBit = 0x4000000B;
     }
+	
+	public static class TpmCommandNames
+	{
+		public const String TPM_CMD_GetCapability = "TPM_GetCapability";
+		public const String TPM_CMD_PCRRead = "TPM_PCRRead";
+	}
 }

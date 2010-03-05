@@ -21,6 +21,14 @@ namespace Iaik.Tc.Tpm.library.commands
 			}
 		}
 		
+		public UInt32 commandTag
+		{
+			get
+			{
+				return commandTag_;
+			}
+		}
+		
 		protected TpmCommand(){}
 		private TpmCommand(UInt32 tag, UInt32 ordinal)
 		{
@@ -31,6 +39,7 @@ namespace Iaik.Tc.Tpm.library.commands
 		public abstract void process();
 		public abstract void clear();
 		public abstract TpmBlob toBlob();
+		// TODO: How to create HMAC?
 				
 	}
 		

@@ -5,9 +5,10 @@ using System;
 using System.Runtime.InteropServices;
 using Iaik.Tc.Tpm.library;
 
+
 namespace Iaik.Tc.Tpm.library.commands
 {
-	[TPMCommands("TPM_PCRRead")]
+	[TPMCommands(TpmCommandNames.TPM_CMD_PCRRead)]
 	public sealed class TPM_PCRRead : TpmCommand
 	{
 		private UInt32 register_ = 0;
@@ -16,5 +17,7 @@ namespace Iaik.Tc.Tpm.library.commands
 		{
 			
 		}
+		
+		
 	}
 }
