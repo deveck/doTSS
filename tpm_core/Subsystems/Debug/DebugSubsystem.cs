@@ -7,6 +7,7 @@ using System;
 using Iaik.Connection.Packets;
 using Iaik.Tc.Tpm.Context;
 using System.Reflection;
+using Iaik.Tc.Tpm.Configuration;
 
 namespace Iaik.Tc.Tpm.Subsystems.Debug
 {
@@ -32,14 +33,14 @@ namespace Iaik.Tc.Tpm.Subsystems.Debug
 			PrintOnServerConsoleWithResponse
 		}
 		
-		public DebugSubsystem(EndpointContext context)
-			:base (context)
+		public DebugSubsystem(EndpointContext context, IConnectionsConfiguration config)
+            : base(context, config)
 		{
-			_requestExecutionInfos.Add(DebugRequestsEnum.PrintOnServerConsole,  
-	        	BuildRequestExecutionInfo<RequestPrintOnServerConsole, NoResponse>(HandlePrintOnServerConsoleRequest));
+			_requestExecutionInfos.Add(DebugRequestsEnum.PrintOnServerConsole, 
+	        	BuildRequestExecutionInfo<DebugSubsystem, RequestPrintOnServerConsole, NoResponse>(HandlePrintOnServerConsoleRequest));
 			
-			_requestExecutionInfos.Add(DebugRequestsEnum.PrintOnServerConsoleWithResponse,  
-	        	BuildRequestExecutionInfo<RequestPrintOnServerConsoleWithResponse, ResponsePrintOnServerConsole>(HandlePrintOnServerConsoleWithResponseRequest));
+			_requestExecutionInfos.Add(DebugRequestsEnum.PrintOnServerConsoleWithResponse,
+                BuildRequestExecutionInfo<DebugSubsystem, RequestPrintOnServerConsoleWithResponse, ResponsePrintOnServerConsole>(HandlePrintOnServerConsoleWithResponseRequest));
 		}
 		
 		
@@ -47,19 +48,19 @@ namespace Iaik.Tc.Tpm.Subsystems.Debug
 		public override string SubsystemIdentifier 
 		{
 			get { return SubsystemConstants.SUBSYSTEM_DEBUG; }
-		}		
-		
-		
-		
+		}
 
-			
-		private void HandlePrintOnServerConsoleRequest(RequestContext<RequestPrintOnServerConsole, NoResponse> requestCtx)
+
+
+
+
+        private void HandlePrintOnServerConsoleRequest(DebugSubsystem subsystem, RequestContext<RequestPrintOnServerConsole, NoResponse> requestCtx)
 		{	
 			
 			Console.WriteLine(requestCtx.Request.Text);
 		}
-		
-		private void HandlePrintOnServerConsoleWithResponseRequest(RequestContext<RequestPrintOnServerConsoleWithResponse, ResponsePrintOnServerConsole> requestCtx)
+
+        private void HandlePrintOnServerConsoleWithResponseRequest(DebugSubsystem subsystem, RequestContext<RequestPrintOnServerConsoleWithResponse, ResponsePrintOnServerConsole> requestCtx)
 		{	
 			Console.WriteLine(requestCtx.Request.Text);
 			

@@ -8,9 +8,41 @@ using Iaik.Utils.Serialization;
 using System.IO;
 using Iaik.Tc.Tpm.Context;
 using Iaik.Utils;
+using Iaik.Tc.Tpm.Configuration;
+using Iaik.Tc.Tpm.Authentication;
+using System.Collections.Generic;
 
 namespace Iaik.Tc.Tpm.Subsystems.Authentication
 {
+
+    public static class ListAuthenticationMechanismsHandler
+    {
+        /// <summary>
+        /// Requesthandler
+        /// 
+        /// Looks for all configured and compatible authentication methods for the requesting client
+        /// </summary>
+        /// <param name="subsystem"></param>
+        /// <param name="requestCtx"></param>
+        public static void HandleListAuthenticationMechanisms(AuthenticationSubsystem subsystem,
+                RequestContext<ListAuthenticationMechanismsRequest, ListAuthenticationMechanismsResponse> requestCtx)
+        {
+            List<string> compatibleAuthenticationMethods = new List<string>();
+
+            foreach (IAuthenticationMethod authMethod in subsystem.ConnectionsConfig.AuthenticationMethods)
+            {
+                AuthenticationMechanismChecker checker = authMethod.AuthChecker;
+
+                if (checker.IsCompatibleWith(subsystem.EndpointContext.Connection))
+                    compatibleAuthenticationMethods.Add(authMethod.AuthIdentifier);
+            }
+
+            ListAuthenticationMechanismsResponse response = requestCtx.CreateResponse();
+            response.AuthenticationModes = compatibleAuthenticationMethods.ToArray();
+            response.Execute();
+        }
+    }
+
 	/// <summary>
 	/// Requests all available authentication modes for the current connection
 	/// from the server
@@ -55,13 +87,12 @@ namespace Iaik.Tc.Tpm.Subsystems.Authentication
 		public string[] AuthenticationModes
 		{
 			get{ return _authenticationModes; }
+            set{ _authenticationModes = value;}
 		}
 		
-		public ListAuthenticationMechanismsResponse(SubsystemRequest request, EndpointContext ctx, 
-		                                       string[] authenticationModes)
+		public ListAuthenticationMechanismsResponse(SubsystemRequest request, EndpointContext ctx) 
 			:base(request, ctx)
 		{
-			_authenticationModes = authenticationModes;
 		}
 		
 		public override void Read (Stream src)

@@ -33,13 +33,21 @@ namespace Iaik.Tc.Tpm.Authentication
 			get
 			{ 
 				//Bounds and type checking is not necessary here because it is done in the ctor
-				return ((AuthenticationSettingsAttribute)this.GetType().
-				        GetCustomAttributes(typeof(AuthenticationSettingsAttribute), false)[0]).Name;
+                return ((AuthenticationSettingsAttribute)this.GetType().
+                        GetCustomAttributes(typeof(AuthenticationSettingsAttribute), false)[0]).Identifier;
 			}			
 		}
+
+        /// <summary>
+        /// Initializes/prepares the context for use
+        /// </summary>
+        /// <param name="context"></param>
+        public virtual void Initialize(EndpointContext context)
+        {
+            _context = context;
+        }
 		
-		
-		public AuthenticationMechanism (EndpointContext context)
+		public AuthenticationMechanism()
 		{
 			//Checks if the resulting type has the AuthenticationSettingsAttribute defined
 			object[] attributes = this.GetType().GetCustomAttributes(typeof(AuthenticationSettingsAttribute), false);
@@ -47,8 +55,6 @@ namespace Iaik.Tc.Tpm.Authentication
 				throw new NotSupportedException("AuthenticationSettingsAttribute is not defined");
 			else if(attributes.Length > 1)
 				throw new NotSupportedException("AuthenticationSettingsAttribute is defined more than once");
-			
-			_context = context;
 		}
 	}
 }

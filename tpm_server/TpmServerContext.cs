@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using Iaik.Connection.ClientConnections;
 using Iaik.Tc.Tpm.Context;
 using System.Configuration;
+using Iaik.Tc.Tpm.Configuration;
 
 namespace Iaik.Tc.Tpm
 {
@@ -112,7 +113,7 @@ namespace Iaik.Tc.Tpm
 			ServerContext ctx;
 			lock(_activeContexts)
 			{
-				ctx = EndpointContext.CreateServerEndpointContext(connection);			
+                ctx = EndpointContext.CreateServerEndpointContext(connection, (IConnectionsConfiguration)ConfigurationManager.GetSection("connections"));			
 				_activeContexts.Add(ctx);
 			}
 			connection.Disconnected += delegate 

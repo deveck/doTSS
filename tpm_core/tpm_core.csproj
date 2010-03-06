@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -21,7 +21,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\tpm_core.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,13 +47,18 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\AuthenticationMechanismChecker.cs" />
+    <Compile Include="Authentication\NamedPipeAuthentication.cs" />
     <Compile Include="Configuration\AccessControlList.cs" />
     <Compile Include="Configuration\DotNetConfiguration\DotNetCfgAccessControlList.cs" />
     <Compile Include="Configuration\DotNetConfiguration\DotNetCfgGroup.cs" />
     <Compile Include="Configuration\DotNetConfiguration\DotNetCfgUser.cs" />
     <Compile Include="Configuration\Group.cs" />
+    <Compile Include="Configuration\IAuthenticationMethod.cs" />
+    <Compile Include="Configuration\IConnectionsConfiguration.cs" />
     <Compile Include="Configuration\Permission.cs" />
     <Compile Include="Configuration\User.cs" />
+    <Compile Include="Context\AuthenticationClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Subsystems\SubsystemConstants.cs" />
     <Compile Include="Subsystems\ISubsystem.cs" />

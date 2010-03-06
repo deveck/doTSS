@@ -16,50 +16,54 @@ namespace Iaik.Tc.Tpm
 			appender.Layout = new log4net.Layout.PatternLayout("[%date{dd.MM.yyyy HH:mm:ss,fff}]-%-5level-[%type]: %message%newline");
 			log4net.Config.BasicConfigurator.Configure(appender);
 			
-			FrontEndConnection tpmConnection = new UnixSocketConnection("/tmp/tpm_server_socket");
-            //FrontEndConnection tpmConnection = new NamedPipeConnection("TPM_csharp");
+			//FrontEndConnection tpmConnection = new UnixSocketConnection("/tmp/tpm_server_socket");
+            FrontEndConnection tpmConnection = new NamedPipeConnection("TPM_csharp");
 			tpmConnection.Connect();
 			
 			
 			ClientContext ctx = EndpointContext.CreateClientEndpointContext(tpmConnection);
 			ctx.DebugClient.PrintOnServerConsole("Hello from client");
-			
-			object syncLock = new object();
-			Random r = new Random();
-			for(int i = 0; i< 10; i++)
-			{
-				Thread t = new Thread(new ThreadStart(delegate{
+
+            Console.WriteLine("Your connection supports the following authentication methods:");
+            foreach (string supportedAuthMethod in ctx.AuthClient.SupportedAuthenticationMethods)
+                Console.WriteLine("\t{0}", supportedAuthMethod);
+
+            //object syncLock = new object();
+            //Random r = new Random();
+            //for(int i = 0; i< 10; i++)
+            //{
+            //    Thread t = new Thread(new ThreadStart(delegate{
 					
-				try
-					{
+            //    try
+            //        {
 						
-						_runningThreads ++;
+            //            _runningThreads ++;
 					
-						int myi = i;
-				long serverTicks = ctx.DebugClient.PrintOnServerConsoleWithResponse("Hello with response");
-						_runningThreads --;
-				//Console.WriteLine("{1}Server ticks at execution: {0}", serverTicks, myi);
-					}
-					catch(Exception ex)
-					{
-						Console.WriteLine(ex);
-					}
-				}));
+            //            int myi = i;
+            //    long serverTicks = ctx.DebugClient.PrintOnServerConsoleWithResponse("Hello with response");
+            //            _runningThreads --;
+            //    //Console.WriteLine("{1}Server ticks at execution: {0}", serverTicks, myi);
+            //        }
+            //        catch(Exception ex)
+            //        {
+            //            Console.WriteLine(ex);
+            //        }
+            //    }));
 				
-				t.Start();
-			}
+            //    t.Start();
+            //}
 			
 			
-			//Thread tSupervisor = new Thread(new ThreadStart(delegate{
-			while(_runningThreads > 0)
-			{		
-				lock(syncLock)
-					Console.WriteLine("#{0} still running", _runningThreads);
+            ////Thread tSupervisor = new Thread(new ThreadStart(delegate{
+            //while(_runningThreads > 0)
+            //{		
+            //    lock(syncLock)
+            //        Console.WriteLine("#{0} still running", _runningThreads);
 					
-				Thread.Sleep(10);
-			}
+            //    Thread.Sleep(10);
+            //}
 			
-			Console.WriteLine("#{0} still running", _runningThreads);
+            //Console.WriteLine("#{0} still running", _runningThreads);
 			
 			//tSupervisor.Start();
 			

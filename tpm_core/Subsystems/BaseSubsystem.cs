@@ -10,13 +10,15 @@ using Iaik.Tc.Tpm.Context;
 using System.Collections.Generic;
 using System.Reflection;
 using log4net;
+using Iaik.Tc.Tpm.Configuration;
 
 namespace Iaik.Tc.Tpm.Subsystems
 {
 
-	public delegate void HandleSubsystemRequestDelegate<T, U>(RequestContext<T, U> requestCtx)
+    public delegate void HandleSubsystemRequestDelegate<Z, T, U>(Z subsystem, RequestContext<T, U> requestCtx)
 		where T: SubsystemRequest
-		where U: SubsystemResponse;
+		where U: SubsystemResponse
+        where Z: ISubsystem;
 	/// <summary>
 	/// Implements a basic subsystem, where all requests are
 	/// build like the standard requests
@@ -42,11 +44,27 @@ namespace Iaik.Tc.Tpm.Subsystems
 		/// </summary>
 		protected Dictionary<TRequest, RequestExecutionInfo> _requestExecutionInfos = 
 			new Dictionary<TRequest, RequestExecutionInfo>();
-		
-		public BaseSubsystem(EndpointContext context)
+
+        /// <summary>
+        /// Contains the configuration of the framework
+        /// </summary>
+        protected IConnectionsConfiguration _config;
+
+        internal IConnectionsConfiguration ConnectionsConfig
+        {
+            get { return _config; }
+        }
+
+        internal EndpointContext EndpointContext
+        {
+            get { return _context; }
+        }
+
+		public BaseSubsystem(EndpointContext context, IConnectionsConfiguration config)
 		{
 			_context = context;
-			
+            _config = config;
+	
 			//The ctor needs to check if T is a enum type and if T has ushort as base type,
 			//because this can not be done with type-constraints
 			Type requestType =  typeof(TRequest);
@@ -58,10 +76,11 @@ namespace Iaik.Tc.Tpm.Subsystems
 		/// <summary>
 		/// Builds a RequestExecutionInfo object needed to register a new request in the BaseSubsystem
 		/// </summary>
-		protected RequestExecutionInfo BuildRequestExecutionInfo<T, U>(
-		        HandleSubsystemRequestDelegate<T, U> callback)
+		protected RequestExecutionInfo BuildRequestExecutionInfo<Z, T, U>(
+		        HandleSubsystemRequestDelegate<Z, T, U> callback)
 			where T: SubsystemRequest
 			where U: SubsystemResponse
+            where Z: ISubsystem
 		{
 			return new RequestExecutionInfo(typeof(T), callback);
 			                                
@@ -101,7 +120,7 @@ namespace Iaik.Tc.Tpm.Subsystems
 			object requestContext = ctor.Invoke(new object[]{request, _context});
 			
 			_logger.DebugFormat("Executing request '{0}'", request);
-			_requestExecutionInfos[requestTypeIdentifier].Callback.DynamicInvoke(requestContext);
+			_requestExecutionInfos[requestTypeIdentifier].Callback.DynamicInvoke(this, requestContext);
 		}
 		
 		/// <summary>

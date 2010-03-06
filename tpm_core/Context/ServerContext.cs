@@ -8,6 +8,8 @@ using System;
 using Iaik.Connection.ClientConnections;
 using Iaik.Connection.Packets;
 using Iaik.Tc.Tpm.Subsystems.Debug;
+using Iaik.Tc.Tpm.Configuration;
+using Iaik.Tc.Tpm.Subsystems.Authentication;
 
 namespace Iaik.Tc.Tpm.Context
 {
@@ -17,11 +19,12 @@ namespace Iaik.Tc.Tpm.Context
 	/// </summary>
 	public class ServerContext : EndpointContext
 	{
-		public ServerContext (FrontEndConnection connection, PacketTransmitter packetTransmitter)
+		public ServerContext (FrontEndConnection connection, PacketTransmitter packetTransmitter, IConnectionsConfiguration connectionConfig)
 			:base(connection, packetTransmitter)
 		{
-			Console.WriteLine("Adding debug subsystem");
-			RegisterSubsystem(new DebugSubsystem(this));
+
+			RegisterSubsystem(new DebugSubsystem(this, connectionConfig));
+            RegisterSubsystem(new AuthenticationSubsystem(this, connectionConfig));
 			_configured = true;
 			_configuredEvent.Set();
 		}

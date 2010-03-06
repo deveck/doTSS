@@ -23,7 +23,7 @@ namespace Iaik.Tc.Tpm.Configuration.DotNetConfiguration
 
 		protected override object GetElementKey (ConfigurationElement element)
 		{
-			return (element as AuthenticationElement).AuthType;
+			return (element as AuthenticationElement).AuthIdentifier;
 		}
 
 		protected override string ElementName 

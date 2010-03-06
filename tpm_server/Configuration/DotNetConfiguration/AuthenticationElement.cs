@@ -5,12 +5,13 @@
 
 using System;
 using System.Configuration;
+using Iaik.Tc.Tpm.Authentication;
 
 namespace Iaik.Tc.Tpm.Configuration.DotNetConfiguration
 {
 
 
-	public class AuthenticationElement : ConfigurationElement
+	public class AuthenticationElement : ConfigurationElement, IAuthenticationMethod
 	{
 		private const string PROP_TYPE = "type";
 		
@@ -18,9 +19,18 @@ namespace Iaik.Tc.Tpm.Configuration.DotNetConfiguration
 		/// Returns 
 		/// </summary>
 		[ConfigurationProperty(PROP_TYPE, IsRequired=true)]
-		public string AuthType
+        public string AuthIdentifier
 		{
 			get{ return (string)base[PROP_TYPE]; }
 		}
-	}
+
+        #region IAuthenticationMethod Members
+
+        public AuthenticationMechanismChecker AuthChecker
+        {
+            get { return new AuthenticationMechanismChecker(this); }
+        }
+
+        #endregion
+    }
 }

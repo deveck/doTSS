@@ -16,13 +16,13 @@ namespace Iaik.Tc.Tpm.Authentication
 	/// If the supplied connection is not a <see>UnixSocketConnection</see>
 	/// an <see>ArgumentException</see> is thrown.
 	/// </summary>
-	[AuthenticationSettings("unix_auth", typeof(UnixSocketConnection))]
-	public sealed class UnixSocketAuthentication : AuthenticationMechanism
+	[AuthenticationSettings("named_pipe_auth", typeof(NamedPipeConnection))]
+	public sealed class NamedPipeAuthentication : AuthenticationMechanism
 	{
         public override void Initialize(EndpointContext context)
         {
-            if (typeof(UnixSocketConnection).IsAssignableFrom(context.Connection.GetType()) == false)
-                throw new ArgumentException("Supplied connection is not a UnixSocketConnection");    
+            if (typeof(NamedPipeConnection).IsAssignableFrom(context.Connection.GetType()) == false)
+                throw new ArgumentException("Supplied connection is not a NamedPipeConnection");    
         
             base.Initialize(context);
         }

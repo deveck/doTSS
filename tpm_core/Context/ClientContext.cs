@@ -25,11 +25,22 @@ namespace Iaik.Tc.Tpm.Context
 		{
 			get{ return _debugClient; }
 		}
-		
+
+        private AuthenticationClient _authClient;
+
+        /// <summary>
+        /// Carries about server side authentication
+        /// </summary>
+        public AuthenticationClient AuthClient
+        {
+            get { return _authClient; }
+        }
+
 		public ClientContext (FrontEndConnection connection, PacketTransmitter packetTransmitter)
 			:base(connection, packetTransmitter)
 		{			
 			_debugClient = new DebugClient(this);
+            _authClient = new AuthenticationClient(this);
 			_configured = true;
 			_configuredEvent.Set();
 		}

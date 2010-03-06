@@ -56,7 +56,7 @@ namespace Iaik.Connection.ClientConnections
 			
 			if(pipeNameOption == null || pipeNameOption.OptionType != 
 			   CommandLineHandler.CommandOption.CommandOptionType.Value)
-				_logger.WarnFormat("No pipe name has beenspecified, using default '{0}'", _pipeName);
+				_logger.WarnFormat("No pipe name has been specified, using default '{0}'", _pipeName);
 			else
 			{
 				_pipeName = pipeNameOption.Arguments[0];
@@ -73,7 +73,7 @@ namespace Iaik.Connection.ClientConnections
 		
         public override void Connect()
         {
-            if (_pipeStream == null)
+            if (_pipeStream == null && _connectedOnCreation == false)
             {
                 NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost", _pipeName, PipeDirection.InOut,  PipeOptions.Asynchronous);
                 pipeClient.Connect();

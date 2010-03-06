@@ -17,6 +17,50 @@ namespace Iaik.Utils.CommonFactories
 	/// </summary>
 	public static class GenericClassIdentifierFactory
 	{
+
+        /// <summary>
+        /// Examines the specified identifier. If a class identifier with the same name is found, this class is used.
+        /// If no classidentifier is found the identifier is interpreted as type identifier.
+        /// </summary>
+        /// <param name="identifier">Classidentifier or type identifier</param>
+        /// <returns>Type of the classidentifier or type identifier</returns>
+        public static Type FindTypeForIdentifier<T>(string identifier)
+        {
+            return FindTypeForIdentifier<T>(identifier, typeof(T).Assembly);
+        }
+        
+        public static Type FindTypeForIdentifier<T>(string identifier, Assembly targetAsm)
+        {
+            foreach (Type t in targetAsm.GetTypes())
+            {
+                if (t.IsAbstract == false &&
+                   t.IsClass == true &&
+                   typeof(T).IsAssignableFrom(t))
+                {
+
+                    //We got a candidate that is at least convertible to the desired type,
+                    //now check if there is an attached ClassIdentifierAttribute
+                    object[] attributes = t.GetCustomAttributes(typeof(ClassIdentifierAttribute), false);
+
+                    if (attributes != null)
+                    {
+                        foreach (ClassIdentifierAttribute classIdentifierAttribute in attributes)
+                        {
+                            if (classIdentifierAttribute.Identifier.Equals(identifier))
+                                return t;
+                        }
+                    }
+                }
+            }
+
+            Type myType = Type.GetType(identifier, false);
+            if (myType == null || typeof(T).IsAssignableFrom(myType) == false)
+                return null;
+
+            return myType;
+        }
+
+
 		/// <summary>
 		/// Examines the specified identifier. If a class identifier with the same name is found, this class is used.
 		/// If no classidentifier is found the identifier is interpreted as type identifier.
@@ -26,18 +70,12 @@ namespace Iaik.Utils.CommonFactories
 		/// <returns>Instance of Type retrieved with identifier or null</returns>
 		public static T CreateFromClassIdentifierOrType<T>(string identifier, params object[] ctorParams) where T: class
 		{
-			T instance = CreateFromClassIdentifier<T>(identifier, typeof(T).Assembly, ctorParams);
-			
-			if(instance == null)
-			{
-				Type myType = Type.GetType(identifier, false);
-				if(myType == null || typeof(T).IsAssignableFrom(myType) == false) return null;
-				
-				return (T)CreateInstance(myType, ctorParams);
-			}
-			else 
-				return instance;
-			
+            Type t = FindTypeForIdentifier<T>(identifier);
+
+            if (t == null)
+                return null;
+            else
+                return (T)CreateInstance(t, ctorParams);			
 		}
 		
 		/// <summary>

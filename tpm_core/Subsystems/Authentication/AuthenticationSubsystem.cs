@@ -5,6 +5,7 @@
 
 using System;
 using Iaik.Tc.Tpm.Context;
+using Iaik.Tc.Tpm.Configuration;
 
 namespace Iaik.Tc.Tpm.Subsystems.Authentication
 {
@@ -27,29 +28,12 @@ namespace Iaik.Tc.Tpm.Subsystems.Authentication
 			get { return SubsystemConstants.SUBSYSTEM_AUTH; }
 		}
 		
-		
-		protected override SubsystemRequest CreateRequestFromIdentifier (AuthenticationRequests requestType)
-		{
-			throw new System.NotImplementedException();
-		}
-		
-				
-		
-		public AuthenticationSubsystem (EndpointContext ctx)
-			:base(ctx)
+        public AuthenticationSubsystem(EndpointContext ctx, IConnectionsConfiguration config)
+			:base(ctx, config)
 		{
 			_requestExecutionInfos.Add(AuthenticationRequests.ListAuthenticationMechanisms,
-			      BuildRequestExecutionInfo<ListAuthenticationMechanismsRequest, ListAuthenticationMechanismsResponse>
-			                           (HandleListAuthenticationMechanisms));
-		}
-
-		
-		
-		private void HandleListAuthenticationMechanisms(
-		        RequestContext<ListAuthenticationMechanismsRequest, ListAuthenticationMechanismsResponse> requestCtx)
-		{	
-			
-
+                  BuildRequestExecutionInfo<AuthenticationSubsystem, ListAuthenticationMechanismsRequest, ListAuthenticationMechanismsResponse>
+                                       (ListAuthenticationMechanismsHandler.HandleListAuthenticationMechanisms));
 		}
 		
 	}

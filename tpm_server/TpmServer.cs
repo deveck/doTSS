@@ -26,7 +26,7 @@ namespace Iaik.Tc.Tpm
 	/// <summary>
 	/// Entrypoint for the tpm server service and console application
 	/// </summary>
-	public class TpmServer : ServiceBase
+	public class TpmServer
 	{
         /// <summary>
         /// Shows the commandline help
