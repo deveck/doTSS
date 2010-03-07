@@ -4,7 +4,7 @@
 using System;
 using System.Collections;
 using Iaik.Tc.Tpm.lowlevel;
-using Iaik.Tc.Tpm.library.common.interface;
+using Iaik.Tc.Tpm.library.common;
 
 namespace Iaik.Tc.Tpm.library.commands
 {
@@ -13,6 +13,7 @@ namespace Iaik.Tc.Tpm.library.commands
 		private readonly String name_;
 		protected readonly UInt32 commandOrdinal_;
 		protected readonly UInt32 commandTag_;
+		private readonly Parameters params_;
 		
 		public UInt32 commandOrdinal
 		{
@@ -36,10 +37,16 @@ namespace Iaik.Tc.Tpm.library.commands
 			commandTag_ = tag;
 			commandOrdinal_ = ordinal;
 		}
-		public abstract void process(IDictionary Parameters);
-		public abstract void process();
-		public abstract void clear();
-		public abstract TpmBlob toBlob();
+		private TpmCommand(UInt32 tag, UInt32 ordinal, Parameters param)
+		{
+			this(tag, ordinal);
+			params_ = param;
+		}
+		
+		public abstract void Process(Parameters param);
+		public abstract void Process();
+		public abstract void Clear();
+		public abstract TpmBlob ToBlob();
 		// TODO: How to create HMAC?
 				
 	}

@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using Iaik.Tc.Tpm.lowlevel.data;
 
 namespace Iaik.Tc.Tpm.lowlevel
 {

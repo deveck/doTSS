@@ -13,7 +13,7 @@ namespace Iaik.Tc.Tpm.library.common
 	public class TPMCommandRequest
 	{
 
-		private String name_;
+		private String commandIdentifier_;
 		private Parameters params_;
 		public TPMCommandRequest()
 		{
@@ -21,7 +21,7 @@ namespace Iaik.Tc.Tpm.library.common
 		
 		public TPMCommandRequest(String commandIdentifier, Parameters param)
 		{
-			name_ = commandIdentifier;
+			commandIdentifier_ = commandIdentifier;
 			params_ = param;
 		}
 		

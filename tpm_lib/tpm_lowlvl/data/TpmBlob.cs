@@ -35,10 +35,10 @@ namespace Iaik.Tc.Tpm.lowlevel.data
         /// Write an object to the TPM blob
         /// </summary>
         /// <param name="obj"></param>
-        public void Write(ITpmBlobSerializable obj)
-        {
-            obj.WriteToBlob(this);
-        }
+//        public void Write(ITpmBlobSerializable obj)
+//        {
+//            obj.WriteToBlob(this);
+//        }
 
         /// <summary>
         /// Write the TPM command header

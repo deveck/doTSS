@@ -8,8 +8,8 @@ namespace Iaik.Tc.Tpm.library.common
 {
 	public sealed class TPMCommandResponse
 	{
-		private String name_;
-		private IDictionary<String, byte[]> parameters_;
+		//private String name_;
+		//private IDictionary<String, byte[]> parameters_;
 
 		public TPMCommandResponse ()
 		{

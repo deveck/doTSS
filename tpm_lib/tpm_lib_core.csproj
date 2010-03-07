@@ -48,7 +48,6 @@
     <Folder Include="commands\Capability\" />
     <Folder Include="commands\Integrity\" />
     <Folder Include="exceptions\" />
-    <Folder Include="New Folder\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="tpm_lowlvl\tpm_lowlvl.csproj">
@@ -58,6 +57,10 @@
     <ProjectReference Include="..\tpm_keystore\tpm_keystore.csproj">
       <Project>{60F8FBD3-BD24-444D-972E-B7BC080EA008}</Project>
       <Name>tpm_keystore</Name>
+    </ProjectReference>
+    <ProjectReference Include="tpm_lib_common\tpm_lib_common.csproj">
+      <Project>{9AADA320-4FD9-4CB9-A5AE-3ABE2A6BF368}</Project>
+      <Name>tpm_lib_common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

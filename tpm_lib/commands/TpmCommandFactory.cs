@@ -31,7 +31,9 @@ namespace Iaik.Tc.Tpm.library.commands
 				{
 					foreach(Type command in module.FindTypes(TpmCommandFilter, null))
 					{
-						
+						TpmCommandAttribute pattr = (TpmCommandAttribute)Attribute.GetCustomAttribute(command, typeof(TpmCommandAttribute));
+						if(!commands_.Keys.Contains(pattr.CommandName))
+							commands_.Add(pattr.CommandName, command);
 					}
 				}
 			}
@@ -39,7 +41,7 @@ namespace Iaik.Tc.Tpm.library.commands
 		
 		public static TpmCommand Create(TPMCommandRequest request)
 		{
-			//create();
+			//
 		}
 	}
 	
