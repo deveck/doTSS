@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tpm_server", "tpm_server\tp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TPM", "TPM", "{AABB2FB3-5027-4D97-A178-F6A6E1B6CAE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tpm_lib_server", "tpm_lib\tpm_lib_server.csproj", "{3C66F3CE-CDD7-43CB-9847-9CC97715D683}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tpm_lib_core", "tpm_lib\tpm_lib_core.csproj", "{3C66F3CE-CDD7-43CB-9847-9CC97715D683}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tpm_lowlvl", "tpm_lib\tpm_lowlvl\tpm_lowlvl.csproj", "{1C051352-0BC4-4EE2-A5FF-C694C197A3AA}"
 EndProject
