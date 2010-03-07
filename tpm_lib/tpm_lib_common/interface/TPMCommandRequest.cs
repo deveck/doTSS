@@ -2,9 +2,9 @@
 // Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 
 using System;
-using System.
+using System.Collections.Generic;
 
-namespace Iaik.Tc.Tpm.library
+namespace Iaik.Tc.Tpm.library.common
 {
 
 
@@ -12,7 +12,7 @@ namespace Iaik.Tc.Tpm.library
 	{
 
 		private String name_;
-		private IDictionary<String, byte[]> parameters_;
+		private IDictionary<String, object> parameters_;
 		public TPMCommandRequest ()
 		{
 		}

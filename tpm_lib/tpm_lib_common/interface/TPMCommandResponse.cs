@@ -4,10 +4,8 @@
 using System;
 using System.Collections.Generic;
 
-namespace Iaik.Tc.Tpm.library
+namespace Iaik.Tc.Tpm.library.common
 {
-
-
 	public sealed class TPMCommandResponse
 	{
 		private String name_;

@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A13F9848-D20F-4551-86D7-A53CED2BCAF7}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>tpm_test</RootNamespace>
-    <AssemblyName>tpm_test</AssemblyName>
+    <ProjectGuid>{3C66F3CE-CDD7-43CB-9847-9CC97715D683}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>tpm_lib</RootNamespace>
+    <AssemblyName>tpm_lib</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -19,6 +19,7 @@
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -26,18 +27,37 @@
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="TpmConstants.cs" />
+    <Compile Include="commands\TpmCommandsAttribute.cs" />
+    <Compile Include="commands\TpmCommandFactory.cs" />
+    <Compile Include="commands\TpmCommand.cs" />
+    <Compile Include="commands\Capability\TPM_GetCapability.cs" />
+    <Compile Include="commands\TPMCommandNames.cs" />
+    <Compile Include="commands\Integrity\TPM_PCRRead.cs" />
+    <Compile Include="exceptions\TpmLibraryException.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\tpm_lib_server.csproj">
-      <Project>{3C66F3CE-CDD7-43CB-9847-9CC97715D683}</Project>
-      <Name>tpm_lib_server</Name>
+    <Folder Include="commands\" />
+    <Folder Include="commands\Capability\" />
+    <Folder Include="commands\Integrity\" />
+    <Folder Include="exceptions\" />
+    <Folder Include="New Folder\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="tpm_lowlvl\tpm_lowlvl.csproj">
+      <Project>{1C051352-0BC4-4EE2-A5FF-C694C197A3AA}</Project>
+      <Name>tpm_lowlvl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\tpm_keystore\tpm_keystore.csproj">
+      <Project>{60F8FBD3-BD24-444D-972E-B7BC080EA008}</Project>
+      <Name>tpm_keystore</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

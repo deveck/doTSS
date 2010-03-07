@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using Iaik.Tc.Tpm.lowlevel;
+using Iaik.Tc.Tpm.library.common.interface;
 
 namespace Iaik.Tc.Tpm.library.commands
 {
