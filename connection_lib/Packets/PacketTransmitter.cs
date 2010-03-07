@@ -126,7 +126,6 @@ namespace Iaik.Connection.Packets
 		{
 			lock(_packetQueue)
 			{
-				Console.WriteLine("Enqueueing packet");
 				_packetQueue.Add(packetInfo);
 				_queueEvent.Set();
 			}
@@ -144,7 +143,6 @@ namespace Iaik.Connection.Packets
 			{
 				if(_packetQueue.Count > 0)
 				{
-					Console.WriteLine("Dequeueing packet");
 					PacketInfo packetInfo = _packetQueue[0];
 					_packetQueue.RemoveAt(0);
 					return packetInfo;

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -36,10 +36,26 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\AuthenticationListCommand.cs" />
+    <Compile Include="Commands\AuthenticationSelectCommand.cs" />
+    <Compile Include="Commands\ConnectionCreateCommand.cs" />
+    <Compile Include="Commands\ConnectionCreateInfoCommand.cs" />
+    <Compile Include="Commands\ConnectionDisconnectCommand.cs" />
+    <Compile Include="Commands\ConnectionInfoCommand.cs" />
+    <Compile Include="Commands\ConsoleCommandBase.cs" />
+    <Compile Include="Commands\ExitCommand.cs" />
+    <Compile Include="Commands\HelpCommand.cs" />
+    <Compile Include="Commands\IConsoleCommand.cs" />
+    <Compile Include="Commands\StartupHintText.cs" />
+    <Compile Include="Commands\TPMConsoleCommandAttribute.cs" />
+    <Compile Include="Commands\TPMConsoleStartupCommand.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="TPMConsole.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_core\tpm_core.csproj">

@@ -32,5 +32,19 @@ namespace Iaik.Tc.Tpm.Context
                 return (request.Execute() as ListAuthenticationMechanismsResponse).AuthenticationModes;
             }
         }
+
+
+        /// <summary>
+        /// Selects the desired authentication method on the server and responds with the status of the select operation
+        /// </summary>
+        /// <param name="authMethod"></param>
+        /// <returns></returns>
+        public IStatusIndicator SelectAuthentication(string authMethod)
+        {
+            SelectAuthenticationMechanismsRequest request = new SelectAuthenticationMechanismsRequest(_ctx);
+            request.AuthMechanismToSelect = authMethod;
+            return (request.Execute() as IStatusIndicator);
+
+        }
     }
 }

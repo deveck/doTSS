@@ -59,7 +59,10 @@
     <Compile Include="Configuration\Permission.cs" />
     <Compile Include="Configuration\User.cs" />
     <Compile Include="Context\AuthenticationClient.cs" />
+    <Compile Include="IStatusIndicator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Subsystems\Authentication\AuthenticationSubsystemResponseBase.cs" />
+    <Compile Include="Subsystems\Authentication\SelectAuthenticationMechanisms.cs" />
     <Compile Include="Subsystems\SubsystemConstants.cs" />
     <Compile Include="Subsystems\ISubsystem.cs" />
     <Compile Include="Context\EndpointContext.cs" />

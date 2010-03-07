@@ -76,7 +76,7 @@ namespace Iaik.Connection.ClientConnections
             if (_pipeStream == null && _connectedOnCreation == false)
             {
                 NamedPipeClientStream pipeClient = new NamedPipeClientStream("localhost", _pipeName, PipeDirection.InOut,  PipeOptions.Asynchronous);
-                pipeClient.Connect();
+                pipeClient.Connect(5000);
                 _pipeStream = pipeClient;
 				RaiseConnectedEvent();
             }
