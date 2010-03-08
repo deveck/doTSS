@@ -107,6 +107,18 @@ namespace Iaik.Tc.Tpm.Configuration
 				return null;
 		}
 		
+		
+		public virtual bool IsAllowed(string subsystem, string pid, IPermissionMember permissionMember)
+		{
+			Permission permission = FindPermission(subsystem, pid);
+			
+			if(permission != null)
+				return permission.IsPermitted(permissionMember);
+
+			
+			return false;
+		}
+		
 		/// <summary>
 		/// Checks if the specified user has permission
 		/// </summary>

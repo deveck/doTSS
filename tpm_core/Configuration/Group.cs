@@ -7,14 +7,35 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Iaik.Tc.Tpm.Configuration.DotNetConfiguration.Elements;
 
 namespace Iaik.Tc.Tpm.Configuration
 {
     /// <summary>
     /// Represents a group of the framework
     /// </summary>
-    public abstract class Group
+    public abstract class Group : IPermissionMember
     {
+		public IdTypeEnum IdType
+		{
+			get{ return IdTypeEnum.Group; }
+		}
+		
+		public bool IsInternal
+		{
+			get{ return true;}
+		}
+		
+		public string Id
+		{
+			get{ return Gid; }
+		}
+		
+		public IEnumerable<IPermissionMember> SubPermissionMembers
+		{
+			get{ return new List<IPermissionMember>(); }
+		}
+		
         /// <summary>
         /// Gets the Id of the group
         /// </summary>

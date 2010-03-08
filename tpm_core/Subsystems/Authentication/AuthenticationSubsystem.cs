@@ -35,6 +35,18 @@ namespace Iaik.Tc.Tpm.Subsystems.Authentication
             /// if the specified mechanism cannot be selected (not compatible,...)
             /// </summary>
             SelectAuthenticationMechanism,
+			
+			/// <summary>
+			/// Starts the authentication process using the selected authentication mechanism
+			/// This request returns once the authentication has completed (successfully or not)
+			/// During this request is active other, authentication mechanism-dependent will be sent.
+			/// </summary>
+			Authenticate,
+			
+			/// <summary>
+			/// Requests informations about the current status of the authentication process from the server
+			/// </summary>
+			AuthenticationInfo
 		}
 		
 		public override string SubsystemIdentifier 

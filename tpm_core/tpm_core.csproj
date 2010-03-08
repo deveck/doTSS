@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -97,6 +97,8 @@
     <Compile Include="Configuration\ExternalUser.cs" />
     <Compile Include="Configuration\DotNetConfiguration\DotNetCfgPermission.cs" />
     <Compile Include="Configuration\DotNetConfiguration\DotNetCfgPermissionFactory.cs" />
+    <Compile Include="Configuration\IPermissionMember.cs" />
+    <Compile Include="Configuration\ExternalGroup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">
