@@ -36,29 +36,30 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="TpmConstants.cs" />
     <Compile Include="commands\TpmCommandsAttribute.cs" />
-    <Compile Include="commands\TpmCommandFactory.cs" />
     <Compile Include="commands\TpmCommand.cs" />
     <Compile Include="commands\Capability\TPM_GetCapability.cs" />
     <Compile Include="commands\TPMCommandNames.cs" />
     <Compile Include="commands\Integrity\TPM_PCRRead.cs" />
     <Compile Include="exceptions\TpmLibraryException.cs" />
+    <Compile Include="commands\Factory\TpmCommandFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="commands\" />
     <Folder Include="commands\Capability\" />
     <Folder Include="commands\Integrity\" />
     <Folder Include="exceptions\" />
+    <Folder Include="commands\Factory\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="tpm_lowlvl\tpm_lowlvl.csproj">
+    <ProjectReference Include="..\tpm_lowlvl\tpm_lowlvl.csproj">
       <Project>{1C051352-0BC4-4EE2-A5FF-C694C197A3AA}</Project>
       <Name>tpm_lowlvl</Name>
     </ProjectReference>
-    <ProjectReference Include="..\tpm_keystore\tpm_keystore.csproj">
+    <ProjectReference Include="..\..\tpm_keystore\tpm_keystore.csproj">
       <Project>{60F8FBD3-BD24-444D-972E-B7BC080EA008}</Project>
       <Name>tpm_keystore</Name>
     </ProjectReference>
-    <ProjectReference Include="tpm_lib_common\tpm_lib_common.csproj">
+    <ProjectReference Include="..\tpm_lib_common\tpm_lib_common.csproj">
       <Project>{9AADA320-4FD9-4CB9-A5AE-3ABE2A6BF368}</Project>
       <Name>tpm_lib_common</Name>
     </ProjectReference>

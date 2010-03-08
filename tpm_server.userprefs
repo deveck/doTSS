@@ -5,26 +5,32 @@
       <Breakpoint file="/home/andi/Repos/IAIK_ITProject/TpmCSStack-impl/tpm_server/TpmServer.cs" line="59" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService>
-  <MonoDevelop.Ide.Workbench ActiveDocument="tpm_lib/commands/TpmCommand.cs" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ctype="Workbench">
     <Files>
       <File FileName="tpm_server/TpmServer.cs" Line="1" Column="1" />
       <File FileName="connection_lib/ClientConnections/FrontEndConnection.cs" Line="1" Column="1" />
       <File FileName="tpm_server/tpm_server.exe.config" Line="1" Column="1" />
-      <File FileName="tpm_lib/commands/TpmCommand.cs" Line="46" Column="2" />
+      <File FileName="tpm_lib/tpm_lib_common/interface/TPMCommandRequest.cs" Line="1" Column="1" />
+      <File FileName="tpm_lib/tpm_lib_common/interface/TPMCommandResponse.cs" Line="1" Column="1" />
+      <File FileName="tpm_lib/tpm_lib_common/interface/Parameters.cs" Line="1" Column="1" />
+      <File FileName="tpm_lib/tpm_lowlvl/data/TpmBlob.cs" Line="1" Column="1" />
+      <File FileName="tpm_lib/tpm_lowlvl/TPM.cs" Line="1" Column="1" />
+      <File FileName="tpm_lib/tpm_lowlvl/data/GenericBlob.cs" Line="1" Column="1" />
+      <File FileName="tpm_lib/tpm_lowlvl/backends/linux/Tddl.cs" Line="1" Column="1" />
+      <File FileName="tpm_lib/tpm_lowlvl/backends/win32/StMicroTPM.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Option id="ShowVersionControlOverlays" value="True" />
           <Option id="ShowAllFiles" value="False" />
+          <Node name="Client" expanded="True" />
+          <Node name="Runtime" expanded="True">
+            <Node name="tpm_core" expanded="True" />
+          </Node>
+          <Node name="Server" expanded="True" />
           <Node name="TPM" expanded="True">
-            <Node name="tpm_lib" expanded="True">
-              <Node name="commands" expanded="True">
-                <Node name="TpmCommand.cs" selected="True" />
-              </Node>
-              <Node name="exceptions" expanded="True" />
-            </Node>
-            <Node name="tpm_lowlvl" expanded="True" />
+            <Node name="tpm_lib_core" expanded="True" selected="True" />
           </Node>
         </State>
       </Pad>
