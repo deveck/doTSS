@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9AADA320-4FD9-4CB9-A5AE-3ABE2A6BF368}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>tpm_lib_common</RootNamespace>
+    <RootNamespace>Iaik.Tc.Tpm.library.common</RootNamespace>
     <AssemblyName>tpm_lib_common</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>

@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1C051352-0BC4-4EE2-A5FF-C694C197A3AA}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>tpm_lowlvl</RootNamespace>
+    <RootNamespace>Iaik.Tc.Tpm.lowlevel</RootNamespace>
     <AssemblyName>tpm_lowlvl</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
