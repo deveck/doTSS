@@ -38,7 +38,7 @@ namespace Iaik.Tc.Tpm.lowlevel
         {
            return Attribute.IsDefined(m, typeof(TpmProviderAttribute)) &&
                   !m.IsAbstract &&
-                  typeof(TPM).IsAssignableFrom(m);
+                  typeof(TPMProvider).IsAssignableFrom(m);
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Iaik.Tc.Tpm.lowlevel
         /// <param name="providerName"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static TPM Create(String providerName, IDictionary<String, String> options)
+        public static TPMProvider Create(String providerName, IDictionary<String, String> options)
         {
             Type provider_type;
 	    lock(providers_)
@@ -82,12 +82,12 @@ namespace Iaik.Tc.Tpm.lowlevel
         /// <param name="provider"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static TPM Create(Type provider, IDictionary<String, String> options)
+        public static TPMProvider Create(Type provider, IDictionary<String, String> options)
         {
             if (provider.IsAbstract)
                 throw new ArgumentException("Can't create abstract TPM providers");
 
-            if (!typeof(TPM).IsAssignableFrom(provider))
+            if (!typeof(TPMProvider).IsAssignableFrom(provider))
                 throw new ArgumentException("TPM provider must inherit from iaik.tc.tpm.TPM");
 
             ConstructorInfo ctor;
@@ -95,12 +95,12 @@ namespace Iaik.Tc.Tpm.lowlevel
             // First try the specific constructor
             ctor = provider.GetConstructor(new Type[] { typeof(IDictionary<String, String>) });
             if (ctor != null)
-                return (TPM)ctor.Invoke(new object[] { options });
+                return (TPMProvider)ctor.Invoke(new object[] { options });
 
             // Resort to the standard constructor
             ctor = provider.GetConstructor(new Type[] { });
             if (ctor != null)
-                return (TPM)ctor.Invoke(new object[] { });
+                return (TPMProvider)ctor.Invoke(new object[] { });
 
             throw new ArgumentException("Can not find a suitable constructor for this TPM provider");
         }

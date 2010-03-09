@@ -4,6 +4,7 @@
 using System;
 using System.Reflection;
 using System.Collections.Generic;
+using Iaik.Tc.Tpm.library.common;
 
 namespace Iaik.Tc.Tpm.library.commands
 {
@@ -18,7 +19,7 @@ namespace Iaik.Tc.Tpm.library.commands
 		
 		private static bool TpmCommandFilter(Type m, Object criteria)
 		{
-			return Attribute.IsDefined(m, typeof(TpmCommandAttribute)) &&
+			return Attribute.IsDefined(m, typeof(TpmCommandsAttribute)) &&
 				!m.IsAbstract &&
 					typeof(TpmCommand).IsAssignableFrom(m);
 		}
@@ -31,7 +32,7 @@ namespace Iaik.Tc.Tpm.library.commands
 				{
 					foreach(Type command in module.FindTypes(TpmCommandFilter, null))
 					{
-						TpmCommandAttribute pattr = (TpmCommandAttribute)Attribute.GetCustomAttribute(command, typeof(TpmCommandAttribute));
+						TpmCommandsAttribute pattr = (TpmCommandsAttribute)Attribute.GetCustomAttribute(command, typeof(TpmCommandsAttribute));
 						if(!commands_.Keys.Contains(pattr.CommandName))
 							commands_.Add(pattr.CommandName, command);
 					}
@@ -41,6 +42,7 @@ namespace Iaik.Tc.Tpm.library.commands
 		
 		public static TpmCommand Create(TPMCommandRequest request)
 		{
+			return null;
 			//
 		}
 	}

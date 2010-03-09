@@ -16,6 +16,10 @@ namespace Iaik.Tc.Tpm.lowlevel.data
 		public TpmBlob ()
 		{
 		}
+		
+		public TpmBlob(byte[] blob) : base(blob, false)
+        {            
+        }
 
 		#region Writing data
         /// <summary>

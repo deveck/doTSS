@@ -35,4 +35,14 @@
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\tpm_lib_core\tpm_lib_core.csproj">
+      <Project>{3C66F3CE-CDD7-43CB-9847-9CC97715D683}</Project>
+      <Name>tpm_lib_core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\tpm_lib_common\tpm_lib_common.csproj">
+      <Project>{9AADA320-4FD9-4CB9-A5AE-3ABE2A6BF368}</Project>
+      <Name>tpm_lib_common</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

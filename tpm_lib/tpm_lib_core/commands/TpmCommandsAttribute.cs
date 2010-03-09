@@ -18,7 +18,7 @@ namespace Iaik.Tc.Tpm.library.commands
 			commandName_ = commandName;
 		}
 		
-		public String commandName
+		public String CommandName
 		{
 			get
 			{

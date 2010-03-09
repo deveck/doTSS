@@ -4,16 +4,19 @@
 using System;
 using System.Collections;
 using Iaik.Tc.Tpm.lowlevel;
+using Iaik.Tc.Tpm.lowlevel.data;
 using Iaik.Tc.Tpm.library.common;
 
 namespace Iaik.Tc.Tpm.library.commands
 {
-	public abstract class TpmCommand : IDisposable
+	public abstract class TpmCommand //: IDisposable
 	{
 		private readonly String name_;
 		protected readonly UInt32 commandOrdinal_;
 		protected readonly UInt32 commandTag_;
 		private readonly Parameters params_;
+		
+		
 		
 		public UInt32 commandOrdinal
 		{
@@ -32,14 +35,13 @@ namespace Iaik.Tc.Tpm.library.commands
 		}
 		
 		protected TpmCommand(){}
-		private TpmCommand(UInt32 tag, UInt32 ordinal)
+		protected TpmCommand(UInt32 tag, UInt32 ordinal)
 		{
 			commandTag_ = tag;
 			commandOrdinal_ = ordinal;
 		}
-		private TpmCommand(UInt32 tag, UInt32 ordinal, Parameters param)
+		private TpmCommand(UInt32 tag, UInt32 ordinal, Parameters param) : this(tag, ordinal)
 		{
-			this(tag, ordinal);
 			params_ = param;
 		}
 		

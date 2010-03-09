@@ -37,12 +37,14 @@
     <Compile Include="backends\linux\Tddl.cs" />
     <Compile Include="backends\win32\StMicroTPM.cs" />
     <Compile Include="backends\win32\TpmBaseServices.cs" />
-    <Compile Include="TPM.cs" />
     <Compile Include="TpmProviderAttribute.cs" />
     <Compile Include="TpmProviders.cs" />
     <Compile Include="exceptions\TpmLowLvlException.cs" />
     <Compile Include="data\GenericBlob.cs" />
     <Compile Include="data\TpmBlob.cs" />
+    <Compile Include="TPMProvider.cs" />
+    <Compile Include="TpmConstants.cs" />
+    <Compile Include="backends\linux\Device.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />

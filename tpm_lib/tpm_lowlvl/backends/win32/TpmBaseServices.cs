@@ -3,6 +3,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Iaik.Tc.Tpm.lowlevel.exceptions;
 
 
 
@@ -13,7 +14,7 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.win32
     /// (UNTESTED CODE!)
     /// </summary>
     [TpmProvider("win32/tbs")]
-    public class TpmBaseServices : TPM
+    public class TpmBaseServices : TPMProvider
     {
         /// <summary>
         /// Receive buffer
@@ -51,7 +52,7 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.win32
            
             uint result = Tbsi_Context_Create(ref ctx_params, out hTbsContext_);
             if (result != 0)
-                throw new TpmException("Tbsi_Context_Create failed (" + result + ")", result);
+                throw new TpmLowLvlException("Tbsi_Context_Create failed (" + result + ")", result);
         }
 
         /// <summary>
@@ -81,9 +82,11 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.win32
             if (result != 0)
             {
                 if (rxlen > 0)
-                    throw new TpmException("TDDL I/O error (partial result)", result, rxBuffer_, (int)rxlen);
+					//TODO
+					throw new Exception();
+                    //throw new TpmException("TDDL I/O error (partial result)", result, rxBuffer_, (int)rxlen);
                 else
-                    throw new TpmException(result);
+                    throw new TpmLowLvlException(result);
             }
 
             byte[] rxblob = new byte[rxlen];

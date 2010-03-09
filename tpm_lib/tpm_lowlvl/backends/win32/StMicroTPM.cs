@@ -3,6 +3,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Iaik.Tc.Tpm.lowlevel.exceptions;
 
 namespace Iaik.Tc.Tpm.lowlevel.backends.win32
 {
@@ -15,7 +16,7 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.win32
     /// convetion is "cdecl" instead of the Windows standard "stdcall" convetion.
     /// </summary>
     [TpmProvider("win32/stmicro")]
-    public sealed class StMicroTPM : TPM
+    public sealed class StMicroTPM : TPMProvider
     {
         /// <summary>
         /// Receive buffer
@@ -45,7 +46,7 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.win32
         {
             uint result = TDDL_Open();
             if (result != 0)
-                throw new TpmException(result);
+                throw new TpmLowLvlException(result);
         }
 
         /// <summary>
@@ -55,7 +56,7 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.win32
         {
             uint result = TDDL_Close();
             if (result != 0)
-                throw new TpmException(result);
+                throw new TpmLowLvlException(result);
         }
 
         /// <summary>
@@ -74,9 +75,11 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.win32
             if (result != 0)
             {
                 if (rxlen > 0)
-                    throw new TpmException("TDDL I/O error (partial result)", result, rxBuffer_, (int)rxlen);
+					//TODO in each backend!!!
+					throw new Exception();
+                    //throw new TpmException("TDDL I/O error (partial result)", result, rxBuffer_, (int)rxlen);
                 else
-                    throw new TpmException(result);
+                    throw new TpmLowLvlException(result);
             }
 
             byte[] rxblob = new byte[rxlen];

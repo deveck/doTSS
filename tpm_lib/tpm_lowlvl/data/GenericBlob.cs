@@ -29,7 +29,22 @@ namespace Iaik.Tc.Tpm.lowlevel.data
         {            
         }
 		
+		/// <summary>
+        /// Constructs a memory stream wrapping the given blob.
+        ///
+        /// Write support can be optionally enabled, note however that
+        /// the underlying stream is non-resizeable. (cf. MemoryStream constructor
+        /// for more details)
+        /// 
+        /// </summary>
+        /// <param name="blob"></param>
+        /// <param name="writeable"></param>
+        public GenericBlob(byte[] blob, bool writeable) : base(blob, 0, blob.Length, writeable, true)
+        { 
+        }
+		
 		#region Reading data
+		
         /// <summary>
         /// Alternative ReadByte method, which throws an exception
         /// if the base class version fails.
@@ -125,6 +140,7 @@ namespace Iaik.Tc.Tpm.lowlevel.data
         #endregion
 
         #region Writing data
+		
         /// <summary>
         /// Write an object to the TPM blob
         /// </summary>

@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Iaik.Tc.Tpm.library
+namespace Iaik.Tc.Tpm.lowlevel
 {
     /// <summary>
     /// Command tags for the TPM

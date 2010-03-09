@@ -38,6 +38,7 @@
     <Compile Include="interface\TPMCommandRequest.cs" />
     <Compile Include="interface\TPMCommandResponse.cs" />
     <Compile Include="interface\Parameters.cs" />
+    <Compile Include="TPMCommandNames.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="interface\" />

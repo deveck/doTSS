@@ -4,19 +4,17 @@
 
 using System;
 using System.Runtime.InteropServices;
+using Iaik.Tc.Tpm.lowlevel.exceptions;
 
 namespace Iaik.Tc.Tpm.lowlevel.backends.linux
 {
 
-	public class Tddl
-	{
-
-	 /// <summary>
+	/// <summary>
     /// Linux wrapper around "libtddl.so.1.2" as shipped as part
     /// of the tpm-emulator package.
     /// </summary>
     [TpmProvider("linux/tddl")]
-    public sealed class TddlTpm : TPM
+    public sealed class TddlTpm : TPMProvider
     {
         /// <summary>
         /// Receive buffer
@@ -46,7 +44,8 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.linux
         {
             uint result = Tddli_Open();
             if (result != 0)
-                throw new TpmException(result);
+					throw new Exception();
+                //throw new TpmException(result);
         }
 
         /// <summary>
@@ -56,7 +55,8 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.linux
         {
             uint result = Tddli_Close();
             if (result != 0)
-                throw new TpmException(result);
+					throw new Exception();
+                //throw new TpmException(result);
         }
 
         /// <summary>
@@ -75,9 +75,10 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.linux
             if (result != 0)
             {
                 if (rxlen > 0)
-                    throw new TpmException("TDDL I/O error (partial result)", result, rxBuffer_, (int)rxlen);
+						throw new Exception();
+                    //throw new TpmException("TDDL I/O error (partial result)", result, rxBuffer_, (int)rxlen);
                 else
-                    throw new TpmException(result);
+                    throw new TpmLowLvlException(result);
             }
 
             byte[] rxblob = new byte[rxlen];
@@ -116,4 +117,3 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.linux
     }
 }
 
-}

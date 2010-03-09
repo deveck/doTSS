@@ -34,14 +34,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="TpmConstants.cs" />
     <Compile Include="commands\TpmCommandsAttribute.cs" />
     <Compile Include="commands\TpmCommand.cs" />
     <Compile Include="commands\Capability\TPM_GetCapability.cs" />
-    <Compile Include="commands\TPMCommandNames.cs" />
     <Compile Include="commands\Integrity\TPM_PCRRead.cs" />
     <Compile Include="exceptions\TpmLibraryException.cs" />
     <Compile Include="commands\Factory\TpmCommandFactory.cs" />
+    <Compile Include="TPM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="commands\" />

@@ -14,7 +14,7 @@ namespace Iaik.Tc.Tpm.lowlevel
     /// This class provides a synchronized TDDL-style 
     /// C# interface to the TPM.    
     /// </summary>
-    public abstract class TPM : IDisposable
+    public abstract class TPMProvider : IDisposable
     {
         /// <summary>
         /// Open/close status for the TPM.
@@ -29,7 +29,7 @@ namespace Iaik.Tc.Tpm.lowlevel
         /// <summary>
         /// Constructs a new closed TPM object.
         /// </summary>
-        public TPM()
+        public TPMProvider()
         {            
         }
 
@@ -164,7 +164,8 @@ namespace Iaik.Tc.Tpm.lowlevel
                     break;
 
                 default:
-                    throw new TpmCommandException("Unsupported TPM request tag", blob);
+				throw new Exception();
+                    //throw new TpmCommandException("Unsupported TPM request tag", blob);
             }
 
             // Do the actual transaction
@@ -259,7 +260,8 @@ namespace Iaik.Tc.Tpm.lowlevel
         public UInt16 CheckTpmReponse(TpmBlob reply)
         {            
             if (reply.Length < 10)
-                throw new TpmCommandException("Short TPM response", reply);
+				throw new Exception();
+                //throw new TpmCommandException("Short TPM response", reply);
 
             // Start from position zero
             reply.Position = 0;
@@ -270,21 +272,24 @@ namespace Iaik.Tc.Tpm.lowlevel
                 replyTag != TpmCmdTags.TPM_TAG_RSP_AUTH1_COMMAND &&
                 replyTag != TpmCmdTags.TPM_TAG_RSP_AUTH2_COMMAND)
             {
-                throw new TpmCommandException("Invalid TPM response tag", reply);
+                throw new Exception();
+				//throw new TpmCommandException("Invalid TPM response tag", reply);
             }
 
             // Check the parameter size
             uint paramSize = reply.ReadUInt32();
             if ((int)paramSize != reply.Length)
             {
-                throw new TpmCommandException("Bad TPM response paramSize", reply);
+				throw new Exception();
+                //throw new TpmCommandException("Bad TPM response paramSize", reply);
             }
 
             // Finally check the TPM result
             uint tpmResult = reply.ReadUInt32();
             if (tpmResult != 0)
             {
-                throw new TpmCommandFailedException(tpmResult, reply);
+				throw new Exception();
+                //throw new TpmCommandFailedException(tpmResult, reply);
             }
 
             return replyTag;
@@ -298,7 +303,8 @@ namespace Iaik.Tc.Tpm.lowlevel
         public void CheckTpmReponse(TpmBlob rsp, ushort expected_tag)
         {
             if (CheckTpmReponse(rsp) != expected_tag)
-                throw new TpmCommandException("TPM response tag does not match request tag", rsp);
+               throw new Exception();
+				// throw new TpmCommandException("TPM response tag does not match request tag", rsp);
         }
         #endregion
 
@@ -310,13 +316,15 @@ namespace Iaik.Tc.Tpm.lowlevel
         /// <returns></returns>
         public byte[] PcrRead(UInt32 pcrIndex)
         {
-            TpmBlob req = TpmBlob.CreateRquCommand(TpmOrdinals.TPM_ORD_PcrRead);
-            req.WriteUInt32(pcrIndex);
+			// TODO!!!!
+            //TpmBlob req = TpmBlob.CreateRquCommand(TpmOrdinals.TPM_ORD_PcrRead);
+            //req.WriteUInt32(pcrIndex);
 
-            TpmBlob rsp = TransmitAndCheck(req);
+            //TpmBlob rsp = TransmitAndCheck(req);
 
             // Return the PCR value
-            return rsp.ReadBytes(20);
+        //    return rsp.ReadBytes(20);
+			return null;
         }
 
         /// <summary>
@@ -330,14 +338,15 @@ namespace Iaik.Tc.Tpm.lowlevel
             if (inDigest.Length != 20)
                 throw new ArgumentException("inDigest must be exactly 20 bytes");
 
-            TpmBlob req = TpmBlob.CreateRquCommand(TpmOrdinals.TPM_ORD_Extend);
-            req.WriteUInt32(pcrIndex);
-            req.Write(inDigest, 0, 20);
-
-            TpmBlob rsp = TransmitAndCheck(req);
-
-            // Return the generated PCR value
-            return rsp.ReadBytes(20);
+            //TpmBlob req = TpmBlob.CreateRquCommand(TpmOrdinals.TPM_ORD_Extend);
+//            req.WriteUInt32(pcrIndex);
+//            req.Write(inDigest, 0, 20);
+//
+//            TpmBlob rsp = TransmitAndCheck(req);
+//
+//            // Return the generated PCR value
+//            return rsp.ReadBytes(20);
+			return null;
         }
 
 //        /// <summary>
