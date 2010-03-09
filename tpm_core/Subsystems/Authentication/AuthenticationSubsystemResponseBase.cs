@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +20,11 @@ namespace Iaik.Tc.Tpm.Subsystems.Authentication
             /// with the current connection, or is not available on this server
             /// </summary>
             AuthenticationMechanismNotAvailable = 1,
+			
+			/// <summary>
+			/// The currenct operation requires a selected authentication mechanism
+			/// </summary>
+			NoAuthenticationMechanismSelected,
         }
 
 
@@ -59,6 +64,8 @@ namespace Iaik.Tc.Tpm.Subsystems.Authentication
                     return _customErrorMessage;
                 else if(_errorCode == (int)ErrorCodeEnum.AuthenticationMechanismNotAvailable)
                     return "The authentication mechanism is not available for this connection or not configured on the server!";
+				else if(_errorCode == (int)ErrorCodeEnum.NoAuthenticationMechanismSelected)
+					return "The current operation requires an authentication mechanism. Select one and resend the request!";
                 else
                     return "Unknown error";
 

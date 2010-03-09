@@ -99,6 +99,7 @@
     <Compile Include="Configuration\DotNetConfiguration\DotNetCfgPermissionFactory.cs" />
     <Compile Include="Configuration\IPermissionMember.cs" />
     <Compile Include="Configuration\ExternalGroup.cs" />
+    <Compile Include="Subsystems\Authentication\Authenticate.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">

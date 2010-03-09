@@ -6,6 +6,8 @@
 using System;
 using Iaik.Connection.ClientConnections;
 using Iaik.Tc.Tpm.Context;
+using Iaik.Tc.Tpm.Subsystems;
+using Iaik.Tc.Tpm.Subsystems.Authentication;
 
 namespace Iaik.Tc.Tpm.Authentication
 {
@@ -26,6 +28,11 @@ namespace Iaik.Tc.Tpm.Authentication
         
             base.Initialize(context);
         }
+		
+		public override void Authenticate (RequestContext<AuthenticateRequest, AuthenticateResponse> requestContext)
+		{
+			throw new NotImplementedException();
+		}
 		
 	}
 }

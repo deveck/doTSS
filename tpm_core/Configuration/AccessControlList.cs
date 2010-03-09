@@ -108,6 +108,13 @@ namespace Iaik.Tc.Tpm.Configuration
 		}
 		
 		
+		/// <summary>
+		/// Checks if the specified permission member is permitted
+		/// </summary>
+		/// <param name="subsystem">Subsystem the permission belongs to</param>
+		/// <param name="pid">Id of ther permission</param>
+		/// <param name="permissionMember">Permission member to check
+		/// <returns>Returns true of permitted, false otherwise</returns>
 		public virtual bool IsAllowed(string subsystem, string pid, IPermissionMember permissionMember)
 		{
 			Permission permission = FindPermission(subsystem, pid);

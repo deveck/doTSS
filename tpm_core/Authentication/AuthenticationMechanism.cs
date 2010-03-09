@@ -5,6 +5,8 @@
 
 using System;
 using Iaik.Tc.Tpm.Context;
+using Iaik.Tc.Tpm.Subsystems.Authentication;
+using Iaik.Tc.Tpm.Subsystems;
 
 namespace Iaik.Tc.Tpm.Authentication
 {
@@ -38,15 +40,7 @@ namespace Iaik.Tc.Tpm.Authentication
 			}			
 		}
 
-        /// <summary>
-        /// Initializes/prepares the context for use
-        /// </summary>
-        /// <param name="context"></param>
-        public virtual void Initialize(EndpointContext context)
-        {
-            _context = context;
-        }
-		
+	
 		public AuthenticationMechanism()
 		{
 			//Checks if the resulting type has the AuthenticationSettingsAttribute defined
@@ -56,5 +50,22 @@ namespace Iaik.Tc.Tpm.Authentication
 			else if(attributes.Length > 1)
 				throw new NotSupportedException("AuthenticationSettingsAttribute is defined more than once");
 		}
+		
+		/// <summary>
+        /// Initializes/prepares the context for use
+        /// </summary>
+        /// <param name="context"></param>
+        public virtual void Initialize(EndpointContext context)
+        {
+            _context = context;
+        }
+		
+		/// <summary>
+		///Starts the authentication process 
+		/// </summary>
+		/// <remarks>
+		/// This method should not block until the process has finished
+		/// </remarks>
+		public abstract void Authenticate(RequestContext<AuthenticateRequest, AuthenticateResponse> request);
 	}
 }

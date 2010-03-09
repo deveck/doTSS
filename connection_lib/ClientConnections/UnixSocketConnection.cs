@@ -42,6 +42,14 @@ namespace Iaik.Connection.ClientConnections
 		/// </summary>
 		private bool _createdFromSocket = false;
 		
+		/// <summary>
+		/// Returns the unix socket, used to retrieve the uid of the running process
+		/// </summary>
+		public Socket UnixSocket
+		{
+			get{ return _socket; }
+		}
+		
 		public UnixSocketConnection (string socketFile)
 		{
 			_logger.Debug(string.Format("Creating UnixSocketConnection with socketFile={0}", socketFile));
@@ -133,6 +141,7 @@ namespace Iaik.Connection.ClientConnections
 		}
 
 
+	
 		#endregion
 		
 	}

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,5 +46,15 @@ namespace Iaik.Tc.Tpm.Context
             return (request.Execute() as IStatusIndicator);
 
         }
+		
+		/// <summary>
+		/// Starts the authentication process
+		/// </summary>
+		/// <returns></returns>
+		public IStatusIndicator Authenticate()
+		{
+			AuthenticateRequest request = new AuthenticateRequest(_ctx);
+			return (request.Execute() as IStatusIndicator);
+		}
     }
 }

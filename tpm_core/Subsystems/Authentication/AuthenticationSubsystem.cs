@@ -18,11 +18,6 @@ namespace Iaik.Tc.Tpm.Subsystems.Authentication
 	/// </summary>
 	public class AuthenticationSubsystem : BaseSubsystem<AuthenticationSubsystem.AuthenticationRequests>
 	{
-        /// <summary>
-        /// Contains the selected and initialized authentication mechanism
-        /// </summary>
-        private AuthenticationMechanism _selectedAuthenticationMechanism = null;
-
 		public enum AuthenticationRequests : ushort
 		{
 			/// <summary>
@@ -54,7 +49,12 @@ namespace Iaik.Tc.Tpm.Subsystems.Authentication
 			get { return SubsystemConstants.SUBSYSTEM_AUTH; }
 		}
 		
-        public AuthenticationSubsystem(EndpointContext ctx, IConnectionsConfiguration config)
+		public ServerContext MyServerContext
+		{
+			get{ return (ServerContext)_context;}
+		}
+		
+        public AuthenticationSubsystem(ServerContext ctx, IConnectionsConfiguration config)
 			:base(ctx, config)
 		{
 			_requestExecutionInfos.Add(AuthenticationRequests.ListAuthenticationMechanisms,
@@ -64,6 +64,10 @@ namespace Iaik.Tc.Tpm.Subsystems.Authentication
             _requestExecutionInfos.Add(AuthenticationRequests.SelectAuthenticationMechanism,
                   BuildRequestExecutionInfo<AuthenticationSubsystem, SelectAuthenticationMechanismsRequest, SelectAuthenticationMechanismsResponse>
                                        (HandleSelectAuthenticationMechanismsRequest));
+			
+			_requestExecutionInfos.Add(AuthenticationRequests.Authenticate,
+                  BuildRequestExecutionInfo<AuthenticationSubsystem, AuthenticateRequest, AuthenticateResponse>
+                                       (HandleAuthenticateRequest));
         }
 
 
@@ -118,9 +122,13 @@ namespace Iaik.Tc.Tpm.Subsystems.Authentication
             {
                 if (compatibleAuthenticationMechanisms.Contains(requestCtx.Request.AuthMechanismToSelect))
                 {
-                    _selectedAuthenticationMechanism = GenericClassIdentifierFactory.CreateFromClassIdentifierOrType<AuthenticationMechanism>(requestCtx.Request.AuthMechanismToSelect);
-                    _selectedAuthenticationMechanism.Initialize(_context);
-                    SelectAuthenticationMechanismsResponse response = requestCtx.CreateResponse();
+					MyServerContext.ServerAuthenticationContext = new ServerAuthenticationContext();
+					MyServerContext.ServerAuthenticationContext.AuthenticationMechanism = 
+						GenericClassIdentifierFactory.CreateFromClassIdentifierOrType<AuthenticationMechanism>(requestCtx.Request.AuthMechanismToSelect);
+                    
+					MyServerContext.ServerAuthenticationContext.AuthenticationMechanism.Initialize(_context);
+                    
+					SelectAuthenticationMechanismsResponse response = requestCtx.CreateResponse();
                     response.Succeeded = true;
                     response.Execute();
                 }
@@ -140,8 +148,29 @@ namespace Iaik.Tc.Tpm.Subsystems.Authentication
                 response.Execute();                
             }
         }
+		
+		/// <summary>
+		/// Starts the authentication process 
+		/// </summary>
+		/// <param name="subsystem"></param>
+		/// <param name="requestCtx"></param>
+		private void HandleAuthenticateRequest(AuthenticationSubsystem subsystem,
+                RequestContext<AuthenticateRequest, AuthenticateResponse> requestCtx)
+        {
+			if(MyServerContext.ServerAuthenticationContext == null 
+			   || MyServerContext.ServerAuthenticationContext.AuthenticationMechanism == null)
+			{
+				AuthenticateResponse response = requestCtx.CreateResponse();
+				response.Succeeded = false;
+				response.SetKnownErrorCode(AuthenticationSubsystemResponseBase.ErrorCodeEnum.NoAuthenticationMechanismSelected);
+				response.Execute();			
+			}
+			else
+				MyServerContext.ServerAuthenticationContext.AuthenticationMechanism.Authenticate(requestCtx);
+		}
 
         #endregion
 
     }
 }
+
