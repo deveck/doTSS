@@ -11,6 +11,7 @@ using Iaik.Connection.ClientConnections;
 using Iaik.Connection.Packets;
 using Iaik.Tc.Tpm.Subsystems;
 using System.Threading;
+using Iaik.Tc.Tpm.Configuration;
 
 namespace Iaik.Tc.Tpm.Context
 {
@@ -29,10 +30,10 @@ namespace Iaik.Tc.Tpm.Context
 		/// <summary>
 		/// Creates a ServerContext for the specified connection
 		/// </summary>
-		public static ServerContext CreateServerEndpointContext(FrontEndConnection connection)
+		public static ServerContext CreateServerEndpointContext(FrontEndConnection connection, IConnectionsConfiguration connectionConfig)
 		{
 			PacketTransmitter packetTransmitter = new PacketTransmitter(connection);
-			ServerContext ctx = new ServerContext(connection, packetTransmitter);
+			ServerContext ctx = new ServerContext(connection, packetTransmitter, connectionConfig);
 			packetTransmitter.StartTransmitting();
 			return ctx;
 		}

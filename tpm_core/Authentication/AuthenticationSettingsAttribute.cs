@@ -5,12 +5,13 @@
 
 using System;
 using Iaik.Connection.ClientConnections;
+using Iaik.Utils.CommonAttributes;
 
 namespace Iaik.Tc.Tpm.Authentication
 {
 
 
-	public class AuthenticationSettingsAttribute : Attribute
+	public class AuthenticationSettingsAttribute : ClassIdentifierAttribute
 	{		
 		private Type[] _associatedConnections = null;
 		
@@ -25,16 +26,7 @@ namespace Iaik.Tc.Tpm.Authentication
 			get{ return _associatedConnections;}
 		}
 		
-		private string _name;
-		
-		/// <summary>
-		/// Gets the unique name of the marked Authentication mechanism
-		/// </summary>
-		public string Name
-		{
-			get{ return _name;}
-		}
-		
+	
 		/// <summary>
 		/// Checks if this attribute has associated <see>FrontEndConnections</see>
 		/// </summary>
@@ -44,9 +36,8 @@ namespace Iaik.Tc.Tpm.Authentication
 		}
 		
 		public AuthenticationSettingsAttribute (string name, params Type[] associatedConnections)
+            :base(name)
 		{
-			_name = name;
-			
 			if(associatedConnections != null && associatedConnections.Length > 0)
 			{
 				foreach(Type t in associatedConnections)

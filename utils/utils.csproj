@@ -64,6 +64,8 @@
     <Compile Include="Serialization\IStreamSerializable.cs" />
     <Compile Include="StreamHelper.cs" />
     <Compile Include="ByteStream.cs" />
+    <Compile Include="CommonAttributes\ClassIdentifierAttribute.cs" />
+    <Compile Include="CommonFactories\GenericClassIdentifierFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -94,13 +96,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
-    <MonoDevelop>
-      <Properties>
-        <Policies>
-          <StandardHeader Text="//&#xA;//&#xA;// Author: Andreas Reiter &lt;andreas.reiter@student.tugraz.at&gt;&#xA;// Author: Georg Neubauer &lt;georg.neubauer@student.tugraz.at&gt;" inheritsSet="MITX11License" />
-        </Policies>
-      </Properties>
-    </MonoDevelop>
     <VisualStudio />
   </ProjectExtensions>
+  <ItemGroup>
+    <Folder Include="CommonAttributes\" />
+    <Folder Include="CommonFactories\" />
+  </ItemGroup>
 </Project>

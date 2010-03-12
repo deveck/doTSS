@@ -21,7 +21,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\tpm_core.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,14 +47,22 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\AuthenticationMechanismChecker.cs" />
+    <Compile Include="Authentication\NamedPipeAuthentication.cs" />
     <Compile Include="Configuration\AccessControlList.cs" />
     <Compile Include="Configuration\DotNetConfiguration\DotNetCfgAccessControlList.cs" />
     <Compile Include="Configuration\DotNetConfiguration\DotNetCfgGroup.cs" />
     <Compile Include="Configuration\DotNetConfiguration\DotNetCfgUser.cs" />
     <Compile Include="Configuration\Group.cs" />
+    <Compile Include="Configuration\IAuthenticationMethod.cs" />
+    <Compile Include="Configuration\IConnectionsConfiguration.cs" />
     <Compile Include="Configuration\Permission.cs" />
     <Compile Include="Configuration\User.cs" />
+    <Compile Include="Context\AuthenticationClient.cs" />
+    <Compile Include="IStatusIndicator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Subsystems\Authentication\AuthenticationSubsystemResponseBase.cs" />
+    <Compile Include="Subsystems\Authentication\SelectAuthenticationMechanisms.cs" />
     <Compile Include="Subsystems\SubsystemConstants.cs" />
     <Compile Include="Subsystems\ISubsystem.cs" />
     <Compile Include="Context\EndpointContext.cs" />
@@ -88,6 +97,9 @@
     <Compile Include="Configuration\ExternalUser.cs" />
     <Compile Include="Configuration\DotNetConfiguration\DotNetCfgPermission.cs" />
     <Compile Include="Configuration\DotNetConfiguration\DotNetCfgPermissionFactory.cs" />
+    <Compile Include="Configuration\IPermissionMember.cs" />
+    <Compile Include="Configuration\ExternalGroup.cs" />
+    <Compile Include="Subsystems\Authentication\Authenticate.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">

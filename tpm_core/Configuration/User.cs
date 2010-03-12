@@ -7,16 +7,33 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Iaik.Tc.Tpm.Configuration.DotNetConfiguration.Elements;
 
 namespace Iaik.Tc.Tpm.Configuration
 {
     /// <summary>
     /// Represents an user of the tpm framework
     /// </summary>
-    public abstract class User
+    public abstract class User : IPermissionMember
     {
         protected IDictionary<string, Group> _memberOf;
 
+		
+		public IdTypeEnum IdType
+		{
+			get{ return IdTypeEnum.User; }
+		}
+		
+		public string Id
+		{
+			get{ return Uid;}
+		}
+		
+		public IEnumerable<IPermissionMember> SubPermissionMembers
+		{
+			get{ return _memberOf.Values.Cast<IPermissionMember>(); }
+		}
+		
         /// <summary>
         /// Enumerates thoug all associated groups
         /// </summary>

@@ -140,7 +140,7 @@ namespace Iaik.Connection.ClientConnections
 			{
 				//No bounds checking is required because this is done in the ctor
 				return ((FrontEndConnectionAttribute)this.GetType().
-				        GetCustomAttributes(typeof(FrontEndConnection), false)[0]).ConnectionName;
+				        GetCustomAttributes(typeof(FrontEndConnection), false)[0]).Identifier;
 			}
 		}
 		

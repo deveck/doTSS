@@ -8,6 +8,9 @@ using Iaik.Utils.Serialization;
 using System.IO;
 using Iaik.Tc.Tpm.Context;
 using Iaik.Utils;
+using Iaik.Tc.Tpm.Configuration;
+using Iaik.Tc.Tpm.Authentication;
+using System.Collections.Generic;
 
 namespace Iaik.Tc.Tpm.Subsystems.Authentication
 {
@@ -45,7 +48,7 @@ namespace Iaik.Tc.Tpm.Subsystems.Authentication
 	/// sends all the available authentication mode identifiers for the current connection
 	/// back to the requesting client
 	/// </summary>
-	public class ListAuthenticationMechanismsResponse : SubsystemResponse
+	public class ListAuthenticationMechanismsResponse : AuthenticationSubsystemResponseBase
 	{
 		private string[] _authenticationModes;
 		
@@ -55,13 +58,12 @@ namespace Iaik.Tc.Tpm.Subsystems.Authentication
 		public string[] AuthenticationModes
 		{
 			get{ return _authenticationModes; }
+            set{ _authenticationModes = value;}
 		}
 		
-		public ListAuthenticationMechanismsResponse(SubsystemRequest request, EndpointContext ctx, 
-		                                       string[] authenticationModes)
+		public ListAuthenticationMechanismsResponse(SubsystemRequest request, EndpointContext ctx) 
 			:base(request, ctx)
 		{
-			_authenticationModes = authenticationModes;
 		}
 		
 		public override void Read (Stream src)

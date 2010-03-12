@@ -43,6 +43,24 @@ namespace Iaik.Tc.Tpm.Configuration
 		/// Lists the permission entries in the same order they are added to the config file
 		/// </summary>
 		protected List<PermissionEntry> _permissionEntries = new List<PermissionEntry>();
+	
+		/// <summary>
+		/// Checks if the specified permission member is permitted
+		/// </summary>
+		/// <param name="permissionMember"></param>
+		/// <returns></returns>
+		public bool IsPermitted(IPermissionMember permissionMember)
+		{
+			foreach(PermissionEntry entry in _permissionEntries)
+			{
+				PermissionEntry.PermitEnum permit = entry.Permit(permissionMember);
+				
+				if(permit != PermissionEntry.PermitEnum.NotFound)
+					return permit == PermissionEntry.PermitEnum.Allow? true: false;				   
+			}
+			
+			return false;
+		}
 		
 		
 		/// <summary>
@@ -147,6 +165,10 @@ namespace Iaik.Tc.Tpm.Configuration
 			get{ return _access; }
 		}
 		
+		protected abstract IdTypeEnum IdType { get; }
+		
+		protected abstract string Id {get;}
+		
 		public PermissionEntry(AccessEnum access)
 		{
 			_access = access;
@@ -178,6 +200,24 @@ namespace Iaik.Tc.Tpm.Configuration
 			else
 				return PermitEnum.NotFound;
 		}
+		
+		public virtual PermitEnum Permit(IPermissionMember permissionMember)
+		{
+			if(IdType == permissionMember.IdType && Id == permissionMember.Id)
+				return _access == AccessEnum.Allow?PermitEnum.Allow:PermitEnum.Deny;
+			else
+			{
+				foreach(IPermissionMember subMember in permissionMember.SubPermissionMembers)
+				{
+					PermitEnum permit = Permit(subMember);
+					
+					if(permit != PermitEnum.NotFound)
+						return permit;
+				}
+			}
+			
+			return PermitEnum.NotFound;
+		}
 	}
 	
 	public class UserPermissionEntry : PermissionEntry
@@ -188,6 +228,17 @@ namespace Iaik.Tc.Tpm.Configuration
 		{
 			get{ return _user;}
 		}
+		
+		protected override IdTypeEnum IdType
+		{
+			get{ return IdTypeEnum.User; }
+		}
+		
+		protected override string Id 
+		{
+			get { return _user.Uid; }
+		}
+
 		
 		public UserPermissionEntry(AccessEnum access, User user)
 			:base(access)
@@ -211,6 +262,17 @@ namespace Iaik.Tc.Tpm.Configuration
 			get{ return _group; }
 		}
 		
+		protected override IdTypeEnum IdType
+		{
+			get{ return IdTypeEnum.Group; }
+		}
+		
+		protected override string Id 
+		{
+			get { return _group.Gid; }
+		}
+
+				
 		public GroupPermissionEntry(AccessEnum access, Group group)
 			:base( access)
 		{
@@ -233,6 +295,17 @@ namespace Iaik.Tc.Tpm.Configuration
 			get{ return _externalUserId; }
 		}
 		
+		protected override IdTypeEnum IdType
+		{
+			get{ return IdTypeEnum.UserExtern; }
+		}
+		
+		protected override string Id 
+		{
+			get { return _externalUserId; }
+		}
+
+				
 		public ExternUserPermissionEntry(AccessEnum access, string externalUserId)
 			:base (access)
 		{
@@ -256,6 +329,17 @@ namespace Iaik.Tc.Tpm.Configuration
 			get{ return _externalGroupId; }
 		}
 		
+		protected override IdTypeEnum IdType
+		{
+			get{ return IdTypeEnum.GroupExtern; }
+		}
+		
+		protected override string Id 
+		{
+			get { return _externalGroupId; }
+		}
+
+			
 		public ExternGroupPermissionEntry(AccessEnum access, string externalGroupId)
 			:base(access)
 		{
@@ -264,7 +348,7 @@ namespace Iaik.Tc.Tpm.Configuration
 		
 		protected override bool IsUser (ExternalUser user)
 		{
-			return _externalGroupId.Equals(user.GId);
+			return _externalGroupId.Equals(user.Group.Id);
 		}
 
 	}
@@ -277,13 +361,24 @@ namespace Iaik.Tc.Tpm.Configuration
 		
 		private string _id;
 		
+		public string MetaId
+		{
+			get{ return Id;}
+		}
+		
 		/// <summary>
 		/// Identifier of the meta users to apply to
 		/// </summary>
-		public string Id
+		protected override string Id
 		{
 			get{ return _id;}
 		}
+		
+		protected override IdTypeEnum IdType
+		{
+			get{ return IdTypeEnum.Meta; }
+		}
+		
 		
 		public MetaPermissionEntry(AccessEnum access, string id)
 			:base(access)
