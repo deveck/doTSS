@@ -5,6 +5,8 @@
 using System;
 using System.IO;
 using System.Text;
+using Iaik.Utils.Serialization;
+using System.Reflection;
 
 namespace Iaik.Utils
 {
@@ -119,7 +121,34 @@ namespace Iaik.Utils
 		
 		public static bool ReadBool (Stream src)
 		{
-			return src.ReadByte() != 0;
+			return src.ReadByte () != 0;
+		}
+		
+		public static void WriteTypedStreamSerializable (ITypedStreamSerializable victim, Stream sink)
+		{
+			TypedStreamSerializableAttribute attribute = TypedStreamSerializableHelper.FindAttribute (victim);
+			
+			WriteString (attribute.Identifier, sink);
+			victim.Write (sink);
+		}
+		
+		public static T ReadTypedStreamSerializable<T> (Stream src) where T : ITypedStreamSerializable
+		{
+			return (T)ReadTypedStreamSerializable (src, typeof(T).Assembly);
+		}
+		
+		public static ITypedStreamSerializable ReadTypedStreamSerializable (Stream src, params Assembly[] asms)
+		{
+			string identifier = ReadString (src);
+			foreach (Assembly asm in asms)
+			{
+				Type t = TypedStreamSerializableHelper.FindTypedStreamSerializableType (identifier, asm);
+				
+				if (t != null)
+					return TypedStreamSerializableHelper.CreateTypedStreamSerializable (t, src);
+			}
+			
+			throw new ArgumentException (string.Format ("Could not find TypedStreamSerializable-Type with identifier={0}", identifier));
 		}
 	}
 }

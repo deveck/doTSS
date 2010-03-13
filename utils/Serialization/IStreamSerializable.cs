@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +7,7 @@ using System.IO;
 namespace Iaik.Utils.Serialization
 {
     /// <summary>
-    /// Defines an object that can be serialized and read from a stream
+    /// Defines an object that can be serialized to and read from a stream
     /// </summary>
     public interface IStreamSerializable
     {

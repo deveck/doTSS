@@ -2,6 +2,8 @@ using System;
 using Iaik.Connection.ClientConnections;
 using Iaik.Tc.Tpm.Context;
 using System.Threading;
+using Iaik.Tc.Tpm.library.common;
+using System.IO;
 
 namespace Iaik.Tc.Tpm
 {
@@ -9,11 +11,10 @@ namespace Iaik.Tc.Tpm
 	{
 		public static void Main (string[] args)
 		{
-            log4net.Appender.DebugAppender appender = new log4net.Appender.DebugAppender();
-            appender.Name = "DebugAppender";
-			appender.Layout = new log4net.Layout.PatternLayout("[%date{dd.MM.yyyy HH:mm:ss,fff}]-%-5level-[%type]: %message%newline");
-			log4net.Config.BasicConfigurator.Configure(appender);
-
+			log4net.Appender.DebugAppender appender = new log4net.Appender.DebugAppender ();
+			appender.Name = "DebugAppender";
+			appender.Layout = new log4net.Layout.PatternLayout ("[%date{dd.MM.yyyy HH:mm:ss,fff}]-%-5level-[%type]: %message%newline");
+			log4net.Config.BasicConfigurator.Configure (appender);
 
             new TPMConsole().Run();
 		}

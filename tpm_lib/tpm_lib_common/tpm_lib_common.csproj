@@ -33,15 +33,21 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyClass.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="interface\TPMCommandRequest.cs" />
     <Compile Include="interface\TPMCommandResponse.cs" />
     <Compile Include="interface\Parameters.cs" />
     <Compile Include="TPMCommandNames.cs" />
+    <Compile Include="interface\ITypedParameter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="interface\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\utils\utils.csproj">
+      <Project>{892CAB5C-D501-47B1-82E2-BE8492E7E378}</Project>
+      <Name>utils</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

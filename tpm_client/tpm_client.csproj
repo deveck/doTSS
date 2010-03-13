@@ -71,6 +71,10 @@
       <Project>{F6681243-5DCF-4B0B-BC85-0F1290CF0334}</Project>
       <Name>connection_lib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\tpm_lib\tpm_lib_common\tpm_lib_common.csproj">
+      <Project>{9AADA320-4FD9-4CB9-A5AE-3ABE2A6BF368}</Project>
+      <Name>tpm_lib_common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

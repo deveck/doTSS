@@ -3,6 +3,9 @@
 
 using System;
 using System.Collections.Generic;
+using Iaik.Utils.Serialization;
+using System.IO;
+using Iaik.Utils;
 
 namespace Iaik.Tc.Tpm.library.common
 {
@@ -10,11 +13,12 @@ namespace Iaik.Tc.Tpm.library.common
 	/// Represents the command request for a specific TPM command, that should
 	/// be processed by the TPM library.
 	/// </summary>
-	public class TPMCommandRequest
+	public class TPMCommandRequest : IStreamSerializable
 	{
 
 		private String commandIdentifier_;
 		private Parameters params_;
+		
 		public TPMCommandRequest()
 		{
 		}
@@ -41,6 +45,21 @@ namespace Iaik.Tc.Tpm.library.common
 			
 		}
 		
+		#region IStreamSerializable implementation
+		public void Write (Stream sink)
+		{
+			StreamHelper.WriteString (commandIdentifier_, sink);
+			params_.Write (sink);
+		}
+		
+		
+		public void Read (Stream src)
+		{
+			commandIdentifier_ = StreamHelper.ReadString (src);
+			params_ = new Parameters (src);
+		}
+		
+		#endregion
 		//public 
 	}
 }
