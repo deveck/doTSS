@@ -37,6 +37,12 @@ namespace Iaik.Tc.Tpm.Subsystems.Tpm
 				BuildRequestExecutionInfo<TpmSubsystem, TpmRequest, TpmResponse> (HandleTpmRequest));
 		}
 		
+		public override void HandlePacket (Iaik.Connection.Packets.DataPacket packet)
+		{
+			base.HandlePacket (packet);
+		}
+
+		
 		private void HandleTpmRequest (TpmSubsystem subsystem, RequestContext<TpmRequest, TpmResponse> requestContext)
 		{
 			//TODO: Check if the current connection has an associated user (already authenticated)

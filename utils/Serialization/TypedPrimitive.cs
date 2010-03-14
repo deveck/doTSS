@@ -17,6 +17,7 @@ namespace Iaik.Utils.Serialization
 			Bool = 0,
 			String,
 			Int,
+			UInt,
 			Byte,
 			ByteA,
 			UShort
@@ -50,39 +51,44 @@ namespace Iaik.Utils.Serialization
 			if (myType.IsEnum)
 				myType = Enum.GetUnderlyingType (myType);
 			
-			if (_value.GetType () == typeof(int))
+			if (myType == typeof(int))
 			{
 				sink.WriteByte ((byte)PrimitiveTypeEnum.Int);
 				StreamHelper.WriteInt32 ((int)_value, sink);
 			}
-			else if (_value.GetType () == typeof(bool))
+			else if(myType == typeof(UInt32))
+			{
+				sink.WriteByte((byte)PrimitiveTypeEnum.UInt);
+				StreamHelper.WriteUInt32((uint)_value, sink);
+			}       
+			else if (myType == typeof(bool))
 			{
 				sink.WriteByte ((byte)PrimitiveTypeEnum.Bool);
 				StreamHelper.WriteBool ((bool)_value, sink);
 			}
-			else if (_value.GetType () == typeof(string))
+			else if (myType == typeof(string))
 			{
 				sink.WriteByte ((byte)PrimitiveTypeEnum.String);
 				StreamHelper.WriteString ((string)_value, sink);
 			}
-			else if (_value.GetType () == typeof(byte))
+			else if (myType == typeof(byte))
 			{
 				sink.WriteByte ((byte)PrimitiveTypeEnum.Byte);
 				sink.WriteByte ((byte)_value);
 			}
-			else if (_value.GetType () == typeof(byte[]))
+			else if (myType == typeof(byte[]))
 			{
 				sink.WriteByte ((byte)PrimitiveTypeEnum.ByteA);
 				StreamHelper.WriteBytesSafe ((byte[])_value, sink);
 			}
-			else if (_value.GetType () == typeof(ushort))
+			else if (myType == typeof(ushort))
 			{
 				sink.WriteByte ((byte)PrimitiveTypeEnum.UShort);
 				StreamHelper.WriteUInt16 ((ushort)_value, sink);
 			}
 			else
 				throw new NotSupportedException(string.Format("The type '{0}' is not supported by TypedPrimitive", 
-						_value.GetType()));
+						myType));
 		}
 
 
@@ -93,6 +99,8 @@ namespace Iaik.Utils.Serialization
 			
 			if (primitiveType == PrimitiveTypeEnum.Int)
 				_value = StreamHelper.ReadInt32 (src);
+			else if(primitiveType == PrimitiveTypeEnum.UInt)
+				_value = StreamHelper.ReadUInt32(src);
 			else if (primitiveType == PrimitiveTypeEnum.Bool)
 				_value = StreamHelper.ReadBool (src);
 			else if (primitiveType == PrimitiveTypeEnum.String)
