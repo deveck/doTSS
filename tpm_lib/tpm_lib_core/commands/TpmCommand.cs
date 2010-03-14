@@ -11,6 +11,8 @@ namespace Iaik.Tc.Tpm.library.commands
 {
 	public abstract class TpmCommand //: IDisposable
 	{
+		protected TPMProvider _tpmProvider = null;
+		
 		private readonly String name_;
 		protected readonly UInt32 commandOrdinal_;
 		protected readonly UInt32 commandTag_;
@@ -40,15 +42,21 @@ namespace Iaik.Tc.Tpm.library.commands
 			commandTag_ = tag;
 			commandOrdinal_ = ordinal;
 		}
-		private TpmCommand(UInt32 tag, UInt32 ordinal, Parameters param) : this(tag, ordinal)
+		private TpmCommand (UInt32 tag, UInt32 ordinal, Parameters param) : this(tag, ordinal)
 		{
 			params_ = param;
 		}
 		
-		public abstract void Process(Parameters param);
+		public virtual void Init (Parameters param, TPMProvider tpmProvider)
+		{
+			_tpmProvider = tpmProvider;
+		}
+		
+		
+		//public abstract void Process(Parameters param);
 		public abstract void Process();
 		public abstract void Clear();
-		public abstract TpmBlob ToBlob();
+		//public abstract TpmBlob ToBlob();
 		// TODO: How to create HMAC?
 				
 	}

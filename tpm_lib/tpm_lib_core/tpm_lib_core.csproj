@@ -41,6 +41,9 @@
     <Compile Include="exceptions\TpmLibraryException.cs" />
     <Compile Include="commands\Factory\TpmCommandFactory.cs" />
     <Compile Include="TPM.cs" />
+    <Compile Include="commands\Capability\CapabilityDataCore.cs" />
+    <Compile Include="ITpmBlobReadable.cs" />
+    <Compile Include="ITpmBlobWritable.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="commands\" />
@@ -61,6 +64,10 @@
     <ProjectReference Include="..\tpm_lib_common\tpm_lib_common.csproj">
       <Project>{9AADA320-4FD9-4CB9-A5AE-3ABE2A6BF368}</Project>
       <Name>tpm_lib_common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\utils\utils.csproj">
+      <Project>{892CAB5C-D501-47B1-82E2-BE8492E7E378}</Project>
+      <Name>utils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

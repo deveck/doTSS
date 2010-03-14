@@ -18,7 +18,8 @@ namespace Iaik.Utils.Serialization
 			String,
 			Int,
 			Byte,
-			ByteA
+			ByteA,
+			UShort
 		}
 		
 		public delegate void StreamWriteDelegate(object value, Stream sink);
@@ -44,6 +45,11 @@ namespace Iaik.Utils.Serialization
 		#region IStreamSerializable implementation
 		public void Write (Stream sink)
 		{
+			Type myType = _value.GetType ();
+			
+			if (myType.IsEnum)
+				myType = Enum.GetUnderlyingType (myType);
+			
 			if (_value.GetType () == typeof(int))
 			{
 				sink.WriteByte ((byte)PrimitiveTypeEnum.Int);
@@ -69,6 +75,11 @@ namespace Iaik.Utils.Serialization
 				sink.WriteByte ((byte)PrimitiveTypeEnum.ByteA);
 				StreamHelper.WriteBytesSafe ((byte[])_value, sink);
 			}
+			else if (_value.GetType () == typeof(ushort))
+			{
+				sink.WriteByte ((byte)PrimitiveTypeEnum.UShort);
+				StreamHelper.WriteUInt16 ((ushort)_value, sink);
+			}
 			else
 				throw new NotSupportedException(string.Format("The type '{0}' is not supported by TypedPrimitive", 
 						_value.GetType()));
@@ -90,6 +101,8 @@ namespace Iaik.Utils.Serialization
 				_value = src.ReadByte ();
 			else if (primitiveType == PrimitiveTypeEnum.ByteA)
 				_value = StreamHelper.ReadBytesSafe (src);
+			else if (primitiveType == PrimitiveTypeEnum.UShort)
+				_value = StreamHelper.ReadUInt16 (src);
 			else
 				throw new NotSupportedException (string.Format ("The type '{0}' is not supported by TypedPrimitive", primitiveType));
 			

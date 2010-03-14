@@ -19,8 +19,13 @@ namespace Iaik.Tc.Tpm.library.common
 		private String commandIdentifier_;
 		private Parameters params_;
 		
-		public TPMCommandRequest()
+		public TPMCommandRequest ()
 		{
+		}
+		
+		public TPMCommandRequest (Stream src)
+		{
+			Read (src);
 		}
 		
 		public TPMCommandRequest(String commandIdentifier, Parameters param)
@@ -33,16 +38,20 @@ namespace Iaik.Tc.Tpm.library.common
 		{
 			get
 			{
-				return params_;				
+				return params_; 
 			}
 			
 			set
 			{
-				if(value == null)
-					throw new ArgumentNullException("params_", "TPMCommandRequest params_ must not be null");
+				if (value == null)
+					throw new ArgumentNullException ("params_", "TPMCommandRequest params_ must not be null");
 				params_ = value;
-			}	
-			
+			}
+		}
+		
+		public string CommandIdentifier
+		{
+			get { return commandIdentifier_;}
 		}
 		
 		#region IStreamSerializable implementation
@@ -60,6 +69,5 @@ namespace Iaik.Tc.Tpm.library.common
 		}
 		
 		#endregion
-		//public 
 	}
 }

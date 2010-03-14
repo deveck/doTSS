@@ -1,4 +1,4 @@
-// Author: Andreas Reiter <andreas.reiter@student.tugraz.at>
+	// Author: Andreas Reiter <andreas.reiter@student.tugraz.at>
 // Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 
 using System;
@@ -58,8 +58,19 @@ namespace Iaik.Tc.Tpm.library.common
 			if (encapsulated_.ContainsKey (key) && 
 				encapsulated_[key] is TypedPrimitiveParameter)
 				return (T)((TypedPrimitiveParameter)encapsulated_[key]).Value;
-			else 
+			else if (encapsulated_.ContainsKey (key) && typeof(T).IsEnum)
+			{
+				object value = encapsulated_[key];
+				
+				if (Enum.GetUnderlyingType (typeof(T)).Equals (value.GetType()))
+					return (T)value;
+				else
+					throw new ArgumentException (string.Format ("Value of type '{0}' is not convertible to enum '{1}'", value.GetType (), typeof(T)));
+			}
+			else if (encapsulated_.ContainsKey (key))
 				return (T)encapsulated_[key];
+			else
+				throw new KeyNotFoundException (string.Format ("Key '{0}' not found in parameter list", key));
 		}
 		
 		

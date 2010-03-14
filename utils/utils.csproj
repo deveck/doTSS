@@ -68,6 +68,8 @@
     <Compile Include="CommonFactories\GenericClassIdentifierFactory.cs" />
     <Compile Include="Serialization\ITypedStreamSerializable.cs" />
     <Compile Include="Serialization\TypedPrimitive.cs" />
+    <Compile Include="Serialization\AutoStreamSerializable.cs" />
+    <Compile Include="Serialization\SerializeMeAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

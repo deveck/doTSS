@@ -8,7 +8,7 @@ namespace Iaik.Tc.Tpm.library.common
 
 	public static class CapabilityData
 	{
-		public enum CapabilityName : int
+		public enum TPMCapabilityArea : uint
 		{
 			/// <summary>
 			/// Returns what the TPM currently supports

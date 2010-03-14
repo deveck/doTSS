@@ -142,15 +142,6 @@ namespace Iaik.Tc.Tpm.lowlevel.data
         #region Writing data
 		
         /// <summary>
-        /// Write an object to the TPM blob
-        /// </summary>
-        /// <param name="obj"></param>
-  //      public void Write(IBlobSerializable obj)
-   //     {
-     //       obj.WriteToBlob(this);
-      //  }
-
-        /// <summary>
         /// Write a boolean value to the stream
         /// </summary>
         /// <param name="b"></param>

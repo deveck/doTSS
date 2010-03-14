@@ -7,7 +7,7 @@ using Iaik.Tc.Tpm.Subsystems.Authentication;
 namespace Iaik.Tc.Tpm.Context
 {
     /// <summary>
-    /// Carries about authentication on the client side.
+    /// Authenticates the client on the server
     /// </summary>
     public class AuthenticationClient
     {

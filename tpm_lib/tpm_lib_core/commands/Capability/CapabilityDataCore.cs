@@ -10,7 +10,8 @@ namespace Iaik.Tc.Tpm.library.commands
 
 	public static class CapabilityDataCore
 	{
-
+	
+		
 		public class TPMCapVersionInfoCore : CapabilityData.TPMCapVersionInfo, ITpmBlobReadable
 		{
 			public TPMCapVersionInfoCore(TpmBlob blob)

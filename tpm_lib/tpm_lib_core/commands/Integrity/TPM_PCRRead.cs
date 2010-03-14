@@ -25,25 +25,18 @@ namespace Iaik.Tc.Tpm.library.commands
 		public TPM_PCRRead() : base(TpmCmdTags.TPM_TAG_RQU_COMMAND, TpmOrdinals.TPM_ORD_PcrRead)
 		{	
 		}
-		
-		public override void Process (Parameters param)
+	
+		public override void Init (Parameters param, TPMProvider provider)
 		{
-			throw new System.NotImplementedException();
+			base.Init(param, provider);
+			throw new System.NotImplementedException ();
 		}
-		
+
 		public override void Process ()
 		{
 			throw new System.NotImplementedException();
 		}
-		
-		public override Iaik.Tc.Tpm.lowlevel.data.TpmBlob ToBlob ()
-		{
-			throw new System.NotImplementedException();
-		}
-		
-		
-		
-		
+	
 		
 	}
 }

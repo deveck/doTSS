@@ -40,10 +40,20 @@ namespace Iaik.Tc.Tpm.library.commands
 			}
 		}
 		
-		public static TpmCommand Create(TPMCommandRequest request)
+		public static TpmCommand Create (TPMCommandRequest request)
 		{
-			return null;
-			//
+			if (commands_.ContainsKey (request.CommandIdentifier))
+			{
+				ConstructorInfo ctorInfo = commands_[request.CommandIdentifier].GetConstructor (new Type[0]);
+				if (ctorInfo == null)
+					throw new ArgumentException (string.Format ("Cannot create TpmCommand for command request with identifier '{0}'", 
+						request.CommandIdentifier));
+				
+				return (TpmCommand)ctorInfo.Invoke (new object[0]);
+			}
+			else
+				throw new NotSupportedException (string.Format ("Cannot find TpmCommand for command request with identifier '{0}'", 
+						request.CommandIdentifier));
 		}
 	}
 	

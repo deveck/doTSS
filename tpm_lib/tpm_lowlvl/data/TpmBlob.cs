@@ -33,17 +33,6 @@ namespace Iaik.Tc.Tpm.lowlevel.data
             WriteCmdHeader(tag, ordinal, 0);
         }
 
-		
-		// TODO: LEAVE IT???
-        /// <summary>
-        /// Write an object to the TPM blob
-        /// </summary>
-        /// <param name="obj"></param>
-//        public void Write(ITpmBlobSerializable obj)
-//        {
-//            obj.WriteToBlob(this);
-//        }
-
         /// <summary>
         /// Write the TPM command header
         /// </summary>
