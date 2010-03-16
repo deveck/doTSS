@@ -43,7 +43,7 @@ namespace Iaik.Tc.Tpm.Subsystems.Tpm
 			//TODO: Do some permission checking here!
 			
 			//Just for testing
-			TPMProvider tpmDevice = new TddlTpm ();
+			TPMProvider tpmDevice = new TpmDevice("/dev/tpm0");
 			tpmDevice.Open ();
 			
 			TpmCommand cmd = TpmCommandFactory.Create (requestContext.Request.CommandRequest);
