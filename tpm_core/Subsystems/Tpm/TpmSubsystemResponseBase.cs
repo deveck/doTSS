@@ -15,7 +15,15 @@ namespace Iaik.Tc.Tpm.Subsystems.Tpm
     {
         public enum ErrorCodeEnum : int
         {
-            
+			/// <summary>
+			/// No active user authentication exists 
+			/// </summary>
+            NotAuthenticated,
+			
+			/// <summary>
+			/// There is an active user authentication but no permission to perform this action 
+			/// </summary>
+			NotPermitted
         }
 
 
@@ -47,9 +55,18 @@ namespace Iaik.Tc.Tpm.Subsystems.Tpm
         /// </summary>
         public string ErrorText
         {
-            get
-            { 
-                    return "Unknown error";
+        	get
+            {
+        		if (_errorCode == null)
+        			return "No error";
+				else if (_errorCode.Value == -1)
+        			return CustomErrorMessage;
+				else if (_errorCode.Value == (int)ErrorCodeEnum.NotAuthenticated)
+        			return "No authentication information for your connection was found";
+				else if (_errorCode.Value == (int)ErrorCodeEnum.NotPermitted)
+        			return "You are not permitted to perform this operation";
+				else
+            		return "Unknown error";
             }
         }
 

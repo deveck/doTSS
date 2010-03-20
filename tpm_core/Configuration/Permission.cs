@@ -393,7 +393,17 @@ namespace Iaik.Tc.Tpm.Configuration
 		
 		protected override bool IsUser (User user)
 		{
-			return _id.Equals(ID_ALL) || _id.Equals(ID_INTERNAL);
+			return _id.Equals (ID_ALL) || _id.Equals (ID_INTERNAL);
 		}
+		
+		public override PermissionEntry.PermitEnum Permit (IPermissionMember permissionMember)
+		{
+			if (_id.Equals (ID_ALL))
+				return _access == AccessEnum.Allow ? PermitEnum.Allow : PermitEnum.Deny;
+			
+			return base.Permit (permissionMember);
+			
+		}
+
 	}
 }

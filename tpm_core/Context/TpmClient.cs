@@ -31,6 +31,20 @@ namespace Iaik.Tc.Tpm.Context
 			get { return _capabilities;}
 		}
 		
+		public string[] TpmDevices
+		{
+			get
+			{
+				ListTpmsRequest request = new ListTpmsRequest (_ctx);
+				ListTpmsResponse response = request.TypedExecute();
+				
+				if (response.Succeeded == false)
+					throw new Exception (response.ErrorText);
+				
+				return response.TpmDevices;
+			}
+		}
+		
         public TpmClient (EndpointContext ctx)
         {
         	_ctx = ctx;

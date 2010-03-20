@@ -52,8 +52,10 @@ namespace Iaik.Tc.Tpm.Context
 		/// </summary>
 		public IDictionary<string, TpmContext> TpmContexts
 		{
-			get { return _tpmContexts;}
+			get { return _tpmContexts; }
 		}
+		
+		
 		
 		public ServerContext (FrontEndConnection connection, PacketTransmitter packetTransmitter, IConnectionsConfiguration connectionConfig,
 			AccessControlList acl, IDictionary<string, TpmContext> tpmContexts)
@@ -62,11 +64,20 @@ namespace Iaik.Tc.Tpm.Context
 			_accessControlList = acl;
 			_tpmContexts = tpmContexts;
 
-			RegisterSubsystem(new DebugSubsystem(this, connectionConfig));
-            RegisterSubsystem(new AuthenticationSubsystem(this, connectionConfig));
-			RegisterSubsystem(new TpmSubsystem(this, connectionConfig));
+			RegisterSubsystem (new DebugSubsystem (this, connectionConfig));
+			RegisterSubsystem (new AuthenticationSubsystem (this, connectionConfig));
+			RegisterSubsystem (new TpmSubsystem (this, connectionConfig));
 			_configured = true;
-			_configuredEvent.Set();
+			_configuredEvent.Set ();
+		}
+		
+		
+		public bool IsCurrentUserAllowed (string subsystem, string pid)
+		{
+			if (ServerAuthenticationContext == null || ServerAuthenticationContext.AuthenticatedPermissionMember == null)
+				return false;
+			
+			return AccessControlList.IsAllowed (subsystem, pid, ServerAuthenticationContext.AuthenticatedPermissionMember);
 		}
 	}
 	

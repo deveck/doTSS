@@ -60,6 +60,7 @@
     <Compile Include="TPMConsole.cs" />
     <Compile Include="Commands\AuthenticateCommand.cs" />
     <Compile Include="Commands\TpmCapabilityCommand.cs" />
+    <Compile Include="Commands\TpmListDevices.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_core\tpm_core.csproj">

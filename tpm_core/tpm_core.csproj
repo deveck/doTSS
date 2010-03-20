@@ -105,6 +105,7 @@
     <Compile Include="Subsystems\Tpm\TpmSubsystemResponseBase.cs" />
     <Compile Include="Context\TpmClient.cs" />
     <Compile Include="Configuration\ITpmDeviceConfiguration.cs" />
+    <Compile Include="Subsystems\Tpm\ListTpmsRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">
