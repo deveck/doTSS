@@ -1,2 +1,2 @@
 source mono-2.6-environment
-mono tpm_client/bin/Debug/tpm_client.exe
+mono tpm_client/bin/Debug/tpm_client.exe $@

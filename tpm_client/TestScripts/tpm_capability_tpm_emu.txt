@@ -1,0 +1,9 @@
+# Runs the tpm capability command on the selected tpm device
+
+@exit_on_error 1
+@exit_on_finish 0
+
+@include ./build_unix_socket_connection.txt
+@include ./select_tpm_emulator.txt
+
+tpm_capability tpm_version

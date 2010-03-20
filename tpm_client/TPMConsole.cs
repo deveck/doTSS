@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,11 +20,27 @@ namespace Iaik.Tc.Tpm
         /// </summary>
         private bool _runConsoleLoop = true;
 
+		/// <summary>
+		///Tells the command handler to exit on error 
+		/// </summary>
+		private bool _exitOnError = false;
+		
+		/// <summary>
+		///Tells the script execution environment to exit if the script file has completed 
+		/// </summary>
+		private bool _exitOnFinish = true;
+		
         /// <summary>
         /// Contains all Commands
         /// </summary>
         private IDictionary<string, IConsoleCommand> _commands = new SortedDictionary<string, IConsoleCommand>();
 
+		
+		/// <summary>
+		///In script execution mode, the top contains the current script execution path 
+		/// </summary>
+		private Stack<string> _currentScriptExecutionPath = new Stack<string>();
+		
         /// <summary>
         /// Returns a text writer where output of the commands is written to
         /// </summary>
@@ -136,36 +152,144 @@ namespace Iaik.Tc.Tpm
         /// <summary>
         /// Runs the Console loop, returns on console exit
         /// </summary>
-        public void Run()
+        public void Run ()
         {
-            while (_runConsoleLoop)
+        	while (_runConsoleLoop)
             {
-                
-                Out.Write(":> ");
-                string commandLine = In.ReadLine().Trim();
+        		
+                Out.Write (":> ");
+        		string commandLine = In.ReadLine ().Trim ();
 
-                if (!commandLine.Equals(String.Empty))
-                {
-
-                    string[] commandParts = commandLine.Split(' ');
-                    if (commandParts.Length > 0 && _commands.ContainsKey(commandParts[0]))
-                    {
-                        try
-                        {
-                            _commands[commandParts[0]].Execute(commandParts);
-                        }
-                        catch (Exception ex)
-                        {
-                            Out.WriteLine("Error while executing command '{0}': {1}", commandParts[0], ex.Message);
-                        }
-                    }
-                    else
-                        Out.WriteLine("Unknown command...");
-
-                }
-               
+                InterpretCommand (commandLine, false);
+        	
             }
         }
+		
+		public void RunScriptFile (string scriptFile)
+		{
+			InnerRunScriptFile (scriptFile);
+			
+			if (_exitOnFinish == false)
+			{
+				Run ();
+			}
+		}
+		
+		private void InnerRunScriptFile (string scriptFile)
+		{
+			string realScriptFile;
+			if (_currentScriptExecutionPath.Count () == 0)
+			{
+				//The first script that gets executed
+				FileInfo scriptFileInfo = new FileInfo (scriptFile);
+				_currentScriptExecutionPath.Push (scriptFileInfo.Directory.FullName);
+				realScriptFile = scriptFile;
+			}
+			else
+			{
+				if (scriptFile.StartsWith ("."))
+				{
+					//Relative path
+					realScriptFile = Path.Combine (_currentScriptExecutionPath.Peek (), scriptFile);
+					_currentScriptExecutionPath.Push (new FileInfo (realScriptFile).Directory.FullName);
+				}
+				else
+				{
+					//absolute path
+					realScriptFile = scriptFile;
+					_currentScriptExecutionPath.Push (new FileInfo (scriptFile).Directory.FullName);
+				}
+			}
+			
+			
+			using (StreamReader rdr = new StreamReader (File.OpenRead (realScriptFile))) 
+			{
+				string currentLine;
+				while (_runConsoleLoop && rdr.EndOfStream == false)
+				{
+					currentLine = rdr.ReadLine ().Trim ();
+					
+					Console.WriteLine ("s > {0}", currentLine);
+					
+					if (currentLine.StartsWith ("#"))
+					{
+						continue;
+					} 
+					else if (currentLine.StartsWith ("@"))
+					{
+						InterpretSpecialCommands (currentLine);
+					}	
+					else
+					{
+						try
+						{
+							InterpretCommand (currentLine, true);
+						}
+						catch (Exception)
+						{
+							//Exception message output is already done in InterpretCommand
+							if (_exitOnError)
+								Environment.Exit (-1);
+						}
+					}
+				}
+			}
+		}
+		
+		private void InterpretCommand (string commandLine, bool throwOnException)
+		{
+			if (!commandLine.Equals (String.Empty))
+            {
+
+                string[] commandParts = commandLine.Split (' ');
+				if (commandParts.Length > 0 && _commands.ContainsKey (commandParts[0]))
+                {
+					try
+                    {
+						_commands[commandParts[0]].Execute (commandParts);
+					}
+                    catch (Exception ex)
+                    {
+						Out.WriteLine ("Error while executing command '{0}': {1}", commandParts[0], ex.Message);
+						if (throwOnException)
+							throw;
+    				}
+    			}
+                else
+    				Out.WriteLine ("Unknown command...");
+
+            }
+        	
+		}
+		
+		
+		private void InterpretSpecialCommands (string command)
+		{
+			string[] splittedCommand = command.Split (' ');
+			
+			if (splittedCommand[0].Equals ("@exit_on_error"))
+			{
+				_exitOnError = CmdLineBoolToBool (splittedCommand[1]);
+			}
+			else if (splittedCommand[0].Equals ("@exit_on_finish"))
+			{
+				_exitOnFinish = CmdLineBoolToBool (splittedCommand[1]);
+			}
+			else if (splittedCommand[0].Equals ("@include"))
+			{
+				InnerRunScriptFile (splittedCommand[1]);
+			}
+		}
+		
+		private bool CmdLineBoolToBool (string value)
+		{
+			if (value.Equals ("1"))
+				return true;
+			else if (value.Equals ("0"))
+				return false;
+			else
+				throw new ArgumentException (string.Format("Could not parse '{0}' to bool", value)); 
+		}
 
         
     }
