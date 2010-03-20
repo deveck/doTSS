@@ -14,6 +14,9 @@ using Iaik.Connection.ClientConnections;
 using Iaik.Tc.Tpm.Context;
 using System.Configuration;
 using Iaik.Tc.Tpm.Configuration;
+using Iaik.Tc.Tpm.library;
+using Iaik.Tc.Tpm.Configuration.DotNetConfiguration;
+using Iaik.Tc.Tpm.lowlevel;
 
 namespace Iaik.Tc.Tpm
 {
@@ -34,6 +37,11 @@ namespace Iaik.Tc.Tpm
 		/// </summary>
 		private List<ServerContext> _activeContexts = new List<ServerContext>();
 		
+		/// <summary>
+		/// Contains all active tpm contexts
+		/// </summary>
+		private Dictionary<string, TpmContext> _tpmContexts = new Dictionary<string, TpmContext>();
+		
 		public TpmServerContext ()
 		{
 		}
@@ -47,15 +55,41 @@ namespace Iaik.Tc.Tpm
 		{
 			base.OnStart (args);
 			
-			SetupLogging();
+			SetupLogging ();
 			
-			StartConnections();
+			SetupTpmContexts ();
+			StartConnections ();
 			
 		}
 		
 		protected override void OnStop ()
 		{
 			base.OnStop ();
+		}
+		
+		/// <summary>
+		/// Reads the configured tpm devices from the configuration and
+		/// sets up the corresponding tpm contexts
+		/// </summary>
+		private void SetupTpmContexts ()
+		{
+			IConnectionsConfiguration connectionConfig = (IConnectionsConfiguration)ConfigurationManager.GetSection ("connections");
+			
+			foreach (Iaik.Tc.Tpm.Configuration.DotNetConfiguration.TpmDevice device in connectionConfig.TpmDevices)
+			{
+				try
+				{
+					TPMProvider provider = TpmProviders.Create (device.TpmType, device.Parameters);
+					TpmContext tpmContext = new TpmContext (device.TpmName, provider);
+					_tpmContexts.Add (device.TpmName, tpmContext);
+					_logger.InfoFormat ("Successfully setup tpm context '{0}' with type '{1}'", device.TpmName, device.TpmType);
+				}
+				catch (Exception ex)
+				{
+					_logger.FatalFormat ("Error setting up tpm device '{0}', the device woll not be available", device.TpmName);
+				}
+				
+			}
 		}
 		
 		/// <summary>

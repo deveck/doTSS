@@ -67,13 +67,14 @@ namespace Iaik.Tc.Tpm.lowlevel
         /// <param name="providerName"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static TPMProvider Create(String providerName, IDictionary<String, String> options)
+        public static TPMProvider Create (String providerName, IDictionary<String, String> options)
         {
-            Type provider_type;
-	    lock(providers_)
+        	Type provider_type;
+	    	
+			lock(providers_)
               provider_type = providers_[providerName];
             
-	    return Create(provider_type, options);
+	    	return Create(provider_type, options);
         }
 
         /// <summary>
@@ -104,41 +105,5 @@ namespace Iaik.Tc.Tpm.lowlevel
 
             throw new ArgumentException("Can not find a suitable constructor for this TPM provider");
         }
-
-	/// <summary>
-	/// Parses command line arguments for the TPM provider and returns a new set of command
-	/// line arguments with all TPM-provider specific arguments removed.
-	/// </summary>
-//	public static Dictionary<String, String> ParseCommandLine(ref String[] args)
-//	{
-//	   List<String> new_args = new List<String>();
-//	   Dictionary<String, String> options = new Dictionary<String, String>();
-//
-//	   foreach (String arg in args)
-//	   {
-//	     if (arg.StartsWith("-tpm:")) 
-//	     {
-//               // Skip the leading "-tpm:"
-//               String option = arg.Substring(5);
-//
-//               // Find the first "="
-//               int colon_index = option.IndexOf('=');
-//	       if (colon_index < 0)
-//		 throw new ArgumentException("Bad TPM provider parameter '" + arg + "'");
-//
-//	       String key = option.Substring(0, colon_index);
-//	       String val = option.Substring(colon_index + 1); 
-//               options[key] = val;
-//             }
-//             else
-//             {
-//               // Keep the argument
-//               new_args.Add(arg);
-//             }
-//	   }
-//
-//	   args = new_args.ToArray();
-//	   return options;
-//	}
     }
 }

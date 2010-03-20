@@ -75,6 +75,8 @@
     </Compile>
     <Compile Include="Configuration\DotNetConfiguration\AuthenticationMethodCollection.cs" />
     <Compile Include="Configuration\DotNetConfiguration\AuthenticationElement.cs" />
+    <Compile Include="Configuration\DotNetConfiguration\TpmDevice.cs" />
+    <Compile Include="Configuration\DotNetConfiguration\TpmDeviceCollection.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -115,6 +117,14 @@
     <ProjectReference Include="..\connection_lib\connection_lib.csproj">
       <Project>{F6681243-5DCF-4B0B-BC85-0F1290CF0334}</Project>
       <Name>connection_lib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\tpm_lib\tpm_lowlvl\tpm_lowlvl.csproj">
+      <Project>{1C051352-0BC4-4EE2-A5FF-C694C197A3AA}</Project>
+      <Name>tpm_lowlvl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\tpm_lib\tpm_lib_core\tpm_lib_core.csproj">
+      <Project>{3C66F3CE-CDD7-43CB-9847-9CC97715D683}</Project>
+      <Name>tpm_lib_core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

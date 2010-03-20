@@ -23,6 +23,11 @@ namespace Iaik.Tc.Tpm.Configuration
 		/// <summary>
 		/// Returns all defined authentication methods with their configurations
 		/// </summary>
-		IEnumerable<IAuthenticationMethod> AuthenticationMethods{get;}
+		IEnumerable<IAuthenticationMethod> AuthenticationMethods { get; }
+		
+		/// <summary>
+		/// Returns all defined tpm device configurations 
+		/// </summary>
+		IEnumerable<ITpmDeviceConfiguration> TpmDevices { get; }
 	}
 }

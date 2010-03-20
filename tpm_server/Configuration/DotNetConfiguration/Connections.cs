@@ -28,6 +28,11 @@ namespace Iaik.Tc.Tpm.Configuration.DotNetConfiguration
 		private const string PROP_AUTHENTICATIONMETHODS = "authenticationMethods";
 		
 		/// <summary>
+		/// Authentication methods tag
+		/// </summary>
+		private const string PROP_TPMDEVICES = "tpmDevices";
+		
+		/// <summary>
 		/// Returns the collection of configured listeners
 		/// </summary>
 		[ConfigurationProperty(PROP_LISTENERS)]
@@ -39,7 +44,12 @@ namespace Iaik.Tc.Tpm.Configuration.DotNetConfiguration
 		[ConfigurationProperty(PROP_AUTHENTICATIONMETHODS)]
 		public AuthenticationMethodCollection AuthenticationMethods
 		{
-			get{ return (AuthenticationMethodCollection)base[PROP_AUTHENTICATIONMETHODS];}
+			get { return (AuthenticationMethodCollection)base[PROP_AUTHENTICATIONMETHODS]; }
+		}
+		
+		[ConfigurationProperty(PROP_TPMDEVICES)]
+		public TpmDeviceCollection TpmDevices {
+			get { return (TpmDeviceCollection)base[PROP_TPMDEVICES]; }
 		}
 		
 		#region IConnectionsConfiguration implementation
@@ -64,12 +74,23 @@ namespace Iaik.Tc.Tpm.Configuration.DotNetConfiguration
 		{
 			get
 			{
-				List<IAuthenticationMethod> authenticationMethods = new List<IAuthenticationMethod>();
+				List<IAuthenticationMethod> authenticationMethods = new List<IAuthenticationMethod> ();
 				
-				foreach(IAuthenticationMethod authMethod in AuthenticationMethods)
-					authenticationMethods.Add(authMethod);
+				foreach (IAuthenticationMethod authMethod in AuthenticationMethods)
+					authenticationMethods.Add (authMethod);
 				
 				return authenticationMethods;
+			}
+		}
+		
+		IEnumerable<ITpmDeviceConfiguration> IConnectionsConfiguration.TpmDevices {
+			get {
+				List<ITpmDeviceConfiguration> tpmDevices = new List<ITpmDeviceConfiguration> ();
+				
+				foreach (ITpmDeviceConfiguration tpmDevice in TpmDevices)
+					tpmDevices.Add (tpmDevice);
+				
+				return tpmDevices;
 			}
 		}
 		

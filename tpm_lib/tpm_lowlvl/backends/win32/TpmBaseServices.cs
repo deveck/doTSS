@@ -1,5 +1,6 @@
 // Author: Andreas Reiter <andreas.reiter@student.tugraz.at>
 // Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
+// Thanks to Johannes Winter <johannes.winter@TUGraz.at>
 
 using System;
 using System.Runtime.InteropServices;

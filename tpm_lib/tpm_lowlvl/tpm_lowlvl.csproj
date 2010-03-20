@@ -44,7 +44,7 @@
     <Compile Include="data\TpmBlob.cs" />
     <Compile Include="TPMProvider.cs" />
     <Compile Include="TpmConstants.cs" />
-    <Compile Include="backends\linux\Device.cs" />
+    <Compile Include="backends\linux\TpmDevice.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />

@@ -5,6 +5,7 @@
 using System;
 using Iaik.Tc.Tpm.lowlevel.exceptions;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 namespace Iaik.Tc.Tpm.lowlevel.backends.linux
 {
@@ -40,11 +41,16 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.linux
         /// Special purpose constructor with configurable device name.
         /// </summary>
         /// <param name="deviceName"></param>
-        public TpmDevice(String deviceName)
+        public TpmDevice (String deviceName)
         {
-            fd_ = -1;
-            deviceName_ = deviceName;
+        	fd_ = -1;
+        	deviceName_ = deviceName;
         }
+		
+		public TpmDevice(IDictionary<string, string> parameters)
+			:this(parameters["DeviceName"])
+		{
+		}
 
         /// <summary>
         /// Wrapper for the native TDDL_Open call.
