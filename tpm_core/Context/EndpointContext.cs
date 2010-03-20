@@ -12,6 +12,7 @@ using Iaik.Connection.Packets;
 using Iaik.Tc.Tpm.Subsystems;
 using System.Threading;
 using Iaik.Tc.Tpm.Configuration;
+using Iaik.Tc.Tpm.library;
 
 namespace Iaik.Tc.Tpm.Context
 {
@@ -30,10 +31,11 @@ namespace Iaik.Tc.Tpm.Context
 		/// <summary>
 		/// Creates a ServerContext for the specified connection
 		/// </summary>
-		public static ServerContext CreateServerEndpointContext(FrontEndConnection connection, IConnectionsConfiguration connectionConfig)
+		public static ServerContext CreateServerEndpointContext(FrontEndConnection connection, IConnectionsConfiguration connectionConfig,
+			AccessControlList acl, IDictionary<string, TpmContext> tpmContexts)
 		{
 			PacketTransmitter packetTransmitter = new PacketTransmitter(connection);
-			ServerContext ctx = new ServerContext(connection, packetTransmitter, connectionConfig);
+			ServerContext ctx = new ServerContext(connection, packetTransmitter, connectionConfig, acl, tpmContexts);
 			packetTransmitter.StartTransmitting();
 			return ctx;
 		}

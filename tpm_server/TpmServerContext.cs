@@ -42,6 +42,11 @@ namespace Iaik.Tc.Tpm
 		/// </summary>
 		private Dictionary<string, TpmContext> _tpmContexts = new Dictionary<string, TpmContext>();
 		
+		/// <summary>
+		/// Contains all defined Users/Groups with their associated permissions
+		/// </summary>
+		private AccessControlList _accessControlList = null;
+		
 		public TpmServerContext ()
 		{
 		}
@@ -56,6 +61,8 @@ namespace Iaik.Tc.Tpm
 			base.OnStart (args);
 			
 			SetupLogging ();
+			
+			_accessControlList = new DotNetCfgAccessControlList ();
 			
 			SetupTpmContexts ();
 			StartConnections ();
@@ -143,11 +150,13 @@ namespace Iaik.Tc.Tpm
 		/// <param name="connection">The connection to the client</param>
 		private void HandleListenerClientConnected (FrontEndConnection connection)
 		{
-			_logger.InfoFormat("Client {0} connected", connection);
+			_logger.InfoFormat ("Client {0} connected", connection);
 			ServerContext ctx;
-			lock(_activeContexts)
+			lock (_activeContexts)
 			{
-                ctx = EndpointContext.CreateServerEndpointContext(connection, (IConnectionsConfiguration)ConfigurationManager.GetSection("connections"));			
+				ctx = EndpointContext.CreateServerEndpointContext (connection, 
+					(IConnectionsConfiguration)ConfigurationManager.GetSection("connections"),
+					_accessControlList, _tpmContexts);			
 				_activeContexts.Add(ctx);
 			}
 			connection.Disconnected += delegate 

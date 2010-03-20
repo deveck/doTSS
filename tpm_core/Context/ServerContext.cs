@@ -12,6 +12,8 @@ using Iaik.Tc.Tpm.Configuration;
 using Iaik.Tc.Tpm.Subsystems.Authentication;
 using Iaik.Tc.Tpm.Authentication;
 using Iaik.Tc.Tpm.Subsystems.Tpm;
+using Iaik.Tc.Tpm.library;
+using System.Collections.Generic;
 
 namespace Iaik.Tc.Tpm.Context
 {
@@ -29,13 +31,36 @@ namespace Iaik.Tc.Tpm.Context
 		/// </summary>				
 		public ServerAuthenticationContext ServerAuthenticationContext
 		{
-			get{ return _serverAuthenticationContext;}
-			set{ _serverAuthenticationContext = value;}
+			get { return _serverAuthenticationContext; }
+			set { _serverAuthenticationContext = value; }
 		}
 		
-		public ServerContext (FrontEndConnection connection, PacketTransmitter packetTransmitter, IConnectionsConfiguration connectionConfig)
-			:base(connection, packetTransmitter)
+		protected AccessControlList _accessControlList;
+		
+		/// <summary>
+		///Provides access to users, groups and permissions
+		/// </summary>
+		public AccessControlList AccessControlList
 		{
+			get { return _accessControlList; }
+		}
+		
+		protected IDictionary<string, TpmContext> _tpmContexts;
+		
+		/// <summary>
+		///Provides access to all defined tpm devices 
+		/// </summary>
+		public IDictionary<string, TpmContext> TpmContexts
+		{
+			get { return _tpmContexts;}
+		}
+		
+		public ServerContext (FrontEndConnection connection, PacketTransmitter packetTransmitter, IConnectionsConfiguration connectionConfig,
+			AccessControlList acl, IDictionary<string, TpmContext> tpmContexts)
+			: base(connection, packetTransmitter)
+		{
+			_accessControlList = acl;
+			_tpmContexts = tpmContexts;
 
 			RegisterSubsystem(new DebugSubsystem(this, connectionConfig));
             RegisterSubsystem(new AuthenticationSubsystem(this, connectionConfig));
