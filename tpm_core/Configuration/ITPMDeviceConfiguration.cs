@@ -12,10 +12,10 @@ namespace Iaik.Tc.TPM.Configuration
 	/// <summary>
 	/// Provides the configuration for a single tpm device
 	/// </summary>
-	public interface ITpmDeviceConfiguration
+	public interface ITPMDeviceConfiguration
 	{
-		string TpmName { get; }
-		string TpmType { get; }
+		string TPMName { get; }
+		string TPMType { get; }
 		
 		IDictionary<string, string> Parameters{ get; }
 		

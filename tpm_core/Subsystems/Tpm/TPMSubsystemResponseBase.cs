@@ -11,7 +11,7 @@ namespace Iaik.Tc.TPM.Subsystems.Tpm
     /// <summary>
     /// Base class for all responses in the tpm subsystem
     /// </summary>
-    public class TpmSubsystemResponseBase : SubsystemResponse, IStatusIndicator
+    public class TPMSubsystemResponseBase : SubsystemResponse, IStatusIndicator
     {
         public enum ErrorCodeEnum : int
         {
@@ -89,7 +89,7 @@ namespace Iaik.Tc.TPM.Subsystems.Tpm
         }
 
 
-        public TpmSubsystemResponseBase(SubsystemRequest request, EndpointContext ctx) 
+        public TPMSubsystemResponseBase(SubsystemRequest request, EndpointContext ctx) 
 			:base(request, ctx)
 		{
             

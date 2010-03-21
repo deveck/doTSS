@@ -37,12 +37,12 @@ namespace Iaik.Tc.TPM.Context
         }
 		
 		
-		private TpmClient _tpmClient;
+		private TPMClient _tpmClient;
 		
 		/// <summary>
 		/// Client used to do tpm operations 
 		/// </summary>
-		public TpmClient TpmClient
+		public TPMClient TPMClient
 		{
 			get { return _tpmClient;}
 		}
@@ -52,7 +52,7 @@ namespace Iaik.Tc.TPM.Context
 		{
 			_debugClient = new DebugClient (this);
 			_authClient = new AuthenticationClient (this);
-			_tpmClient = new TpmClient (this);
+			_tpmClient = new TPMClient (this);
 			_configured = true;
 			_configuredEvent.Set();
 		}

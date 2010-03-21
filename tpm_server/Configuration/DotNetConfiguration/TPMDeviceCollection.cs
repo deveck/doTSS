@@ -12,12 +12,12 @@ namespace Iaik.Tc.TPM.Configuration.DotNetConfiguration
 	/// <summary>
 	/// Collects all configured listeners
 	/// </summary>
-	[ConfigurationCollection(typeof(TpmDevice), 
+	[ConfigurationCollection(typeof(TPMDevice), 
 	                         CollectionType=ConfigurationElementCollectionType.BasicMap,
 	                         AddItemName="addTpmDevice",
 	                         RemoveItemName = "removeTpmDevice",
 	                         ClearItemsName = "clearTpmDevices")]
-	public class TpmDeviceCollection : ConfigurationElementCollection
+	public class TPMDeviceCollection : ConfigurationElementCollection
 	{
 	
 		public override ConfigurationElementCollectionType CollectionType 
@@ -32,13 +32,13 @@ namespace Iaik.Tc.TPM.Configuration.DotNetConfiguration
 		
 		protected override ConfigurationElement CreateNewElement ()
 		{
-			return new TpmDevice();
+			return new TPMDevice();
 		}
 		
 		
 		protected override object GetElementKey (ConfigurationElement element)
 		{
-			return (element as TpmDevice).TpmName;
+			return (element as TPMDevice).TPMName;
 		}
 		
 		

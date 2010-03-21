@@ -14,47 +14,47 @@ namespace Iaik.Tc.TPM.Context
 	/// <summary>
 	/// Client used to do tpm operations
 	/// </summary>
-	public class TpmClient
+	public class TPMClient
 	{
   		/// <summary>
 		/// Transmits the packets to the server
 		/// </summary>
 		private EndpointContext _ctx;
 
-		private TpmCapabilityClient _capabilities;
+		private TPMCapabilityClient _capabilities;
 		
 		/// <summary>
 		/// Performs tpm capability requests
 		/// </summary>
-		public TpmCapabilityClient Capabilities
+		public TPMCapabilityClient Capabilities
 		{
 			get { return _capabilities;}
 		}
 		
-		public string[] TpmDevices
+		public string[] TPMDevices
 		{
 			get
 			{
-				ListTpmsRequest request = new ListTpmsRequest (_ctx);
-				ListTpmsResponse response = request.TypedExecute();
+				ListTPMsRequest request = new ListTPMsRequest (_ctx);
+				ListTPMsResponse response = request.TypedExecute();
 				
 				if (response.Succeeded == false)
 					throw new Exception (response.ErrorText);
 				
-				return response.TpmDevices;
+				return response.TPMDevices;
 			}
 		}
 		
-        public TpmClient (EndpointContext ctx)
+        public TPMClient (EndpointContext ctx)
         {
         	_ctx = ctx;
-        	_capabilities = new TpmCapabilityClient (this);
+        	_capabilities = new TPMCapabilityClient (this);
         }
 		
 		
 		public void DoTPMCommandRequest (TPMCommandRequest commandRequest)
 		{
-			TpmRequest request = new TpmRequest (_ctx);
+			TPMRequest request = new TPMRequest (_ctx);
 			request.CommandRequest = commandRequest;
 			request.Execute ();
 		}
@@ -62,14 +62,14 @@ namespace Iaik.Tc.TPM.Context
 		/// <summary>
 		/// Performs tpm capability requests
 		/// </summary>
-		public class TpmCapabilityClient
+		public class TPMCapabilityClient
 		{
 			/// <summary>
 			/// Transmits the packets to the server
 			/// </summary>
-			private TpmClient _tpmClient;
+			private TPMClient _tpmClient;
 	
-	        public TpmCapabilityClient (TpmClient tpmClient)
+	        public TPMCapabilityClient (TPMClient tpmClient)
 	        {
 	        	_tpmClient = tpmClient;
 	        }

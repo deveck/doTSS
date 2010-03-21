@@ -66,7 +66,7 @@ namespace Iaik.Tc.TPM.Context
 
 			RegisterSubsystem (new DebugSubsystem (this, connectionConfig));
 			RegisterSubsystem (new AuthenticationSubsystem (this, connectionConfig));
-			RegisterSubsystem (new TpmSubsystem (this, connectionConfig));
+			RegisterSubsystem (new TPMSubsystem (this, connectionConfig));
 			_configured = true;
 			_configuredEvent.Set ();
 		}

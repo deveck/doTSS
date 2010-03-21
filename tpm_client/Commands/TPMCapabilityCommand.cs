@@ -7,7 +7,7 @@ using Iaik.Tc.TPM.Context;
 namespace Iaik.Tc.TPM.Commands
 {
     [TPMConsoleCommand("tpm_capability")]
-    public class TpmCapabilityCommand : ConsoleCommandBase
+    public class TPMCapabilityCommand : ConsoleCommandBase
     {
         public override string HelpText
         {
@@ -33,7 +33,7 @@ namespace Iaik.Tc.TPM.Commands
 
 			if (commandline[1] == "tpm_version")
 			{
-        		ctx.TpmClient.Capabilities.GetTPMVersion ();
+        		ctx.TPMClient.Capabilities.GetTPMVersion ();
         	}
 			else
         		_console.Out.WriteLine ("Error, unknown cap_type '{0}'", commandline[1]);

@@ -16,7 +16,7 @@ namespace Iaik.Tc.TPM.Subsystems.Tpm
 {
 
 
-	public class TpmSubsystem : BaseSubsystem<TpmSubsystem.TpmRequestEnum>
+	public class TPMSubsystem : BaseSubsystem<TPMSubsystem.TPMRequestEnum>
 	{
 		public override string SubsystemIdentifier 
 		{
@@ -28,37 +28,37 @@ namespace Iaik.Tc.TPM.Subsystems.Tpm
 			get { return (ServerContext)_context;}
 		}
 
-		public enum TpmRequestEnum : ushort
+		public enum TPMRequestEnum : ushort
 		{
 			/// <summary>
 			/// Requests a tpm operation 
 			/// </summary>
-			TpmRequest = 0x0001,
+			TPMRequest = 0x0001,
 			
 			/// <summary>
 			/// Lists all available tpm devices
 			/// </summary>
-			ListTpmDevices,
+			ListTPMDevices,
 			
 			/// <summary>
 			/// Selects the specified tpm device. Returns an
 			/// identifier of the selected tpm back to the client.
 			/// Selecting multiple tpms is supported
 			/// </summary>
-			SelectTpmDevice
+			SelectTPMDevice
 		}		
 		
-		public TpmSubsystem (EndpointContext context, IConnectionsConfiguration config)
+		public TPMSubsystem (EndpointContext context, IConnectionsConfiguration config)
             : base(context, config)
 		{
 			if (typeof(ServerContext).IsAssignableFrom (context.GetType ()) == false)
 				throw new ArgumentException ("TpmSubsystem requires a ServerContext");
 			
-			_requestExecutionInfos.Add (TpmRequestEnum.TpmRequest,
-				BuildRequestExecutionInfo<TpmSubsystem, TpmRequest, TpmResponse> (HandleTpmRequest));
+			_requestExecutionInfos.Add (TPMRequestEnum.TPMRequest,
+				BuildRequestExecutionInfo<TPMSubsystem, TPMRequest, TPMResponse> (HandleTPMRequest));
 			
-			_requestExecutionInfos.Add (TpmRequestEnum.ListTpmDevices,
-				BuildRequestExecutionInfo<TpmSubsystem, ListTpmsRequest, ListTpmsResponse> (HandleListTpmsRequest));
+			_requestExecutionInfos.Add (TPMRequestEnum.ListTPMDevices,
+				BuildRequestExecutionInfo<TPMSubsystem, ListTPMsRequest, ListTPMsResponse> (HandleListTPMsRequest));
 		}
 		
 		public override void HandlePacket (Iaik.Connection.Packets.DataPacket packet)
@@ -67,9 +67,9 @@ namespace Iaik.Tc.TPM.Subsystems.Tpm
 		}
 
 		
-		private void HandleTpmRequest (TpmSubsystem subsystem, RequestContext<TpmRequest, TpmResponse> requestContext)
+		private void HandleTPMRequest (TPMSubsystem subsystem, RequestContext<TPMRequest, TPMResponse> requestContext)
 		{
-			TpmResponse response = requestContext.CreateResponse();
+			TPMResponse response = requestContext.CreateResponse();
 			//AssertUserAuthentication(
 			//TODO: Check if the current connection has an associated user (already authenticated)
 			//TODO: Do some permission checking here!
@@ -89,7 +89,7 @@ namespace Iaik.Tc.TPM.Subsystems.Tpm
 		/// </summary>
 		/// <param name="subsystem"></param>
 		/// <param name="requestContext"></param>
-		private void HandleListTpmsRequest (TpmSubsystem subsystem, RequestContext<ListTpmsRequest, ListTpmsResponse> requestContext)
+		private void HandleListTPMsRequest (TPMSubsystem subsystem, RequestContext<ListTPMsRequest, ListTPMsResponse> requestContext)
 		{
 			if (!AssertUserAuthentication (null, requestContext.CreateResponse ()))
 				return;
@@ -97,12 +97,12 @@ namespace Iaik.Tc.TPM.Subsystems.Tpm
 			List<string> tpmDevices = new List<string> ();
 			foreach (KeyValuePair<string, TPMContext> ctx in ServerContext.TpmContexts)
 			{
-				if (IsAllowedToUseTpmDevice (ctx.Key))
+				if (IsAllowedToUseTPMDevice (ctx.Key))
 					tpmDevices.Add (ctx.Key);
 			}
 			
-			ListTpmsResponse response = requestContext.CreateResponse ();
-			response.TpmDevices = tpmDevices.ToArray ();
+			ListTPMsResponse response = requestContext.CreateResponse ();
+			response.TPMDevices = tpmDevices.ToArray ();
 			response.Execute ();
 		}
 		
@@ -111,20 +111,20 @@ namespace Iaik.Tc.TPM.Subsystems.Tpm
 		/// </summary>
 		/// <param name="tpmSubsystemResponse"></param>
 		/// <returns></returns>
-		private bool AssertUserAuthentication (string pid, TpmSubsystemResponseBase tpmSubsystemResponse)
+		private bool AssertUserAuthentication (string pid, TPMSubsystemResponseBase tpmSubsystemResponse)
 		{
 			if (ServerContext.ServerAuthenticationContext == null 
 				|| ServerContext.ServerAuthenticationContext.AuthenticatedPermissionMember == null)
 			{
 				tpmSubsystemResponse.Succeeded = false;
-				tpmSubsystemResponse.SetKnownErrorCode (TpmSubsystemResponseBase.ErrorCodeEnum.NotAuthenticated);
+				tpmSubsystemResponse.SetKnownErrorCode (TPMSubsystemResponseBase.ErrorCodeEnum.NotAuthenticated);
 				tpmSubsystemResponse.Execute ();
 				return false;
 			}
 			else if (pid != null && !ServerContext.IsCurrentUserAllowed (SubsystemIdentifier, pid))
 			{
 				tpmSubsystemResponse.Succeeded = false;
-				tpmSubsystemResponse.SetKnownErrorCode (TpmSubsystemResponseBase.ErrorCodeEnum.NotPermitted);
+				tpmSubsystemResponse.SetKnownErrorCode (TPMSubsystemResponseBase.ErrorCodeEnum.NotPermitted);
 				tpmSubsystemResponse.Execute ();
 				return false;
 			}
@@ -138,7 +138,7 @@ namespace Iaik.Tc.TPM.Subsystems.Tpm
 		/// </summary>
 		/// <param name="tpmDeviceIdentifier"></param>
 		/// <returns></returns>
-		private bool IsAllowedToUseTpmDevice (string tpmDeviceIdentifier)
+		private bool IsAllowedToUseTPMDevice (string tpmDeviceIdentifier)
 		{
 			return ServerContext.IsCurrentUserAllowed (SubsystemIdentifier, "select_" + tpmDeviceIdentifier);
 		}

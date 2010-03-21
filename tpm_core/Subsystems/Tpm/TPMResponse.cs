@@ -19,7 +19,7 @@ namespace Iaik.Tc.TPM.Subsystems.Tpm
 	/// Requests all available authentication modes for the current connection
 	/// from the server
 	/// </summary>
-	public class TpmRequest : TypedSubsystemRequest<TpmResponse>
+	public class TPMRequest : TypedSubsystemRequest<TPMResponse>
 	{
 		
 		
@@ -31,7 +31,7 @@ namespace Iaik.Tc.TPM.Subsystems.Tpm
 
 		public override ushort RequestIdentifier
 		{
-			get	{ return (ushort)TpmSubsystem.TpmRequestEnum.TpmRequest; }
+			get	{ return (ushort)TPMSubsystem.TPMRequestEnum.TPMRequest; }
 		}
 				
 		
@@ -46,7 +46,7 @@ namespace Iaik.Tc.TPM.Subsystems.Tpm
 			set { _commandRequest = value;}
 		}
 
-		public TpmRequest (EndpointContext ctx)
+		public TPMRequest (EndpointContext ctx)
 			: base(ctx)
 		{
 		}
@@ -72,10 +72,10 @@ namespace Iaik.Tc.TPM.Subsystems.Tpm
 	/// <summary>
 	/// Response to a <see>TpmRequest</see>
 	/// </summary>
-	public class TpmResponse : TpmSubsystemResponseBase
+	public class TPMResponse : TPMSubsystemResponseBase
 	{
 		
-		public TpmResponse(SubsystemRequest request, EndpointContext ctx) 
+		public TPMResponse(SubsystemRequest request, EndpointContext ctx) 
 			:base(request, ctx)
 		{
 		}

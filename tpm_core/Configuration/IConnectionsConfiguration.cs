@@ -28,6 +28,6 @@ namespace Iaik.Tc.TPM.Configuration
 		/// <summary>
 		/// Returns all defined tpm device configurations 
 		/// </summary>
-		IEnumerable<ITpmDeviceConfiguration> TpmDevices { get; }
+		IEnumerable<ITPMDeviceConfiguration> TpmDevices { get; }
 	}
 }

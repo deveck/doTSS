@@ -7,7 +7,7 @@ using Iaik.Tc.TPM.Context;
 namespace Iaik.Tc.TPM.Commands
 {
     [TPMConsoleCommand("tpm_list")]
-    public class TpmListDevicesCommand : ConsoleCommandBase
+    public class TPMListDevicesCommand : ConsoleCommandBase
     {
         public override string HelpText
         {
@@ -29,7 +29,7 @@ namespace Iaik.Tc.TPM.Commands
         	}
 
 			_console.Out.WriteLine ("Tpm devices:");
-        	foreach (string tpmDevice in ctx.TpmClient.TpmDevices)
+        	foreach (string tpmDevice in ctx.TPMClient.TPMDevices)
 			{
         		_console.Out.WriteLine ("\t" + tpmDevice);
 			}

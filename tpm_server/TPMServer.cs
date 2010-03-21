@@ -26,7 +26,7 @@ namespace Iaik.Tc.TPM
 	/// <summary>
 	/// Entrypoint for the tpm server service and console application
 	/// </summary>
-	public class TpmServer
+	public class TPMServer
 	{
         /// <summary>
         /// Shows the commandline help
@@ -65,7 +65,7 @@ namespace Iaik.Tc.TPM
             commandLineHandler.Parse(args);
 			
 	
-			TpmServerContext ctx = new TpmServerContext();
+			TPMServerContext ctx = new TPMServerContext();
 			ctx.Start();
 			
 			Thread.Sleep(Timeout.Infinite);

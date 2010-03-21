@@ -18,7 +18,7 @@ namespace Iaik.Tc.TPM.Configuration.DotNetConfiguration
 	/// Provides the .net configuration of the tpm device configuration
 	/// </summary>
 	[ConfigurationCollection(typeof(Parameter))]	                         
-	public class TpmDevice : ConfigurationElementCollection, ITpmDeviceConfiguration
+	public class TPMDevice : ConfigurationElementCollection, ITPMDeviceConfiguration
 	{
 		private const string PROP_DEVICE_TYPE = "type";
 		private const string PROP_DEVICE_NAME = "name";
@@ -28,7 +28,7 @@ namespace Iaik.Tc.TPM.Configuration.DotNetConfiguration
 		/// Returns the type of the tpm device
 		/// </summary>
 		[ConfigurationProperty(PROP_DEVICE_TYPE, IsRequired=true)]
-		public string TpmType
+		public string TPMType
 		{
 			get { return (string)base[PROP_DEVICE_TYPE];}
 		}	
@@ -37,7 +37,7 @@ namespace Iaik.Tc.TPM.Configuration.DotNetConfiguration
 		/// Returns the name of the tpm device
 		/// </summary>
 		[ConfigurationProperty(PROP_DEVICE_NAME, IsRequired = true)]
-		public string TpmName {
+		public string TPMName {
 			get { return (string)base[PROP_DEVICE_NAME]; }
 		}
 		

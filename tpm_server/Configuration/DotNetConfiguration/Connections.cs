@@ -48,8 +48,8 @@ namespace Iaik.Tc.TPM.Configuration.DotNetConfiguration
 		}
 		
 		[ConfigurationProperty(PROP_TPMDEVICES)]
-		public TpmDeviceCollection TpmDevices {
-			get { return (TpmDeviceCollection)base[PROP_TPMDEVICES]; }
+		public TPMDeviceCollection TpmDevices {
+			get { return (TPMDeviceCollection)base[PROP_TPMDEVICES]; }
 		}
 		
 		#region IConnectionsConfiguration implementation
@@ -83,11 +83,11 @@ namespace Iaik.Tc.TPM.Configuration.DotNetConfiguration
 			}
 		}
 		
-		IEnumerable<ITpmDeviceConfiguration> IConnectionsConfiguration.TpmDevices {
+		IEnumerable<ITPMDeviceConfiguration> IConnectionsConfiguration.TpmDevices {
 			get {
-				List<ITpmDeviceConfiguration> tpmDevices = new List<ITpmDeviceConfiguration> ();
+				List<ITPMDeviceConfiguration> tpmDevices = new List<ITPMDeviceConfiguration> ();
 				
-				foreach (ITpmDeviceConfiguration tpmDevice in TpmDevices)
+				foreach (ITPMDeviceConfiguration tpmDevice in TpmDevices)
 					tpmDevices.Add (tpmDevice);
 				
 				return tpmDevices;

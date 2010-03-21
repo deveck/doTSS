@@ -12,11 +12,11 @@ namespace Iaik.Tc.TPM.Subsystems.Tpm
 {
 
 
-	public class ListTpmsRequest : TypedSubsystemRequest<ListTpmsResponse>
+	public class ListTPMsRequest : TypedSubsystemRequest<ListTPMsResponse>
 	{
 		public override ushort RequestIdentifier {
 			get {
-				return (ushort)TpmSubsystem.TpmRequestEnum.ListTpmDevices;
+				return (ushort)TPMSubsystem.TPMRequestEnum.ListTPMDevices;
 			}
 		}
 		
@@ -27,14 +27,14 @@ namespace Iaik.Tc.TPM.Subsystems.Tpm
 		}
 		
 
-		public ListTpmsRequest (EndpointContext ctx)
+		public ListTPMsRequest (EndpointContext ctx)
 			:base(ctx)
 		{
 		}
 	}
 	
 	
-	public class ListTpmsResponse  : TpmSubsystemResponseBase
+	public class ListTPMsResponse  : TPMSubsystemResponseBase
 	{
 		private string[] _tpmDevices;
 		
@@ -42,14 +42,14 @@ namespace Iaik.Tc.TPM.Subsystems.Tpm
 		/// Gets or sets the tpm devices that can be used/selected by the authenticated
 		/// user
 		/// </summary>
-		public string[] TpmDevices
+		public string[] TPMDevices
 		{
 			get { return _tpmDevices; }
 			set { _tpmDevices = value; }
 		}
 		
 		
-		public ListTpmsResponse (SubsystemRequest request, EndpointContext ctx)
+		public ListTPMsResponse (SubsystemRequest request, EndpointContext ctx)
 			: base(request, ctx)
 		{
 		}

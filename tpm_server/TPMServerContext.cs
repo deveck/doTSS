@@ -20,7 +20,7 @@ using Iaik.Tc.TPM.Lowlevel;
 
 namespace Iaik.Tc.TPM
 {
-	public class TpmServerContext : ServiceBase
+	public class TPMServerContext : ServiceBase
 	{
 		/// <summary>
 		/// The ServerContextLogger
@@ -47,7 +47,7 @@ namespace Iaik.Tc.TPM
 		/// </summary>
 		private AccessControlList _accessControlList = null;
 		
-		public TpmServerContext ()
+		public TPMServerContext ()
 		{
 		}
 		
@@ -82,18 +82,18 @@ namespace Iaik.Tc.TPM
 		{
 			IConnectionsConfiguration connectionConfig = (IConnectionsConfiguration)ConfigurationManager.GetSection ("connections");
 			
-			foreach (Iaik.Tc.TPM.Configuration.DotNetConfiguration.TpmDevice device in connectionConfig.TpmDevices)
+			foreach (Iaik.Tc.TPM.Configuration.DotNetConfiguration.TPMDevice device in connectionConfig.TpmDevices)
 			{
 				try
 				{
-					TPMProvider provider = TPMProviders.Create (device.TpmType, device.Parameters);
-					TPMContext tpmContext = new TPMContext (device.TpmName, provider);
-					_tpmContexts.Add (device.TpmName, tpmContext);
-					_logger.InfoFormat ("Successfully setup tpm context '{0}' with type '{1}'", device.TpmName, device.TpmType);
+					TPMProvider provider = TPMProviders.Create (device.TPMType, device.Parameters);
+					TPMContext tpmContext = new TPMContext (device.TPMName, provider);
+					_tpmContexts.Add (device.TPMName, tpmContext);
+					_logger.InfoFormat ("Successfully setup tpm context '{0}' with type '{1}'", device.TPMName, device.TPMType);
 				}
 				catch (Exception ex)
 				{
-					_logger.FatalFormat ("Error setting up tpm device '{0}', the device woll not be available", device.TpmName);
+					_logger.FatalFormat ("Error setting up tpm device '{0}', the device woll not be available", device.TPMName);
 				}
 				
 			}
