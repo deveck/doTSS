@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Iaik.Utils.CommonFactories;
 using Iaik.Connection.ClientConnections;
-using Iaik.Tc.Tpm.Context;
+using Iaik.Tc.TPM.Context;
 
-namespace Iaik.Tc.Tpm.Commands
+namespace Iaik.Tc.TPM.Commands
 {
     [TPMConsoleCommand("connection_create")]
     public class ConnectionCreateCommand : ConsoleCommandBase

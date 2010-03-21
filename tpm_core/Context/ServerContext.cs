@@ -7,15 +7,15 @@
 using System;
 using Iaik.Connection.ClientConnections;
 using Iaik.Connection.Packets;
-using Iaik.Tc.Tpm.Subsystems.Debug;
-using Iaik.Tc.Tpm.Configuration;
-using Iaik.Tc.Tpm.Subsystems.Authentication;
-using Iaik.Tc.Tpm.Authentication;
-using Iaik.Tc.Tpm.Subsystems.Tpm;
-using Iaik.Tc.Tpm.library;
+using Iaik.Tc.TPM.Subsystems.Debug;
+using Iaik.Tc.TPM.Configuration;
+using Iaik.Tc.TPM.Subsystems.Authentication;
+using Iaik.Tc.TPM.Authentication;
+using Iaik.Tc.TPM.Subsystems.Tpm;
+using Iaik.Tc.TPM.Library;
 using System.Collections.Generic;
 
-namespace Iaik.Tc.Tpm.Context
+namespace Iaik.Tc.TPM.Context
 {
 
 	/// <summary>
@@ -45,12 +45,12 @@ namespace Iaik.Tc.Tpm.Context
 			get { return _accessControlList; }
 		}
 		
-		protected IDictionary<string, TpmContext> _tpmContexts;
+		protected IDictionary<string, TPMContext> _tpmContexts;
 		
 		/// <summary>
 		///Provides access to all defined tpm devices 
 		/// </summary>
-		public IDictionary<string, TpmContext> TpmContexts
+		public IDictionary<string, TPMContext> TpmContexts
 		{
 			get { return _tpmContexts; }
 		}
@@ -58,7 +58,7 @@ namespace Iaik.Tc.Tpm.Context
 		
 		
 		public ServerContext (FrontEndConnection connection, PacketTransmitter packetTransmitter, IConnectionsConfiguration connectionConfig,
-			AccessControlList acl, IDictionary<string, TpmContext> tpmContexts)
+			AccessControlList acl, IDictionary<string, TPMContext> tpmContexts)
 			: base(connection, packetTransmitter)
 		{
 			_accessControlList = acl;

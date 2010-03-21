@@ -7,9 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Iaik.Tc.Tpm.Configuration.DotNetConfiguration.Elements;
+using Iaik.Tc.TPM.Configuration.DotNetConfiguration.Elements;
 
-namespace Iaik.Tc.Tpm.Configuration
+namespace Iaik.Tc.TPM.Configuration
 {
     /// <summary>
     /// Represents a group of the framework

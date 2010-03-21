@@ -7,7 +7,7 @@ using System;
 using Iaik.Connection.ClientConnections;
 using Iaik.Utils.CommonAttributes;
 
-namespace Iaik.Tc.Tpm.Authentication
+namespace Iaik.Tc.TPM.Authentication
 {
 
 

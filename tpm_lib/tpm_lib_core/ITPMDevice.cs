@@ -1,7 +1,7 @@
 
 using System;
 
-namespace Iaik.Tc.Tpm.library
+namespace Iaik.Tc.TPM.library
 {
 
 

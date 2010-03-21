@@ -6,14 +6,14 @@
 using System;
 using Iaik.Utils.Serialization;
 using System.IO;
-using Iaik.Tc.Tpm.Context;
+using Iaik.Tc.TPM.Context;
 using Iaik.Utils;
-using Iaik.Tc.Tpm.Configuration;
-using Iaik.Tc.Tpm.Authentication;
+using Iaik.Tc.TPM.Configuration;
+using Iaik.Tc.TPM.Authentication;
 using System.Collections.Generic;
-using Iaik.Tc.Tpm.library.common;
+using Iaik.Tc.TPM.Library.Common;
 
-namespace Iaik.Tc.Tpm.Subsystems.Tpm
+namespace Iaik.Tc.TPM.Subsystems.Tpm
 {
 	/// <summary>
 	/// Requests all available authentication modes for the current connection

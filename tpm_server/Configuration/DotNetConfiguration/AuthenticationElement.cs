@@ -5,9 +5,9 @@
 
 using System;
 using System.Configuration;
-using Iaik.Tc.Tpm.Authentication;
+using Iaik.Tc.TPM.Authentication;
 
-namespace Iaik.Tc.Tpm.Configuration.DotNetConfiguration
+namespace Iaik.Tc.TPM.Configuration.DotNetConfiguration
 {
 
 

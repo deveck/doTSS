@@ -8,10 +8,10 @@ using Iaik.Utils.Serialization;
 using System.IO;
 using Iaik.Connection.Packets;
 using Iaik.Utils;
-using Iaik.Tc.Tpm.Context;
+using Iaik.Tc.TPM.Context;
 using System.Reflection;
 
-namespace Iaik.Tc.Tpm.Subsystems
+namespace Iaik.Tc.TPM.Subsystems
 {
 	/// <summary>
 	/// Implements request base class for all default subsystem implementations.

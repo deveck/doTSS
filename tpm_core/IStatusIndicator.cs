@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Iaik.Tc.Tpm
+namespace Iaik.Tc.TPM
 {
     /// <summary>
     /// Interface implemented by classes that indicate the status of any kind of operation

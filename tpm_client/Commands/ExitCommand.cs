@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Iaik.Tc.Tpm.Commands
+namespace Iaik.Tc.TPM.Commands
 {
     [TPMConsoleCommand("exit")]
     public class ExitCommand : ConsoleCommandBase

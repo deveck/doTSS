@@ -4,9 +4,9 @@
 //  Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 
 using System;
-using Iaik.Tc.Tpm.Authentication;
+using Iaik.Tc.TPM.Authentication;
 
-namespace Iaik.Tc.Tpm.Configuration
+namespace Iaik.Tc.TPM.Configuration
 {
 
 	/// <summary>

@@ -6,11 +6,11 @@
 using System;
 using Iaik.Utils;
 using System.IO;
-using Iaik.Tc.Tpm.Configuration;
-using Iaik.Tc.Tpm.Configuration.DotNetConfiguration;
+using Iaik.Tc.TPM.Configuration;
+using Iaik.Tc.TPM.Configuration.DotNetConfiguration;
 using System.Configuration;
 
-namespace Iaik.Tc.Tpm
+namespace Iaik.Tc.TPM
 {
 
 

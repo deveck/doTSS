@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Iaik.Tc.Tpm.Configuration;
+using Iaik.Tc.TPM.Configuration;
 using Iaik.Utils.CommonFactories;
 using Iaik.Connection.ClientConnections;
 
-namespace Iaik.Tc.Tpm.Authentication
+namespace Iaik.Tc.TPM.Authentication
 {
     /// <summary>
     /// Checks if a specific AuthenticationMechanism is compatible with a FrontEndConnection

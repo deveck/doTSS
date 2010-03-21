@@ -5,7 +5,7 @@
 
 using System;
 
-namespace Iaik.Tc.Tpm.Configuration.DotNetConfiguration
+namespace Iaik.Tc.TPM.Configuration.DotNetConfiguration
 {
 
 	/// <summary>

@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Iaik.Tc.Tpm.Subsystems.Authentication;
+using Iaik.Tc.TPM.Subsystems.Authentication;
 
-namespace Iaik.Tc.Tpm.Context
+namespace Iaik.Tc.TPM.Context
 {
     /// <summary>
     /// Authenticates the client on the server

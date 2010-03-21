@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Iaik.Tc.Tpm.Configuration.DotNetConfiguration.Elements;
+using Iaik.Tc.TPM.Configuration.DotNetConfiguration.Elements;
 
-namespace Iaik.Tc.Tpm.Configuration.DotNetConfiguration
+namespace Iaik.Tc.TPM.Configuration.DotNetConfiguration
 {
     /// <summary>
     /// Dot Net Configuration implementation of the group class

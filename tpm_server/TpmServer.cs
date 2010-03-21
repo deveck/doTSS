@@ -11,16 +11,16 @@ using Iaik.Connection.ServerListeners;
 using System.Threading;
 using log4net;
 using Iaik.Connection.ClientConnections;
-using Iaik.Tc.Tpm.Context;
+using Iaik.Tc.TPM.Context;
 using System.Configuration;
-using Iaik.Tc.Tpm.Configuration;
-using Iaik.Tc.Tpm.Configuration.DotNetConfiguration.Elements;
-using Iaik.Tc.Tpm.Configuration.DotNetConfiguration;
+using Iaik.Tc.TPM.Configuration;
+using Iaik.Tc.TPM.Configuration.DotNetConfiguration.Elements;
+using Iaik.Tc.TPM.Configuration.DotNetConfiguration;
 using System.Collections.Generic;
 using Iaik.Utils.CommonFactories;
 using Iaik.Connection.Configuration;
 
-namespace Iaik.Tc.Tpm
+namespace Iaik.Tc.TPM
 {	
 	
 	/// <summary>
@@ -32,8 +32,10 @@ namespace Iaik.Tc.Tpm
         /// Shows the commandline help
         /// </summary>
         /// <param name="command"></param>
-        public static void OutputHelp(CommandLineHandler.CommandOption command)
+        public static void OutputHelp (CommandLineHandler.CommandOption command)
         {
+        	
+			
             //Strange default .net versioning really makes sense ;-)
             DateTime buildDate = new DateTime(2000,1,1);
             buildDate = buildDate.AddDays(Assembly.GetEntryAssembly().GetName().Version.Build);
@@ -54,8 +56,9 @@ namespace Iaik.Tc.Tpm
 		/// Console entrypoint
 		/// </summary>
 		/// <param name="args">Command line arguments. you can override the default config file by supplying "--config=/path/to/configfile.conf"</param>
-		public static void Main(string[] args)
+		public static void Main (string[] args)
 		{
+		
             CommandLineHandler commandLineHandler = new CommandLineHandler();
             commandLineHandler.RegisterCallback("help", OutputHelp);
             commandLineHandler.RegisterCallback("h", OutputHelp);

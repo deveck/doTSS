@@ -9,12 +9,12 @@ using System.Linq;
 using System.Text;
 using Iaik.Connection.ClientConnections;
 using Iaik.Connection.Packets;
-using Iaik.Tc.Tpm.Subsystems;
+using Iaik.Tc.TPM.Subsystems;
 using System.Threading;
-using Iaik.Tc.Tpm.Configuration;
-using Iaik.Tc.Tpm.library;
+using Iaik.Tc.TPM.Configuration;
+using Iaik.Tc.TPM.Library;
 
-namespace Iaik.Tc.Tpm.Context
+namespace Iaik.Tc.TPM.Context
 {
 
     /// <summary>
@@ -32,7 +32,7 @@ namespace Iaik.Tc.Tpm.Context
 		/// Creates a ServerContext for the specified connection
 		/// </summary>
 		public static ServerContext CreateServerEndpointContext(FrontEndConnection connection, IConnectionsConfiguration connectionConfig,
-			AccessControlList acl, IDictionary<string, TpmContext> tpmContexts)
+			AccessControlList acl, IDictionary<string, TPMContext> tpmContexts)
 		{
 			PacketTransmitter packetTransmitter = new PacketTransmitter(connection);
 			ServerContext ctx = new ServerContext(connection, packetTransmitter, connectionConfig, acl, tpmContexts);

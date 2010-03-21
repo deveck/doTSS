@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Iaik.Tc.Tpm.Configuration
+namespace Iaik.Tc.TPM.Configuration
 {
     /// <summary>
     /// Base Access Control List configuration.

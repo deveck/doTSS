@@ -4,9 +4,9 @@
 //  Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 
 using System;
-using Iaik.Tc.Tpm.Context;
+using Iaik.Tc.TPM.Context;
 
-namespace Iaik.Tc.Tpm.Subsystems
+namespace Iaik.Tc.TPM.Subsystems
 {
 
 	/// <summary>

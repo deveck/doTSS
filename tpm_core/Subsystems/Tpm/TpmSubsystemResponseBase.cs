@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Iaik.Tc.Tpm.Context;
+using Iaik.Tc.TPM.Context;
 using System.IO;
 using Iaik.Utils;
 
-namespace Iaik.Tc.Tpm.Subsystems.Tpm
+namespace Iaik.Tc.TPM.Subsystems.Tpm
 {
     /// <summary>
     /// Base class for all responses in the tpm subsystem

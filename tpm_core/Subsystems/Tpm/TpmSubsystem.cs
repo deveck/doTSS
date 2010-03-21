@@ -4,15 +4,15 @@
 //  Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 
 using System;
-using Iaik.Tc.Tpm.Context;
-using Iaik.Tc.Tpm.Configuration;
-using Iaik.Tc.Tpm.lowlevel;
-using Iaik.Tc.Tpm.lowlevel.backends.linux;
-using Iaik.Tc.Tpm.library.commands;
+using Iaik.Tc.TPM.Context;
+using Iaik.Tc.TPM.Configuration;
+using Iaik.Tc.TPM.Lowlevel;
+using Iaik.Tc.TPM.Lowlevel.Backends.Linux;
+using Iaik.Tc.TPM.Library.Commands;
 using System.Collections.Generic;
-using Iaik.Tc.Tpm.library;
+using Iaik.Tc.TPM.Library;
 
-namespace Iaik.Tc.Tpm.Subsystems.Tpm
+namespace Iaik.Tc.TPM.Subsystems.Tpm
 {
 
 
@@ -75,10 +75,10 @@ namespace Iaik.Tc.Tpm.Subsystems.Tpm
 			//TODO: Do some permission checking here!
 			
 			//Just for testing
-			TPMProvider tpmDevice = new TpmDevice ("/dev/tpm0");
+			TPMProvider tpmDevice = new TPMDevice ("/dev/tpm0");
 			tpmDevice.Open ();
 			
-			TPMCommand cmd = TpmCommandFactory.Create (requestContext.Request.CommandRequest);
+			TPMCommand cmd = TPMCommandFactory.Create (requestContext.Request.CommandRequest);
 			cmd.Init (requestContext.Request.CommandRequest.Parameters, tpmDevice);
 			cmd.Process ();
 			tpmDevice.Close ();
@@ -95,7 +95,7 @@ namespace Iaik.Tc.Tpm.Subsystems.Tpm
 				return;
 			
 			List<string> tpmDevices = new List<string> ();
-			foreach (KeyValuePair<string, TpmContext> ctx in ServerContext.TpmContexts)
+			foreach (KeyValuePair<string, TPMContext> ctx in ServerContext.TpmContexts)
 			{
 				if (IsAllowedToUseTpmDevice (ctx.Key))
 					tpmDevices.Add (ctx.Key);

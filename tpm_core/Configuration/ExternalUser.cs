@@ -4,10 +4,10 @@
 //  Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 
 using System;
-using Iaik.Tc.Tpm.Configuration.DotNetConfiguration.Elements;
+using Iaik.Tc.TPM.Configuration.DotNetConfiguration.Elements;
 using System.Collections.Generic;
 
-namespace Iaik.Tc.Tpm.Configuration
+namespace Iaik.Tc.TPM.Configuration
 {
 
 	/// <summary>

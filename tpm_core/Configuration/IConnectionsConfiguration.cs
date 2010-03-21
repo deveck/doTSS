@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using Iaik.Connection.Configuration;
 
-namespace Iaik.Tc.Tpm.Configuration
+namespace Iaik.Tc.TPM.Configuration
 {
 
 	/// <summary>

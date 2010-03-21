@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +6,7 @@ using Iaik.Utils.CommonFactories;
 using Iaik.Connection.ClientConnections;
 using System.Reflection;
 
-namespace Iaik.Tc.Tpm.Commands
+namespace Iaik.Tc.TPM.Commands
 {
     [TPMConsoleCommand("connection_create_info")]
     public class ConnectionCreateInfoCommand : ConsoleCommandBase

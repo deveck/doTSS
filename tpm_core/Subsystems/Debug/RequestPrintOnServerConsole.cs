@@ -6,9 +6,9 @@
 using System;
 using System.IO;
 using Iaik.Utils;
-using Iaik.Tc.Tpm.Context;
+using Iaik.Tc.TPM.Context;
 
-namespace Iaik.Tc.Tpm.Subsystems.Debug
+namespace Iaik.Tc.TPM.Subsystems.Debug
 {
 
 	/// <summary>

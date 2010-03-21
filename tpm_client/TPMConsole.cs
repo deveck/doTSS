@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Reflection;
-using Iaik.Tc.Tpm.Commands;
+using Iaik.Tc.TPM.Commands;
 
-namespace Iaik.Tc.Tpm
+namespace Iaik.Tc.TPM
 {
     public class TPMConsole
     {

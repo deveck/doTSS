@@ -5,11 +5,11 @@
 
 using System;
 using Iaik.Connection.Packets;
-using Iaik.Tc.Tpm.Context;
+using Iaik.Tc.TPM.Context;
 using System.Reflection;
-using Iaik.Tc.Tpm.Configuration;
+using Iaik.Tc.TPM.Configuration;
 
-namespace Iaik.Tc.Tpm.Subsystems.Debug
+namespace Iaik.Tc.TPM.Subsystems.Debug
 {
 
 	/// <summary>

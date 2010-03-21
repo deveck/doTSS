@@ -5,9 +5,9 @@
 
 using System;
 using Iaik.Connection.Packets;
-using Iaik.Tc.Tpm.Subsystems.Debug;
+using Iaik.Tc.TPM.Subsystems.Debug;
 
-namespace Iaik.Tc.Tpm.Context
+namespace Iaik.Tc.TPM.Context
 {
 
 	/// <summary>

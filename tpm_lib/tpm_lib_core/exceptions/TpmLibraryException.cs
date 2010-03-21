@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Iaik.Tc.Tpm.library.exceptions
+namespace Iaik.Tc.TPM.library.exceptions
 {
 public class TpmLibraryException : Exception
     {

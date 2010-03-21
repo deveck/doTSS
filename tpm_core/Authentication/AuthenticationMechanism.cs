@@ -4,11 +4,11 @@
 //  Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 
 using System;
-using Iaik.Tc.Tpm.Context;
-using Iaik.Tc.Tpm.Subsystems.Authentication;
-using Iaik.Tc.Tpm.Subsystems;
+using Iaik.Tc.TPM.Context;
+using Iaik.Tc.TPM.Subsystems.Authentication;
+using Iaik.Tc.TPM.Subsystems;
 
-namespace Iaik.Tc.Tpm.Authentication
+namespace Iaik.Tc.TPM.Authentication
 {
 
 	/// <summary>

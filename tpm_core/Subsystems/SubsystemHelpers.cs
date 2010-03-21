@@ -1,7 +1,7 @@
 				
 using System;
 
-namespace Iaik.Tc.Tpm.Subsystems
+namespace Iaik.Tc.TPM.Subsystems
 {
 
 

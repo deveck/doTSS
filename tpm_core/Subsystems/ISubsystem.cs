@@ -6,7 +6,7 @@
 using System;
 using Iaik.Connection.Packets;
 
-namespace Iaik.Tc.Tpm.Subsystems
+namespace Iaik.Tc.TPM.Subsystems
 {
 
 	/// <summary>

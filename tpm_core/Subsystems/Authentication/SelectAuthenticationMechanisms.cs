@@ -6,13 +6,13 @@
 using System;
 using Iaik.Utils.Serialization;
 using System.IO;
-using Iaik.Tc.Tpm.Context;
+using Iaik.Tc.TPM.Context;
 using Iaik.Utils;
-using Iaik.Tc.Tpm.Configuration;
-using Iaik.Tc.Tpm.Authentication;
+using Iaik.Tc.TPM.Configuration;
+using Iaik.Tc.TPM.Authentication;
 using System.Collections.Generic;
 
-namespace Iaik.Tc.Tpm.Subsystems.Authentication
+namespace Iaik.Tc.TPM.Subsystems.Authentication
 {
 
 	/// <summary>

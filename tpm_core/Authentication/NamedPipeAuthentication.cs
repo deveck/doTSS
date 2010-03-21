@@ -5,11 +5,11 @@
 
 using System;
 using Iaik.Connection.ClientConnections;
-using Iaik.Tc.Tpm.Context;
-using Iaik.Tc.Tpm.Subsystems;
-using Iaik.Tc.Tpm.Subsystems.Authentication;
+using Iaik.Tc.TPM.Context;
+using Iaik.Tc.TPM.Subsystems;
+using Iaik.Tc.TPM.Subsystems.Authentication;
 
-namespace Iaik.Tc.Tpm.Authentication
+namespace Iaik.Tc.TPM.Authentication
 {
 
 	/// <summary>

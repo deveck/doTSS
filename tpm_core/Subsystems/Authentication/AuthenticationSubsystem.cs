@@ -4,13 +4,13 @@
 //  Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 
 using System;
-using Iaik.Tc.Tpm.Context;
-using Iaik.Tc.Tpm.Configuration;
-using Iaik.Tc.Tpm.Authentication;
+using Iaik.Tc.TPM.Context;
+using Iaik.Tc.TPM.Configuration;
+using Iaik.Tc.TPM.Authentication;
 using System.Collections.Generic;
 using Iaik.Utils.CommonFactories;
 
-namespace Iaik.Tc.Tpm.Subsystems.Authentication
+namespace Iaik.Tc.TPM.Subsystems.Authentication
 {
 
 	/// <summary>

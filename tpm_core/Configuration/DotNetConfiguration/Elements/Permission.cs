@@ -7,7 +7,7 @@ using System;
 using System.Configuration;
 using System.ComponentModel;
 
-namespace Iaik.Tc.Tpm.Configuration.DotNetConfiguration.Elements
+namespace Iaik.Tc.TPM.Configuration.DotNetConfiguration.Elements
 {
 
 	/// <summary>

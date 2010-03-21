@@ -4,10 +4,10 @@
 //  Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 
 using System;
-using Iaik.Tc.Tpm.library.common;
-using Iaik.Tc.Tpm.Subsystems.Tpm;
+using Iaik.Tc.TPM.Library.Common;
+using Iaik.Tc.TPM.Subsystems.Tpm;
 
-namespace Iaik.Tc.Tpm.Context
+namespace Iaik.Tc.TPM.Context
 {
 
 

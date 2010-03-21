@@ -5,13 +5,13 @@
 
 using System;
 using Iaik.Connection.ClientConnections;
-using Iaik.Tc.Tpm.Context;
-using Iaik.Tc.Tpm.Subsystems.Authentication;
+using Iaik.Tc.TPM.Context;
+using Iaik.Tc.TPM.Subsystems.Authentication;
 using Mono.Unix;
-using Iaik.Tc.Tpm.Configuration;
-using Iaik.Tc.Tpm.Subsystems;
+using Iaik.Tc.TPM.Configuration;
+using Iaik.Tc.TPM.Subsystems;
 
-namespace Iaik.Tc.Tpm.Authentication
+namespace Iaik.Tc.TPM.Authentication
 {
 
 	/// <summary>

@@ -3,7 +3,7 @@
 
 using System;
 
-namespace Iaik.Tc.Tpm.Storage
+namespace Iaik.Tc.TPM.Storage
 {
 
 

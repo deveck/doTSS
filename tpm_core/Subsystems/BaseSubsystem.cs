@@ -6,13 +6,13 @@
 using System;
 using Iaik.Connection.Packets;
 using Iaik.Utils;
-using Iaik.Tc.Tpm.Context;
+using Iaik.Tc.TPM.Context;
 using System.Collections.Generic;
 using System.Reflection;
 using log4net;
-using Iaik.Tc.Tpm.Configuration;
+using Iaik.Tc.TPM.Configuration;
 
-namespace Iaik.Tc.Tpm.Subsystems
+namespace Iaik.Tc.TPM.Subsystems
 {
 
     public delegate void HandleSubsystemRequestDelegate<Z, T, U>(Z subsystem, RequestContext<T, U> requestCtx)

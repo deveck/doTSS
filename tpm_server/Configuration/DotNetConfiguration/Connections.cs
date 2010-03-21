@@ -6,10 +6,10 @@
 using System;
 using System.Configuration;
 using System.Collections.Generic;
-using Iaik.Tc.Tpm.Configuration;
+using Iaik.Tc.TPM.Configuration;
 using Iaik.Connection.Configuration;
 
-namespace Iaik.Tc.Tpm.Configuration.DotNetConfiguration
+namespace Iaik.Tc.TPM.Configuration.DotNetConfiguration
 {
 
 	/// <summary>

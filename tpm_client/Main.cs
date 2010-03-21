@@ -1,13 +1,13 @@
 using System;
 using Iaik.Connection.ClientConnections;
-using Iaik.Tc.Tpm.Context;
+using Iaik.Tc.TPM.Context;
 using System.Threading;
-using Iaik.Tc.Tpm.library.common;
+using Iaik.Tc.TPM.Library.Common;
 using System.IO;
 using Iaik.Utils;
 using System.Reflection;
 
-namespace Iaik.Tc.Tpm
+namespace Iaik.Tc.TPM
 {
 	class MainClass
 	{

@@ -7,7 +7,7 @@ using System;
 using Iaik.Connection.ClientConnections;
 using Iaik.Connection.Packets;
 
-namespace Iaik.Tc.Tpm.Context
+namespace Iaik.Tc.TPM.Context
 {
 
 	/// <summary>

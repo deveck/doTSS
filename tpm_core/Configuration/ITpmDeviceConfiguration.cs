@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Iaik.Tc.Tpm.Configuration
+namespace Iaik.Tc.TPM.Configuration
 {
 
 	/// <summary>

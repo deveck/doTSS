@@ -11,14 +11,14 @@ using Iaik.Utils.CommonFactories;
 using Iaik.Connection;
 using System.Collections.Generic;
 using Iaik.Connection.ClientConnections;
-using Iaik.Tc.Tpm.Context;
+using Iaik.Tc.TPM.Context;
 using System.Configuration;
-using Iaik.Tc.Tpm.Configuration;
-using Iaik.Tc.Tpm.library;
-using Iaik.Tc.Tpm.Configuration.DotNetConfiguration;
-using Iaik.Tc.Tpm.lowlevel;
+using Iaik.Tc.TPM.Configuration;
+using Iaik.Tc.TPM.Library;
+using Iaik.Tc.TPM.Configuration.DotNetConfiguration;
+using Iaik.Tc.TPM.Lowlevel;
 
-namespace Iaik.Tc.Tpm
+namespace Iaik.Tc.TPM
 {
 	public class TpmServerContext : ServiceBase
 	{
@@ -82,11 +82,11 @@ namespace Iaik.Tc.Tpm
 		{
 			IConnectionsConfiguration connectionConfig = (IConnectionsConfiguration)ConfigurationManager.GetSection ("connections");
 			
-			foreach (Iaik.Tc.Tpm.Configuration.DotNetConfiguration.TpmDevice device in connectionConfig.TpmDevices)
+			foreach (Iaik.Tc.TPM.Configuration.DotNetConfiguration.TpmDevice device in connectionConfig.TpmDevices)
 			{
 				try
 				{
-					TPMProvider provider = TpmProviders.Create (device.TpmType, device.Parameters);
+					TPMProvider provider = TPMProviders.Create (device.TpmType, device.Parameters);
 					TPMContext tpmContext = new TPMContext (device.TpmName, provider);
 					_tpmContexts.Add (device.TpmName, tpmContext);
 					_logger.InfoFormat ("Successfully setup tpm context '{0}' with type '{1}'", device.TpmName, device.TpmType);
