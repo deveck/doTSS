@@ -45,6 +45,7 @@
     <Compile Include="ITpmBlobReadable.cs" />
     <Compile Include="ITpmBlobWritable.cs" />
     <Compile Include="TpmContext.cs" />
+    <Compile Include="ITPMDevice.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="commands\" />

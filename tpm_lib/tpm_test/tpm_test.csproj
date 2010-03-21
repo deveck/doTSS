@@ -44,5 +44,9 @@
       <Project>{9AADA320-4FD9-4CB9-A5AE-3ABE2A6BF368}</Project>
       <Name>tpm_lib_common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\tpm_lowlvl\tpm_lowlvl.csproj">
+      <Project>{1C051352-0BC4-4EE2-A5FF-C694C197A3AA}</Project>
+      <Name>tpm_lowlvl</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

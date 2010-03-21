@@ -33,7 +33,7 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.linux
         /// <summary>
         /// Standard constructor with 4K rx buffer size
         /// </summary>
-        public TpmDevice() : this("/dev/tpm")
+        public TpmDevice() : this("/dev/tpm0")
         {            
         }
 
