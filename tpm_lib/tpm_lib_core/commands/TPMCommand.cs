@@ -3,13 +3,13 @@
 
 using System;
 using System.Collections;
-using Iaik.Tc.Tpm.lowlevel;
-using Iaik.Tc.Tpm.lowlevel.data;
-using Iaik.Tc.Tpm.library.common;
+using Iaik.Tc.TPM.Lowlevel;
+using Iaik.Tc.TPM.Lowlevel.Data;
+using Iaik.Tc.TPM.Library.Common;
 
-namespace Iaik.Tc.Tpm.library.commands
+namespace Iaik.Tc.TPM.Library.Commands
 {
-	public abstract class TpmCommand //: IDisposable
+	public abstract class TPMCommand //: IDisposable
 	{
 		protected TPMProvider _tpmProvider = null;
 		
@@ -36,13 +36,13 @@ namespace Iaik.Tc.Tpm.library.commands
 			}
 		}
 		
-		protected TpmCommand(){}
-		protected TpmCommand(UInt32 tag, UInt32 ordinal)
+		protected TPMCommand(){}
+		protected TPMCommand(UInt32 tag, UInt32 ordinal)
 		{
 			commandTag_ = tag;
 			commandOrdinal_ = ordinal;
 		}
-		private TpmCommand (UInt32 tag, UInt32 ordinal, Parameters param) : this(tag, ordinal)
+		private TPMCommand (UInt32 tag, UInt32 ordinal, Parameters param) : this(tag, ordinal)
 		{
 			params_ = param;
 		}

@@ -7,7 +7,7 @@ using Iaik.Utils.Serialization;
 using System.IO;
 using Iaik.Utils;
 
-namespace Iaik.Tc.Tpm.library.common
+namespace Iaik.Tc.TPM.Library.Common
 {
 	/// <summary>
 	/// This class represents the parameters list, that is passed from the client to the server

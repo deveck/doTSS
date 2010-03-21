@@ -4,9 +4,9 @@
 
 using System;
 using System.Runtime.InteropServices;
-using Iaik.Tc.Tpm.lowlevel.exceptions;
+using Iaik.Tc.TPM.Lowlevel.Exceptions;
 
-namespace Iaik.Tc.Tpm.lowlevel.backends.win32
+namespace Iaik.Tc.TPM.Lowlevel.Backends.Win32
 {
     /// <summary>
     /// Windows XP wrapper around "tpmddl.dll" shipped as part
@@ -16,7 +16,7 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.win32
     /// to the TCG specified TDDL-Interface. Note however, that the calling
     /// convetion is "cdecl" instead of the Windows standard "stdcall" convetion.
     /// </summary>
-    [TpmProvider("win32/stmicro")]
+    [TPMProvider("win32/stmicro")]
     public sealed class StMicroTPM : TPMProvider
     {
         /// <summary>
@@ -47,7 +47,7 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.win32
         {
             uint result = TDDL_Open();
             if (result != 0)
-                throw new TpmLowLvlException(result);
+                throw new TPMLowLvlException(result);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.win32
         {
             uint result = TDDL_Close();
             if (result != 0)
-                throw new TpmLowLvlException(result);
+                throw new TPMLowLvlException(result);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.win32
 					throw new Exception();
                     //throw new TpmException("TDDL I/O error (partial result)", result, rxBuffer_, (int)rxlen);
                 else
-                    throw new TpmLowLvlException(result);
+                    throw new TPMLowLvlException(result);
             }
 
             byte[] rxblob = new byte[rxlen];

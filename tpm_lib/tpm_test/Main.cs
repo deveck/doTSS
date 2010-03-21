@@ -1,10 +1,10 @@
 // Author: Andreas Reiter <andreas.reiter@student.tugraz.at>
 // Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 using System;
-using Iaik.Tc.Tpm.library;
-using Iaik.Tc.Tpm.library.common;
-using Iaik.Tc.Tpm.library.commands;
-using Iaik.Tc.Tpm.lowlevel;
+using Iaik.Tc.TPM.Library;
+using Iaik.Tc.TPM.Library.Common;
+using Iaik.Tc.TPM.Library.Commands;
+using Iaik.Tc.TPM.Lowlevel;
 
 namespace tpm_test
 {
@@ -12,7 +12,7 @@ namespace tpm_test
 	{
 		public static void Main (string[] args)
 		{
-			TPMProvider tpm = TpmProviders.Create("linux/tddl",null);
+			TPMProvider tpm = TPMProviders.Create("linux/tddl",null);
 			
 			tpm.Open();
 			//tpm.init;
@@ -22,7 +22,7 @@ namespace tpm_test
 			Parameters param = new Parameters();
 			param.AddPrimitiveType("pcrnum", i);
 			TPMCommandRequest req = new TPMCommandRequest(TPMCommandNames.TPM_CMD_PCRRead, null);
-			TpmCommand com = TpmCommandFactory.Create(req);
+			TPMCommand com = TPMCommandFactory.Create(req);
 			com.Init(param, tpm);
 			com.Process();
 			Console.WriteLine ("Hello World!");

@@ -1,10 +1,10 @@
 
 using System;
-using Iaik.Tc.Tpm.library.common;
-using Iaik.Tc.Tpm.lowlevel.data;
+using Iaik.Tc.TPM.Library.Common;
+using Iaik.Tc.TPM.Lowlevel.Data;
 using Iaik.Utils;
 
-namespace Iaik.Tc.Tpm.library.commands
+namespace Iaik.Tc.TPM.Library.Commands
 {
 
 
@@ -12,15 +12,15 @@ namespace Iaik.Tc.Tpm.library.commands
 	{
 	
 		
-		public class TPMCapVersionInfoCore : CapabilityData.TPMCapVersionInfo, ITpmBlobReadable
+		public class TPMCapVersionInfoCore : CapabilityData.TPMCapVersionInfo, ITPMBlobReadable
 		{
-			public TPMCapVersionInfoCore(TpmBlob blob)
+			public TPMCapVersionInfoCore(TPMBlob blob)
 			{
 				Read(blob);
 			}
 			
 			#region ITpmBlobReadable implementation
-			public void ReadFromTpmBlob (TpmBlob blob)
+			public void ReadFromTpmBlob (TPMBlob blob)
 			{
 				this._tag = blob.ReadUInt16 ();
 				this._version = new TPMVersionCore (blob);
@@ -37,15 +37,15 @@ namespace Iaik.Tc.Tpm.library.commands
 			
 		}
 		
-		public class TPMVersionCore : CapabilityData.TPMVersion, ITpmBlobReadable
+		public class TPMVersionCore : CapabilityData.TPMVersion, ITPMBlobReadable
 		{
-			internal TPMVersionCore(TpmBlob blob)
+			internal TPMVersionCore(TPMBlob blob)
 			{
 				Read(blob);
 			}
 			
 			#region ITpmBlobReadable implementation
-			public void ReadFromTpmBlob (TpmBlob blob)
+			public void ReadFromTpmBlob (TPMBlob blob)
 			{
 				_major = blob.ReadByte ();
 				_minor = blob.ReadByte ();

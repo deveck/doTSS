@@ -2,7 +2,7 @@
 using System;
 using Iaik.Utils.Serialization;
 
-namespace Iaik.Tc.Tpm.library.common
+namespace Iaik.Tc.TPM.Library.Common
 {
 
 

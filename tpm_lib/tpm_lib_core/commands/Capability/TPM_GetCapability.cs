@@ -2,15 +2,15 @@
 // Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 
 using System;
-using Iaik.Tc.Tpm.library;
-using Iaik.Tc.Tpm.library.common;
-using Iaik.Tc.Tpm.lowlevel;
-using Iaik.Tc.Tpm.lowlevel.data;
+using Iaik.Tc.TPM.Library;
+using Iaik.Tc.TPM.Library.Common;
+using Iaik.Tc.TPM.Lowlevel;
+using Iaik.Tc.TPM.Lowlevel.Data;
 
-namespace Iaik.Tc.Tpm.library.commands
+namespace Iaik.Tc.TPM.Library.Commands
 {
-	[TpmCommands(TPMCommandNames.TPM_CMD_GetCapability)]
-	public sealed class TPM_GetCapability : TpmCommand
+	[TPMCommands(TPMCommandNames.TPM_CMD_GetCapability)]
+	public sealed class TPM_GetCapability : TPMCommand
 	{
 		/// <summary>
 		/// Partition of capabilities to be interrogated
@@ -32,14 +32,14 @@ namespace Iaik.Tc.Tpm.library.commands
 		
 		public override void Process ()
 		{
-			TpmBlob requestBlob = new TpmBlob ();
-			requestBlob.WriteCmdHeader (TpmCmdTags.TPM_TAG_RQU_COMMAND, TpmOrdinals.TPM_ORD_GetCapability);
+			TPMBlob requestBlob = new TPMBlob ();
+			requestBlob.WriteCmdHeader (TPMCmdTags.TPM_TAG_RQU_COMMAND, TPMOrdinals.TPM_ORD_GetCapability);
 			requestBlob.WriteUInt32 ((uint)_capArea);
 			requestBlob.WriteUInt32 ((uint)_subCap.Length);
 			requestBlob.Write (_subCap, 0, _subCap.Length);
 			requestBlob.WriteCmdSize ();
 			
-			TpmBlob responseBlob = _tpmProvider.TransmitAndCheck (requestBlob);
+			TPMBlob responseBlob = _tpmProvider.TransmitAndCheck (requestBlob);
 			
 		}
 		

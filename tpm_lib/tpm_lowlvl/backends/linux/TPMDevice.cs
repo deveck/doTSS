@@ -3,16 +3,16 @@
 // Thanks to Johannes Winter <johannes.winter@TUGraz.at>
 
 using System;
-using Iaik.Tc.Tpm.lowlevel.exceptions;
+using Iaik.Tc.TPM.Lowlevel.Exceptions;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
-namespace Iaik.Tc.Tpm.lowlevel.backends.linux
+namespace Iaik.Tc.TPM.Lowlevel.Backends.Linux
 {
 
 
-	[TpmProvider("linux/device")]
-	public class TpmDevice : TPMProvider
+	[TPMProvider("linux/device")]
+	public class TPMDevice : TPMProvider
 	{
 
 		/// <summary>
@@ -33,7 +33,7 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.linux
         /// <summary>
         /// Standard constructor with 4K rx buffer size
         /// </summary>
-        public TpmDevice() : this("/dev/tpm0")
+        public TPMDevice() : this("/dev/tpm0")
         {            
         }
 
@@ -41,13 +41,13 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.linux
         /// Special purpose constructor with configurable device name.
         /// </summary>
         /// <param name="deviceName"></param>
-        public TpmDevice (String deviceName)
+        public TPMDevice (String deviceName)
         {
         	fd_ = -1;
         	deviceName_ = deviceName;
         }
 		
-		public TpmDevice(IDictionary<string, string> parameters)
+		public TPMDevice(IDictionary<string, string> parameters)
 			:this(parameters["DeviceName"])
 		{
 		}
@@ -59,7 +59,7 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.linux
         {
 		fd_ = open(deviceName_, O_RDWR); 
 		if (fd_ < 0)
-		   throw new TpmLowLvlException("Failed to open TPM device " + deviceName_, 1);
+		   throw new TPMLowLvlException("Failed to open TPM device " + deviceName_, 1);
         }
 
         /// <summary>
@@ -81,21 +81,21 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.linux
 	
 			int txlen = write(fd_, blob, size);
 	        if (txlen < size)
-		    	throw new TpmLowLvlException("Failed to write to TPM device " + deviceName_, 2);
+		    	throw new TPMLowLvlException("Failed to write to TPM device " + deviceName_, 2);
 	
 			// Read the TPM header
 			int rxlen = read(fd_, rxheader, rxheader.Length);
 			if (rxlen < 0)
-			   throw new TpmLowLvlException("Failed to read from the TPM device " + deviceName_, 2);
+			   throw new TPMLowLvlException("Failed to read from the TPM device " + deviceName_, 2);
 	
 			if (rxlen < 10)
-	           throw new TpmLowLvlException("Short response (" + rxlen + " bytes) from TPM device " + deviceName_, 3);
+	           throw new TPMLowLvlException("Short response (" + rxlen + " bytes) from TPM device " + deviceName_, 3);
 	
 	
 			// Decode the length
 			int length = (rxheader[2] << 24) | (rxheader[3] << 16) | (rxheader[4] << 8) | rxheader[5];
 			if (length < 10)
-	           throw new TpmLowLvlException("Implausible length response (" + length + " bytes) from TPM device " + deviceName_, 4);
+	           throw new TPMLowLvlException("Implausible length response (" + length + " bytes) from TPM device " + deviceName_, 4);
 	
 	        // Already done
 			if (length == rxheader.Length)
@@ -105,7 +105,7 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.linux
             byte[] payload = new byte[length - rxheader.Length];
             rxlen = read(fd_, payload, payload.Length);
 			if (rxlen < (length - rxheader.Length))
-	            throw new TpmLowLvlException("Short payload response (" + rxlen + " bytes ) from TPM device " + deviceName_, 5);                
+	            throw new TPMLowLvlException("Short payload response (" + rxlen + " bytes ) from TPM device " + deviceName_, 5);                
 
 			// Assemble the full response buffer
 			byte[] rsp = new byte[length];

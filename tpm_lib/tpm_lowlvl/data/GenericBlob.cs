@@ -5,7 +5,7 @@
 using System;
 using System.IO;
 
-namespace Iaik.Tc.Tpm.lowlevel.data
+namespace Iaik.Tc.TPM.Lowlevel.Data
 {
 	/// <summary>
     /// An extended version of the System.IO.MemoryStream with

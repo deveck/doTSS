@@ -1,19 +1,19 @@
 
 using System;
-using Iaik.Tc.Tpm.lowlevel.data;
+using Iaik.Tc.TPM.Lowlevel.Data;
 
-namespace Iaik.Tc.Tpm.library
+namespace Iaik.Tc.TPM.Library
 {
 
 	/// <summary>
 	/// Implemented by classes that can be build from tpm blobs
 	/// </summary>
-	public interface ITpmBlobReadable
+	public interface ITPMBlobReadable
 	{
 		/// <summary>
 		/// Reads the data from the blob stream
 		/// </summary>
 		/// <param name="blob"></param>
-		void ReadFromTpmBlob(TpmBlob blob);
+		void ReadFromTpmBlob(TPMBlob blob);
 	}
 }

@@ -7,7 +7,7 @@ using Iaik.Utils.Serialization;
 using System.IO;
 using Iaik.Utils;
 
-namespace Iaik.Tc.Tpm.library.common
+namespace Iaik.Tc.TPM.Library.Common
 {
 	/// <summary>
 	/// Represents the command request for a specific TPM command, that should

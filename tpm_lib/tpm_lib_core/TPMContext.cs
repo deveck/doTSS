@@ -1,20 +1,20 @@
 
 using System;
-using Iaik.Tc.Tpm.lowlevel;
+using Iaik.Tc.TPM.Lowlevel;
 
-namespace Iaik.Tc.Tpm.library
+namespace Iaik.Tc.TPM.Library
 {
 
 	/// <summary>
 	/// Combines all tpm provider related objects (tpm provider, Key storage, ...)
 	/// </summary>
-	public class TpmContext
+	public class TPMContext
 	{
 		private string _deviceName;
 		private TPMProvider _tpmProvider;
 		
 		
-		public TpmContext (string deviceName, TPMProvider tpmProvider)
+		public TPMContext (string deviceName, TPMProvider tpmProvider)
 		{
 			_deviceName = deviceName;
 			_tpmProvider = tpmProvider;

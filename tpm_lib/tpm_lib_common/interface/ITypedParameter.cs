@@ -3,7 +3,7 @@ using System;
 using Iaik.Utils.Serialization;
 using System.IO;
 
-namespace Iaik.Tc.Tpm.library.common
+namespace Iaik.Tc.TPM.Library.Common
 {	
 	
 	public interface ITypedParameter : ITypedStreamSerializable

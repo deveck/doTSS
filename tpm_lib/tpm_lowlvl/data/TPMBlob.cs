@@ -4,20 +4,19 @@
 
 using System;
 using System.IO;
-using Iaik.Tc.Tpm.lowlevel.data;
 
-namespace Iaik.Tc.Tpm.lowlevel.data
+namespace Iaik.Tc.TPM.Lowlevel.Data
 {
 
 
-	public class TpmBlob : GenericBlob
+	public class TPMBlob : GenericBlob
 	{
 
-		public TpmBlob ()
+		public TPMBlob ()
 		{
 		}
 		
-		public TpmBlob(byte[] blob) : base(blob, false)
+		public TPMBlob(byte[] blob) : base(blob, false)
         {            
         }
 

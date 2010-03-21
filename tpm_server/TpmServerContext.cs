@@ -40,7 +40,7 @@ namespace Iaik.Tc.Tpm
 		/// <summary>
 		/// Contains all active tpm contexts
 		/// </summary>
-		private Dictionary<string, TpmContext> _tpmContexts = new Dictionary<string, TpmContext>();
+		private Dictionary<string, TPMContext> _tpmContexts = new Dictionary<string, TPMContext>();
 		
 		/// <summary>
 		/// Contains all defined Users/Groups with their associated permissions
@@ -87,7 +87,7 @@ namespace Iaik.Tc.Tpm
 				try
 				{
 					TPMProvider provider = TpmProviders.Create (device.TpmType, device.Parameters);
-					TpmContext tpmContext = new TpmContext (device.TpmName, provider);
+					TPMContext tpmContext = new TPMContext (device.TpmName, provider);
 					_tpmContexts.Add (device.TpmName, tpmContext);
 					_logger.InfoFormat ("Successfully setup tpm context '{0}' with type '{1}'", device.TpmName, device.TpmType);
 				}

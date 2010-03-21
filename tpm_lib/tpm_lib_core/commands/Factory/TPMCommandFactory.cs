@@ -4,24 +4,24 @@
 using System;
 using System.Reflection;
 using System.Collections.Generic;
-using Iaik.Tc.Tpm.library.common;
+using Iaik.Tc.TPM.Library.Common;
 
-namespace Iaik.Tc.Tpm.library.commands
+namespace Iaik.Tc.TPM.Library.Commands
 {
-	public static class TpmCommandFactory
+	public static class TPMCommandFactory
 	{
 		private static readonly IDictionary<String, Type> commands_ = new Dictionary<String, Type>();
 		
-		static TpmCommandFactory()
+		static TPMCommandFactory()
 		{
-			RegisterCommands(typeof(TpmCommandFactory).Assembly);
+			RegisterCommands(typeof(TPMCommandFactory).Assembly);
 		}
 		
 		private static bool TpmCommandFilter(Type m, Object criteria)
 		{
-			return Attribute.IsDefined(m, typeof(TpmCommandsAttribute)) &&
+			return Attribute.IsDefined(m, typeof(TPMCommandsAttribute)) &&
 				!m.IsAbstract &&
-					typeof(TpmCommand).IsAssignableFrom(m);
+					typeof(TPMCommand).IsAssignableFrom(m);
 		}
 		
 		public static void RegisterCommands(Assembly assembly)
@@ -32,7 +32,7 @@ namespace Iaik.Tc.Tpm.library.commands
 				{
 					foreach(Type command in module.FindTypes(TpmCommandFilter, null))
 					{
-						TpmCommandsAttribute pattr = (TpmCommandsAttribute)Attribute.GetCustomAttribute(command, typeof(TpmCommandsAttribute));
+						TPMCommandsAttribute pattr = (TPMCommandsAttribute)Attribute.GetCustomAttribute(command, typeof(TPMCommandsAttribute));
 						if(!commands_.Keys.Contains(pattr.CommandName))
 							commands_.Add(pattr.CommandName, command);
 					}
@@ -40,7 +40,7 @@ namespace Iaik.Tc.Tpm.library.commands
 			}
 		}
 		
-		public static TpmCommand Create (TPMCommandRequest request)
+		public static TPMCommand Create (TPMCommandRequest request)
 		{
 			if (commands_.ContainsKey (request.CommandIdentifier))
 			{
@@ -49,7 +49,7 @@ namespace Iaik.Tc.Tpm.library.commands
 					throw new ArgumentException (string.Format ("Cannot create TpmCommand for command request with identifier '{0}'", 
 						request.CommandIdentifier));
 				
-				return (TpmCommand)ctorInfo.Invoke (new object[0]);
+				return (TPMCommand)ctorInfo.Invoke (new object[0]);
 			}
 			else
 				throw new NotSupportedException (string.Format ("Cannot find TpmCommand for command request with identifier '{0}'", 

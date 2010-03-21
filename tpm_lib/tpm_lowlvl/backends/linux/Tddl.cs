@@ -4,16 +4,16 @@
 
 using System;
 using System.Runtime.InteropServices;
-using Iaik.Tc.Tpm.lowlevel.exceptions;
+using Iaik.Tc.TPM.Lowlevel.Exceptions;
 
-namespace Iaik.Tc.Tpm.lowlevel.backends.linux
+namespace Iaik.Tc.TPM.Lowlevel.Backends.Linux
 {
 
 	/// <summary>
     /// Linux wrapper around "libtddl.so.1.2" as shipped as part
     /// of the tpm-emulator package.
     /// </summary>
-    [TpmProvider("linux/tddl")]
+    [TPMProvider("linux/tddl")]
     public sealed class TddlTpm : TPMProvider
     {
         /// <summary>
@@ -78,7 +78,7 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.linux
 						throw new Exception();
                     //throw new TpmException("TDDL I/O error (partial result)", result, rxBuffer_, (int)rxlen);
                 else
-                    throw new TpmLowLvlException(result);
+                    throw new TPMLowLvlException(result);
             }
 
             byte[] rxblob = new byte[rxlen];

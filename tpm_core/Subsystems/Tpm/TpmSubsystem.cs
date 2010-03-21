@@ -78,7 +78,7 @@ namespace Iaik.Tc.Tpm.Subsystems.Tpm
 			TPMProvider tpmDevice = new TpmDevice ("/dev/tpm0");
 			tpmDevice.Open ();
 			
-			TpmCommand cmd = TpmCommandFactory.Create (requestContext.Request.CommandRequest);
+			TPMCommand cmd = TpmCommandFactory.Create (requestContext.Request.CommandRequest);
 			cmd.Init (requestContext.Request.CommandRequest.Parameters, tpmDevice);
 			cmd.Process ();
 			tpmDevice.Close ();

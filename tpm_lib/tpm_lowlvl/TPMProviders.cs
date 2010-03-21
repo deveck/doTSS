@@ -5,12 +5,12 @@ using System;
 using System.Reflection;
 using System.Collections.Generic;
 
-namespace Iaik.Tc.Tpm.lowlevel
+namespace Iaik.Tc.TPM.Lowlevel
 {
     /// <summary>
     /// Helper class for instantiating TPM providers
     /// </summary>
-    public static class TpmProviders
+    public static class TPMProviders
     {
 	/// <summary>
 	/// The global repository of known TPM provider types.
@@ -23,9 +23,9 @@ namespace Iaik.Tc.Tpm.lowlevel
 	/// This constructor automatically registers all TPM providers
 	/// found in the assembly definining this class.
 	/// </summary>fac
-	static TpmProviders()
+	static TPMProviders()
 	{
-           RegisterProviders(typeof(TpmProviders).Assembly);
+           RegisterProviders(typeof(TPMProviders).Assembly);
 	}
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Iaik.Tc.Tpm.lowlevel
         /// <returns></returns>
         private static bool TpmProviderFilter(Type m, Object criteria)
         {
-           return Attribute.IsDefined(m, typeof(TpmProviderAttribute)) &&
+           return Attribute.IsDefined(m, typeof(TPMProviderAttribute)) &&
                   !m.IsAbstract &&
                   typeof(TPMProvider).IsAssignableFrom(m);
         }
@@ -53,7 +53,7 @@ namespace Iaik.Tc.Tpm.lowlevel
                 {
                     foreach (Type provider in module.FindTypes(TpmProviderFilter, null))
                     {
-                        TpmProviderAttribute pattr = (TpmProviderAttribute)Attribute.GetCustomAttribute(provider, typeof(TpmProviderAttribute));
+                        TPMProviderAttribute pattr = (TPMProviderAttribute)Attribute.GetCustomAttribute(provider, typeof(TPMProviderAttribute));
 			if (!providers_.Keys.Contains(pattr.ProviderName))
                         	providers_.Add(pattr.ProviderName, provider);
                     }

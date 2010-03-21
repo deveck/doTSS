@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{1C051352-0BC4-4EE2-A5FF-C694C197A3AA}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Iaik.Tc.Tpm.lowlevel</RootNamespace>
+    <RootNamespace>Iaik.Tc.TPM.Lowlevel</RootNamespace>
     <AssemblyName>tpm_lowlvl</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -36,15 +36,15 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="backends\linux\Tddl.cs" />
     <Compile Include="backends\win32\StMicroTPM.cs" />
-    <Compile Include="backends\win32\TpmBaseServices.cs" />
-    <Compile Include="TpmProviderAttribute.cs" />
-    <Compile Include="TpmProviders.cs" />
     <Compile Include="exceptions\TpmLowLvlException.cs" />
     <Compile Include="data\GenericBlob.cs" />
-    <Compile Include="data\TpmBlob.cs" />
     <Compile Include="TPMProvider.cs" />
-    <Compile Include="TpmConstants.cs" />
-    <Compile Include="backends\linux\TpmDevice.cs" />
+    <Compile Include="backends\win32\TPMBaseServices.cs" />
+    <Compile Include="TPMProviderAttribute.cs" />
+    <Compile Include="TPMProviders.cs" />
+    <Compile Include="data\TPMBlob.cs" />
+    <Compile Include="TPMOrdinals.cs" />
+    <Compile Include="backends\linux\TPMDevice.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />

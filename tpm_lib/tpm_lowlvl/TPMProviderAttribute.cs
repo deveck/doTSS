@@ -3,13 +3,13 @@
 
 using System;
 
-namespace Iaik.Tc.Tpm.lowlevel
+namespace Iaik.Tc.TPM.Lowlevel
 {
     /// <summary>
     /// Attribute to flag a class as TPM provider.    
     /// </summary>    
     [AttributeUsage(AttributeTargets.Class)]
-    public sealed class TpmProviderAttribute : Attribute
+    public sealed class TPMProviderAttribute : Attribute
     {
         /// <summary>
         /// The name of this provider
@@ -20,7 +20,7 @@ namespace Iaik.Tc.Tpm.lowlevel
         /// 
         /// </summary>
         /// <param name="providerName"></param>
-        public TpmProviderAttribute(String providerName)
+        public TPMProviderAttribute(String providerName)
         {
             providerName_ = providerName;
         }

@@ -3,12 +3,12 @@
 
 using System;
 
-namespace Iaik.Tc.Tpm.lowlevel
+namespace Iaik.Tc.TPM.Lowlevel
 {
     /// <summary>
     /// Command tags for the TPM
     /// </summary>
-    public static class TpmCmdTags
+    public static class TPMCmdTags
     {
         public const UInt16 TPM_TAG_RQU_COMMAND = 0x00c1;
         public const UInt16 TPM_TAG_RQU_AUTH1_COMMAND = 0x00c2;
@@ -21,7 +21,7 @@ namespace Iaik.Tc.Tpm.lowlevel
     /// <summary>
     /// Ordinals for the TPM
     /// </summary>
-    public static class TpmOrdinals
+    public static class TPMOrdinals
     {
         public const UInt32 TPM_ORD_OIAP = 0x0000000A;
         public const UInt32 TPM_ORD_OSAP = 0x0000000B;

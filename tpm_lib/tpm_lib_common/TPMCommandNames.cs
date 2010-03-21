@@ -4,7 +4,7 @@
 
 using System;
 
-namespace Iaik.Tc.Tpm.library.common
+namespace Iaik.Tc.TPM.Library.Common
 {
 	public static class TPMCommandNames
 	{

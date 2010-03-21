@@ -3,9 +3,9 @@
 
 using System;
 using System.IO;
-using Iaik.Tc.Tpm.lowlevel.data;
+using Iaik.Tc.TPM.Lowlevel.Data;
 
-namespace Iaik.Tc.Tpm.lowlevel
+namespace Iaik.Tc.TPM.Lowlevel
 {
 	
 	 /// <summary>
@@ -106,7 +106,7 @@ namespace Iaik.Tc.Tpm.lowlevel
         /// </summary>
         /// <param name="inblob"></param>
         /// <returns></returns>
-        public TpmBlob Transmit(TpmBlob instm)
+        public TPMBlob Transmit(TPMBlob instm)
         {
             return Transmit(instm, true);
         }
@@ -117,14 +117,14 @@ namespace Iaik.Tc.Tpm.lowlevel
         /// <param name="instm"></param>
         /// <param name="writeSize"></param>
         /// <returns></returns>
-        public TpmBlob Transmit(TpmBlob instm, bool writeSize)
+        public TPMBlob Transmit(TPMBlob instm, bool writeSize)
         {
             if (writeSize)                
                 instm.WriteCmdSize();
 
             byte[] inblob = instm.GetBuffer();
             byte[] outblob = Transmit(inblob, (int)instm.Length);
-            return new TpmBlob(outblob);
+            return new TPMBlob(outblob);
         }
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace Iaik.Tc.Tpm.lowlevel
         /// <param name="blob"></param>
         /// <param name="writeSize"></param>
         /// <returns></returns>
-        public TpmBlob TransmitAndCheck(TpmBlob blob)
+        public TPMBlob TransmitAndCheck(TPMBlob blob)
         {
             return TransmitAndCheck(blob, true);
         }
@@ -143,7 +143,7 @@ namespace Iaik.Tc.Tpm.lowlevel
         /// </summary>
         /// <param name="blob"></param>
         /// <returns></returns>
-        public TpmBlob TransmitAndCheck(TpmBlob blob, bool writeSize)
+        public TPMBlob TransmitAndCheck(TPMBlob blob, bool writeSize)
         {            
             ushort expected_rsp_tag;
 
@@ -151,16 +151,16 @@ namespace Iaik.Tc.Tpm.lowlevel
             blob.Position = 0;
             switch (blob.ReadUInt16())
             {
-                case TpmCmdTags.TPM_TAG_RQU_COMMAND:
-                    expected_rsp_tag = TpmCmdTags.TPM_TAG_RSP_COMMAND;
+                case TPMCmdTags.TPM_TAG_RQU_COMMAND:
+                    expected_rsp_tag = TPMCmdTags.TPM_TAG_RSP_COMMAND;
                     break;
 
-                case TpmCmdTags.TPM_TAG_RQU_AUTH1_COMMAND:
-                    expected_rsp_tag = TpmCmdTags.TPM_TAG_RQU_AUTH1_COMMAND;
+                case TPMCmdTags.TPM_TAG_RQU_AUTH1_COMMAND:
+                    expected_rsp_tag = TPMCmdTags.TPM_TAG_RQU_AUTH1_COMMAND;
                     break;
 
-                case TpmCmdTags.TPM_TAG_RQU_AUTH2_COMMAND:
-                    expected_rsp_tag = TpmCmdTags.TPM_TAG_RQU_AUTH2_COMMAND;
+                case TPMCmdTags.TPM_TAG_RQU_AUTH2_COMMAND:
+                    expected_rsp_tag = TPMCmdTags.TPM_TAG_RQU_AUTH2_COMMAND;
                     break;
 
                 default:
@@ -169,7 +169,7 @@ namespace Iaik.Tc.Tpm.lowlevel
             }
 
             // Do the actual transaction
-            TpmBlob rsp = Transmit(blob, writeSize);
+            TPMBlob rsp = Transmit(blob, writeSize);
 
             // Check the response
             CheckTpmReponse(rsp, expected_rsp_tag);
@@ -257,7 +257,7 @@ namespace Iaik.Tc.Tpm.lowlevel
         /// Check a TPM reply blob
         /// </summary>
         /// <param name="reply">The tag type of this blob</param>
-        public UInt16 CheckTpmReponse(TpmBlob reply)
+        public UInt16 CheckTpmReponse(TPMBlob reply)
         {            
             if (reply.Length < 10)
 				throw new Exception();
@@ -268,9 +268,9 @@ namespace Iaik.Tc.Tpm.lowlevel
 
             // Check the reply tag
             ushort replyTag = reply.ReadUInt16();
-            if (replyTag != TpmCmdTags.TPM_TAG_RSP_COMMAND &&
-                replyTag != TpmCmdTags.TPM_TAG_RSP_AUTH1_COMMAND &&
-                replyTag != TpmCmdTags.TPM_TAG_RSP_AUTH2_COMMAND)
+            if (replyTag != TPMCmdTags.TPM_TAG_RSP_COMMAND &&
+                replyTag != TPMCmdTags.TPM_TAG_RSP_AUTH1_COMMAND &&
+                replyTag != TPMCmdTags.TPM_TAG_RSP_AUTH2_COMMAND)
             {
                 throw new Exception();
 				//throw new TpmCommandException("Invalid TPM response tag", reply);
@@ -300,7 +300,7 @@ namespace Iaik.Tc.Tpm.lowlevel
         /// </summary>
         /// <param name="rsp"></param>
         /// <param name="p"></param>
-        public void CheckTpmReponse(TpmBlob rsp, ushort expected_tag)
+        public void CheckTpmReponse(TPMBlob rsp, ushort expected_tag)
         {
             if (CheckTpmReponse(rsp) != expected_tag)
                throw new Exception();
@@ -408,9 +408,9 @@ namespace Iaik.Tc.Tpm.lowlevel
         /// </summary>
         /// <param name="nstrm"></param>
         /// <returns></returns>
-        public static TpmBlob ReceiveBlob(Stream stm)
+        public static TPMBlob ReceiveBlob(Stream stm)
         {           
-            return new TpmBlob(RawReceiveBlob(stm));
+            return new TPMBlob(RawReceiveBlob(stm));
         }
        
          /// <summary>
@@ -431,7 +431,7 @@ namespace Iaik.Tc.Tpm.lowlevel
         /// </summary>
         /// <param name="stm"></param>
         /// <param name="tpmBlob"></param>
-        public static void SendBlob(Stream stm, TpmBlob tpmBlob)
+        public static void SendBlob(Stream stm, TPMBlob tpmBlob)
         {
             // We need to have a valid size when working over the network
             // Disabled for now - tpmBlob.WriteCmdSize();

@@ -3,17 +3,17 @@
 
 using System;
 
-namespace Iaik.Tc.Tpm.library.commands
+namespace Iaik.Tc.TPM.Library.Commands
 {
     /// <summary>
     /// Attribute to flag a class as TPM command.    
     /// </summary> 
 	[AttributeUsage(AttributeTargets.Class)]
-	public sealed class TpmCommandsAttribute : Attribute
+	public sealed class TPMCommandsAttribute : Attribute
 	{
 		private readonly String commandName_;
 		
-		public TpmCommandsAttribute(string commandName)
+		public TPMCommandsAttribute(string commandName)
 		{
 			commandName_ = commandName;
 		}

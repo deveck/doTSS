@@ -2,9 +2,9 @@
 // Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 
 using System;
-using Iaik.Tc.Tpm.lowlevel;
+using Iaik.Tc.TPM.Lowlevel;
 
-namespace Iaik.Tc.Tpm.library
+namespace Iaik.Tc.TPM.Library
 {
 
 
@@ -44,7 +44,7 @@ namespace Iaik.Tc.Tpm.library
 		/// </param>
 		public void init (string providerName)
 		{
-			_backend = TpmProviders.Create(providerName,null);
+			_backend = TPMProviders.Create(providerName,null);
 		}
 		
 		public void Open(){

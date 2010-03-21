@@ -4,18 +4,16 @@
 
 using System;
 using System.Runtime.InteropServices;
-using Iaik.Tc.Tpm.lowlevel.exceptions;
+using Iaik.Tc.TPM.Lowlevel.Exceptions;
 
-
-
-namespace Iaik.Tc.Tpm.lowlevel.backends.win32
+namespace Iaik.Tc.TPM.Lowlevel.Backends.Win32
 {
     /// <summary>
     /// Backend for Windows Vista TPM base services 
     /// (UNTESTED CODE!)
     /// </summary>
-    [TpmProvider("win32/tbs")]
-    public class TpmBaseServices : TPMProvider
+    [TPMProvider("win32/tbs")]
+    public class TPMBaseServices : TPMProvider
     {
         /// <summary>
         /// Receive buffer
@@ -30,7 +28,7 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.win32
         /// <summary>
         /// Standard constructor with 4K rx buffer size
         /// </summary>
-        public TpmBaseServices() : this(4096)
+        public TPMBaseServices() : this(4096)
         {            
         }
 
@@ -38,7 +36,7 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.win32
         /// Special purpose constructor with configurable rx buffer size
         /// </summary>
         /// <param name="rxbuffersize"></param>
-        public TpmBaseServices(int rxbuffersize)
+        public TPMBaseServices(int rxbuffersize)
         {
             rxBuffer_ = new byte[rxbuffersize];
         }     
@@ -53,7 +51,7 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.win32
            
             uint result = Tbsi_Context_Create(ref ctx_params, out hTbsContext_);
             if (result != 0)
-                throw new TpmLowLvlException("Tbsi_Context_Create failed (" + result + ")", result);
+                throw new TPMLowLvlException("Tbsi_Context_Create failed (" + result + ")", result);
         }
 
         /// <summary>
@@ -87,7 +85,7 @@ namespace Iaik.Tc.Tpm.lowlevel.backends.win32
 					throw new Exception();
                     //throw new TpmException("TDDL I/O error (partial result)", result, rxBuffer_, (int)rxlen);
                 else
-                    throw new TpmLowLvlException(result);
+                    throw new TPMLowLvlException(result);
             }
 
             byte[] rxblob = new byte[rxlen];
