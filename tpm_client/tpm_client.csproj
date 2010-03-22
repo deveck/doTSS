@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{4299FAC7-1E40-4530-AB1E-EA1CC963F913}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Iaik.Tc.Tpm</RootNamespace>
+    <RootNamespace>Iaik.Tc.TPM</RootNamespace>
     <AssemblyName>tpm_client</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -59,8 +59,8 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="TPMConsole.cs" />
     <Compile Include="Commands\AuthenticateCommand.cs" />
-    <Compile Include="Commands\TpmCapabilityCommand.cs" />
-    <Compile Include="Commands\TpmListDevices.cs" />
+    <Compile Include="Commands\TPMCapabilityCommand.cs" />
+    <Compile Include="Commands\TPMListDevicesCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_core\tpm_core.csproj">

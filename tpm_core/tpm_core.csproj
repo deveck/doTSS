@@ -8,7 +8,7 @@
     <ProjectGuid>{4D1DBB08-821E-44F4-BE21-B9695E4EE8F1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Iaik.Tc.Tpm</RootNamespace>
+    <RootNamespace>Iaik.Tc.TPM</RootNamespace>
     <AssemblyName>tpm_core</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -100,12 +100,13 @@
     <Compile Include="Configuration\IPermissionMember.cs" />
     <Compile Include="Configuration\ExternalGroup.cs" />
     <Compile Include="Subsystems\Authentication\Authenticate.cs" />
-    <Compile Include="Subsystems\Tpm\TpmSubsystem.cs" />
-    <Compile Include="Subsystems\Tpm\TpmRequest.cs" />
-    <Compile Include="Subsystems\Tpm\TpmSubsystemResponseBase.cs" />
-    <Compile Include="Context\TpmClient.cs" />
-    <Compile Include="Configuration\ITpmDeviceConfiguration.cs" />
-    <Compile Include="Subsystems\Tpm\ListTpmsRequest.cs" />
+    <Compile Include="Context\TPMClient.cs" />
+    <Compile Include="Configuration\ITPMDeviceConfiguration.cs" />
+    <Compile Include="Subsystems\TPMSubsystem\TPMSubsystem.cs" />
+    <Compile Include="Subsystems\TPMSubsystem\TPMSubsystemResponseBase.cs" />
+    <Compile Include="Subsystems\TPMSubsystem\ListTPMsRequest.cs" />
+    <Compile Include="Subsystems\TPMSubsystem\TPMRequest.cs" />
+    <Compile Include="Subsystems\TPMSubsystem\SelectTPMRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">
@@ -148,6 +149,6 @@
     <VisualStudio />
   </ProjectExtensions>
   <ItemGroup>
-    <Folder Include="Subsystems\Tpm\" />
+    <Folder Include="Subsystems\TPMSubsystem\" />
   </ItemGroup>
 </Project>

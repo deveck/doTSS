@@ -11,7 +11,7 @@ using Iaik.Tc.TPM.Subsystems.Debug;
 using Iaik.Tc.TPM.Configuration;
 using Iaik.Tc.TPM.Subsystems.Authentication;
 using Iaik.Tc.TPM.Authentication;
-using Iaik.Tc.TPM.Subsystems.Tpm;
+using Iaik.Tc.TPM.Subsystems.TPMSubsystem;
 using Iaik.Tc.TPM.Library;
 using System.Collections.Generic;
 
@@ -50,7 +50,7 @@ namespace Iaik.Tc.TPM.Context
 		/// <summary>
 		///Provides access to all defined tpm devices 
 		/// </summary>
-		public IDictionary<string, TPMContext> TpmContexts
+		public IDictionary<string, TPMContext> TPMContexts
 		{
 			get { return _tpmContexts; }
 		}

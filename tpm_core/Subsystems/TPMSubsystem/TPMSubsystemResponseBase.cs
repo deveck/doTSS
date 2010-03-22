@@ -6,7 +6,7 @@ using Iaik.Tc.TPM.Context;
 using System.IO;
 using Iaik.Utils;
 
-namespace Iaik.Tc.TPM.Subsystems.Tpm
+namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {
     /// <summary>
     /// Base class for all responses in the tpm subsystem
@@ -23,7 +23,12 @@ namespace Iaik.Tc.TPM.Subsystems.Tpm
 			/// <summary>
 			/// There is an active user authentication but no permission to perform this action 
 			/// </summary>
-			NotPermitted
+			NotPermitted,
+			
+			/// <summary>
+			/// The specified tpm device could not be found 
+			/// </summary>
+			TPMDeviceNotFound
         }
 
 
@@ -65,6 +70,8 @@ namespace Iaik.Tc.TPM.Subsystems.Tpm
         			return "No authentication information for your connection was found";
 				else if (_errorCode.Value == (int)ErrorCodeEnum.NotPermitted)
         			return "You are not permitted to perform this operation";
+				else if (_errorCode.Value == (int)ErrorCodeEnum.TPMDeviceNotFound)
+        			return "The specified TPM device could not be found";
 				else
             		return "Unknown error";
             }

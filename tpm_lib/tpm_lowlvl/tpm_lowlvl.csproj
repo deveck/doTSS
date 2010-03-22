@@ -36,7 +36,6 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="backends\linux\Tddl.cs" />
     <Compile Include="backends\win32\StMicroTPM.cs" />
-    <Compile Include="exceptions\TpmLowLvlException.cs" />
     <Compile Include="data\GenericBlob.cs" />
     <Compile Include="TPMProvider.cs" />
     <Compile Include="backends\win32\TPMBaseServices.cs" />
@@ -45,6 +44,7 @@
     <Compile Include="data\TPMBlob.cs" />
     <Compile Include="TPMOrdinals.cs" />
     <Compile Include="backends\linux\TPMDevice.cs" />
+    <Compile Include="exceptions\TPMLowLvlException.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />

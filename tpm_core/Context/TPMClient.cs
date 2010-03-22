@@ -5,7 +5,7 @@
 
 using System;
 using Iaik.Tc.TPM.Library.Common;
-using Iaik.Tc.TPM.Subsystems.Tpm;
+using Iaik.Tc.TPM.Subsystems.TPMSubsystem;
 
 namespace Iaik.Tc.TPM.Context
 {

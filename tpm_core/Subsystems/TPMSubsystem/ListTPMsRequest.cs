@@ -8,7 +8,7 @@ using Iaik.Tc.TPM.Context;
 using Iaik.Utils;
 using System.IO;
 
-namespace Iaik.Tc.TPM.Subsystems.Tpm
+namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {
 
 

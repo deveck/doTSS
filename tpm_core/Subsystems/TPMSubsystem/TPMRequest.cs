@@ -13,7 +13,7 @@ using Iaik.Tc.TPM.Authentication;
 using System.Collections.Generic;
 using Iaik.Tc.TPM.Library.Common;
 
-namespace Iaik.Tc.TPM.Subsystems.Tpm
+namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {
 	/// <summary>
 	/// Requests all available authentication modes for the current connection
