@@ -1,6 +1,7 @@
 
 using System;
 using Iaik.Utils.Serialization;
+using System.IO;
 
 namespace Iaik.Tc.TPM.Library.Common
 {
@@ -8,6 +9,9 @@ namespace Iaik.Tc.TPM.Library.Common
 
 	public static class CapabilityData
 	{
+		public const string PARAM_TPM_VERSION_INFO = "tpm_version_info";
+		
+		
 		public enum TPMCapabilityArea : uint
 		{
 			/// <summary>
@@ -18,7 +22,8 @@ namespace Iaik.Tc.TPM.Library.Common
 		}
 
 		
-		public class TPMCapVersionInfo : AutoStreamSerializable
+		[TypedStreamSerializable(CapabilityData.PARAM_TPM_VERSION_INFO)]
+		public class TPMCapVersionInfo : AutoStreamSerializable, ITypedParameter
 		{
 
 			[SerializeMe(0)]
@@ -70,11 +75,11 @@ namespace Iaik.Tc.TPM.Library.Common
 			
 			
 			[SerializeMe(4)]
-			protected byte _tpmVendorId;
+			protected byte[] _tpmVendorId;
 			/// <summary>
 			/// The vendor id, unique to each tpm manufacturer
 			/// </summary>
-		 	public byte TpmVendorId
+		 	public byte[] TpmVendorId
 			{
 		 		get { return _tpmVendorId; }
 			}
@@ -94,7 +99,12 @@ namespace Iaik.Tc.TPM.Library.Common
 			{
 			}
 			
-		
+			public TPMCapVersionInfo (Stream src)
+			{
+				Read (src);
+			}
+			
+			
 		}
 		
 		public class TPMVersion : AutoStreamSerializable
@@ -102,16 +112,36 @@ namespace Iaik.Tc.TPM.Library.Common
 			[SerializeMe(0)]
 			protected byte _major;
 			
+			public byte Major
+			{
+				get { return _major;}
+			}
+			
 			[SerializeMe(1)]
 			protected byte _minor;
+			
+			public byte Minor
+			{
+				get { return _minor;}
+			}
 			
 			[SerializeMe(2)]
 			protected byte _revMajor;
 			
+			public byte RevMajor
+			{
+				get { return _revMajor;}
+			}
+			
 			[SerializeMe(3)]
 			protected byte _revMinor;
 			
-			protected TPMVersion()
+			public byte RevMinor
+			{
+				get { return _revMinor;}
+			}
+			
+			public TPMVersion ()
 			{
 			}
 		}

@@ -57,6 +57,17 @@ namespace Iaik.Tc.TPM.Lowlevel.Data
 
         #endregion
 		
+		#region Reading Data
+		public void SkipHeader ()
+		{
+			Position = 
+				  2 //Size of TPM_TAG
+				+ 4 //Size of paramSize
+				+ 4 //Size of returnCode
+				;
+		}
+		#endregion
+		
 		
 	}
 }

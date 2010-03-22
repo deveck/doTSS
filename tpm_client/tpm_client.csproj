@@ -20,7 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>--script=/home/andi/Repos/TpmCSStack-impl/tpm_client/TestScripts/tpm_capability_tpm_emu.txt</Commandlineparameters>
+    <Commandlineparameters>--script=/home/andi/Repos/TpmCSStack-impl/tpm_client/TestScripts/tpm_session_cap.txt</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -59,9 +59,9 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="TPMConsole.cs" />
     <Compile Include="Commands\AuthenticateCommand.cs" />
-    <Compile Include="Commands\TPMCapabilityCommand.cs" />
     <Compile Include="Commands\TPMListDevicesCommand.cs" />
     <Compile Include="Commands\TPMSelectDeviceCommand.cs" />
+    <Compile Include="Commands\TPMSessionCapCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_core\tpm_core.csproj">
@@ -87,8 +87,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="TestScripts\build_unix_socket_connection.txt" />
-    <None Include="TestScripts\tpm_capability_tpm_emu.txt" />
     <None Include="TestScripts\select_tpm_emulator.txt" />
     <None Include="TestScripts\authenticated_environment.txt" />
+    <None Include="TestScripts\tpm_session_cap.txt" />
   </ItemGroup>
 </Project>

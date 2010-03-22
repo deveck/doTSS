@@ -40,8 +40,12 @@ namespace Iaik.Tc.TPM.Library.Commands
 			requestBlob.WriteCmdSize ();
 			
 			TPMBlob responseBlob = _tpmProvider.TransmitAndCheck (requestBlob);
-			//TODO: implement!
-			return null;
+			responseBlob.SkipHeader ();
+			CapabilityDataCore.TPMCapVersionInfoCore tpmVersionInfo = new CapabilityDataCore.TPMCapVersionInfoCore (responseBlob);
+			
+			Parameters parameters = new Parameters ();
+			parameters.AddValue (CapabilityData.PARAM_TPM_VERSION_INFO, tpmVersionInfo);
+			return new TPMCommandResponse (true, TPMCommandNames.TPM_CMD_GetCapability, parameters);
 		}
 		
 		public override void Clear ()

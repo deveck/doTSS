@@ -24,7 +24,7 @@ namespace Iaik.Utils.Serialization
 		{
 			IDictionary<int, FieldInfo> dictMemberInfos = new SortedDictionary<int, FieldInfo> ();
 			
-			foreach (FieldInfo memberInfo in this.GetType ().GetFields (BindingFlags.Public | BindingFlags.NonPublic))
+			foreach (FieldInfo memberInfo in this.GetType ().GetFields (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
 			{
 				object[] attachedAttributes = memberInfo.GetCustomAttributes (typeof(SerializeMeAttribute), false);
 			
@@ -78,11 +78,11 @@ namespace Iaik.Utils.Serialization
 					if (ctorInfo == null)
 						throw new ArgumentException (string.Format ("'{0}' is not compatible with AutoStreamSerializable, no ctor(Stream) found!", curType));
 					
-					memberInfo.SetValue (this, ctorInfo.Invoke (new object[] { src }));
+					memberInfo.SetValue (this, ctorInfo.Invoke (new object[] { }));
 					((IStreamSerializable)memberInfo.GetValue (this)).Read (src);
 				}
 				else if (curType == typeof(byte))
-					memberInfo.SetValue (this, src.ReadByte ());
+					memberInfo.SetValue (this, (byte)src.ReadByte ());
 				else if (curType == typeof(byte[]))
 					memberInfo.SetValue (this, StreamHelper.ReadBytesSafe (src));
 				else if (curType == typeof(int))

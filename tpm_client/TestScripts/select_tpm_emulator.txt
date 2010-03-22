@@ -1,1 +1,3 @@
-# Select tpm funtion is not implemented yet
+# Selects the tpm emulator as the tpm device with the alias tpm
+
+tpm_select tpm_emu tpm

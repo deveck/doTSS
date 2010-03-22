@@ -70,6 +70,7 @@
     <Compile Include="Serialization\TypedPrimitive.cs" />
     <Compile Include="Serialization\AutoStreamSerializable.cs" />
     <Compile Include="Serialization\SerializeMeAttribute.cs" />
+    <Compile Include="ByteHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
