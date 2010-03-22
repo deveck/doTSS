@@ -54,7 +54,8 @@ namespace Iaik.Tc.TPM.Library.Commands
 		
 		
 		//public abstract void Process(Parameters param);
-		public abstract void Process();
+		//public abstract void Process();
+		public abstract TPMCommandResponse Process();
 		public abstract void Clear();
 		//public abstract TpmBlob ToBlob();
 		// TODO: How to create HMAC?

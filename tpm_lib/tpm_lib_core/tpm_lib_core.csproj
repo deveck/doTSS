@@ -39,7 +39,6 @@
     <Compile Include="exceptions\TpmLibraryException.cs" />
     <Compile Include="TPM.cs" />
     <Compile Include="commands\Capability\CapabilityDataCore.cs" />
-    <Compile Include="ITPMDevice.cs" />
     <Compile Include="commands\TPMCommandsAttribute.cs" />
     <Compile Include="commands\TPMCommand.cs" />
     <Compile Include="commands\Factory\TPMCommandFactory.cs" />

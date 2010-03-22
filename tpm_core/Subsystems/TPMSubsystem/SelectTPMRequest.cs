@@ -27,16 +27,32 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			set { _tpmIdentifier = value;}
 		}
 		
+		public override ushort RequestIdentifier {
+			get {
+				return (ushort)TPMSubsystem.TPMRequestEnum.SelectTPMDevice;
+			}
+		}
 		
-		public SelectTPMRequest ()
+		public override string Subsystem {
+			get {
+				return SubsystemConstants.SUBSYSTEM_TPM;
+			}
+		}
+		
+		
+		
+		
+		public SelectTPMRequest (EndpointContext ctx)
+			:base(ctx)
 		{
 		}
 		
-		public SelectTPMRequest (string tpmIdentifier)
+		public SelectTPMRequest (EndpointContext ctx, string tpmIdentifier)
+			: this(ctx)
 		{
 			_tpmIdentifier = tpmIdentifier;
 		}
-		
+			
 		public override void Read (Stream src)
 		{
 			base.Read (src);
@@ -77,7 +93,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		{
 			base.Read (src);
 			
-			_tpmSessionIdentifier = StreamHelper.ReadInt32 (_tpmSessionIdentifier);
+			_tpmSessionIdentifier = StreamHelper.ReadInt32 (src);
 		}
 		
 		public override void Write (Stream sink)
