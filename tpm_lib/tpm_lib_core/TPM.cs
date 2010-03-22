@@ -112,10 +112,19 @@ namespace Iaik.Tc.TPM.Library
 		}
 		#endregion
 		
-		public TPMCommandResponse Process(TPMCommandRequest request){
-			TPMCommand command = TPMCommandFactory.Create(request.CommandIdentifier);
-			command.Init(request.Parameters, _backend);
-			return command.Process();
+		public TPMCommandResponse Process (TPMCommandRequest request)
+		{
+			try
+			{
+				_backend.Open ();
+				TPMCommand command = TPMCommandFactory.Create (request.CommandIdentifier);
+				command.Init (request.Parameters, _backend);
+				return command.Process ();
+			}
+			finally
+			{
+				_backend.Close ();
+			}
 		}
 		
 	}

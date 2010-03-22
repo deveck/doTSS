@@ -107,6 +107,9 @@
     <Compile Include="Subsystems\TPMSubsystem\ListTPMsRequest.cs" />
     <Compile Include="Subsystems\TPMSubsystem\TPMRequest.cs" />
     <Compile Include="Subsystems\TPMSubsystem\SelectTPMRequest.cs" />
+    <Compile Include="Context\TPMSession.cs" />
+    <Compile Include="Context\TPMCapabilityClient.cs" />
+    <Compile Include="Subsystems\TPMSubsystem\TPMRequestException.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">

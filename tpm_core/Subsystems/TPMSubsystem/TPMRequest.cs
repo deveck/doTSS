@@ -35,11 +35,23 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		}
 				
 		
+		private int _tpmIdentifier;
+		
+		/// <summary>
+		/// Identifies the TPM this action should take place on.
+		/// Acquire this id by selecting the tpm device 
+		/// </summary>
+		public int TPMIdentifier
+		{
+			get { return _tpmIdentifier; }
+			set { _tpmIdentifier = value;}
+		}
+		
+		private TPMCommandRequest _commandRequest = null;
+		
 		/// <summary>
 		/// The request with its parameters 
 		/// </summary>
-		private TPMCommandRequest _commandRequest = null;
-		
 		public TPMCommandRequest CommandRequest
 		{
 			get { return _commandRequest; }
@@ -55,6 +67,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		{
 			base.Write (sink);
 			
+			StreamHelper.WriteInt32 (_tpmIdentifier, sink);
 			_commandRequest.Write (sink);
 		}
  
@@ -63,6 +76,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		{
 			base.Read (src);
 			
+			_tpmIdentifier = StreamHelper.ReadInt32 (src);
 			_commandRequest = new TPMCommandRequest (src);
 		}
 
@@ -75,6 +89,18 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 	public class TPMResponse : TPMSubsystemResponseBase
 	{
 		
+		private TPMCommandResponse _commandResponse = null;
+		
+		/// <summary>
+		/// The response with its parameters 
+		/// </summary>
+		public TPMCommandResponse CommandResponse
+		{
+			get { return _commandResponse; }
+			set { _commandResponse = value;}
+		}
+			
+		
 		public TPMResponse(SubsystemRequest request, EndpointContext ctx) 
 			:base(request, ctx)
 		{
@@ -83,11 +109,21 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		public override void Read (Stream src)
 		{
 			base.Read (src);
+			
+			if (Succeeded)
+			{
+				_commandResponse = new TPMCommandResponse (src);
+			}
 		}
 
 		public override void Write (Stream sink)
 		{
-			base.Write (sink);			
+			base.Write (sink);
+			
+			if (Succeeded)
+			{
+				_commandResponse.Write (sink);
+			}
 		}
 
 		

@@ -11,6 +11,7 @@ using Iaik.Tc.TPM.Lowlevel.Backends.Linux;
 using Iaik.Tc.TPM.Library.Commands;
 using System.Collections.Generic;
 using Iaik.Tc.TPM.Library;
+using Iaik.Tc.TPM.Library.Common;
 
 namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {
@@ -90,19 +91,36 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		
 		private void HandleTPMRequest (TPMSubsystem subsystem, RequestContext<TPMRequest, TPMResponse> requestContext)
 		{
-			TPMResponse response = requestContext.CreateResponse();
-			//AssertUserAuthentication(
-			//TODO: Check if the current connection has an associated user (already authenticated)
+			if (!AssertUserAuthentication (null, requestContext.CreateResponse ()))
+				return;
+
 			//TODO: Do some permission checking here!
+
+			TPMContext tpmContext;
+			TPMResponse response;
 			
-			//Just for testing
-			TPMProvider tpmDevice = new TPMDevice ("/dev/tpm0");
-			tpmDevice.Open ();
+			lock (_selectedTPMs)
+			{
+				if (_selectedTPMs.ContainsKey (requestContext.Request.TPMIdentifier) == false)
+				{
+					response = requestContext.CreateResponse ();
+					response.Succeeded = false;
+					response.SetKnownErrorCode (TPMSubsystemResponseBase.ErrorCodeEnum.TPMIdentifierNotValid);
+					response.Execute ();
+					return;
+				}
+				
+				tpmContext = _selectedTPMs[requestContext.Request.TPMIdentifier];
+			}
 			
-			TPMCommand cmd = TPMCommandFactory.Create (requestContext.Request.CommandRequest);
-			cmd.Init (requestContext.Request.CommandRequest.Parameters, tpmDevice);
-			cmd.Process ();
-			tpmDevice.Close ();
+			
+			TPMCommandResponse commandResponse = tpmContext.TPM.Process (requestContext.Request.CommandRequest);
+			
+			response = requestContext.CreateResponse ();
+			response.CommandResponse = commandResponse;
+			response.Execute ();
+			
+			
 		}
 		
 		/// <summary>
@@ -150,7 +168,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			
 			lock (_selectedTPMs)
 			{
-				int myId = _maxTPMIdentifier++;
+				int myId = (++_maxTPMIdentifier);
 				
 				_selectedTPMs.Add (myId, ServerContext.TPMContexts[requestContext.Request.TPMIdentifier]);
 				response.TPMSessionIdentifier = myId;

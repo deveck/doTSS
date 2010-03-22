@@ -1,0 +1,6 @@
+# Connects to the server and authenticates on the server, so testing can be done quite fast
+
+@exit_on_error 1
+@exit_on_finish 0
+
+@include ./build_unix_socket_connection.txt

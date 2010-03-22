@@ -11,13 +11,31 @@ namespace Iaik.Tc.TPM.Library
 	public class TPMContext
 	{
 		private string _deviceName;
-		private TPMProvider _tpmProvider;
+		
+		/// <summary>
+		/// Gets the configuration device name of this tpm device
+		/// </summary>
+		public string DeviceName
+		{
+			get { return _deviceName; }
+		}
+		
+		private TPM _tpm;
+
+		/// <summary>
+		/// Gets access to the TPM device
+		/// </summary>
+		public TPM TPM
+		{
+			get { return _tpm;}
+		}
 		
 		
-		public TPMContext (string deviceName, TPMProvider tpmProvider)
+		
+		public TPMContext (string deviceName, TPM tpm)
 		{
 			_deviceName = deviceName;
-			_tpmProvider = tpmProvider;
+			_tpm = tpm;
 		}
 	}
 }

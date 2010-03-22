@@ -70,7 +70,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 	}
 	
 	
-	public class SelectTPMResponse : TPMResponse
+	public class SelectTPMResponse : TPMSubsystemResponseBase
 	{
 		
 		private int _tpmSessionIdentifier;

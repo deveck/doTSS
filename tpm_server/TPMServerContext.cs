@@ -18,6 +18,8 @@ using Iaik.Tc.TPM.Library;
 using Iaik.Tc.TPM.Configuration.DotNetConfiguration;
 using Iaik.Tc.TPM.Lowlevel;
 
+using TPMWrapper = Iaik.Tc.TPM.Library.TPM;
+
 namespace Iaik.Tc.TPM
 {
 	public class TPMServerContext : ServiceBase
@@ -64,7 +66,7 @@ namespace Iaik.Tc.TPM
 			
 			_accessControlList = new DotNetCfgAccessControlList ();
 			
-			SetupTpmContexts ();
+			SetupTPMContexts ();
 			StartConnections ();
 			
 		}
@@ -78,7 +80,7 @@ namespace Iaik.Tc.TPM
 		/// Reads the configured tpm devices from the configuration and
 		/// sets up the corresponding tpm contexts
 		/// </summary>
-		private void SetupTpmContexts ()
+		private void SetupTPMContexts ()
 		{
 			IConnectionsConfiguration connectionConfig = (IConnectionsConfiguration)ConfigurationManager.GetSection ("connections");
 			
@@ -86,8 +88,9 @@ namespace Iaik.Tc.TPM
 			{
 				try
 				{
-					TPMProvider provider = TPMProviders.Create (device.TPMType, device.Parameters);
-					TPMContext tpmContext = new TPMContext (device.TPMName, provider);
+					TPMWrapper tpmDevice = new TPMWrapper ();
+					tpmDevice.Init (device.TPMType, device.Parameters);
+					TPMContext tpmContext = new TPMContext (device.TPMName, tpmDevice);
 					_tpmContexts.Add (device.TPMName, tpmContext);
 					_logger.InfoFormat ("Successfully setup tpm context '{0}' with type '{1}'", device.TPMName, device.TPMType);
 				}

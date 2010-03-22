@@ -28,7 +28,12 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			/// <summary>
 			/// The specified tpm device could not be found 
 			/// </summary>
-			TPMDeviceNotFound
+			TPMDeviceNotFound,
+			
+			/// <summary>
+			/// The last request wanted to use a tpm identifier which was not valid (not selected) 
+			/// </summary>
+			TPMIdentifierNotValid
         }
 
 
@@ -72,6 +77,8 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
         			return "You are not permitted to perform this operation";
 				else if (_errorCode.Value == (int)ErrorCodeEnum.TPMDeviceNotFound)
         			return "The specified TPM device could not be found";
+				else if (_errorCode.Value == (int)ErrorCodeEnum.TPMIdentifierNotValid)
+					return "The specified TPM identifier is not valid";
 				else
             		return "Unknown error";
             }
@@ -111,7 +118,14 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
             _errorCode = (int)errorCode;
         }
 
-        
+		/// <summary>
+		/// Throws an TPMRequestException if the execution was not successful 
+		/// </summary>
+        public void AssertTPMSuccess ()
+        {
+        	if (_succeeded == false)
+        		throw new TPMRequestException (ErrorText);
+		}
 
         public override void Read(Stream src)
         {

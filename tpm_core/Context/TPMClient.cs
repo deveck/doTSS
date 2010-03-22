@@ -21,22 +21,16 @@ namespace Iaik.Tc.TPM.Context
 		/// </summary>
 		private EndpointContext _ctx;
 
-		private TPMCapabilityClient _capabilities;
-		
+	
 		/// <summary>
-		/// Performs tpm capability requests
+		/// Lists all available TPM devices
 		/// </summary>
-		public TPMCapabilityClient Capabilities
-		{
-			get { return _capabilities;}
-		}
-		
 		public string[] TPMDevices
 		{
 			get
 			{
 				ListTPMsRequest request = new ListTPMsRequest (_ctx);
-				ListTPMsResponse response = request.TypedExecute();
+				ListTPMsResponse response = request.TypedExecute ();
 				
 				if (response.Succeeded == false)
 					throw new Exception (response.ErrorText);
@@ -45,48 +39,31 @@ namespace Iaik.Tc.TPM.Context
 			}
 		}
 		
+		/// <summary>
+		/// Selects the specified tpm device. 
+		/// On success a TPMSession object is returned
+		/// </summary>
+		/// <param name="tpmIdentifier"></param>
+		/// <returns></returns>
+		public TPMSession SelectTPMDevice (string tpmIdentifier)
+		{
+			SelectTPMRequest request = new SelectTPMRequest (_ctx);
+			request.TPMIdentifier = tpmIdentifier;
+			
+			SelectTPMResponse response = request.TypedExecute ();
+			response.AssertTPMSuccess ();
+			
+			return new TPMSession (_ctx, response.TPMSessionIdentifier);
+			
+		}
+		
         public TPMClient (EndpointContext ctx)
         {
         	_ctx = ctx;
-        	_capabilities = new TPMCapabilityClient (this);
         }
 		
 		
-		public void DoTPMCommandRequest (TPMCommandRequest commandRequest)
-		{
-			TPMRequest request = new TPMRequest (_ctx);
-			request.CommandRequest = commandRequest;
-			request.Execute ();
-		}
 		
-		/// <summary>
-		/// Performs tpm capability requests
-		/// </summary>
-		public class TPMCapabilityClient
-		{
-			/// <summary>
-			/// Transmits the packets to the server
-			/// </summary>
-			private TPMClient _tpmClient;
-	
-	        public TPMCapabilityClient (TPMClient tpmClient)
-	        {
-	        	_tpmClient = tpmClient;
-	        }
-			
-			/// <summary>
-			/// 
-			/// </summary>
-			public void GetTPMVersion ()
-			{
-				Parameters parameters = new Parameters ();
-				parameters.AddPrimitiveType ("capArea", CapabilityData.TPMCapabilityArea.TPM_CAP_VERSION_VAL);
-				parameters.AddPrimitiveType ("subCap", new byte[0]);
-				
-				TPMCommandRequest versionRequest = new TPMCommandRequest (TPMCommandNames.TPM_CMD_GetCapability, parameters);
-				_tpmClient.DoTPMCommandRequest (versionRequest);
-				
-			}
-		}
+		
 	}
 }
