@@ -149,9 +149,9 @@ namespace Iaik.Tc.TPM.Lowlevel
         public const UInt32 TSC_ORD_ResetEstablishmentBit = 0x4000000B;
     }
 	
-	public static class TpmCommandNames
-	{
-		public const String TPM_CMD_GetCapability = "TPM_GetCapability";
-		public const String TPM_CMD_PCRRead = "TPM_PCRRead";
-	}
+//	public static class TPMCommandNames
+//	{
+//		public const String TPM_CMD_GetCapability = "TPM_GetCapability";
+//		public const String TPM_CMD_PCRRead = "TPM_PCRRead";
+//	}
 }

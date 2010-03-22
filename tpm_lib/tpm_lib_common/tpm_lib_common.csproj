@@ -41,6 +41,7 @@
     <Compile Include="TPMCommandNames.cs" />
     <Compile Include="interface\ITypedParameter.cs" />
     <Compile Include="CapabilityData.cs" />
+    <Compile Include="interface\ATPMCommandQuery.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="interface\" />

@@ -13,13 +13,10 @@ namespace Iaik.Tc.TPM.Library.Common
 	/// Represents the command request for a specific TPM command, that should
 	/// be processed by the TPM library.
 	/// </summary>
-	public class TPMCommandRequest : IStreamSerializable
+	public sealed class TPMCommandRequest : ATPMCommandQuery
 	{
 
-		private String commandIdentifier_;
-		private Parameters params_;
-		
-		public TPMCommandRequest ()
+		private TPMCommandRequest () : base()
 		{
 		}
 		
@@ -28,46 +25,21 @@ namespace Iaik.Tc.TPM.Library.Common
 			Read (src);
 		}
 		
-		public TPMCommandRequest(String commandIdentifier, Parameters param)
+		public TPMCommandRequest(String commandIdentifier, Parameters param) : base (commandIdentifier, param)
 		{
-			commandIdentifier_ = commandIdentifier;
-			params_ = param;
 		}
-		
-		public Parameters Parameters
-		{
-			get
-			{
-				return params_; 
-			}
-			
-			set
-			{
-				if (value == null)
-					throw new ArgumentNullException ("params_", "TPMCommandRequest params_ must not be null");
-				params_ = value;
-			}
-		}
-		
-		public string CommandIdentifier
-		{
-			get { return commandIdentifier_;}
-		}
-		
+	
 		#region IStreamSerializable implementation
 		public void Write (Stream sink)
 		{
-			StreamHelper.WriteString (commandIdentifier_, sink);
-			params_.Write (sink);
+			base.Write(sink);
 		}
 		
 		
 		public void Read (Stream src)
 		{
-			commandIdentifier_ = StreamHelper.ReadString (src);
-			params_ = new Parameters (src);
+			base.Read(src);
 		}
-		
 		#endregion
 	}
 }

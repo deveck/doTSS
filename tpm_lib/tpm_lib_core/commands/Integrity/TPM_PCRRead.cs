@@ -35,21 +35,33 @@ namespace Iaik.Tc.TPM.Library.Commands
 		{
 			base.Init(param, provider);
 			_register = param.GetValueOf<UInt32>("pcrnum");
-			
-		//	throw new System.NotImplementedException ();
 		}
 
-		public override void Process ()
+		public override TPMCommandResponse Process ()
 		{
 			TPMBlob requestBlob = new TPMBlob ();
 			requestBlob.WriteCmdHeader (TPMCmdTags.TPM_TAG_RQU_COMMAND, TPMOrdinals.TPM_ORD_PcrRead);
 			requestBlob.WriteUInt32 ((uint)_register);
-			//requestBlob.WriteUInt32 ((uint)_subCap.Length);
-			//requestBlob.Write (_subCap, 0, _subCap.Length);
 			requestBlob.WriteCmdSize ();
 			
 			TPMBlob responseBlob = _tpmProvider.TransmitAndCheck (requestBlob);
-			//throw new System.NotImplementedException();
+			Parameters responseParam = new Parameters();
+			
+			// is done in transmit and check
+			//responseBlob.ReadUInt16();
+			//responseBlob.ReadUInt32();
+			//UInt32 i = responseBlob.ReadUInt32();
+			
+			byte[] val = responseBlob.ReadBytes(20);
+			
+			
+			responseParam.AddPrimitiveType("pcrnum", _register);
+			responseParam.AddPrimitiveType("value", val);
+			
+			
+			TPMCommandResponse response = new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_PCRRead, responseParam);
+			
+			return response;
 		}
 	
 		

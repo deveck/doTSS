@@ -55,6 +55,22 @@ namespace Iaik.Tc.TPM.Library.Commands
 				throw new NotSupportedException (string.Format ("Cannot find TpmCommand for command request with identifier '{0}'", 
 						request.CommandIdentifier));
 		}
+		
+		public static TPMCommand Create (string identifier)
+		{
+			if (commands_.ContainsKey (identifier))
+			{
+				ConstructorInfo ctorInfo = commands_[identifier].GetConstructor (new Type[0]);
+				if (ctorInfo == null)
+					throw new ArgumentException (string.Format ("Cannot create TpmCommand for command request with identifier '{0}'", 
+						identifier));
+				
+				return (TPMCommand)ctorInfo.Invoke (new object[0]);
+			}
+			else
+				throw new NotSupportedException (string.Format ("Cannot find TpmCommand for command request with identifier '{0}'", 
+						identifier));
+		}
 	}
 	
 }

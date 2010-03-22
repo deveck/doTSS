@@ -19,12 +19,12 @@ namespace Iaik.Tc.TPM.Lowlevel
         /// <summary>
         /// Open/close status for the TPM.
         /// </summary>
-        private bool isOpen_ = false;
+        private bool _isOpen = false;
 
         /// <summary>
         /// Disposal status for this object
         /// </summary>
-        private bool isDisposed_ = false;
+        private bool _isDisposed = false;
 
         /// <summary>
         /// Constructs a new closed TPM object.
@@ -40,13 +40,13 @@ namespace Iaik.Tc.TPM.Lowlevel
         {
             lock (this)
             {
-                if (isDisposed_)
+                if (_isDisposed)
                     throw new ObjectDisposedException("TPM");                
                 
-                if (!isOpen_)
+                if (!_isOpen)
                 {
                     tpmOpen();                    
-                    isOpen_ = true;
+                    _isOpen = true;
                 }
             }
         }
@@ -58,12 +58,12 @@ namespace Iaik.Tc.TPM.Lowlevel
         {
             lock (this)
             {
-                if (isDisposed_)
+                if (_isDisposed)
                     throw new ObjectDisposedException("TPM");
 
-                if (isOpen_) {
+                if (_isOpen) {
                     tpmClose();
-                    isOpen_ = false;
+                    _isOpen = false;
                 }                
             }
         }
@@ -91,10 +91,10 @@ namespace Iaik.Tc.TPM.Lowlevel
         {
             lock (this)
             {
-                if (isDisposed_)
+                if (_isDisposed)
                     throw new ObjectDisposedException("TPM");
 
-                if (!isOpen_)
+                if (!_isOpen)
                     throw new InvalidOperationException("TPM is closed");
 
                 return tpmTransmit(blob, size);
@@ -186,7 +186,7 @@ namespace Iaik.Tc.TPM.Lowlevel
             {
                 lock (this)
                 {
-                    return isOpen_;
+                    return _isOpen;
                 }
             }
         }
@@ -235,18 +235,18 @@ namespace Iaik.Tc.TPM.Lowlevel
         {
             lock (this)
             {
-                if (isDisposed_)
+                if (_isDisposed)
                     throw new ObjectDisposedException("TPM");
 
                 try
                 {
-                    if (isOpen_)
+                    if (_isOpen)
                         tpmClose();
                 }               
                 finally
                 {
-                    isOpen_ = false;
-                    isDisposed_ = true;
+                    _isOpen = false;
+                    _isDisposed = true;
                 }
             }            
         }

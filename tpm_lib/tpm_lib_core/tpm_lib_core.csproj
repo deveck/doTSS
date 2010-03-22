@@ -34,18 +34,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="commands\TpmCommandsAttribute.cs" />
-    <Compile Include="commands\TpmCommand.cs" />
     <Compile Include="commands\Capability\TPM_GetCapability.cs" />
     <Compile Include="commands\Integrity\TPM_PCRRead.cs" />
     <Compile Include="exceptions\TpmLibraryException.cs" />
-    <Compile Include="commands\Factory\TpmCommandFactory.cs" />
     <Compile Include="TPM.cs" />
     <Compile Include="commands\Capability\CapabilityDataCore.cs" />
-    <Compile Include="ITpmBlobReadable.cs" />
-    <Compile Include="ITpmBlobWritable.cs" />
-    <Compile Include="TpmContext.cs" />
-    <Compile Include="ITPMDevice.cs" />
+    <Compile Include="commands\TPMCommandsAttribute.cs" />
+    <Compile Include="commands\TPMCommand.cs" />
+    <Compile Include="commands\Factory\TPMCommandFactory.cs" />
+    <Compile Include="ITPMBlobReadable.cs" />
+    <Compile Include="ITPMBlobWritable.cs" />
+    <Compile Include="TPMContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="commands\" />

@@ -30,7 +30,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 			_subCap = param.GetValueOf<byte[]> ("subCap");
 		}
 		
-		public override void Process ()
+		public override TPMCommandResponse Process ()
 		{
 			TPMBlob requestBlob = new TPMBlob ();
 			requestBlob.WriteCmdHeader (TPMCmdTags.TPM_TAG_RQU_COMMAND, TPMOrdinals.TPM_ORD_GetCapability);
@@ -40,7 +40,8 @@ namespace Iaik.Tc.TPM.Library.Commands
 			requestBlob.WriteCmdSize ();
 			
 			TPMBlob responseBlob = _tpmProvider.TransmitAndCheck (requestBlob);
-			
+			//TODO: implement!
+			return null;
 		}
 		
 		public override void Clear ()
