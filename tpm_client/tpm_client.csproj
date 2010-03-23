@@ -87,8 +87,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="TestScripts\build_unix_socket_connection.txt" />
-    <None Include="TestScripts\select_tpm_emulator.txt" />
     <None Include="TestScripts\authenticated_environment.txt" />
     <None Include="TestScripts\tpm_session_cap.txt" />
+    <None Include="TestScripts\select_tpm.txt" />
   </ItemGroup>
 </Project>

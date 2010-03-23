@@ -14,12 +14,20 @@ namespace Iaik.Tc.TPM.Lowlevel.Backends.Linux
 	[TPMProvider("linux/device")]
 	public class TPMDevice : TPMProvider
 	{
-
+		/// <summary>
+		/// Using same value than used in trousers
+		/// </summary>
+		public const int RCV_BUF_SIZE = 2048;
+		
+		private byte[] _receiveBuffer = new byte[RCV_BUF_SIZE];
+		
 		/// <summary>
 		/// Read/write flag for open.
 		/// </summary>
 		private const int O_RDWR = 0x0002;
 	
+		
+		
         /// <summary>
         /// Device file name
         /// </summary>
@@ -77,14 +85,19 @@ namespace Iaik.Tc.TPM.Lowlevel.Backends.Linux
         /// <returns></returns>
         protected override byte[] tpmTransmit(byte[] blob, int size)
         {
-			byte[] rxheader = new byte[10];
+			
+			//byte[] rxheader = new byte[10];
 	
 			int txlen = write(fd_, blob, size);
 	        if (txlen < size)
 		    	throw new TPMLowLvlException("Failed to write to TPM device " + deviceName_, 2);
-	
+
+			// Read the whole tpm response at once
+			int rxlen = read(fd_, _receiveBuffer, _receiveBuffer.Length);
+
+			
 			// Read the TPM header
-			int rxlen = read(fd_, rxheader, rxheader.Length);
+			//int rxlen = read(fd_, rxheader, rxheader.Length);
 			if (rxlen < 0)
 			   throw new TPMLowLvlException("Failed to read from the TPM device " + deviceName_, 2);
 	
@@ -93,25 +106,29 @@ namespace Iaik.Tc.TPM.Lowlevel.Backends.Linux
 	
 	
 			// Decode the length
-			int length = (rxheader[2] << 24) | (rxheader[3] << 16) | (rxheader[4] << 8) | rxheader[5];
+			int length = (_receiveBuffer[2] << 24) | (_receiveBuffer[3] << 16) | (_receiveBuffer[4] << 8) | _receiveBuffer[5];
 			if (length < 10)
 	           throw new TPMLowLvlException("Implausible length response (" + length + " bytes) from TPM device " + deviceName_, 4);
 	
-	        // Already done
-			if (length == rxheader.Length)
-			  return rxheader;
+
+			if(length != rxlen)
+				throw new TPMLowLvlException("Short payload response (" + rxlen + " bytes ) from TPM device " + deviceName_, 5);                	
+	    
+			// Already done
+			//if (length == rxheader.Length)
+			//  return rxheader;
 	
             // Need a larger buffer ...
-            byte[] payload = new byte[length - rxheader.Length];
-            rxlen = read(fd_, payload, payload.Length);
-			if (rxlen < (length - rxheader.Length))
-	            throw new TPMLowLvlException("Short payload response (" + rxlen + " bytes ) from TPM device " + deviceName_, 5);                
+            //byte[] payload = new byte[length - rxheader.Length];
+            //rxlen = read(fd_, payload, payload.Length);
+			//if (rxlen < (length - rxheader.Length))
+	        //    throw new TPMLowLvlException("Short payload response (" + rxlen + " bytes ) from TPM device " + deviceName_, 5);                
 
 			// Assemble the full response buffer
 			byte[] rsp = new byte[length];
 	
-			Array.Copy(rxheader, 0, rsp, 0, rxheader.Length);
-			Array.Copy(payload, 0, rsp, rxheader.Length, payload.Length);
+			Array.Copy(_receiveBuffer, 0, rsp, 0, rxlen);
+			//Array.Copy(payload, 0, rsp, rxheader.Length, payload.Length);
 
             return rsp;
         }

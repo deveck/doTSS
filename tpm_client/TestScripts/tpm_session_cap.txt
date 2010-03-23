@@ -4,6 +4,6 @@
 @exit_on_finish 0
 
 @include ./authenticated_environment.txt
-@include ./select_tpm_emulator.txt
+@include ./select_tpm.txt
 
 tpm_session_cap tpm tpm_version
