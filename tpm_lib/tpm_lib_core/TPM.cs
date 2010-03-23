@@ -6,6 +6,7 @@ using Iaik.Tc.TPM.Lowlevel;
 using Iaik.Tc.TPM.Library.Common;
 using Iaik.Tc.TPM.Library.Commands;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Iaik.Tc.TPM.Library
 {
@@ -93,6 +94,14 @@ namespace Iaik.Tc.TPM.Library
 		{
 			_backend = TPMProviders.Create(providerName,options);
 		}
+		
+		public void Init (string providerName, IDictionary<String, String> options, StreamWriter debug)
+		{
+			_backend = TPMProviders.Create(providerName,options);
+			_backend.StartDebug(debug);
+		}
+		
+		
 		#endregion
 		
 		public void Open ()
@@ -108,7 +117,11 @@ namespace Iaik.Tc.TPM.Library
 		#region IDisposable implementation
 		public void Dispose ()
 		{
-			throw new System.NotImplementedException();
+			lock(this)
+				if(_isDisposed)
+					throw new ObjectDisposedException("TPM object is disposed");
+			_backend.Dispose();
+			_isDisposed = true;
 		}
 		#endregion
 		

@@ -53,6 +53,8 @@ namespace Iaik.Tc.TPM.Lowlevel.Backends.Linux
         {
         	fd_ = -1;
         	deviceName_ = deviceName;
+			
+			_backendIdentifier = "linux/device" + "   " + deviceName;
         }
 		
 		public TPMDevice(IDictionary<string, string> parameters)

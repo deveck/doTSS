@@ -24,6 +24,7 @@ namespace Iaik.Tc.TPM.Lowlevel.Backends.Win32
         /// </summary>
         private byte[] rxBuffer_;
 
+		
         /// <summary>
         /// Standard constructor with 4K rx buffer size
         /// </summary>
@@ -38,6 +39,7 @@ namespace Iaik.Tc.TPM.Lowlevel.Backends.Win32
         public StMicroTPM(int rxbuffersize)
         {
             rxBuffer_ = new byte[rxbuffersize];
+			_backendIdentifier = "win32/stmicro";
         }
 
         /// <summary>

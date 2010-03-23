@@ -20,6 +20,12 @@ namespace Iaik.Tc.TPM.Lowlevel
         /// Open/close status for the TPM.
         /// </summary>
         private bool _isOpen = false;
+		
+		private bool _debug = false;
+		
+		protected string _backendIdentifier = "UNKNOWN";
+		
+		private StreamWriter _debugStream = null;
 
         /// <summary>
         /// Disposal status for this object
@@ -32,6 +38,12 @@ namespace Iaik.Tc.TPM.Lowlevel
         public TPMProvider()
         {            
         }
+		
+		public void StartDebug(StreamWriter debug){
+			_debugStream = debug;
+			_debug = true;
+			_debugStream.WriteLine(DateTime.Now + ": Start Debugging of TPM device \"" + _backendIdentifier + "\"");
+		}
 
         /// <summary>
         /// Opens the low-level connection to the TPM.
@@ -48,6 +60,8 @@ namespace Iaik.Tc.TPM.Lowlevel
                     tpmOpen();                    
                     _isOpen = true;
                 }
+				if(_debug)
+					_debugStream.WriteLine(DateTime.Now + ": opened device");
             }
         }
 
@@ -64,7 +78,10 @@ namespace Iaik.Tc.TPM.Lowlevel
                 if (_isOpen) {
                     tpmClose();
                     _isOpen = false;
-                }                
+                } 
+				if(_debug)
+					_debugStream.WriteLine(DateTime.Now + ": closed device");
+				
             }
         }
 
@@ -96,7 +113,7 @@ namespace Iaik.Tc.TPM.Lowlevel
 
                 if (!_isOpen)
                     throw new InvalidOperationException("TPM is closed");
-
+				
                 return tpmTransmit(blob, size);
             }
         }
@@ -123,7 +140,24 @@ namespace Iaik.Tc.TPM.Lowlevel
                 instm.WriteCmdSize();
 
             byte[] inblob = instm.GetBuffer();
+			
+			if(_debug){
+					_debugStream.Write(DateTime.Now + ": send --> 0x");
+				// we don't use foreach 'cause datasize << buffersize ;)
+					for(int i = 0; i<instm.Length; ++i)
+						_debugStream.Write(String.Format("{0:X2}",inblob[i]));
+				_debugStream.WriteLine();
+				}
+			
             byte[] outblob = Transmit(inblob, (int)instm.Length);
+			
+			if(_debug){
+					_debugStream.Write(DateTime.Now + ": received --> 0x");
+					foreach(byte b in outblob)
+						_debugStream.Write(String.Format("{0:X2}",b));
+				_debugStream.WriteLine();
+				}
+			
             return new TPMBlob(outblob);
         }
 
@@ -248,6 +282,9 @@ namespace Iaik.Tc.TPM.Lowlevel
                     _isOpen = false;
                     _isDisposed = true;
                 }
+				if(_debug)
+					_debugStream.WriteLine(DateTime.Now + ": disposed backend");
+				_debugStream.Flush();
             }            
         }
         #endregion
@@ -308,59 +345,59 @@ namespace Iaik.Tc.TPM.Lowlevel
         }
         #endregion
 
-        #region 16. Integrity Collection and Reporting
-        /// <summary>
-        /// TPM_PcrRead - Read a the current value of a PCR.
-        /// </summary>
-        /// <param name="pcrIndex"></param>
-        /// <returns></returns>
-        public byte[] PcrRead(UInt32 pcrIndex)
-        {
-			// TODO!!!!
-            //TpmBlob req = TpmBlob.CreateRquCommand(TpmOrdinals.TPM_ORD_PcrRead);
-            //req.WriteUInt32(pcrIndex);
-
-            //TpmBlob rsp = TransmitAndCheck(req);
-
-            // Return the PCR value
-        //    return rsp.ReadBytes(20);
-			return null;
-        }
-
-        /// <summary>
-        /// TPM_Extend - Extend a PCR.
-        /// </summary>
-        /// <param name="pcrIndex"></param>
-        /// <param name="inDigest"></param>
-        /// <returns></returns>
-        public byte[] PcrExtend(UInt32 pcrIndex, byte[] inDigest)
-        {
-            if (inDigest.Length != 20)
-                throw new ArgumentException("inDigest must be exactly 20 bytes");
-
-            //TpmBlob req = TpmBlob.CreateRquCommand(TpmOrdinals.TPM_ORD_Extend);
-//            req.WriteUInt32(pcrIndex);
-//            req.Write(inDigest, 0, 20);
-//
-//            TpmBlob rsp = TransmitAndCheck(req);
-//
-//            // Return the generated PCR value
-//            return rsp.ReadBytes(20);
-			return null;
-        }
-
+//        #region 16. Integrity Collection and Reporting
 //        /// <summary>
-//        /// TPM_PCR_Reset - Resets the selected (resettable) PCRs.
+//        /// TPM_PcrRead - Read a the current value of a PCR.
 //        /// </summary>
-//        /// <param name="pcrs"></param>
-//        public void PcrReset(TpmPcrSelection pcrs)
+//        /// <param name="pcrIndex"></param>
+//        /// <returns></returns>
+//        public byte[] PcrRead(UInt32 pcrIndex)
 //        {
-//            TpmBlob req = TpmBlob.CreateRquCommand(TpmOrdinals.TPM_ORD_PCR_Reset);
-//            req.Write(pcrs);
+//			// TODO!!!!
+//            //TpmBlob req = TpmBlob.CreateRquCommand(TpmOrdinals.TPM_ORD_PcrRead);
+//            //req.WriteUInt32(pcrIndex);
 //
-//            TransmitAndCheck(req);            
+//            //TpmBlob rsp = TransmitAndCheck(req);
+//
+//            // Return the PCR value
+//        //    return rsp.ReadBytes(20);
+//			return null;
 //        }
-        #endregion
+//
+//        /// <summary>
+//        /// TPM_Extend - Extend a PCR.
+//        /// </summary>
+//        /// <param name="pcrIndex"></param>
+//        /// <param name="inDigest"></param>
+//        /// <returns></returns>
+//        public byte[] PcrExtend(UInt32 pcrIndex, byte[] inDigest)
+//        {
+//            if (inDigest.Length != 20)
+//                throw new ArgumentException("inDigest must be exactly 20 bytes");
+//
+//            //TpmBlob req = TpmBlob.CreateRquCommand(TpmOrdinals.TPM_ORD_Extend);
+////            req.WriteUInt32(pcrIndex);
+////            req.Write(inDigest, 0, 20);
+////
+////            TpmBlob rsp = TransmitAndCheck(req);
+////
+////            // Return the generated PCR value
+////            return rsp.ReadBytes(20);
+//			return null;
+//        }
+//
+////        /// <summary>
+////        /// TPM_PCR_Reset - Resets the selected (resettable) PCRs.
+////        /// </summary>
+////        /// <param name="pcrs"></param>
+////        public void PcrReset(TpmPcrSelection pcrs)
+////        {
+////            TpmBlob req = TpmBlob.CreateRquCommand(TpmOrdinals.TPM_ORD_PCR_Reset);
+////            req.Write(pcrs);
+////
+////            TransmitAndCheck(req);            
+////        }
+//        #endregion
 
 	#region Helper functions for blob reception and transfer over streams
 	/// <summary>

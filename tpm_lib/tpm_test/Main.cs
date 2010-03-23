@@ -7,6 +7,8 @@ using Iaik.Tc.TPM.Library.Commands;
 using Iaik.Tc.TPM.Lowlevel;
 using System.Collections.Generic;
 using System.Collections;
+using System.IO;
+using System.Text;
 
 namespace tpm_test
 {
@@ -14,13 +16,19 @@ namespace tpm_test
 	{
 		public static void Main (string[] args)
 		{
+			//FileStream test = new FileStream("~/test", FileMode.Append);
+			StreamWriter writer = new StreamWriter("/home/nn/test", true, Encoding.UTF8);
+									
 			TPM tpm = new TPM();
 			IDictionary<string, string> dict = new Dictionary<string, string>();
 			dict.Add("DeviceName","/dev/tpm0");
-			tpm.Init("linux/device", dict);
+			tpm.Init("linux/device", dict,writer);
 			tpm.Open();
 			
 			ReadPCRs(tpm);
+			
+			tpm.Dispose();
+			writer.Close();
 			//tpm.init;
 			//tpm.backend.tpmOpen();
 			

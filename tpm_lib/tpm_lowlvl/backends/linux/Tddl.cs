@@ -35,6 +35,7 @@ namespace Iaik.Tc.TPM.Lowlevel.Backends.Linux
         public TddlTpm(int rxbuffersize)
         {
             rxBuffer_ = new byte[rxbuffersize];
+			_backendIdentifier = "linux/tddl";
         }
 
         /// <summary>
