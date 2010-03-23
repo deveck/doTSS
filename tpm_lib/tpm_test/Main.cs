@@ -5,6 +5,8 @@ using Iaik.Tc.TPM.Library;
 using Iaik.Tc.TPM.Library.Common;
 using Iaik.Tc.TPM.Library.Commands;
 using Iaik.Tc.TPM.Lowlevel;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace tpm_test
 {
@@ -13,7 +15,9 @@ namespace tpm_test
 		public static void Main (string[] args)
 		{
 			TPM tpm = new TPM();
-			tpm.Init("linux/tddl");
+			IDictionary<string, string> dict = new Dictionary<string, string>();
+			dict.Add("DeviceName","/dev/tpm0");
+			tpm.Init("linux/device", dict);
 			tpm.Open();
 			
 			ReadPCRs(tpm);
