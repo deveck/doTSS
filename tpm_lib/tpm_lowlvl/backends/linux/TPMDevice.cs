@@ -6,6 +6,7 @@ using System;
 using Iaik.Tc.TPM.Lowlevel.Exceptions;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using Iaik.Utils;
 
 namespace Iaik.Tc.TPM.Lowlevel.Backends.Linux
 {
@@ -38,10 +39,17 @@ namespace Iaik.Tc.TPM.Lowlevel.Backends.Linux
 		/// </summary>
 		private int fd_;
 
+		
+		protected override string BackendIdentifier 
+		{
+			get { return string.Format("{0} -> {1}", ProviderAttributeName, deviceName_); }
+		}
+
+		
         /// <summary>
         /// Standard constructor with 4K rx buffer size
         /// </summary>
-        public TPMDevice() : this("/dev/tpm0")
+        public TPMDevice() : this("/dev/tpm0", false)
         {            
         }
 
@@ -49,16 +57,17 @@ namespace Iaik.Tc.TPM.Lowlevel.Backends.Linux
         /// Special purpose constructor with configurable device name.
         /// </summary>
         /// <param name="deviceName"></param>
-        public TPMDevice (String deviceName)
+        public TPMDevice (String deviceName, bool enableDebugOutput)
+			:base(enableDebugOutput)
         {
         	fd_ = -1;
         	deviceName_ = deviceName;
 			
-			_backendIdentifier = "linux/device" + "   " + deviceName;
+			SetupLogger();
         }
 		
 		public TPMDevice(IDictionary<string, string> parameters)
-			:this(parameters["DeviceName"])
+			:this(parameters["DeviceName"], DictionaryHelper.GetBool("debug", parameters, false))
 		{
 		}
 

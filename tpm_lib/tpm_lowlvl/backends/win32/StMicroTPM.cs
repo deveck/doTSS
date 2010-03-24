@@ -39,7 +39,7 @@ namespace Iaik.Tc.TPM.Lowlevel.Backends.Win32
         public StMicroTPM(int rxbuffersize)
         {
             rxBuffer_ = new byte[rxbuffersize];
-			_backendIdentifier = "win32/stmicro";
+			SetupLogger();
         }
 
         /// <summary>

@@ -4,6 +4,9 @@
 using System;
 using System.IO;
 using Iaik.Tc.TPM.Lowlevel.Data;
+using log4net;
+using System.Text;
+using Iaik.Utils;
 
 namespace Iaik.Tc.TPM.Lowlevel
 {
@@ -22,29 +25,56 @@ namespace Iaik.Tc.TPM.Lowlevel
         private bool _isOpen = false;
 		
 		private bool _debug = false;
-		
-		protected string _backendIdentifier = "UNKNOWN";
-		
-		private StreamWriter _debugStream = null;
 
         /// <summary>
         /// Disposal status for this object
         /// </summary>
         private bool _isDisposed = false;
 
+		/// <summary>
+		/// Logging
+		/// </summary>
+		protected ILog _logger;
+		
         /// <summary>
         /// Constructs a new closed TPM object.
         /// </summary>
         public TPMProvider()
+			:this(false)
+		{
+		}
+		
+        public TPMProvider(bool enableDebugOutput)
         {            
+			_debug = enableDebugOutput;
+			
+			
         }
 		
-		public void StartDebug(StreamWriter debug){
-			_debugStream = debug;
-			_debug = true;
-			_debugStream.WriteLine(DateTime.Now + ": Start Debugging of TPM device \"" + _backendIdentifier + "\"");
+		
+		protected void SetupLogger()
+		{
+			_logger = LogManager.GetLogger("TPMProvider " + BackendIdentifier);
 		}
-
+		
+		protected string ProviderAttributeName
+		{
+			get
+			{
+				object[] attributes = this.GetType().GetCustomAttributes(typeof(TPMProviderAttribute), false);
+				if(attributes == null || attributes.Length == 0)
+					return "UnknownProvider";
+				else
+					return ((TPMProviderAttribute)attributes[0]).ProviderName;
+			}
+		}
+		
+		protected virtual string BackendIdentifier
+		{
+			get{ return ProviderAttributeName; }
+		}
+		
+		
         /// <summary>
         /// Opens the low-level connection to the TPM.
         /// </summary>
@@ -61,7 +91,7 @@ namespace Iaik.Tc.TPM.Lowlevel
                     _isOpen = true;
                 }
 				if(_debug)
-					_debugStream.WriteLine(DateTime.Now + ": opened device");
+					_logger.DebugFormat("opened device");
             }
         }
 
@@ -80,7 +110,7 @@ namespace Iaik.Tc.TPM.Lowlevel
                     _isOpen = false;
                 } 
 				if(_debug)
-					_debugStream.WriteLine(DateTime.Now + ": closed device");
+					_logger.DebugFormat("closed device");
 				
             }
         }
@@ -142,20 +172,20 @@ namespace Iaik.Tc.TPM.Lowlevel
             byte[] inblob = instm.GetBuffer();
 			
 			if(_debug){
-					_debugStream.Write(DateTime.Now + ": send --> 0x");
+				StringBuilder debugStr = new StringBuilder();
+				debugStr.Append("send --> 0x");
+
 				// we don't use foreach 'cause datasize << buffersize ;)
 					for(int i = 0; i<instm.Length; ++i)
-						_debugStream.Write(String.Format("{0:X2}",inblob[i]));
-				_debugStream.WriteLine();
+						debugStr.AppendFormat("{0:X2}", inblob[i]);
+						
+				_logger.Debug(debugStr.ToString());
 				}
 			
             byte[] outblob = Transmit(inblob, (int)instm.Length);
 			
 			if(_debug){
-					_debugStream.Write(DateTime.Now + ": received --> 0x");
-					foreach(byte b in outblob)
-						_debugStream.Write(String.Format("{0:X2}",b));
-				_debugStream.WriteLine();
+					_logger.DebugFormat("received --> 0x{0}", ByteHelper.ByteArrayToHexString(outblob));
 				}
 			
             return new TPMBlob(outblob);
@@ -283,8 +313,8 @@ namespace Iaik.Tc.TPM.Lowlevel
                     _isDisposed = true;
                 }
 				if(_debug)
-					_debugStream.WriteLine(DateTime.Now + ": disposed backend");
-				_debugStream.Flush();
+					_logger.Debug("disposed backend");
+
             }            
         }
         #endregion

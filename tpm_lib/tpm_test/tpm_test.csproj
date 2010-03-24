@@ -29,6 +29,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\log4net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -47,6 +51,10 @@
     <ProjectReference Include="..\tpm_lowlvl\tpm_lowlvl.csproj">
       <Project>{1C051352-0BC4-4EE2-A5FF-C694C197A3AA}</Project>
       <Name>tpm_lowlvl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\utils\utils.csproj">
+      <Project>{892CAB5C-D501-47B1-82E2-BE8492E7E378}</Project>
+      <Name>utils</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

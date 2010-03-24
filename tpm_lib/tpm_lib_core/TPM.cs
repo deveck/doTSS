@@ -95,11 +95,11 @@ namespace Iaik.Tc.TPM.Library
 			_backend = TPMProviders.Create(providerName,options);
 		}
 		
-		public void Init (string providerName, IDictionary<String, String> options, StreamWriter debug)
-		{
-			_backend = TPMProviders.Create(providerName,options);
-			_backend.StartDebug(debug);
-		}
+		//public void Init (string providerName, IDictionary<String, String> options, StreamWriter debug)
+		//{
+		//	_backend = TPMProviders.Create(providerName,options);
+		//	_backend.StartDebug(debug);
+		//}
 		
 		
 		#endregion

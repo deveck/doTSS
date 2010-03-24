@@ -9,26 +9,26 @@ using System.Collections.Generic;
 using System.Collections;
 using System.IO;
 using System.Text;
+using log4net;
+using Iaik.Utils;
 
 namespace tpm_test
 {
 	class MainClass
 	{
 		public static void Main (string[] args)
-		{
-			//FileStream test = new FileStream("~/test", FileMode.Append);
-			StreamWriter writer = new StreamWriter("/home/nn/test", true, Encoding.UTF8);
-									
+		{				
+			SetupLogging();
 			TPM tpm = new TPM();
 			IDictionary<string, string> dict = new Dictionary<string, string>();
 			dict.Add("DeviceName","/dev/tpm0");
-			tpm.Init("linux/device", dict,writer);
+			dict.Add("debug", "True");
+			tpm.Init("linux/device", dict);
 			tpm.Open();
 			
 			ReadPCRs(tpm);
 			
 			tpm.Dispose();
-			writer.Close();
 			//tpm.init;
 			//tpm.backend.tpmOpen();
 			
@@ -36,6 +36,8 @@ namespace tpm_test
 		
 		private static void ReadPCRs(TPM tpm){
 			UInt32 i = 0;
+			
+		    ILog log = LogManager.GetLogger("ReadPCRs");
 			
 			for(i=0; i<24; ++i){
 			
@@ -45,10 +47,9 @@ namespace tpm_test
 				TPMCommandResponse resp = tpm.Process(req);
 				
 				byte[] val = resp.Parameters.GetValueOf<byte[]>("value");
-				Console.Write("Answer for PCR {0} is: 0x", resp.Parameters.GetValueOf<UInt32>("pcrnum"));
-				foreach(byte b in val)
-					Console.Write(String.Format("{0:X2}",b));
-				Console.WriteLine();
+				
+				log.InfoFormat("Answer for PCR {0} is: 0x{1}", resp.Parameters.GetValueOf<UInt32>("pcrnum"),
+				               ByteHelper.ByteArrayToHexString(val));
 			}
 			
 //			TPMCommandRequest req = new TPMCommandRequest(TPMCommandNames.TPM_CMD_PCRRead, null);
@@ -56,6 +57,19 @@ namespace tpm_test
 //			com.Init(param, tpm);
 //			com.Process();
 			//Console.WriteLine ("Hello World!");
+		}
+		
+		
+		/// <summary>
+		/// Initializes the logger
+		/// </summary>
+		private static void SetupLogging()
+		{
+			
+			log4net.Appender.ConsoleAppender appender = new log4net.Appender.ConsoleAppender();
+			appender.Name = "ConsoleAppender";
+			appender.Layout = new log4net.Layout.PatternLayout("[%date{dd.MM.yyyy HH:mm:ss,fff}]-%-5level-[%c]: %message%newline");
+			log4net.Config.BasicConfigurator.Configure(appender);
 		}
 	}
 }
