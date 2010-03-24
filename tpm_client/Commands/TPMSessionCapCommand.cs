@@ -17,7 +17,7 @@ namespace Iaik.Tc.TPM.Commands
             {
                 return @"tpm_session_cap Args: [local_alias] [cap_type]
     Specify the tpm to use by [local_alias]. These aliases can be defined using the tpm_select command
-    Returns the capability specified by cap_type by one of these values: tpm_version";
+    Returns the capability specified by cap_type by one of these values: tpm_version, pcr_count";
             }
         }
 
@@ -61,6 +61,12 @@ namespace Iaik.Tc.TPM.Commands
         		_console.Out.WriteLine ("Vendor specific (size #{0} bytes): {1}", versionInfo.VendorSpecific.Length,
 					ByteHelper.ByteArrayToHexString (versionInfo.VendorSpecific));
         	}
+			else if(capCommand == "pcr_count")
+			{
+				int pcrCount = tpmSessions[localAlias].CapabilityClient.GetPCRCount();
+				
+				_console.Out.WriteLine("TPM '{0}' claims to support #{1} pcr registers", localAlias, pcrCount);
+			}
 			else
         		_console.Out.WriteLine ("Error, unknown cap_type '{0}'", commandline[1]);
         }

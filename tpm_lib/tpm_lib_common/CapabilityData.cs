@@ -10,15 +10,33 @@ namespace Iaik.Tc.TPM.Library.Common
 	public static class CapabilityData
 	{
 		public const string PARAM_TPM_VERSION_INFO = "tpm_version_info";
+		public const string PARAM_PROP_PCR = "prop_pcr";
 		
 		
 		public enum TPMCapabilityArea : uint
 		{
 			/// <summary>
+			/// Queries various values from the tpm
+			/// </summary>
+			TPM_CAP_PROPERTY = 0x00000005,
+			
+			
+			/// <summary>
 			/// Returns what the TPM currently supports
 			/// 
 			/// </summary>
 			TPM_CAP_VERSION_VAL	= 0x0000001A
+		}
+		
+		/// <summary>
+		/// SubCaps for TPM_CAP_PROPERTY
+		/// </summary>
+		public enum TPMSubCapProperty : uint
+		{
+			/// <summary>
+			/// Returns the number of PCR registers supported by the tpm
+			/// </summary>
+			TPM_CAP_PROP_PCR = 0x000000101,
 		}
 
 		

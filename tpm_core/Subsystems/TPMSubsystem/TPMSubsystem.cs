@@ -114,11 +114,21 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			}
 			
 			
-			TPMCommandResponse commandResponse = tpmContext.TPM.Process (requestContext.Request.CommandRequest);
-			
 			response = requestContext.CreateResponse ();
-			response.CommandResponse = commandResponse;
-			response.Execute ();
+			try
+			{
+				TPMCommandResponse commandResponse = tpmContext.TPM.Process (requestContext.Request.CommandRequest);
+			
+				response.CommandResponse = commandResponse;
+				response.Execute ();
+			}
+			catch(Exception ex)
+			{
+				_logger.FatalFormat("Error processing TPMRequest: {0}", ex);
+				response.Succeeded = false;
+				response.CustomErrorMessage = ex.Message;
+				response.Execute();
+			}
 			
 			
 		}
