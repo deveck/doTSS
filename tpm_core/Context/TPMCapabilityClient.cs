@@ -52,14 +52,14 @@ namespace Iaik.Tc.TPM.Context
 		/// Retrieves the count of PCR registers
 		/// </summary>
 		/// <returns></returns>
-		public int GetPCRCount()
+		public uint GetPCRCount()
 		{
 			Parameters parameters = new Parameters ();
 			parameters.AddPrimitiveType ("capArea", CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY);
 			parameters.AddPrimitiveType ("subCap", CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_PCR);
 			
 			return this.BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_GetCapability, parameters)
-				.Parameters.GetValueOf<int>(CapabilityData.PARAM_PROP_PCR);
+				.Parameters.GetValueOf<uint>(CapabilityData.PARAM_PROP_PCR);
 		}
 	}
 }

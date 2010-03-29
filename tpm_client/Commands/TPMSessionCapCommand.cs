@@ -57,13 +57,13 @@ namespace Iaik.Tc.TPM.Commands
 					versionInfo.Version.Minor, versionInfo.Version.RevMajor, versionInfo.Version.RevMinor);
     
 				_console.Out.WriteLine ("Speclevel: {0} errataRev: {1}", versionInfo.SpecLevel, versionInfo.ErrataRev);
-        		_console.Out.WriteLine ("VendorId: {0}", ByteHelper.ByteArrayToHexString (versionInfo.TpmVendorId));
+        		_console.Out.WriteLine ("VendorId: {0}", Encoding.ASCII.GetString(versionInfo.TpmVendorId));
         		_console.Out.WriteLine ("Vendor specific (size #{0} bytes): {1}", versionInfo.VendorSpecific.Length,
 					ByteHelper.ByteArrayToHexString (versionInfo.VendorSpecific));
         	}
 			else if(capCommand == "pcr_count")
 			{
-				int pcrCount = tpmSessions[localAlias].CapabilityClient.GetPCRCount();
+				uint pcrCount = tpmSessions[localAlias].CapabilityClient.GetPCRCount();
 				
 				_console.Out.WriteLine("TPM '{0}' claims to support #{1} pcr registers", localAlias, pcrCount);
 			}

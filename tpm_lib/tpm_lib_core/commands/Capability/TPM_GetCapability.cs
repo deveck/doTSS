@@ -6,6 +6,7 @@ using Iaik.Tc.TPM.Library;
 using Iaik.Tc.TPM.Library.Common;
 using Iaik.Tc.TPM.Lowlevel;
 using Iaik.Tc.TPM.Lowlevel.Data;
+using Iaik.Tc.TPM.library.exceptions;
 
 namespace Iaik.Tc.TPM.Library.Commands
 {
@@ -73,7 +74,14 @@ namespace Iaik.Tc.TPM.Library.Commands
 			else if(_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY && 
 				    _param.GetValueOf<CapabilityData.TPMSubCapProperty>("subCap") == CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_PCR)					
 			{
-				parameters.AddPrimitiveType(CapabilityData.PARAM_PROP_PCR, 0);
+				responseBlob.SkipHeader();
+				uint responseSize = responseBlob.ReadUInt32();
+				if(responseSize != 4)
+					throw new TPMResponseException(string.Format("Capability response size mismatch (should be 4, and is {0})",responseSize));
+
+				uint pcrCount = responseBlob.ReadUInt32();
+				
+				parameters.AddPrimitiveType(CapabilityData.PARAM_PROP_PCR, pcrCount);
 			}
 			else
 				throw new NotSupportedException("Defined cap or subcap are not supported");
