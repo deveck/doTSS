@@ -19,7 +19,7 @@ namespace tpm_test
 		public static void Main (string[] args)
 		{				
 			SetupLogging();
-			TPM tpm = new TPM();
+			TPMWrapper tpm = new TPMWrapper();
 			IDictionary<string, string> dict = new Dictionary<string, string>();
 			dict.Add("DeviceName","/dev/tpm0");
 			dict.Add("debug", "True");
@@ -34,7 +34,7 @@ namespace tpm_test
 			
 		}
 		
-		private static void ReadPCRs(TPM tpm){
+		private static void ReadPCRs(TPMWrapper tpm){
 			UInt32 i = 0;
 			
 		    ILog log = LogManager.GetLogger("ReadPCRs");

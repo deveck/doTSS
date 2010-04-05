@@ -12,7 +12,7 @@ namespace Iaik.Tc.TPM.Library
 {
 
 
-	public class TPM : IDisposable
+	public class TPMWrapper : IDisposable
 	{
 		#region Backend status
 		/// <summary>
@@ -68,7 +68,7 @@ namespace Iaik.Tc.TPM.Library
 		/// <summary>
 		/// Default constructor of the object
 		/// </summary>
-		public TPM(){}
+		public TPMWrapper(){}
 		
 		/// <summary>
 		/// Init TPM Connection with a suitable backend

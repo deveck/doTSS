@@ -1,6 +1,6 @@
 
 using System;
-using TPMWrapper = Iaik.Tc.TPM.Library.TPM;
+using Iaik.Tc.TPM.Library;
 
 namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {

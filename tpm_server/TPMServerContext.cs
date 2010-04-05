@@ -17,8 +17,8 @@ using Iaik.Tc.TPM.Configuration;
 using Iaik.Tc.TPM.Configuration.DotNetConfiguration;
 using Iaik.Tc.TPM.Lowlevel;
 
-using TPMWrapper = Iaik.Tc.TPM.Library.TPM;
 using Iaik.Tc.TPM.Subsystems.TPMSubsystem;
+using Iaik.Tc.TPM.Library;
 
 namespace Iaik.Tc.TPM
 {
