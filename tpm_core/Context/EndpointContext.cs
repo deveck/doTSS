@@ -13,6 +13,7 @@ using Iaik.Tc.TPM.Subsystems;
 using System.Threading;
 using Iaik.Tc.TPM.Configuration;
 using Iaik.Tc.TPM.Library;
+using Iaik.Tc.TPM.Subsystems.TPMSubsystem;
 
 namespace Iaik.Tc.TPM.Context
 {

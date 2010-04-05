@@ -14,11 +14,11 @@ using Iaik.Connection.ClientConnections;
 using Iaik.Tc.TPM.Context;
 using System.Configuration;
 using Iaik.Tc.TPM.Configuration;
-using Iaik.Tc.TPM.Library;
 using Iaik.Tc.TPM.Configuration.DotNetConfiguration;
 using Iaik.Tc.TPM.Lowlevel;
 
 using TPMWrapper = Iaik.Tc.TPM.Library.TPM;
+using Iaik.Tc.TPM.Subsystems.TPMSubsystem;
 
 namespace Iaik.Tc.TPM
 {

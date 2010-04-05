@@ -44,7 +44,6 @@
     <Compile Include="commands\Factory\TPMCommandFactory.cs" />
     <Compile Include="ITPMBlobReadable.cs" />
     <Compile Include="ITPMBlobWritable.cs" />
-    <Compile Include="TPMContext.cs" />
     <Compile Include="exceptions\TPMResponseException.cs" />
   </ItemGroup>
   <ItemGroup>

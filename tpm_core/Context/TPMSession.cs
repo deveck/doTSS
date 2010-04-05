@@ -24,7 +24,7 @@ namespace Iaik.Tc.TPM.Context
 		/// <summary>
 		/// Contains the unique session identifier of the tom session
 		/// </summary>
-		private int _sessionIdentifier;
+		private int _sessionIdentifier;		
 		
 		private TPMCapabilityClient _capabilityClient;
 		
@@ -34,7 +34,7 @@ namespace Iaik.Tc.TPM.Context
 		public TPMCapabilityClient CapabilityClient
 		{
 			get { return _capabilityClient; }
-		}
+		}		
 		
 		public TPMSession (EndpointContext ctx, int sessionIdentifier)
 		{

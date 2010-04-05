@@ -6,6 +6,7 @@ using Iaik.Tc.TPM.Library.Common;
 using System.IO;
 using Iaik.Utils;
 using System.Reflection;
+using Mono.Security.X509;
 
 namespace Iaik.Tc.TPM
 {
@@ -13,6 +14,9 @@ namespace Iaik.Tc.TPM
 	{
 		public static void Main (string[] args)
 		{
+			
+			
+			
 			log4net.Appender.DebugAppender appender = new log4net.Appender.DebugAppender ();
 			appender.Name = "DebugAppender";
 			appender.Layout = new log4net.Layout.PatternLayout ("[%date{dd.MM.yyyy HH:mm:ss,fff}]-%-5level-[%type]: %message%newline");

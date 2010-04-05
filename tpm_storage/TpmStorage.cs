@@ -2,6 +2,7 @@
 // Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 
 using System;
+using Mono.Security.X509;
 
 namespace Iaik.Tc.TPM.Storage
 {
@@ -12,6 +13,7 @@ namespace Iaik.Tc.TPM.Storage
 
 		public TpmStorage ()
 		{
+			
 		}
 	}
 }

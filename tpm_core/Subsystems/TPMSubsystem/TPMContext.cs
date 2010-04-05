@@ -1,8 +1,8 @@
 
 using System;
-using Iaik.Tc.TPM.Lowlevel;
+using TPMWrapper = Iaik.Tc.TPM.Library.TPM;
 
-namespace Iaik.Tc.TPM.Library
+namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {
 
 	/// <summary>
@@ -20,19 +20,19 @@ namespace Iaik.Tc.TPM.Library
 			get { return _deviceName; }
 		}
 		
-		private TPM _tpm;
+		private TPMWrapper _tpm;
 
 		/// <summary>
 		/// Gets access to the TPM device
 		/// </summary>
-		public TPM TPM
+		public TPMWrapper TPM
 		{
 			get { return _tpm;}
 		}
 		
 		
 		
-		public TPMContext (string deviceName, TPM tpm)
+		public TPMContext (string deviceName, TPMWrapper tpm)
 		{
 			_deviceName = deviceName;
 			_tpm = tpm;
