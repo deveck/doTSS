@@ -50,7 +50,17 @@ namespace Iaik.Utils.Serialization
 				Type curType = memberInfo.FieldType;
 				
 				if (typeof(IStreamSerializable).IsAssignableFrom (curType))
-					((IStreamSerializable)memberInfo.GetValue (this)).Write (sink);
+				{
+					IStreamSerializable toSerialize = (IStreamSerializable)memberInfo.GetValue (this);
+					
+					if (toSerialize == null)
+						StreamHelper.WriteBool (false);
+					else
+					{
+						StreamHelper.WriteBool (true);
+						toSerialize.Write (sink);						
+					}
+				}
 				else if (curType == typeof(byte))
 					sink.WriteByte ((byte)memberInfo.GetValue (this));
 				else if (curType == typeof(byte[]))
@@ -73,13 +83,21 @@ namespace Iaik.Utils.Serialization
 				
 				if (typeof(IStreamSerializable).IsAssignableFrom (curType))
 				{
-					ConstructorInfo ctorInfo = curType.GetConstructor (new Type[] { });
+					ConstructorInfo ctorInfo = curType.GetConstructor (new Type[] {  });
 					
 					if (ctorInfo == null)
 						throw new ArgumentException (string.Format ("'{0}' is not compatible with AutoStreamSerializable, no ctor(Stream) found!", curType));
 					
-					memberInfo.SetValue (this, ctorInfo.Invoke (new object[] { }));
-					((IStreamSerializable)memberInfo.GetValue (this)).Read (src);
+					bool hasValue = StreamHelper.ReadBool (src);
+					
+					if (hasValue)
+					{
+						memberInfo.SetValue (this, ctorInfo.Invoke (new object[] {  }));
+						((IStreamSerializable)memberInfo.GetValue (this)).Read (src);
+					}
+					else
+						memberInfo.SetValue (this, null);
+					
 				}
 				else if (curType == typeof(byte))
 					memberInfo.SetValue (this, (byte)src.ReadByte ());
