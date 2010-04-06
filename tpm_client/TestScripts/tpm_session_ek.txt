@@ -1,0 +1,9 @@
+# Runs the tpm capability command on the selected tpm device
+
+@exit_on_error 1
+@exit_on_finish 0
+
+@include ./authenticated_environment.txt
+@include ./select_tpm.txt
+
+tpm_session_ek tpm read_pubek

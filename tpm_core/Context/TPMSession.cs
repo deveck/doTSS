@@ -34,13 +34,25 @@ namespace Iaik.Tc.TPM.Context
 		public TPMCapabilityClient CapabilityClient
 		{
 			get { return _capabilityClient; }
-		}		
+		}
+		
+		private TPMEndorsementKeyHandlingClient _endorsementKeyHandling;
+		
+		/// <summary>
+		/// Returns the endorsement key handler for this session
+		/// </summary>
+		public TPMEndorsementKeyHandlingClient EndorsementKeyHandling
+		{
+			get { return _endorsementKeyHandling; }
+		}
+			
 		
 		public TPMSession (EndpointContext ctx, int sessionIdentifier)
 		{
 			_ctx = ctx;
 			_sessionIdentifier = sessionIdentifier;
 			_capabilityClient = new TPMCapabilityClient (this);
+			_endorsementKeyHandling = new TPMEndorsementKeyHandlingClient (this);
 		}
 		
 		internal TPMCommandResponse DoTPMCommandRequest (TPMCommandRequest commandRequest)

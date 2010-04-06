@@ -45,6 +45,7 @@
       <HintPath>..\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Security" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\AuthenticationMechanismChecker.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="Context\TPMCapabilityClient.cs" />
     <Compile Include="Subsystems\TPMSubsystem\TPMRequestException.cs" />
     <Compile Include="Subsystems\TPMSubsystem\TPMContext.cs" />
+    <Compile Include="Context\EndorsementKeyHandlingClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">
@@ -154,5 +156,6 @@
   </ProjectExtensions>
   <ItemGroup>
     <Folder Include="Subsystems\TPMSubsystem\" />
+    <Folder Include="Subsystems\TPMSubsystem\AuthHandles\" />
   </ItemGroup>
 </Project>

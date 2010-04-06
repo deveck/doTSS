@@ -136,10 +136,17 @@ namespace Iaik.Utils
 		
 		public static void WriteTypedStreamSerializable (ITypedStreamSerializable victim, Stream sink)
 		{
-			TypedStreamSerializableAttribute attribute = TypedStreamSerializableHelper.FindAttribute (victim);
-			
-			WriteString (attribute.Identifier, sink);
-			victim.Write (sink);
+			if (victim == null)
+				WriteBool (false, sink);
+			else
+			{
+				WriteBool (true, sink);
+				TypedStreamSerializableAttribute attribute = TypedStreamSerializableHelper.FindAttribute (victim);
+				
+				
+				WriteString (attribute.Identifier, sink);
+				victim.Write (sink);
+			}
 		}
 		
 		public static T ReadTypedStreamSerializable<T> (Stream src) where T : ITypedStreamSerializable
@@ -149,6 +156,10 @@ namespace Iaik.Utils
 		
 		public static ITypedStreamSerializable ReadTypedStreamSerializable (Stream src, params Assembly[] asms)
 		{
+			bool hasValue = ReadBool (src);
+			if (hasValue == false)
+				return null;
+				
 			string identifier = ReadString (src);
 			foreach (Assembly asm in asms)
 			{

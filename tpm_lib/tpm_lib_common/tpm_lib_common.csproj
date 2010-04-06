@@ -42,9 +42,14 @@
     <Compile Include="interface\ITypedParameter.cs" />
     <Compile Include="CapabilityData.cs" />
     <Compile Include="interface\ATPMCommandQuery.cs" />
+    <Compile Include="KeyData\TPMPubkey.cs" />
+    <Compile Include="KeyData\TPMKeyParams.cs" />
+    <Compile Include="TPMConstants.cs" />
+    <Compile Include="KeyData\TPMRSAKeyParams.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="interface\" />
+    <Folder Include="KeyData\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

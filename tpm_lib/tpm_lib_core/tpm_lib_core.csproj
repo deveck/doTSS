@@ -34,24 +34,32 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="commands\Capability\TPM_GetCapability.cs" />
-    <Compile Include="commands\Integrity\TPM_PCRRead.cs" />
     <Compile Include="exceptions\TpmLibraryException.cs" />
-    <Compile Include="TPM.cs" />
-    <Compile Include="commands\Capability\CapabilityDataCore.cs" />
-    <Compile Include="commands\TPMCommandsAttribute.cs" />
-    <Compile Include="commands\TPMCommand.cs" />
-    <Compile Include="commands\Factory\TPMCommandFactory.cs" />
     <Compile Include="ITPMBlobReadable.cs" />
     <Compile Include="ITPMBlobWritable.cs" />
     <Compile Include="exceptions\TPMResponseException.cs" />
+    <Compile Include="Commands\Capability\TPM_GetCapability.cs" />
+    <Compile Include="Commands\Integrity\TPM_PCRRead.cs" />
+    <Compile Include="TPMWrapper.cs" />
+    <Compile Include="Commands\Capability\CapabilityDataCore.cs" />
+    <Compile Include="Commands\TPMCommandsAttribute.cs" />
+    <Compile Include="Commands\TPMCommand.cs" />
+    <Compile Include="Commands\Factory\TPMCommandFactory.cs" />
+    <Compile Include="Commands\EndorsementKey\TPM_ReadPubek.cs" />
+    <Compile Include="KeyDataCore\TPMKeyParamsCore.cs" />
+    <Compile Include="KeyDataCore\TPMPubkeyCore.cs" />
+    <Compile Include="KeyDataCore\TPMRSAKeyParamsCore.cs" />
+    <Compile Include="CommonTPMDataTypes\Digest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="commands\" />
-    <Folder Include="commands\Capability\" />
-    <Folder Include="commands\Integrity\" />
     <Folder Include="exceptions\" />
-    <Folder Include="commands\Factory\" />
+    <Folder Include="Commands\" />
+    <Folder Include="Commands\Capability\" />
+    <Folder Include="Commands\Integrity\" />
+    <Folder Include="Commands\Factory\" />
+    <Folder Include="Commands\EndorsementKey\" />
+    <Folder Include="KeyDataCore\" />
+    <Folder Include="CommonTPMDataTypes\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_lowlvl\tpm_lowlvl.csproj">

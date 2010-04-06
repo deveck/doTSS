@@ -72,6 +72,8 @@
     <Compile Include="Serialization\SerializeMeAttribute.cs" />
     <Compile Include="ByteHelper.cs" />
     <Compile Include="DictionaryHelper.cs" />
+    <Compile Include="Nonce\NonceGenerator.cs" />
+    <Compile Include="StringHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -107,5 +109,6 @@
   <ItemGroup>
     <Folder Include="CommonAttributes\" />
     <Folder Include="CommonFactories\" />
+    <Folder Include="Nonce\" />
   </ItemGroup>
 </Project>

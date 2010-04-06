@@ -10,6 +10,7 @@ namespace Iaik.Tc.TPM.Library.Common
 	{
 		public const String TPM_CMD_PCRRead = "TPM_CMD_PCRRead";
 		public const String TPM_CMD_GetCapability = "TPM_CMD_GetCapability";
+		public const string TPM_CMD_ReadPubek = "TPM_CMD_ReadPubek";
 		
 		
 		// TODO: tbd. DELETE!!!

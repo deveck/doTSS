@@ -20,7 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>--script=/home/andi/Repos/TpmCSStack-impl/tpm_client/TestScripts/tpm_session_cap.txt</Commandlineparameters>
+    <Commandlineparameters>--script=/home/andi/Repos/TpmCSStack-impl/tpm_client/TestScripts/tpm_session_ek.txt</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -63,6 +63,7 @@
     <Compile Include="Commands\TPMListDevicesCommand.cs" />
     <Compile Include="Commands\TPMSelectDeviceCommand.cs" />
     <Compile Include="Commands\TPMSessionCapCommand.cs" />
+    <Compile Include="Commands\TPMSessionEkCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_core\tpm_core.csproj">
@@ -91,5 +92,6 @@
     <None Include="TestScripts\authenticated_environment.txt" />
     <None Include="TestScripts\tpm_session_cap.txt" />
     <None Include="TestScripts\select_tpm.txt" />
+    <None Include="TestScripts\tpm_session_ek.txt" />
   </ItemGroup>
 </Project>
