@@ -24,5 +24,25 @@ namespace Iaik.Utils
 			return returnVal.ToString ();
 		}
 		
+		/// <summary>
+		/// Compares the 2 byte arrays and returns if they contain the same data
+		/// </summary>
+		/// <param name="left"></param>
+		/// <param name="right"></param>
+		/// <returns></returns>
+		public static bool CompareByteArrays (byte[] left, byte[] right)
+		{
+			if (left.Length != right.Length)
+				return false;
+			
+			for (int i = 0; i < left.Length; i++)
+			{
+				if (left[i] != right[i])
+					return false;
+			}
+			
+			return true;
+		}
+		
 	}
 }

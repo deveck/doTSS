@@ -6,6 +6,8 @@ using Iaik.Tc.TPM.Lowlevel;
 using Iaik.Tc.TPM.Lowlevel.Data;
 using Iaik.Utils.Nonce;
 using Iaik.Tc.TPM.Library.KeyDataCore;
+using Iaik.Tc.TPM.Library.CommonTPMDataTypes;
+using Iaik.Utils.Hash;
 
 namespace Iaik.Tc.TPM.Library.Commands
 {
@@ -39,6 +41,13 @@ namespace Iaik.Tc.TPM.Library.Commands
 			TPMPubkeyCore pubkey = new TPMPubkeyCore (responseBlob);
 			long posEnd = responseBlob.Position;
 			
+			Digest digest = new Digest (responseBlob, 20);
+			if (digest.CompareTo (
+				new HashStreamDataProvider (responseBlob, posStart, posEnd - posStart),
+				new HashByteDataProvider (nonce)) == false)
+			{
+				throw new TPMResponseException ("Local digest does not match remote digest");
+			}			
 			
 			
 			Parameters responseParams = new Parameters ();

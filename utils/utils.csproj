@@ -74,6 +74,10 @@
     <Compile Include="DictionaryHelper.cs" />
     <Compile Include="Nonce\NonceGenerator.cs" />
     <Compile Include="StringHelper.cs" />
+    <Compile Include="Hash\HashProvider.cs" />
+    <Compile Include="Hash\HashDataProvider.cs" />
+    <Compile Include="Hash\HashStreamDataProvider.cs" />
+    <Compile Include="Hash\HashByteDataProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -110,5 +114,6 @@
     <Folder Include="CommonAttributes\" />
     <Folder Include="CommonFactories\" />
     <Folder Include="Nonce\" />
+    <Folder Include="Hash\" />
   </ItemGroup>
 </Project>

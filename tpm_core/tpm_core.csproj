@@ -112,7 +112,7 @@
     <Compile Include="Context\TPMCapabilityClient.cs" />
     <Compile Include="Subsystems\TPMSubsystem\TPMRequestException.cs" />
     <Compile Include="Subsystems\TPMSubsystem\TPMContext.cs" />
-    <Compile Include="Context\EndorsementKeyHandlingClient.cs" />
+    <Compile Include="Context\TPMEndorsementKeyHandlingClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">

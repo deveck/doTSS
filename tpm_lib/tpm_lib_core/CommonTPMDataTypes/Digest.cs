@@ -4,6 +4,8 @@ using Iaik.Tc.TPM.Lowlevel.Data;
 using Iaik.Tc.TPM.Library.Common;
 using System.IO;
 using System.Security.Cryptography;
+using Iaik.Utils.Hash;
+using Iaik.Utils;
 
 namespace Iaik.Tc.TPM.Library.CommonTPMDataTypes
 {
@@ -23,6 +25,11 @@ namespace Iaik.Tc.TPM.Library.CommonTPMDataTypes
 		/// </summary>
 		private string _hashAlgo = "SHA1";
 		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="blob"></param>
+		/// <param name="digestSize">Digest size in bytes</param>
 		public Digest (TPMBlob blob, int digestSize)
 		{
 			_digest = new byte[digestSize];
@@ -37,35 +44,16 @@ namespace Iaik.Tc.TPM.Library.CommonTPMDataTypes
 		#endregion
 		
 		
-		public bool CompareTo (params DigestHashDestination[] hashDestinations)
+		public bool CompareTo (params HashDataProvider[] hashDataProviders)
 		{
-			HashAlgorithm hashAlgo = HashAlgorithm.Create (_hashAlgo);
+			HashProvider hasher = new HashProvider (_hashAlgo);
 			
-			hashAlgo.Initialize ();
+			byte[] localHash = hasher.Hash (hashDataProviders);
 			
-			return true;
-			
+			return ByteHelper.CompareByteArrays (_digest, localHash);
 		}
 		
 		
 
-		public abstract class DigestHashDestination
-		{
-			/// <summary>
-			/// Gets the next block of data to hash with a maximum size of buffer.length
-			/// </summary>
-			/// <param name="buffer"></param>
-			/// <returns>Returns the actual amount of bytes written to the buffer</returns>
-			public abstract int NextBlock(byte[] buffer);
-		}
-		
-		
-		public class DigestStreamHashDestination : DigestHashDestination
-		{
-			public override int NextBlock (byte[] buffer)
-			{
-				return 0;
-			}
-		}
 	}
 }
