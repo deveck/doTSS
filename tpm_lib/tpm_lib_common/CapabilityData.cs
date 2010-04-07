@@ -11,6 +11,9 @@ namespace Iaik.Tc.TPM.Library.Common
 	{
 		public const string PARAM_TPM_VERSION_INFO = "tpm_version_info";
 		public const string PARAM_PROP_PCR = "prop_pcr";
+		public const string PARAM_PROP_MAX_AUTHSESS = "max_authsess";
+		public const string PARAM_PROP_MAX_TRANSESS = "max_transess";
+		public const string PARAM_PROP_MAX_SESSIONS = "max_sessions";
 		
 		
 		public enum TPMCapabilityArea : uint
@@ -37,6 +40,21 @@ namespace Iaik.Tc.TPM.Library.Common
 			/// Returns the number of PCR registers supported by the tpm
 			/// </summary>
 			TPM_CAP_PROP_PCR = 0x000000101,
+			
+			/// <summary>
+			/// The maximum number of loaded authorization sessions the TPM supports, varies with time
+			/// </summary>
+			TPM_CAP_PROP_MAX_AUTHSESS = 0x010D,
+			
+			/// <summary>
+			/// The maximum number of loaded transport sessions the TPM supports, varies with time
+			/// </summary>
+			TPM_CAP_PROP_MAX_TRANSESS = 0x010E,
+			
+			/// <summary>
+			/// The maximum number of sessions the TPM supports
+			/// </summary>
+			TPM_CAP_PROP_MAX_SESSIONS = 0x011E
 		}
 
 		

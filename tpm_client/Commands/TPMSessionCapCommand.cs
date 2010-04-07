@@ -17,7 +17,7 @@ namespace Iaik.Tc.TPM.Commands
             {
                 return @"tpm_session_cap Args: [local_alias] [cap_type]
     Specify the tpm to use by [local_alias]. These aliases can be defined using the tpm_select command
-    Returns the capability specified by cap_type by one of these values: tpm_version, pcr_count";
+    Returns the capability specified by cap_type by one of these values: tpm_version, pcr_count, max_authsess, max_transess, max_sessions";
             }
         }
 
@@ -57,15 +57,30 @@ namespace Iaik.Tc.TPM.Commands
 					versionInfo.Version.Minor, versionInfo.Version.RevMajor, versionInfo.Version.RevMinor);
     
 				_console.Out.WriteLine ("Speclevel: {0} errataRev: {1}", versionInfo.SpecLevel, versionInfo.ErrataRev);
-        		_console.Out.WriteLine ("VendorId: {0}", Encoding.ASCII.GetString(versionInfo.TpmVendorId));
+        		_console.Out.WriteLine ("VendorId: {0}", Encoding.ASCII.GetString (versionInfo.TpmVendorId));
         		_console.Out.WriteLine ("Vendor specific (size #{0} bytes): {1}", versionInfo.VendorSpecific.Length,
 					ByteHelper.ByteArrayToHexString (versionInfo.VendorSpecific));
         	}
-			else if(capCommand == "pcr_count")
+			else if (capCommand == "pcr_count")
 			{
-				uint pcrCount = tpmSessions[localAlias].CapabilityClient.GetPCRCount();
-				
-				_console.Out.WriteLine("TPM '{0}' claims to support #{1} pcr registers", localAlias, pcrCount);
+        		uint pcrCount = tpmSessions[localAlias].CapabilityClient.GetPCRCount ();
+    
+				_console.Out.WriteLine ("TPM '{0}' claims to support #{1} pcr registers", localAlias, pcrCount);
+        	}
+			else if (capCommand == "max_authsess")
+			{
+        		uint maxAuthSess = tpmSessions[localAlias].CapabilityClient.GetMaxAuthorizationSessions ();
+        		_console.Out.WriteLine ("TPM '{0}' supports #{1} authorization sessions", localAlias, maxAuthSess);
+        	}
+			else if (capCommand == "max_transess")
+			{
+        		uint maxTranSess = tpmSessions[localAlias].CapabilityClient.GetMaxAuthorizationSessions ();
+        		_console.Out.WriteLine ("TPM '{0}' supports #{1} transport sessions", localAlias, maxTranSess);
+        	}
+			else if (capCommand == "max_sessions")
+			{
+        		uint maxSessions = tpmSessions[localAlias].CapabilityClient.GetMaxSessions ();
+        		_console.Out.WriteLine ("TPM '{0}' supports #{1} sessions", localAlias, maxSessions);
 			}
 			else
         		_console.Out.WriteLine ("Error, unknown cap_type '{0}'", commandline[1]);

@@ -52,14 +52,54 @@ namespace Iaik.Tc.TPM.Context
 		/// Retrieves the count of PCR registers
 		/// </summary>
 		/// <returns></returns>
-		public uint GetPCRCount()
+		public uint GetPCRCount ()
 		{
 			Parameters parameters = new Parameters ();
 			parameters.AddPrimitiveType ("capArea", CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY);
 			parameters.AddPrimitiveType ("subCap", CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_PCR);
 			
-			return this.BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_GetCapability, parameters)
-				.Parameters.GetValueOf<uint>(CapabilityData.PARAM_PROP_PCR);
+			return this.BuildDoVerifyRequest (TPMCommandNames.TPM_CMD_GetCapability, parameters)
+				.Parameters.GetValueOf<uint> (CapabilityData.PARAM_PROP_PCR);
+		}
+		
+		/// <summary>
+		/// Returns the maximum number of authorization session the tpm supports, varies with time
+		/// </summary>
+		/// <returns></returns>
+		public uint GetMaxAuthorizationSessions ()
+		{
+			Parameters parameters = new Parameters ();
+			parameters.AddPrimitiveType ("capArea", CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY);
+			parameters.AddPrimitiveType ("subCap", CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_AUTHSESS);
+			
+			return this.BuildDoVerifyRequest (TPMCommandNames.TPM_CMD_GetCapability, parameters).Parameters.GetValueOf<uint> (CapabilityData.PARAM_PROP_MAX_AUTHSESS);
+		}
+		
+		/// <summary>
+		/// Returns the maximum number of transport session the tpm supports, varies with time
+		/// </summary>
+		/// <returns></returns>
+		public uint GetMaxTransportSessions ()
+		{
+			Parameters parameters = new Parameters ();
+			parameters.AddPrimitiveType ("capArea", CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY);
+			parameters.AddPrimitiveType ("subCap", CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_TRANSESS);
+			
+			return this.BuildDoVerifyRequest (TPMCommandNames.TPM_CMD_GetCapability, parameters).Parameters.GetValueOf<uint> (CapabilityData.PARAM_PROP_MAX_TRANSESS);
+		}
+		
+		/// <summary>
+		/// The maximum number of sessions the TPM supports
+		/// </summary>
+		/// <returns></returns>
+		public uint GetMaxSessions ()
+		{
+			Parameters parameters = new Parameters ();
+			parameters.AddPrimitiveType ("capArea", CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY);
+			parameters.AddPrimitiveType ("subCap", CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_SESSIONS);
+			
+			return this.BuildDoVerifyRequest (TPMCommandNames.TPM_CMD_GetCapability, parameters).Parameters.GetValueOf<uint> (CapabilityData.PARAM_PROP_MAX_SESSIONS);
+
 		}
 	}
 }

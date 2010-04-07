@@ -7,3 +7,7 @@
 @include ./select_tpm.txt
 
 tpm_session_cap tpm tpm_version
+tpm_session_cap tpm pcr_count
+tpm_session_cap tpm max_authsess
+tpm_session_cap tpm max_transess
+tpm_session_cap tpm max_sessions
