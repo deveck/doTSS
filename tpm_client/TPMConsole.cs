@@ -250,7 +250,7 @@ namespace Iaik.Tc.TPM
 					}
                     catch (Exception ex)
                     {
-						Out.WriteLine ("Error while executing command '{0}': {1}", commandParts[0], ex.Message);
+						Out.WriteLine ("Error while executing command '{0}': {1}", commandParts[0], ex);
 						if (throwOnException)
 							throw;
     				}
