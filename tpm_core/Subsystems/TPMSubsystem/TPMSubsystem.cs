@@ -117,7 +117,12 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			response = requestContext.CreateResponse ();
 			try
 			{
-				TPMCommandResponse commandResponse = tpmContext.TPM.Process (requestContext.Request.CommandRequest);
+				TPMCommandResponse commandResponse;
+				
+				lock (tpmContext)
+				{
+					commandResponse = tpmContext.TPM.Process (requestContext.Request.CommandRequest);
+				}
 			
 				response.CommandResponse = commandResponse;
 				response.Execute ();

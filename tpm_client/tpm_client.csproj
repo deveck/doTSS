@@ -20,7 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>--script=/home/andi/Repos/TpmCSStack-impl/tpm_client/TestScripts/tpm_session_ek.txt</Commandlineparameters>
+    <Commandlineparameters>--script=/home/andi/Repos/TpmCSStack-impl/tpm_client/TestScripts/tpm_session_cap.txt</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>

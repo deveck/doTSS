@@ -46,6 +46,7 @@
     <Compile Include="KeyData\TPMKeyParams.cs" />
     <Compile Include="TPMConstants.cs" />
     <Compile Include="KeyData\TPMRSAKeyParams.cs" />
+    <Compile Include="Authorization\AuthHandle.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="interface\" />

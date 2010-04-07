@@ -113,6 +113,7 @@
     <Compile Include="Subsystems\TPMSubsystem\TPMRequestException.cs" />
     <Compile Include="Subsystems\TPMSubsystem\TPMContext.cs" />
     <Compile Include="Context\TPMEndorsementKeyHandlingClient.cs" />
+    <Compile Include="Context\TPMAdministrationClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">
@@ -156,6 +157,5 @@
   </ProjectExtensions>
   <ItemGroup>
     <Folder Include="Subsystems\TPMSubsystem\" />
-    <Folder Include="Subsystems\TPMSubsystem\AuthHandles\" />
   </ItemGroup>
 </Project>

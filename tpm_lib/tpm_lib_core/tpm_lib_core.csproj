@@ -50,6 +50,7 @@
     <Compile Include="KeyDataCore\TPMPubkeyCore.cs" />
     <Compile Include="KeyDataCore\TPMRSAKeyParamsCore.cs" />
     <Compile Include="CommonTPMDataTypes\Digest.cs" />
+    <Compile Include="Commands\Authorization\TPM_OIAP.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />
@@ -60,6 +61,7 @@
     <Folder Include="Commands\EndorsementKey\" />
     <Folder Include="KeyDataCore\" />
     <Folder Include="CommonTPMDataTypes\" />
+    <Folder Include="Commands\Authorization\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_lowlvl\tpm_lowlvl.csproj">
