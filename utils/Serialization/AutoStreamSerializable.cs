@@ -116,7 +116,7 @@ namespace Iaik.Utils.Serialization
 						}
 						else
 						{
-							memberInfo.SetValue (this, ctorInfo.Invoke (new object[] {  }));
+							memberInfo.SetValue (this, defaultCtorInfo.Invoke (new object[] {  }));
 							((IStreamSerializable)memberInfo.GetValue (this)).Read (src);
 						}
 					}
