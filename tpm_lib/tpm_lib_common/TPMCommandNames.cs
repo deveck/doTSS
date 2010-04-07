@@ -11,6 +11,8 @@ namespace Iaik.Tc.TPM.Library.Common
 		public const String TPM_CMD_PCRRead = "TPM_CMD_PCRRead";
 		public const String TPM_CMD_GetCapability = "TPM_CMD_GetCapability";
 		public const string TPM_CMD_ReadPubek = "TPM_CMD_ReadPubek";
+		public const string TPM_CMD_OIAP = "TPM_CMD_OIAP";
+		public const string TPM_CMD_FLUSH_SPECIFIC = "TPM_CMD_FLushSpecific";
 		
 		
 		// TODO: tbd. DELETE!!!

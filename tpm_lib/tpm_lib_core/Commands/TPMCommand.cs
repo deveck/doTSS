@@ -16,7 +16,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 		private readonly String name_;
 		protected readonly UInt32 commandOrdinal_;
 		protected readonly UInt32 commandTag_;
-		private readonly Parameters params_;
+		protected  Parameters params_;
 		
 		
 		
@@ -50,6 +50,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 		public virtual void Init (Parameters param, TPMProvider tpmProvider)
 		{
 			_tpmProvider = tpmProvider;
+			params_ = param;
 		}
 		
 		

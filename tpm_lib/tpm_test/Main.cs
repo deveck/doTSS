@@ -11,6 +11,7 @@ using System.IO;
 using System.Text;
 using log4net;
 using Iaik.Utils;
+using Iaik.Tc.TPM.Subsystems.TPMSubsystem.Authorization;
 
 namespace tpm_test
 {
@@ -23,11 +24,12 @@ namespace tpm_test
 			IDictionary<string, string> dict = new Dictionary<string, string>();
 			dict.Add("DeviceName","/dev/tpm0");
 			dict.Add("debug", "True");
-			tpm.Init("linux/device", dict);
+			//tpm.Init("linux/device", dict);
+			tpm.Init("linux/tddl", dict);
 			tpm.Open();
 			
-			ReadPCRs(tpm);
-			
+			//ReadPCRs(tpm);
+			EstablishOIAP(tpm);
 			tpm.Dispose();
 			//tpm.init;
 			//tpm.backend.tpmOpen();
@@ -59,6 +61,22 @@ namespace tpm_test
 			//Console.WriteLine ("Hello World!");
 		}
 		
+		
+		private static AuthHandle EstablishOIAP(TPMWrapper tpm)
+		{
+			ILog log = LogManager.GetLogger("EstablishOIAP");
+
+			for(int i = 0; i<100; i++)
+			{
+			TPMCommandRequest request = new TPMCommandRequest(TPMCommandNames.TPM_CMD_OIAP, new Parameters());
+			TPMCommandResponse response = tpm.Process(request);
+			
+			AuthHandle myAuthHandle = response.Parameters.GetValueOf<AuthHandle>("auth_handle");
+			//return myAuthHandle;
+			}
+			
+			return null;
+		}
 		
 		/// <summary>
 		/// Initializes the logger
