@@ -46,11 +46,13 @@
     <Compile Include="KeyData\TPMKeyParams.cs" />
     <Compile Include="TPMConstants.cs" />
     <Compile Include="KeyData\TPMRSAKeyParams.cs" />
-    <Compile Include="Authorization\AuthHandle.cs" />
+    <Compile Include="Handles\Authorization\AuthHandle.cs" />
+    <Compile Include="Handles\ITPMHandle.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="interface\" />
     <Folder Include="KeyData\" />
+    <Folder Include="Handles\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

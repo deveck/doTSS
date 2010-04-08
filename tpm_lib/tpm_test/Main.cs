@@ -11,7 +11,7 @@ using System.IO;
 using System.Text;
 using log4net;
 using Iaik.Utils;
-using Iaik.Tc.TPM.Subsystems.TPMSubsystem.Authorization;
+using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 
 namespace tpm_test
 {
@@ -62,16 +62,22 @@ namespace tpm_test
 		}
 		
 		
-		private static AuthHandle EstablishOIAP(TPMWrapper tpm)
+		private static AuthHandle EstablishOIAP (TPMWrapper tpm)
 		{
-			ILog log = LogManager.GetLogger("EstablishOIAP");
+			ILog log = LogManager.GetLogger ("EstablishOIAP");
 
-			for(int i = 0; i<100; i++)
+			for (int i = 0; i < 100; i++)
 			{
-			TPMCommandRequest request = new TPMCommandRequest(TPMCommandNames.TPM_CMD_OIAP, new Parameters());
-			TPMCommandResponse response = tpm.Process(request);
+				TPMCommandRequest request = new TPMCommandRequest (TPMCommandNames.TPM_CMD_OIAP, new Parameters ());
+				TPMCommandResponse response = tpm.Process (request);
 			
-			AuthHandle myAuthHandle = response.Parameters.GetValueOf<AuthHandle>("auth_handle");
+				AuthHandle myAuthHandle = response.Parameters.GetValueOf<AuthHandle> ("auth_handle");
+				
+				Parameters parameters = new Parameters ();
+				parameters.AddValue ("handle", myAuthHandle);
+				TPMCommandRequest requestFlush = new TPMCommandRequest (TPMCommandNames.TPM_CMD_FLUSH_SPECIFIC, parameters);
+				tpm.Process (requestFlush);
+				
 			//return myAuthHandle;
 			}
 			

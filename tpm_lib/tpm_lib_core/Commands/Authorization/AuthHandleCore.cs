@@ -1,8 +1,8 @@
 
 using System;
-using Iaik.Tc.TPM.Subsystems.TPMSubsystem.Authorization;
 using Iaik.Tc.TPM.Lowlevel.Data;
 using Iaik.Utils.Serialization;
+using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 
 namespace Iaik.Tc.TPM.Library.Commands
 {

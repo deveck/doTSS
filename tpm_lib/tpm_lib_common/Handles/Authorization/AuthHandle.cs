@@ -7,11 +7,11 @@ using System;
 using Iaik.Tc.TPM.Library.Common;
 using Iaik.Utils.Serialization;
 
-namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem.Authorization
+namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 {
 
 	[TypedStreamSerializable("AuthHandle")]
-	public class AuthHandle : AutoStreamSerializable, ITypedParameter
+	public class AuthHandle : AutoStreamSerializable, ITypedParameter, ITPMHandle
 	{
 
 		public enum AuthType
@@ -53,9 +53,23 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem.Authorization
 		/// Updates the TPM-received nonce
 		/// </summary>
 		/// <param name="nonce">new nonce</param>
-		public void UpdateNonceEven(byte[] nonce)
+		public void UpdateNonceEven (byte[] nonce)
 		{
 			_nonceEven = nonce;
 		}
+		
+		#region ITPMHandle implementation
+		
+		public uint Handle 
+		{
+			get { return _authHandle; }
+		}
+		
+		public TPMResourceType ResourceType 
+		{
+			get { return TPMResourceType.TPM_RT_AUTH; }
+		}
+		
+		#endregion
 	}
 }
