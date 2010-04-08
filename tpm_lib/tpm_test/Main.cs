@@ -12,6 +12,7 @@ using System.Text;
 using log4net;
 using Iaik.Utils;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
+using Iaik.Tc.TPM.Library.Common.Handles;
 
 namespace tpm_test
 {
@@ -66,20 +67,31 @@ namespace tpm_test
 		{
 			ILog log = LogManager.GetLogger ("EstablishOIAP");
 
-			for (int i = 0; i < 100; i++)
+			for (int i = 0; i < 2; i++)
 			{
 				TPMCommandRequest request = new TPMCommandRequest (TPMCommandNames.TPM_CMD_OIAP, new Parameters ());
 				TPMCommandResponse response = tpm.Process (request);
 			
 				AuthHandle myAuthHandle = response.Parameters.GetValueOf<AuthHandle> ("auth_handle");
 				
-				Parameters parameters = new Parameters ();
-				parameters.AddValue ("handle", myAuthHandle);
-				TPMCommandRequest requestFlush = new TPMCommandRequest (TPMCommandNames.TPM_CMD_FLUSH_SPECIFIC, parameters);
-				tpm.Process (requestFlush);
+//				Parameters parameters = new Parameters ();
+				//				parameters.AddValue ("handle", myAuthHandle);
+				//				TPMCommandRequest requestFlush = new TPMCommandRequest (TPMCommandNames.TPM_CMD_FLUSH_SPECIFIC, parameters);
+				//				tpm.Process (requestFlush);
 				
 			//return myAuthHandle;
 			}
+			
+			Parameters listHandlesParameters = new Parameters ();
+			listHandlesParameters.AddPrimitiveType ("capArea", CapabilityData.TPMCapabilityArea.TPM_CAP_HANDLE);
+			listHandlesParameters.AddPrimitiveType ("handle_type", TPMResourceType.TPM_RT_AUTH);
+			
+			TPMCommandRequest listHandlesRequest = new TPMCommandRequest (TPMCommandNames.TPM_CMD_GetCapability, listHandlesParameters);
+			TPMCommandResponse listHandlesResponse = tpm.Process (listHandlesRequest);
+			
+			HandleList loadedKeyHandles = listHandlesResponse.Parameters.GetValueOf<HandleList> ("handles");
+			
+			
 			
 			return null;
 		}

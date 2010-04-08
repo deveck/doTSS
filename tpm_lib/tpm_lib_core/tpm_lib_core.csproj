@@ -51,8 +51,9 @@
     <Compile Include="KeyDataCore\TPMRSAKeyParamsCore.cs" />
     <Compile Include="CommonTPMDataTypes\Digest.cs" />
     <Compile Include="Commands\Authorization\TPM_OIAP.cs" />
-    <Compile Include="Commands\Authorization\AuthHandleCore.cs" />
     <Compile Include="Commands\Eviction\TPM_FlushSpecific.cs" />
+    <Compile Include="HandlesCore\Authorization\AuthHandleCore.cs" />
+    <Compile Include="HandlesCore\HandleListCore.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />
@@ -65,6 +66,8 @@
     <Folder Include="CommonTPMDataTypes\" />
     <Folder Include="Commands\Authorization\" />
     <Folder Include="Commands\Eviction\" />
+    <Folder Include="HandlesCore\" />
+    <Folder Include="HandlesCore\Authorization\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_lowlvl\tpm_lowlvl.csproj">

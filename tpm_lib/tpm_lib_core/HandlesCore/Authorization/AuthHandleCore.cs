@@ -4,7 +4,7 @@ using Iaik.Tc.TPM.Lowlevel.Data;
 using Iaik.Utils.Serialization;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 
-namespace Iaik.Tc.TPM.Library.Commands
+namespace Iaik.Tc.TPM.Library.HandlesCore.Authorization
 {
 
 
@@ -12,9 +12,8 @@ namespace Iaik.Tc.TPM.Library.Commands
 	public class AuthHandleCore : AuthHandle, ITPMBlobReadable
 	{
 		
-		public AuthHandleCore(AuthType authType, TPMBlob blob)
+		public AuthHandleCore(TPMBlob blob)
 		{
-			_authType = authType;
 			ReadFromTpmBlob(blob);
 		}
 		

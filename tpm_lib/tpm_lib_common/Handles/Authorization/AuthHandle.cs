@@ -11,21 +11,21 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 {
 
 	[TypedStreamSerializable("AuthHandle")]
-	public class AuthHandle : AutoStreamSerializable, ITypedParameter, ITPMHandle
+	public class AuthHandle : AutoStreamSerializable, ITPMHandle
 	{
 
-		public enum AuthType
-		{
-			OIAP,
-			OSAP
-		}
-		
+//		public enum AuthType
+//		{
+//			OIAP,
+//			OSAP
+//		}
+//		
 		/// <summary>
 		/// Specifies the authorization type this handle represents
 		/// </summary>
-		[SerializeMe(0)]
-		protected AuthType _authType;
-		
+//		[SerializeMe(0)]
+//		protected AuthType _authType;
+//		
 		/// <summary>
 		/// TPM_AUTHHANDLE of the authorization session
 		/// </summary>
@@ -43,9 +43,9 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		{
 		}
 		
-		public AuthHandle (AuthType authType, uint authHandle)
+		public AuthHandle (uint authHandle)
 		{
-			_authType = authType;
+			//_authType = authType;
 			_authHandle = authHandle;
 		}
 		

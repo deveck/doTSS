@@ -7,7 +7,7 @@ namespace Iaik.Tc.TPM.Library.Common.Handles
 	/// <summary>
 	/// Defines a resource on the TPM
 	/// </summary>
-	public interface ITPMHandle
+	public interface ITPMHandle : ITypedParameter
 	{
 		/// <summary>
 		/// Gets the TPM handle identifier

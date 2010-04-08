@@ -7,6 +7,7 @@ using Iaik.Tc.TPM.Library.Common;
 using Iaik.Tc.TPM.Lowlevel;
 using Iaik.Tc.TPM.Lowlevel.Data;
 using Iaik.Tc.TPM.library.exceptions;
+using Iaik.Tc.TPM.Library.HandlesCore;
 
 namespace Iaik.Tc.TPM.Library.Commands
 {
@@ -47,6 +48,11 @@ namespace Iaik.Tc.TPM.Library.Commands
 				//Subcaps are ignored by TPM_CAP_VERSION_VAL
 				requestBlob.WriteUInt32 (0);
 			}
+			else if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_HANDLE)
+			{
+				requestBlob.WriteUInt32 (4);
+				requestBlob.WriteUInt32 ((uint)_param.GetValueOf<TPMResourceType> ("handle_type"));
+			}
 			else if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY)
 			{
 				CapabilityData.TPMSubCapProperty subCap = _param.GetValueOf<CapabilityData.TPMSubCapProperty> ("subCap");
@@ -70,6 +76,16 @@ namespace Iaik.Tc.TPM.Library.Commands
 			{
 				CapabilityDataCore.TPMCapVersionInfoCore tpmVersionInfo = new CapabilityDataCore.TPMCapVersionInfoCore (responseBlob);
 				parameters.AddValue (CapabilityData.PARAM_TPM_VERSION_INFO, tpmVersionInfo);
+			}
+			else if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_HANDLE)
+			{
+				responseBlob.SkipHeader ();
+				
+				//Reads the response size, which is ignored
+				responseBlob.ReadUInt32 ();
+				
+				HandleListCore handleList = new HandleListCore (responseBlob, _param.GetValueOf<TPMResourceType> ("handle_type"));
+				parameters.AddValue ("handles", handleList);
 			}
 			else if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY && 
 				    _param.GetValueOf<CapabilityData.TPMSubCapProperty> ("subCap") == CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_PCR) 

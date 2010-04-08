@@ -19,6 +19,8 @@ using Iaik.Tc.TPM.Lowlevel;
 
 using Iaik.Tc.TPM.Subsystems.TPMSubsystem;
 using Iaik.Tc.TPM.Library;
+using Iaik.Tc.TPM.Library.Common;
+using Iaik.Tc.TPM.Library.Common.Handles;
 
 namespace Iaik.Tc.TPM
 {
@@ -88,10 +90,39 @@ namespace Iaik.Tc.TPM
 			{
 				try
 				{
+					_logger.InfoFormat ("Setting up tpm context '{0}'", device.TPMName);
 					TPMWrapper tpmDevice = new TPMWrapper ();
 					tpmDevice.Init (device.TPMType, device.Parameters);
 					TPMContext tpmContext = new TPMContext (device.TPMName, tpmDevice);
 					_tpmContexts.Add (device.TPMName, tpmContext);
+					
+					_logger.InfoFormat ("Flushing device '{0}'", device.TPMName);
+					foreach (TPMResourceType resourceType in new TPMResourceType[] {
+						TPMResourceType.TPM_RT_AUTH, TPMResourceType.TPM_RT_KEY, TPMResourceType.TPM_RT_TRANS })
+					{
+						Parameters listLoadedHandlesParameters = new Parameters ();
+						listLoadedHandlesParameters.AddPrimitiveType ("capArea", CapabilityData.TPMCapabilityArea.TPM_CAP_HANDLE);
+						listLoadedHandlesParameters.AddPrimitiveType ("handle_type", resourceType);
+						TPMCommandRequest listLoadedHandlesRequest = new TPMCommandRequest (TPMCommandNames.TPM_CMD_GetCapability, 
+							listLoadedHandlesParameters);
+						TPMCommandResponse response = tpmDevice.Process (listLoadedHandlesRequest);
+						
+						if (response.Status == false)
+							throw new Exception ("An unknown tpm exception while flushing occured");
+						
+						foreach (uint handle in response.Parameters.GetValueOf<HandleList> ("handles"))
+						{
+							Parameters flushParameters = new Parameters ();
+							flushParameters.AddValue ("handle", HandleFactory.Create (resourceType, handle));
+							TPMCommandRequest flushRequest = new TPMCommandRequest (TPMCommandNames.TPM_CMD_FLUSH_SPECIFIC, flushParameters);
+							TPMCommandResponse flushResponse = tpmDevice.Process (flushRequest);
+							
+							if (flushResponse.Status == false)
+								throw new Exception ("Something went wrong while flushing");
+							
+						}
+					}
+					
 					_logger.InfoFormat ("Successfully setup tpm context '{0}' with type '{1}'", device.TPMName, device.TPMType);
 				}
 				catch (Exception ex)

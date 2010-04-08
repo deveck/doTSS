@@ -48,6 +48,8 @@
     <Compile Include="KeyData\TPMRSAKeyParams.cs" />
     <Compile Include="Handles\Authorization\AuthHandle.cs" />
     <Compile Include="Handles\ITPMHandle.cs" />
+    <Compile Include="Handles\HandleList.cs" />
+    <Compile Include="Handles\HandleFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="interface\" />

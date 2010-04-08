@@ -23,10 +23,14 @@ namespace Iaik.Tc.TPM.Library.Common
 			/// </summary>
 			TPM_CAP_PROPERTY = 0x00000005,
 			
+
+			/// <summary>
+			/// Enumerates all handles of the specified type currently loaded in the tpm
+			/// </summary>
+			TPM_CAP_HANDLE = 0x00000014,
 			
 			/// <summary>
 			/// Returns what the TPM currently supports
-			/// 
 			/// </summary>
 			TPM_CAP_VERSION_VAL	= 0x0000001A
 		}
