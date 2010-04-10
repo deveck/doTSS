@@ -45,25 +45,16 @@ namespace Iaik.Tc.TPM.Subsystems
 		protected Dictionary<TRequest, RequestExecutionInfo> _requestExecutionInfos = 
 			new Dictionary<TRequest, RequestExecutionInfo>();
 
-        /// <summary>
-        /// Contains the configuration of the framework
-        /// </summary>
-        protected IConnectionsConfiguration _config;
-
-        internal IConnectionsConfiguration ConnectionsConfig
-        {
-            get { return _config; }
-        }
+        
 
         internal EndpointContext EndpointContext
         {
             get { return _context; }
         }
 
-		public BaseSubsystem(EndpointContext context, IConnectionsConfiguration config)
+		public BaseSubsystem(EndpointContext context)
 		{
 			_context = context;
-            _config = config;
 	
 			//The ctor needs to check if T is a enum type and if T has ushort as base type,
 			//because this can not be done with type-constraints

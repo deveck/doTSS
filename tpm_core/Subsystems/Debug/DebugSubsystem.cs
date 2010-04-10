@@ -15,7 +15,7 @@ namespace Iaik.Tc.TPM.Subsystems.Debug
 	/// <summary>
 	/// Implements a Subsystem only for testing 
 	/// </summary>
-	public class DebugSubsystem : BaseSubsystem<DebugSubsystem.DebugRequestsEnum>
+	public class DebugSubsystem : BaseServerSubsystem<DebugSubsystem.DebugRequestsEnum>
 	{
 		public enum DebugRequestsEnum : ushort
 		{

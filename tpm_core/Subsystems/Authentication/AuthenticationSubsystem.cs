@@ -16,7 +16,7 @@ namespace Iaik.Tc.TPM.Subsystems.Authentication
 	/// <summary>
 	/// Implements the subsystem the client uses to authenticate to the server
 	/// </summary>
-	public class AuthenticationSubsystem : BaseSubsystem<AuthenticationSubsystem.AuthenticationRequests>
+	public class AuthenticationSubsystem : BaseServerSubsystem<AuthenticationSubsystem.AuthenticationRequests>
 	{
 		public enum AuthenticationRequests : ushort
 		{

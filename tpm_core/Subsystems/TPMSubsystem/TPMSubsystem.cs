@@ -17,7 +17,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {
 
 
-	public class TPMSubsystem : BaseSubsystem<TPMSubsystem.TPMRequestEnum>
+	public class TPMSubsystem : BaseServerSubsystem<TPMSubsystem.TPMRequestEnum>
 	{
 		
 		/// <summary>
