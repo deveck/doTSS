@@ -41,8 +41,27 @@ namespace Iaik.Tc.TPM.Library.Commands
 			
 		}
 		
-		public class TPMVersionCore : CapabilityData.TPMVersion, ITPMBlobReadable
+		public class TPMVersionCore : CapabilityData.TPMVersion, ITPMBlobReadable, ITPMBlobWritable
 		{
+			/// <summary>
+			/// Creates a default tpm v1.2 version structure
+			/// </summary>
+			/// <returns</returns>
+			public static TPMVersionCore CreateVersion12 ()
+			{
+				CapabilityDataCore.TPMVersionCore version = new CapabilityDataCore.TPMVersionCore ();
+				version._major = 0x01;
+				version._minor = 0x02;
+				version._revMajor = 0;
+				version._revMinor = 0;
+				
+				return version;
+			}
+			
+			private TPMVersionCore ()
+			{
+			}
+			
 			internal TPMVersionCore (TPMBlob blob)
 			{
 				ReadFromTpmBlob(blob);
@@ -55,6 +74,16 @@ namespace Iaik.Tc.TPM.Library.Commands
 				_minor = blob.ReadByte ();
 				_revMajor = blob.ReadByte ();
 				_revMinor = blob.ReadByte ();
+			}
+			
+			#endregion
+			#region ITPMBlobWritable implementation
+			public void WriteToTpmBlob (TPMBlob blob)
+			{
+				blob.WriteByte (_major);
+				blob.WriteByte (_minor);
+				blob.WriteByte (_revMajor);
+				blob.WriteByte (_revMinor);
 			}
 			
 			#endregion

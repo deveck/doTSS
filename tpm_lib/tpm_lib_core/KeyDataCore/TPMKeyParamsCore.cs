@@ -11,8 +11,28 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 	
 	
 	
-	public class TPMKeyParamsCore : TPMKeyParams, ITPMBlobReadable
+	public class TPMKeyParamsCore : TPMKeyParams, ITPMBlobReadable, ITPMBlobWritable
 	{
+		
+		public static TPMKeyParamsCore Create (TPMAlgorithmId algorithmId, TPMEncScheme encScheme, TPMSigScheme sigScheme,
+			ITypedStreamSerializable algorithmKeyParams)
+		{
+			if (algorithmId == TPMAlgorithmId.TPM_ALG_RSA && !(algorithmKeyParams is TPMRSAKeyParamsCore))
+				throw new ArgumentException (string.Format ("algorithm: {0} required TPMRSAKeyParamsCore", algorithmId));
+			
+			TPMKeyParamsCore keyParamsCore = new TPMKeyParamsCore ();
+			keyParamsCore._algorithmId = algorithmId;
+			keyParamsCore._encScheme = encScheme;
+			keyParamsCore._sigScheme = sigScheme;
+			keyParamsCore._params = algorithmKeyParams;
+
+			return keyParamsCore;
+		}
+		
+		private TPMKeyParamsCore ()
+		{
+		}
+		
 		public TPMKeyParamsCore (TPMBlob src)
 		{
 			ReadFromTpmBlob (src);
@@ -40,6 +60,17 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 					//TODO
 					throw new NotImplementedException ("Symmetric key params not implemented");		
 			}
+		}
+		
+		#endregion
+		#region ITPMBlobWritable implementation
+		public void WriteToTpmBlob (TPMBlob blob)
+		{
+			blob.WriteUInt32 ((uint)_algorithmId);
+			blob.WriteUInt16 ((ushort)_encScheme);
+			blob.WriteUInt16 ((ushort)_sigScheme);
+			TPMBlobWriteableHelper.WriteITPMBlobWritableWithUIntSize (blob, (ITPMBlobWritable)_params);
+			
 		}
 		
 		#endregion

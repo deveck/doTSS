@@ -25,12 +25,12 @@ namespace Iaik.Tc.TPM.Library.Common
 		}
 		
 		[SerializeMe(1)]
-		protected byte[] _publicKey;
+		protected TPMStorePubkey _publicKey;
 		
 		/// <summary>
 		/// The public key
 		/// </summary>
-		public byte[] PublicKey
+		public TPMStorePubkey PublicKey
 		{
 			get { return _publicKey; }
 		}
@@ -50,7 +50,7 @@ namespace Iaik.Tc.TPM.Library.Common
 		{
 			return string.Format ("KeyParams:\n{0}\n\nPublicKey:\n{1}", 
 				StringHelper.IndentPerLine (KeyParams.ToString (), "   "), 
-				ByteHelper.ByteArrayToHexString(_publicKey));
+				_publicKey.ToString());
 		}
 
 	}

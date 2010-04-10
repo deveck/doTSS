@@ -131,4 +131,121 @@ namespace Iaik.Tc.TPM.Library.Common
 		TPM_RT_DAA_V1 = 0x0A
 	}
 	
+	/// <summary>
+	/// Defines the possible types of keys
+	/// </summary>
+	public enum TPMKeyUsage : ushort
+	{
+		/// <summary>
+		/// Indicates a signing key
+		/// </summary>
+		TPM_KEY_SIGNING = 0x10,
+		
+		/// <summary>
+		/// Indicates a storage key
+		/// </summary>
+		TPM_KEY_STORAGE = 0x11,
+		
+		/// <summary>
+		/// Indicates an identity key
+		/// </summary>
+		TPM_KEY_IDENTITY = 0x12,
+		
+		/// <summary>
+		/// Indiates an ephemeral key that is used during ChangeAuthAsym process only
+		/// </summary>
+		TPM_KEY_AUTHCHANGE = 0x13,
+		
+		/// <summary>
+		/// Indicates a key that can be used for TPM_Bind and TPM_UnBind
+		/// </summary>
+		TPM_KEY_BIND = 0x14,
+		
+		/// <summary>
+		/// Indicates a key that can be used for signing and binding operations
+		/// </summary>
+		TPM_KEY_LEGACY = 0x15,
+		
+		/// <summary>
+		/// Indicates a key in use for TPM_MigrateKey
+		/// </summary>
+		TPM_KEY_MIGRATE = 0x16
+	}
+	
+	/// <summary>
+	/// Defines flags that can be attached to keys
+	/// </summary>
+	[Flags()]
+	public enum TPMKeyFlags : uint
+	{
+		/// <summary>
+		/// No Flags
+		/// </summary>
+		None = 0x0,
+		
+		/// <summary>
+		/// Indicates use of redirected output
+		/// </summary>
+		Redirection = 0x01,
+		
+		/// <summary>
+		/// Indicates that the key is migratable
+		/// </summary>
+		Migratable = 0x02,
+		
+		/// <summary>
+		/// Indicates that the key MUST be unloaded upon execution of TPM_STARTUP(ST_Clear)
+		/// </summary>
+		IsVolatile = 0x04,
+		
+		/// <summary>
+		/// If set the TPM MUST NOT check digestAtRelease or localityAtRelease for commands that use the 
+		/// public portion of the key like TPM_GetPubKey
+		/// 
+		/// If not set the TPM MUST check digestAtRelease and localityAtRelease for commands thet use the public
+		/// portion of the key
+		/// </summary>
+		PcrIgnoredOnRead = 0x08,
+		
+		/// <summary>
+		/// Indicates that the key is under control of a migratable authority	
+		/// </summary>
+		MigrateAuthority = 0x10
+	}
+	
+	/// <summary>
+	/// Indicates to the TPM when authorization sessions for an entity are required
+	/// </summary>
+	public enum TPMAuthDataUsage : byte
+	{
+		/// <summary>
+		/// Usage of the key withoug authorization is permitted
+		/// </summary>
+		TPM_AUTH_NEVER = 0x00,
+		
+		/// <summary>
+		/// Indicates that on each sage of the key the authorization must be performed
+		/// </summary>
+		TPM_AUTH_ALWAYS = 0x01,
+		
+		/// <summary>
+		/// Indicates that on commands that require the TPM to use the private portion of the key
+		/// the authorization must be performed
+		/// </summary>
+		TPM_AUTH_PRIV_USE_ONLY = 0x03
+	}
+	
+	/// <summary>
+	/// Identifies the protocol in use
+	/// </summary>
+	public enum TPMProtocolId : ushort
+	{
+		TPM_PID_OIAP = 0x01,
+		TPM_PID_OSAP = 0x02,
+		TPM_PID_ADIP = 0x03,
+		TPM_PID_ADCP = 0x04,
+		TPM_PID_OWNER = 0x05,
+		TPM_PID_DSAP = 0x06,
+		TPM_PID_TRANSPORT = 0x07
+	}
 }

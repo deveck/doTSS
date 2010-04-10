@@ -15,6 +15,27 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 	[TypedStreamSerializable("TPMRSAKeyParams")]
 	public class TPMRSAKeyParamsCore : TPMRSAKeyParams, ITPMBlobReadable
 	{
+		public const uint DEFAULT_KEYLENGTH = 2048;
+		public const uint DEFAULT_NUMPRIMES = 2;
+		
+		public static TPMRSAKeyParamsCore Create (uint keyLength, uint numPrimes, byte[] exponent)
+		{
+			TPMRSAKeyParamsCore rsaKeyParams = new TPMRSAKeyParamsCore ();
+			rsaKeyParams._keyLength = keyLength;
+			rsaKeyParams._numPrimes = numPrimes;
+			
+			if (exponent == null)
+				rsaKeyParams._exponent = new byte[0];
+			else
+				rsaKeyParams._exponent = exponent;
+			
+			return rsaKeyParams;
+		}
+		
+		private TPMRSAKeyParamsCore()
+		{
+		}
+		
 			
 		public TPMRSAKeyParamsCore (TPMBlob src)
 		{

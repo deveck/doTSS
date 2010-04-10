@@ -21,11 +21,7 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 		public void ReadFromTpmBlob (TPMBlob blob)
 		{
 			_keyParams = new TPMKeyParamsCore (blob);
-			
-			uint keyLength = blob.ReadUInt32 ();			
-			_publicKey = new byte[keyLength];
-			blob.Read (_publicKey, 0, _publicKey.Length);
-			
+			_publicKey = new TPMStorePubkeyCore (blob);
 		}
 		
 		#endregion
