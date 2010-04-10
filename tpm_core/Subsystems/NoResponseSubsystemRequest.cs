@@ -23,9 +23,15 @@ namespace Iaik.Tc.TPM.Subsystems
 	
 	public class NoResponse:SubsystemResponse
 	{
-		public NoResponse(SubsystemRequest request, EndpointContext ctx)
-			:base(request, ctx)
+		public NoResponse (SubsystemRequest request, EndpointContext ctx)
+			: base(request, ctx)
 		{
 		}
+		
+		protected override string InternalErrorText 
+		{
+			get { return null; }
+		}
+
 	}
 }

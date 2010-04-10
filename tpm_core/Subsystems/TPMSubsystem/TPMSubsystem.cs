@@ -203,14 +203,14 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				|| ServerContext.ServerAuthenticationContext.AuthenticatedPermissionMember == null)
 			{
 				tpmSubsystemResponse.Succeeded = false;
-				tpmSubsystemResponse.SetKnownErrorCode (TPMSubsystemResponseBase.ErrorCodeEnum.NotAuthenticated);
+				tpmSubsystemResponse.SetKnownCommonError(TPMSubsystemResponseBase.CommonErrorCodes.NotAuthenticated);
 				tpmSubsystemResponse.Execute ();
 				return false;
 			}
 			else if (pid != null && !ServerContext.IsCurrentUserAllowed (SubsystemIdentifier, pid))
 			{
 				tpmSubsystemResponse.Succeeded = false;
-				tpmSubsystemResponse.SetKnownErrorCode (TPMSubsystemResponseBase.ErrorCodeEnum.NotPermitted);
+				tpmSubsystemResponse.SetKnownCommonError (TPMSubsystemResponseBase.CommonErrorCodes.NotPermitted);
 				tpmSubsystemResponse.Execute ();
 				return false;
 			}

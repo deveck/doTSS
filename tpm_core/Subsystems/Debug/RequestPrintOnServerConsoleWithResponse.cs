@@ -88,6 +88,11 @@ namespace Iaik.Tc.TPM.Subsystems.Debug
 			_serverTicks = StreamHelper.ReadInt64(src);
 		}
 
+		protected override string InternalErrorText 
+		{
+			get { return null; }
+		}
+
 
 	}
 }
