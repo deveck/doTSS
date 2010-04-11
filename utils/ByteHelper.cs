@@ -44,5 +44,10 @@ namespace Iaik.Utils
 			return true;
 		}
 		
+		public static void ClearBytes (byte[] data)
+		{
+			Array.Clear (data, 0, data.Length);
+		}
+		
 	}
 }

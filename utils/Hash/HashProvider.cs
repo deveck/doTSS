@@ -16,6 +16,11 @@ namespace Iaik.Utils.Hash
 		/// </summary>
 		private HashAlgorithm _hashAlgorithm;
 		
+		public int HashBitSize
+		{
+			get { return _hashAlgorithm.HashSize; }
+		}
+		
 		public HashProvider ()
 			:this("SHA1")
 		{
@@ -35,23 +40,32 @@ namespace Iaik.Utils.Hash
 		{
 			_hashAlgorithm.Initialize ();
 			
-			byte[] buffer = new byte[1024 * 4];
+			byte[] internalBuffer = new byte[1024 * 4];
 			
-			foreach (HashDataProvider dataProvider in dataProviders)
-			{
+			
+			foreach (HashDataProvider dataProvider in dataProviders) {
 				int bufferLength;
-				do
-				{
-					bufferLength = dataProvider.NextBytes (buffer);
+				do {
+					bufferLength = dataProvider.NextBytes (internalBuffer);
 					
 					if (bufferLength > 0)
-						_hashAlgorithm.TransformBlock (buffer, 0, bufferLength, buffer, 0);
-				}
-				while (bufferLength > 0);
+						_hashAlgorithm.TransformBlock (internalBuffer, 0, bufferLength, internalBuffer, 0);
+				} while (bufferLength > 0);
 			}
 			
-			_hashAlgorithm.TransformFinalBlock (buffer, 0, 0);
+			_hashAlgorithm.TransformFinalBlock (internalBuffer, 0, 0);
 			return _hashAlgorithm.Hash;
+		}
+		
+		/// <summary>
+		/// Performs the hashing operation. The data is applied to the hash algorithm as they come in dataProviders.
+		/// </summary>
+		/// <param name="dataProviders"></param>
+		public void Hash (byte[] buffer, int index, params HashDataProvider[] dataProviders)
+		{
+			Array.Copy(Hash(dataProviders), 0, buffer, index, HashBitSize/8);
+			_hashAlgorithm.Clear();
+			ByteHelper.ClearBytes(_hashAlgorithm.Hash);
 		}
 	}
 }

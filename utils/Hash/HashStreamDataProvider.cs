@@ -22,13 +22,19 @@ namespace Iaik.Utils.Hash
 		/// </summary>
 		private long _length;
 		
+		/// <summary>
+		/// If set, destroys the underlying stream on disposing
+		/// </summary>
+		private bool _streamOwner = false;
+		
 		public HashStreamDataProvider (Stream src)
-			:this(src, null, null)
+			:this(src, null, null, false)
 		{
 		}
 		
-		public HashStreamDataProvider (Stream src, long? startPosition, long? length)
+		public HashStreamDataProvider (Stream src, long? startPosition, long? length, bool streamOwner)
 		{
+			_streamOwner = streamOwner;
 			_source = src;
 			
 			if (startPosition == null)
@@ -61,6 +67,15 @@ namespace Iaik.Utils.Hash
 			
 			return read;
 		}
+		
+		public override void Dispose ()
+		{
+			base.Dispose ();
+			
+			if (_streamOwner)
+				_source.Dispose ();
+		}
+
 
 	}
 }
