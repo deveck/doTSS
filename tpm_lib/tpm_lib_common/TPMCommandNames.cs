@@ -32,6 +32,10 @@ namespace Iaik.Tc.TPM.Library.Common
 		public const string TPM_CMD_FlushSpecific = "TPM_CMD_FlushSpecific";
 		#endregion
 		
+		#region SessionManagement
+		public const string TPM_CMD_SaveContext = "TPM_CMD_SaveContext";
+		public const string TPM_CMD_LoadContext = "TPM_CMD_LoadContext";
+		#endregion
 		
 		// TODO: tbd. DELETE!!!
 #region balbla
