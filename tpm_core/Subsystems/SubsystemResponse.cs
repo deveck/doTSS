@@ -181,7 +181,18 @@ namespace Iaik.Tc.TPM.Subsystems
                     StreamHelper.WriteString(_customErrorMessage, sink);
             }
         }
-		
+	
+		/// <summary>
+		/// Checks if the Request has succeeded. If not it throws an SubsystemRequestException
+		/// </summary>
+		public void AssertResponse()
+		{
+			if(_succeeded == false && _errorCode != null)
+				throw new SubsystemResponseException(this, _errorCode.Value, ErrorText);
+			else if(_succeeded == false && _errorCode == null)
+				throw new SubsystemResponseException(this, -2, ErrorText);
+			
+		}
 
  
 	}
