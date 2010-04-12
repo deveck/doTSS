@@ -7,6 +7,7 @@ using Iaik.Tc.TPM.Library.Common;
 using Iaik.Tc.TPM.Library.Commands;
 using System.Collections.Generic;
 using System.IO;
+using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 
 namespace Iaik.Tc.TPM.Library
 {
@@ -125,12 +126,19 @@ namespace Iaik.Tc.TPM.Library
 		}
 		#endregion
 		
-		public TPMCommandResponse Process (TPMCommandRequest request)
+		public TPMCommandResponse Process(TPMCommandRequest request)
+		{
+			return Process(request, null);
+		}
+		
+		public TPMCommandResponse Process (TPMCommandRequest request, ICommandAuthorizationHelper commandAuthorizationHelper)
 		{
 			try
 			{
 				_backend.Open ();
 				TPMCommand command = TPMCommandFactory.Create (request.CommandIdentifier);
+				if(typeof(IAuthorizableCommand).IsAssignableFrom(command.GetType()))
+					((IAuthorizableCommand)command).SetCommandAuthorizationHelper(commandAuthorizationHelper);
 				command.Init (request.Parameters, _backend);
 				return command.Process ();
 			}

@@ -16,6 +16,8 @@ namespace Iaik.Utils
 		/// <returns></returns>
 		public static string ByteArrayToHexString (byte[] data)
 		{
+			if (data == null)
+				return "<null>";
 			StringBuilder returnVal = new StringBuilder ();
 			
 			foreach (byte b in data)

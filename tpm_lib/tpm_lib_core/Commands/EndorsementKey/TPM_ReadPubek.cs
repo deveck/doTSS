@@ -43,7 +43,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 			
 			Digest digest = new Digest (responseBlob, 20);
 			if (digest.CompareTo (
-				new HashStreamDataProvider (responseBlob, posStart, posEnd - posStart),
+				new HashStreamDataProvider (responseBlob, posStart, posEnd - posStart, false),
 				new HashByteDataProvider (nonce)) == false)
 			{
 				throw new TPMResponseException ("Local digest does not match remote digest");

@@ -347,7 +347,7 @@ namespace Iaik.Connection.Packets
 		private void RaiseRequestPacketReceived(DataPacket dataPacket)
 		{
 			if(RequestPacketReceived != null)
-				RequestPacketReceived(dataPacket);
+				RequestPacketReceived.BeginInvoke(dataPacket, null, null);
 		}
 		#endregion
 		

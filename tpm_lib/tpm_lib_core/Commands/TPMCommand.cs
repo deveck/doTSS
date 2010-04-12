@@ -6,6 +6,7 @@ using System.Collections;
 using Iaik.Tc.TPM.Lowlevel;
 using Iaik.Tc.TPM.Lowlevel.Data;
 using Iaik.Tc.TPM.Library.Common;
+using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 
 namespace Iaik.Tc.TPM.Library.Commands
 {
@@ -57,10 +58,19 @@ namespace Iaik.Tc.TPM.Library.Commands
 		//public abstract void Process(Parameters param);
 		//public abstract void Process();
 		public abstract TPMCommandResponse Process();
-		public abstract void Clear();
+		public virtual void Clear ()
+		{
+		}
 		//public abstract TpmBlob ToBlob();
 		// TODO: How to create HMAC?
-				
+		
+		protected void WriteAuthorizationInfo (TPMBlob target, AuthorizationInfo authInfo)
+		{
+			target.WriteUInt32 (authInfo.Handle.Handle);
+			target.Write (authInfo.Handle.NonceOdd, 0, authInfo.Handle.NonceOdd.Length);
+			target.WriteBool (authInfo.ContinueAuthSession);
+			target.Write (authInfo.AuthData, 0, authInfo.AuthData.Length);
+		}
 	}
 		
 }

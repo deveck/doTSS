@@ -291,6 +291,11 @@ namespace Iaik.Tc.TPM
 				throw new ArgumentException (string.Format("Could not parse '{0}' to bool", value)); 
 		}
 
+		
+		public ConsoleKeyInfo ReadKeyWithoutEcho ()
+		{
+			return Console.ReadKey (true);
+		}
         
     }
 }

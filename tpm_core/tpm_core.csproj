@@ -46,6 +46,7 @@
     </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Security" />
+    <Reference Include="Mono.Security" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\AuthenticationMechanismChecker.cs" />
@@ -114,6 +115,13 @@
     <Compile Include="Subsystems\TPMSubsystem\TPMContext.cs" />
     <Compile Include="Context\TPMEndorsementKeyHandlingClient.cs" />
     <Compile Include="Context\TPMAdministrationClient.cs" />
+    <Compile Include="Subsystems\TPMSubsystem\CommandAuthorizationHelper.cs" />
+    <Compile Include="Subsystems\TPMClient\TPMClientSubsystem.cs" />
+    <Compile Include="Subsystems\TPMClient\TPMClientSubsystemResponseBase.cs" />
+    <Compile Include="Subsystems\BaseServerSubsystem.cs" />
+    <Compile Include="Subsystems\BaseClientSubsystem.cs" />
+    <Compile Include="Subsystems\TPMClient\GenerateHMAC.cs" />
+    <Compile Include="Subsystems\TypedClientSubsystemRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">
@@ -157,5 +165,6 @@
   </ProjectExtensions>
   <ItemGroup>
     <Folder Include="Subsystems\TPMSubsystem\" />
+    <Folder Include="Subsystems\TPMClient\" />
   </ItemGroup>
 </Project>

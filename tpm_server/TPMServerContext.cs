@@ -114,7 +114,7 @@ namespace Iaik.Tc.TPM
 						{
 							Parameters flushParameters = new Parameters ();
 							flushParameters.AddValue ("handle", HandleFactory.Create (resourceType, handle));
-							TPMCommandRequest flushRequest = new TPMCommandRequest (TPMCommandNames.TPM_CMD_FLUSH_SPECIFIC, flushParameters);
+							TPMCommandRequest flushRequest = new TPMCommandRequest (TPMCommandNames.TPM_CMD_FlushSpecific, flushParameters);
 							TPMCommandResponse flushResponse = tpmDevice.Process (flushRequest);
 							
 							if (flushResponse.Status == false)

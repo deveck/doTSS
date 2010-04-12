@@ -50,6 +50,12 @@
     <Compile Include="Handles\ITPMHandle.cs" />
     <Compile Include="Handles\HandleList.cs" />
     <Compile Include="Handles\HandleFactory.cs" />
+    <Compile Include="KeyData\TPMKey.cs" />
+    <Compile Include="KeyData\TPMStorePubkey.cs" />
+    <Compile Include="Handles\Authorization\IAuthorizableCommand.cs" />
+    <Compile Include="Handles\Authorization\ICommandAuthorizationHelper.cs" />
+    <Compile Include="Handles\Authorization\AuthorizationInfo.cs" />
+    <Compile Include="Handles\Authorization\HMACKeyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="interface\" />

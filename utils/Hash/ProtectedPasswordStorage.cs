@@ -171,7 +171,42 @@ namespace Iaik.Utils.Hash
 			
 			_hash = null;
 		}
-		
+
+		public override bool Equals (object obj)
+		{
+			if (!(obj is ProtectedPasswordStorage) || obj == null)
+				return false;
+			
+			IntPtr plain1 = Marshal.SecureStringToBSTR (_plainPassword);
+			IntPtr plain2 = Marshal.SecureStringToBSTR (((ProtectedPasswordStorage)obj)._plainPassword);
+			try
+			{
+				unsafe
+				{
+					int currentIndex = 0;
+					while (true)
+					{
+						char char1 = ((char*)plain1)[currentIndex];
+						char char2 = ((char*)plain2)[currentIndex];
+						
+						if (char1 != char2)
+							return false;
+						else if (char1 == 0 || char2 == 0)
+							return true;
+						
+						currentIndex++;
+					}
+					
+					return false;
+				}
+			}
+			finally
+			{
+				Marshal.ZeroFreeBSTR (plain1);
+				Marshal.ZeroFreeBSTR (plain2);
+			}
+		}
+
 		
 		
 	}

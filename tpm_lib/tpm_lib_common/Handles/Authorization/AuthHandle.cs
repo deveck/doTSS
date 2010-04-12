@@ -6,6 +6,7 @@
 using System;
 using Iaik.Tc.TPM.Library.Common;
 using Iaik.Utils.Serialization;
+using Iaik.Utils.Nonce;
 
 namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 {
@@ -14,12 +15,12 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 	public class AuthHandle : AutoStreamSerializable, ITPMHandle
 	{
 
-//		public enum AuthType
-//		{
-//			OIAP,
-//			OSAP
-//		}
-//		
+		public enum AuthType
+		{
+			OIAP,
+			OSAP
+		}
+		
 		/// <summary>
 		/// Specifies the authorization type this handle represents
 		/// </summary>
@@ -31,7 +32,6 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		/// </summary>
 		[SerializeMe(1)]
 		protected uint _authHandle;
-		
 
 		/// <summary>
 		/// Last nonce received from the TPM
@@ -39,6 +39,22 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		[SerializeMe(2)]
 		protected byte[] _nonceEven;
 	
+		public byte[] NonceEven
+		{
+			get { return _nonceEven;}
+		}
+		
+		/// <summary>
+		/// Current local nonce
+		/// </summary>
+		[SerializeMe(3)]
+		protected byte[] _nonceOdd;
+		
+		public byte[] NonceOdd
+		{
+			get { return _nonceOdd;}
+		}
+			
 		protected AuthHandle()
 		{
 		}
@@ -56,6 +72,14 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		public void UpdateNonceEven (byte[] nonce)
 		{
 			_nonceEven = nonce;
+		}
+		
+		/// <summary>
+		/// Generates a new nonce odd
+		/// </summary>
+		public void NewNonceOdd ()
+		{
+			NonceGenerator.GenerateByteNonce (_nonceOdd);
 		}
 		
 		#region ITPMHandle implementation

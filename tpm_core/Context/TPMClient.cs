@@ -6,6 +6,7 @@
 using System;
 using Iaik.Tc.TPM.Library.Common;
 using Iaik.Tc.TPM.Subsystems.TPMSubsystem;
+using System.Collections.Generic;
 
 namespace Iaik.Tc.TPM.Context
 {
@@ -21,6 +22,10 @@ namespace Iaik.Tc.TPM.Context
 		/// </summary>
 		private EndpointContext _ctx;
 
+		/// <summary>
+		/// Contains all active TPMSessions
+		/// </summary>
+		private Dictionary<int, TPMSession> _activeSessions = new Dictionary<int, TPMSession>();
 	
 		/// <summary>
 		/// Lists all available TPM devices
@@ -53,10 +58,40 @@ namespace Iaik.Tc.TPM.Context
 			SelectTPMResponse response = request.TypedExecute ();
 			response.AssertTPMSuccess ();
 			
-			return new TPMSession (_ctx, response.TPMSessionIdentifier);
+			TPMSession session = new TPMSession (_ctx, response.TPMSessionIdentifier, this);
+			_activeSessions.Add (session.SessionIdentifier, session);
 			
+			return session;
+		
 		}
 		
+		/// <summary>
+		/// Looks for an active session with the specified sessionIdentifier
+		/// </summary>
+		/// <param name="sessionIdentifier"></param>
+		/// <returns></returns>
+		public TPMSession FindSession (int sessionIdentifier)
+		{
+			if (_activeSessions.ContainsKey (sessionIdentifier))
+				return _activeSessions[sessionIdentifier];
+			else
+				return null;
+		}
+		
+		/// <summary>
+		/// Removes the specified TPMSession from the active sessions
+		/// </summary>
+		/// <param name="tpmSession"></param>
+		public void RemoveTPMSession (TPMSession tpmSession)
+		{
+			if (_activeSessions.ContainsKey (tpmSession.SessionIdentifier))
+			{
+				_activeSessions.Remove (tpmSession.SessionIdentifier);
+				tpmSession.Dispose ();
+			}
+		}
+		
+			
         public TPMClient (EndpointContext ctx)
         {
         	_ctx = ctx;

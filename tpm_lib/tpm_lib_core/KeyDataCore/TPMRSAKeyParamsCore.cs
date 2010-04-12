@@ -13,7 +13,7 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 	/// Describes the parameters of an RSA key
 	/// </summary>
 	[TypedStreamSerializable("TPMRSAKeyParams")]
-	public class TPMRSAKeyParamsCore : TPMRSAKeyParams, ITPMBlobReadable
+	public class TPMRSAKeyParamsCore : TPMRSAKeyParams, ITPMBlobReadable, ITPMBlobWritable
 	{
 		public const uint DEFAULT_KEYLENGTH = 2048;
 		public const uint DEFAULT_NUMPRIMES = 2;
@@ -51,6 +51,17 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 			uint expoSize = blob.ReadUInt32 ();
 			_exponent = new byte[expoSize];
 			blob.Read (_exponent, 0, (int)expoSize);
+		}
+		
+		#endregion
+		#region ITPMBlobWritable implementation
+		public void WriteToTpmBlob (TPMBlob blob)
+		{
+			blob.WriteUInt32(_keyLength);
+			blob.WriteUInt32(_numPrimes);
+			
+			blob.WriteUInt32((uint)_exponent.Length);
+			blob.Write(_exponent, 0, _exponent.Length);
 		}
 		
 		#endregion

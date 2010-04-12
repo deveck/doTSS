@@ -11,7 +11,7 @@ namespace Iaik.Tc.TPM.Library.Commands.Eviction
 	/// <summary>
 	/// TPM_FlushSpecific. Flushes the specified handle from the TPM
 	/// </summary>
-	[TPMCommands(TPMCommandNames.TPM_CMD_FLUSH_SPECIFIC)]
+	[TPMCommands(TPMCommandNames.TPM_CMD_FlushSpecific)]
 	public class TPM_FlushSpecific : TPMCommand
 	{
 
@@ -29,7 +29,7 @@ namespace Iaik.Tc.TPM.Library.Commands.Eviction
 			
 			TPMBlob responseBlob = _tpmProvider.TransmitAndCheck (requestBlob);
 			
-			return new TPMCommandResponse (true, TPMCommandNames.TPM_CMD_FLUSH_SPECIFIC, new Parameters ());
+			return new TPMCommandResponse (true, TPMCommandNames.TPM_CMD_FlushSpecific, new Parameters ());
 		}
 
 		

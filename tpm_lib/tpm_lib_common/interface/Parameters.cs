@@ -74,6 +74,18 @@ namespace Iaik.Tc.TPM.Library.Common
 		}
 		
 		
+		public T GetValueOf<T> (String key, T defaultValue)
+		{
+			try
+			{
+				return GetValueOf<T> (key);
+			}
+			catch (KeyNotFoundException)
+			{
+				return defaultValue;
+			}
+		}
+		
 		#region IStreamSerializable implementation
 		public void Write (Stream sink)
 		{

@@ -4,6 +4,7 @@
 
 using System;
 using System.IO;
+using Iaik.Utils.Serialization;
 
 namespace Iaik.Tc.TPM.Lowlevel.Data
 {

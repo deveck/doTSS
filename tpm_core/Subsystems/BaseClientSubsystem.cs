@@ -17,9 +17,13 @@ namespace Iaik.Tc.TPM.Subsystems
 	public abstract class BaseClientSubsystem<TRequest> : BaseSubsystem<TRequest>
 	{
 
+		
+		
 		public BaseClientSubsystem (EndpointContext context)
 			: base(context)
 		{
 		}
+		
+		 
 	}
 }

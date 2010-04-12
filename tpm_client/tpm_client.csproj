@@ -21,6 +21,7 @@
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
     <Commandlineparameters>--script=/home/andi/Repos/TpmCSStack-impl/tpm_client/TestScripts/tpm_session_cap.txt</Commandlineparameters>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -64,6 +65,8 @@
     <Compile Include="Commands\TPMSelectDeviceCommand.cs" />
     <Compile Include="Commands\TPMSessionCapCommand.cs" />
     <Compile Include="Commands\TPMSessionEkCommand.cs" />
+    <Compile Include="Commands\TPMSessionAdminCommand.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_core\tpm_core.csproj">

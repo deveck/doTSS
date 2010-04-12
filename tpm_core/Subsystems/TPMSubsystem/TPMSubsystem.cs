@@ -12,6 +12,7 @@ using Iaik.Tc.TPM.Library.Commands;
 using System.Collections.Generic;
 using Iaik.Tc.TPM.Library;
 using Iaik.Tc.TPM.Library.Common;
+using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 
 namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {
@@ -31,7 +32,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		/// </summary>
 		private IDictionary<int, TPMContext> _selectedTPMs = new Dictionary<int, TPMContext>();
 		
-		
+	
 		public override string SubsystemIdentifier 
 		{
 			get { return SubsystemConstants.SUBSYSTEM_TPM; }
@@ -81,6 +82,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			
 			_requestExecutionInfos.Add (TPMRequestEnum.SelectTPMDevice,
 				BuildRequestExecutionInfo<TPMSubsystem, SelectTPMRequest, SelectTPMResponse> (HandleSelectTPMRequest));
+				
 		}
 		
 		public override void HandlePacket (Iaik.Connection.Packets.DataPacket packet)
@@ -121,7 +123,8 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				
 				lock (tpmContext)
 				{
-					commandResponse = tpmContext.TPM.Process (requestContext.Request.CommandRequest);
+					commandResponse = tpmContext.TPM.Process (requestContext.Request.CommandRequest, 
+						new CommandAuthorizationHelper(ServerContext, requestContext.Request.TPMIdentifier));
 				}
 			
 				response.CommandResponse = commandResponse;

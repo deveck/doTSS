@@ -11,10 +11,14 @@ namespace Iaik.Utils.Nonce
 		public static byte[] GenerateByteNonce (int length)
 		{
 			byte[] randomData = new byte[length];
-			Random r = new Random ();
-			r.NextBytes (randomData);
-			
+			GenerateByteNonce (randomData);
 			return randomData;
+		}
+		
+		public static void GenerateByteNonce (byte[] nonce)
+		{
+			Random r = new Random ();
+			r.NextBytes (nonce);
 		}
 		
 	}

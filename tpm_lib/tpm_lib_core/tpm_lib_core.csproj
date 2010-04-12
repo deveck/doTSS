@@ -54,6 +54,10 @@
     <Compile Include="Commands\Eviction\TPM_FlushSpecific.cs" />
     <Compile Include="HandlesCore\Authorization\AuthHandleCore.cs" />
     <Compile Include="HandlesCore\HandleListCore.cs" />
+    <Compile Include="Commands\AdminOwnership\TPM_TakeOwnership.cs" />
+    <Compile Include="KeyDataCore\TPMKeyCore.cs" />
+    <Compile Include="KeyDataCore\TPMStorePubkeyCore.cs" />
+    <Compile Include="Hash\HashTPMBlobWritableDataProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />
@@ -68,6 +72,8 @@
     <Folder Include="Commands\Eviction\" />
     <Folder Include="HandlesCore\" />
     <Folder Include="HandlesCore\Authorization\" />
+    <Folder Include="Commands\AdminOwnership\" />
+    <Folder Include="Hash\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_lowlvl\tpm_lowlvl.csproj">

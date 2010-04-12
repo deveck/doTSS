@@ -6,6 +6,7 @@
 using System;
 using Iaik.Connection.ClientConnections;
 using Iaik.Connection.Packets;
+using Iaik.Tc.TPM.Subsystems.TPMClient;
 
 namespace Iaik.Tc.TPM.Context
 {
@@ -53,8 +54,13 @@ namespace Iaik.Tc.TPM.Context
 			_debugClient = new DebugClient (this);
 			_authClient = new AuthenticationClient (this);
 			_tpmClient = new TPMClient (this);
+			
+			RegisterSubsystem (new TPMClientSubsystem (this));
+			
 			_configured = true;
-			_configuredEvent.Set();
+			_configuredEvent.Set ();
+			
+			
 		}
 	}
 }

@@ -48,6 +48,30 @@ namespace Iaik.Tc.TPM.Library.Common.KeyData
 			get { return _exponent;}
 		}
 
+		/// <summary>
+		/// If no exponent is supplied by the TPM the default value is used 2^16+1
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.Byte"/>
+		/// </returns>
+		public byte[] GetExponent ()
+		{
+			if (_exponent != null && _exponent.Length > 0)
+				return _exponent;
+			else
+			{
+				int exponent = 65537;
+				
+				byte[] expo = new byte[4];
+				
+				expo[0] = ((byte)(exponent >> 24));
+            	expo[1] = ((byte)(exponent >> 16));
+            	expo[2] = ((byte)(exponent >> 8));
+            	expo[3] = ((byte)(exponent));
+            	return expo;
+			}
+		}
+		
 		protected TPMRSAKeyParams ()
 		{
 		}

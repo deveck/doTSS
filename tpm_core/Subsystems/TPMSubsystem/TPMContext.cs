@@ -30,8 +30,6 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			get { return _tpm;}
 		}
 		
-		
-		
 		public TPMContext (string deviceName, TPMWrapper tpm)
 		{
 			_deviceName = deviceName;

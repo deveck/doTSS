@@ -5,7 +5,7 @@
 using System;
 using System.IO;
 
-namespace Iaik.Tc.TPM.Lowlevel.Data
+namespace Iaik.Utils.Serialization
 {
 	/// <summary>
     /// An extended version of the System.IO.MemoryStream with

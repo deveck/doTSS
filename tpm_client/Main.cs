@@ -17,7 +17,7 @@ namespace Iaik.Tc.TPM
 			
 			
 			
-			log4net.Appender.DebugAppender appender = new log4net.Appender.DebugAppender ();
+			log4net.Appender.ConsoleAppender appender = new log4net.Appender.ConsoleAppender ();
 			appender.Name = "DebugAppender";
 			appender.Layout = new log4net.Layout.PatternLayout ("[%date{dd.MM.yyyy HH:mm:ss,fff}]-%-5level-[%type]: %message%newline");
 			log4net.Config.BasicConfigurator.Configure (appender);

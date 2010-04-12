@@ -10,5 +10,6 @@ namespace Iaik.Tc.TPM.Subsystems
 		public const string SUBSYSTEM_DEBUG = "debug";
 		public const string SUBSYSTEM_AUTH = "auth";
 		public const string SUBSYSTEM_TPM = "tpm";
+		public const string SUBSYSTEM_TPMCLIENT = "tpm_client";
 	}
 }

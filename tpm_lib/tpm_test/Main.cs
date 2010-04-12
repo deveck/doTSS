@@ -13,13 +13,33 @@ using log4net;
 using Iaik.Utils;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 using Iaik.Tc.TPM.Library.Common.Handles;
+using Iaik.Utils.Hash;
+using System.Security.Cryptography;
 
 namespace tpm_test
 {
 	class MainClass
 	{
 		public static void Main (string[] args)
-		{				
+		{
+			RSA rsa = new RSACryptoServiceProvider (2048);
+			RSAParameters parameters = rsa.ExportParameters (false);
+			
+			Console.WriteLine ("P: {0}\nQ: {1}\nD: {2}\nDP: {3}\nDQ: {4}\nExpo: {5}\nInvQ: {6}\nMod: {7}", 
+				ByteHelper.ByteArrayToHexString (parameters.P),
+				ByteHelper.ByteArrayToHexString (parameters.Q),
+				ByteHelper.ByteArrayToHexString (parameters.D),
+				ByteHelper.ByteArrayToHexString (parameters.DP),
+				ByteHelper.ByteArrayToHexString (parameters.DQ),
+				ByteHelper.ByteArrayToHexString (parameters.Exponent),
+				ByteHelper.ByteArrayToHexString (parameters.InverseQ),
+				ByteHelper.ByteArrayToHexString (parameters.Modulus));
+			
+			rsa = new RSACryptoServiceProvider ();
+			rsa.ImportParameters (parameters);
+			rsa.EncryptValue (new byte[] { 0, 1, 2, 3 });
+			
+			
 			SetupLogging();
 			TPMWrapper tpm = new TPMWrapper();
 			IDictionary<string, string> dict = new Dictionary<string, string>();
