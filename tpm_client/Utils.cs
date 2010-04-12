@@ -9,12 +9,17 @@ namespace Iaik.Tc.TPM
 	public static class Utils
 	{
 
-		public static ProtectedPasswordStorage ReadPassword (string hintText, TPMConsole console)
+		public static ProtectedPasswordStorage ReadPassword (string hintText, TPMConsole console, bool retypePw)
 		{
 			console.Out.Write (hintText);
 			
 			ConsoleKeyInfo consoleKeyInfo;
-			ProtectedPasswordStorage[] pws = new ProtectedPasswordStorage[] { new ProtectedPasswordStorage (), new ProtectedPasswordStorage () };
+			ProtectedPasswordStorage[] pws;
+			
+			if(retypePw)
+				pws = new ProtectedPasswordStorage[] { new ProtectedPasswordStorage (), new ProtectedPasswordStorage () };
+			else
+				pws = new ProtectedPasswordStorage[] { new ProtectedPasswordStorage() };
 			
 			for (int i = 0; i < pws.Length; i++)
 			{
@@ -41,7 +46,7 @@ namespace Iaik.Tc.TPM
 				}
 			}
 			
-			if (pws[0].Equals (pws[1]))
+			if (retypePw == false || pws[0].Equals (pws[1]))
 				return pws[0];
 			else
 			{

@@ -7,9 +7,13 @@ using System;
 using Iaik.Tc.TPM.Library.Common;
 using Iaik.Tc.TPM.Subsystems.TPMSubsystem;
 using System.Collections.Generic;
+using Iaik.Utils.Hash;
+using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
+using log4net;
 
 namespace Iaik.Tc.TPM.Context
 {
+	public delegate ProtectedPasswordStorage RequestSecretDelegate(HMACKeyInfo keyInfo);
 
 	/// <summary>
 	/// Combines all operations that can be performed on a tpm.
@@ -18,6 +22,21 @@ namespace Iaik.Tc.TPM.Context
 	public class TPMSession : IDisposable
 	{
 	
+		/// <summary>
+		/// Logger
+		/// </summary>
+		protected ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+	
+		
+		/// <summary>
+		/// Called if the framework needs a secret from the user to authenticate
+		/// a request.
+		/// The default value is taken from the TPMClient
+		/// </summary>
+		private RequestSecretDelegate _requestSecret = null;
+		
+		
+		
 		/// <summary>
 		/// Specifies the owner auth data
 		/// </summary>
@@ -159,5 +178,53 @@ namespace Iaik.Tc.TPM.Context
 			_parameters.Remove (key);
 		}
 		#endregion
+		
+		/// <summary>
+		/// If not cached, the desired secret is requested from the user
+		/// </summary>
+		/// <param name="keyInfo"></param>
+		/// <returns></returns>
+		public ProtectedPasswordStorage RequestSecret(HMACKeyInfo keyInfo)
+		{
+			string dictKey = null;
+			
+			if(keyInfo.KeyType == HMACKeyInfo.HMACKeyType.OwnerSecret)
+				dictKey = PARAM_AUTH_OWNER;
+			else if(keyInfo.KeyType == HMACKeyInfo.HMACKeyType.SrkSecret)
+				dictKey = PARAM_AUTH_SRK;
+			else
+				throw new NotSupportedException(string.Format("The key type '{0}' is not supported", keyInfo.KeyType));
+			
+			ProtectedPasswordStorage pw = GetValue<ProtectedPasswordStorage>(dictKey, null);
+			if(pw == null)
+			{
+				_logger.DebugFormat("Secret for dictkey '{0}' was not found in cache, requesting from user", dictKey);
+				return RaiseRequestSecret(keyInfo);
+			}
+			else
+			{
+				_logger.DebugFormat("Secret for dictkey '{0}' was found in cache", dictKey);
+				return pw;
+			}
+		}
+		
+		private ProtectedPasswordStorage RaiseRequestSecret(HMACKeyInfo keyInfo)
+		{
+			if(_requestSecret == null)
+				return null;
+			
+			return _requestSecret(keyInfo);
+		}
+		
+		/// <summary>
+		/// Sets the request secret callback
+		/// </summary>
+		/// <param name="requestSecret">
+		/// A <see cref="RequestSecretDelegate"/>
+		/// </param>
+		public void SetRequestSecretCallback(RequestSecretDelegate requestSecret)
+		{
+			_requestSecret = requestSecret;
+		}
 	}
 }

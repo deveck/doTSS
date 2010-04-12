@@ -46,7 +46,7 @@ namespace Iaik.Tc.TPM.Commands
             conn.Connect();
 
             ClientContext ctx = EndpointContext.CreateClientEndpointContext(conn);
-
+			ctx.TPMClient.SetRequestSecretCallback(_console.AsyncSecretRequestCallback);
             _console.SetValue("client_context", ctx);
         }
     }

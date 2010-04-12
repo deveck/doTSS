@@ -4,13 +4,23 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using Iaik.Tc.TPM.Commands;
+using Iaik.Utils.Hash;
+using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
+using log4net;
 
 namespace Iaik.Tc.TPM
 {
     public class TPMConsole
     {
-        /// <summary>
+  		/// <summary>
+		/// Logger
+		/// </summary>
+		protected ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+	
+		
+		/// <summary>
         /// Values that can be used and set by the commands
         /// </summary>
         private Dictionary<string, object> _values = new Dictionary<string, object>();
@@ -33,13 +43,17 @@ namespace Iaik.Tc.TPM
         /// <summary>
         /// Contains all Commands
         /// </summary>
-        private IDictionary<string, IConsoleCommand> _commands = new SortedDictionary<string, IConsoleCommand>();
+        private IDictionary<string, IConsoleCommand> _commands = new SortedDictionary<string, IConsoleCommand>();	
 
-		
 		/// <summary>
-		///In script execution mode, the top contains the current script execution path 
+		/// In script execution mode, the top contains the current script execution path 
 		/// </summary>
 		private Stack<string> _currentScriptExecutionPath = new Stack<string>();
+		
+		/// <summary>
+		/// Contains all currently queued secret requests 
+		/// </summary>
+		private Queue<SecretRequest> _secretRequests = new Queue<SecretRequest>();
 		
         /// <summary>
         /// Returns a text writer where output of the commands is written to
@@ -154,16 +168,76 @@ namespace Iaik.Tc.TPM
         /// </summary>
         public void Run ()
         {
+			bool outputPrompt = true;
+			StringBuilder currentCommandLine = new StringBuilder();
+			
+			bool commandReady = true;
+			bool commandRunning = false;
+			
         	while (_runConsoleLoop)
             {
-        		
-                Out.Write (":> ");
-        		string commandLine = In.ReadLine ().Trim ();
-
-                InterpretCommand (commandLine, false);
+        	
+				if(commandRunning == false && outputPrompt)
+				{
+                	Out.Write (":> ");
+					outputPrompt = false;
+				}
+				
+				while(commandRunning == false && Console.KeyAvailable)
+				{
+					ConsoleKeyInfo keyInfo = Console.ReadKey();
+					
+					if(keyInfo.Key == ConsoleKey.Backspace)
+						currentCommandLine.Remove(currentCommandLine.Length - 1, 1);
+					else if(keyInfo.Key == ConsoleKey.Enter)
+					{
+						commandReady = false;
+						commandRunning = true;
+						InterpretCommand(currentCommandLine.ToString(), false, false, ref commandReady);
+						
+						currentCommandLine.Remove(0, currentCommandLine.Length);
+						outputPrompt = true;
+					}
+					else
+						currentCommandLine.Append(keyInfo.KeyChar);
+				}
+				
+				if(commandReady)
+				{
+					commandRunning = false;
+				}
+				
+				SecretRequest secretRequest = null;
+				lock(_secretRequests)
+				{
+					if(_secretRequests.Count > 0)
+						secretRequest = _secretRequests.Dequeue();
+				}
+				
+				if(secretRequest != null)
+				{
+					HandleSecretRequest(secretRequest);	
+					currentCommandLine.Remove(0, currentCommandLine.Length);
+				}
+				
+				Thread.Sleep(10);				
         	
             }
         }
+		
+		private void HandleSecretRequest(SecretRequest request)
+		{
+			ProtectedPasswordStorage pw = null;
+			if(request.KeyInfo.KeyType == HMACKeyInfo.HMACKeyType.OwnerSecret)
+				request.ProtectedPassword = Utils.ReadPassword("Server requests owner password:", this, false);
+			else if(request.KeyInfo.KeyType == HMACKeyInfo.HMACKeyType.SrkSecret)
+				request.ProtectedPassword = Utils.ReadPassword("Server requests srk password:", this, false);
+			else
+				throw new ArgumentException("Key type not supported by TPM console");
+			
+			request.PasswordReady.Set();
+			
+		}
 		
 		public void RunScriptFile (string scriptFile)
 		{
@@ -223,7 +297,8 @@ namespace Iaik.Tc.TPM
 					{
 						try
 						{
-							InterpretCommand (currentLine, true);
+							bool dummy = false;
+							InterpretCommand (currentLine, true, true, ref dummy);
 						}
 						catch (Exception)
 						{
@@ -236,30 +311,50 @@ namespace Iaik.Tc.TPM
 			}
 		}
 		
-		private void InterpretCommand (string commandLine, bool throwOnException)
+		private void  InterpretCommand (string commandLine, bool throwOnException, bool sync, ref bool commandReady)
 		{
-			if (!commandLine.Equals (String.Empty))
-            {
-
-                string[] commandParts = commandLine.Split (' ');
-				if (commandParts.Length > 0 && _commands.ContainsKey (commandParts[0]))
-                {
-					try
-                    {
-						_commands[commandParts[0]].Execute (commandParts);
-					}
-                    catch (Exception ex)
-                    {
-						Out.WriteLine ("Error while executing command '{0}': {1}", commandParts[0], ex);
-						if (throwOnException)
-							throw;
-    				}
-    			}
-                else
-    				Out.WriteLine ("Unknown command...");
-
-            }
-        	
+			AutoResetEvent evt = null;
+			
+			if(sync)
+				evt = new AutoResetEvent(false);
+			
+			ThreadPool.QueueUserWorkItem(delegate(object state)
+			{
+				try
+				{
+					if (!commandLine.Equals (String.Empty))
+		            {
+		
+		                string[] commandParts = commandLine.Split (' ');
+						if (commandParts.Length > 0 && _commands.ContainsKey (commandParts[0]))
+		                {
+							try
+		                    {
+								_commands[commandParts[0]].Execute (commandParts);
+							}
+		                    catch (Exception ex)
+		                    {
+								Out.WriteLine ("Error while executing command '{0}': {1}", commandParts[0], ex);
+								if (throwOnException)
+									throw;
+		    				}
+		    			}
+		                else
+		    				Out.WriteLine ("Unknown command...");
+						
+		
+		            }
+				}
+				finally
+				{
+					if(sync)
+						evt.Set();
+				}
+				});
+				
+			if(sync)
+				evt.WaitOne();
+			
 		}
 		
 		
@@ -296,6 +391,22 @@ namespace Iaik.Tc.TPM
 		{
 			return Console.ReadKey (true);
 		}
-        
-    }
+		
+		public void AddSecretRequest(SecretRequest secretRequest)		
+		{
+			lock(_secretRequests)
+				_secretRequests.Enqueue(secretRequest);
+		}
+		
+		public ProtectedPasswordStorage AsyncSecretRequestCallback(HMACKeyInfo keyInfo)
+		{
+			_logger.DebugFormat("Async requesting secret '{0}'", keyInfo.KeyType);			
+			
+			SecretRequest request = new SecretRequest(keyInfo);
+			AddSecretRequest(request);
+			request.PasswordReady.WaitOne();
+			return request.ProtectedPassword;
+		}
+			
+	}
 }

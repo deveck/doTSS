@@ -9,6 +9,8 @@ using Iaik.Tc.TPM.Configuration;
 using Iaik.Tc.TPM.Authentication;
 using System.Collections.Generic;
 using Iaik.Utils.CommonFactories;
+using System.Security.Cryptography;
+using Iaik.Utils.Hash;
 
 namespace Iaik.Tc.TPM.Subsystems.TPMClient
 {
@@ -69,6 +71,16 @@ namespace Iaik.Tc.TPM.Subsystems.TPMClient
         		response.SetKnownErrorCode (GenerateHMACResponse.ErrorCodeEnum.TPMSessionNotFound);
         		response.Execute ();
         		return;
+			}
+			
+			_logger.DebugFormat("Requesting password: {0}", requestContext.Request.KeyInfo.KeyType);
+			ProtectedPasswordStorage pw = session.RequestSecret(requestContext.Request.KeyInfo);
+			if(pw == null)
+			{
+				response.Succeeded = false;
+				response.SetKnownErrorCode(GenerateHMACResponse.ErrorCodeEnum.HMACSecretMissing);
+				response.Execute();
+				return;
 			}
 			
 			

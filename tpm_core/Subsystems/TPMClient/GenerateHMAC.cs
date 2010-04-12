@@ -39,6 +39,9 @@ namespace Iaik.Tc.TPM.Subsystems.TPMClient
 		}
 		
 		
+		
+		
+		
 		public GenerateHMACRequest (EndpointContext ctx)
 			: base(ctx)
 		{

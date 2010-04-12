@@ -67,6 +67,7 @@
     <Compile Include="Commands\TPMSessionEkCommand.cs" />
     <Compile Include="Commands\TPMSessionAdminCommand.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="SecretRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_core\tpm_core.csproj">

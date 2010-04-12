@@ -25,6 +25,11 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 			OwnerSecret,
 			
 			/// <summary>
+			/// The SRK secret is used as hmac key
+			/// </summary>
+			SrkSecret,
+			
+			/// <summary>
 			/// The secret of the specified key is used as hmac key
 			/// </summary>
 			KeyUsageSecret

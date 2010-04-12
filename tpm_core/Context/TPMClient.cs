@@ -28,6 +28,11 @@ namespace Iaik.Tc.TPM.Context
 		private Dictionary<int, TPMSession> _activeSessions = new Dictionary<int, TPMSession>();
 	
 		/// <summary>
+		/// Requests a secret from the user
+		/// </summary>
+		private RequestSecretDelegate _requestSecret = null;
+		
+		/// <summary>
 		/// Lists all available TPM devices
 		/// </summary>
 		public string[] TPMDevices
@@ -59,6 +64,8 @@ namespace Iaik.Tc.TPM.Context
 			response.AssertTPMSuccess ();
 			
 			TPMSession session = new TPMSession (_ctx, response.TPMSessionIdentifier, this);
+			session.SetRequestSecretCallback(_requestSecret);			                                 
+			                                 
 			_activeSessions.Add (session.SessionIdentifier, session);
 			
 			return session;
@@ -90,7 +97,12 @@ namespace Iaik.Tc.TPM.Context
 				tpmSession.Dispose ();
 			}
 		}
+
 		
+		public void SetRequestSecretCallback(RequestSecretDelegate requestSecret)
+		{
+			_requestSecret = requestSecret;
+		}
 			
         public TPMClient (EndpointContext ctx)
         {

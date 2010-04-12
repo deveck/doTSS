@@ -19,6 +19,11 @@ namespace Iaik.Tc.TPM.Subsystems.TPMClient
 			///The received session identifier is not associated with an active tpm session 
 			/// </summary>
 			TPMSessionNotFound = SubsystemResponse.CommonErrorCodes.CustomErrorCodeBase + 1,
+			
+			/// <summary>
+			/// The secret for hmac generation was not entered correctly
+			/// </summary>
+			HMACSecretMissing
         }
 
 
@@ -28,6 +33,8 @@ namespace Iaik.Tc.TPM.Subsystems.TPMClient
 			{
     			if (_errorCode.Value == (int)ErrorCodeEnum.TPMSessionNotFound)
     				return "The session identifier is not associated with an active tpm session";
+				else if(_errorCode.Value == (int)ErrorCodeEnum.HMACSecretMissing)
+					return "The HMAC secret could not be retrieved!";
     			else
     				return null;
 			}
