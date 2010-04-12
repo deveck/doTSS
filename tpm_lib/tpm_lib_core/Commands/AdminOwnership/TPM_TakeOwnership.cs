@@ -90,7 +90,7 @@ namespace Iaik.Tc.TPM.Library.Commands.AdminOwnership
 			
 			WriteAuthorizationInfo (requestBlob, authInfo);
 			
-			TPMBlob responseBlob = _tpmProvider.TransmitAndCheck (requestBlob);
+			/*TPMBlob responseBlob =*/ _tpmProvider.TransmitAndCheck (requestBlob);
 			return null;
 		}
 		

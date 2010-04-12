@@ -63,6 +63,11 @@ namespace Iaik.Tc.TPM.Context
 		/// </summary>
 		private bool _active = true;
 		
+		public bool Active
+		{
+			get{ return _active;}
+		}
+		
 		/// <summary>
 		/// Contains the unique session identifier of the tpm session
 		/// </summary>

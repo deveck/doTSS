@@ -36,13 +36,13 @@ namespace Iaik.Tc.TPM.Library.Common
 		}
 		
 		#region IStreamSerializable implementation
-		public void Write (Stream sink)
+		public override void Write (Stream sink)
 		{
 			base.Write(sink);
 			StreamHelper.WriteBool (_status, sink);
 		}
 		
-		public void Read (Stream src)
+		public override void Read (Stream src)
 		{
 			base.Read(src);
 			_status = StreamHelper.ReadBool (src);

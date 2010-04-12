@@ -120,6 +120,9 @@ namespace Iaik.Utils
 		{
 			byte[] buf = new byte[length];
 			int read = src.Read(buf, 0, length);
+			
+			if(read != length)
+				throw new ArgumentException("Could not read enough bytes!");
 			return buf;
 		}
 		

@@ -46,7 +46,7 @@ namespace Iaik.Tc.TPM
 				}
 			}
 			
-			if (retypePw == false || pws[0].Equals (pws[1]))
+			if (retypePw == false || pws[0].EqualPassword (pws[1]))
 				return pws[0];
 			else
 			{

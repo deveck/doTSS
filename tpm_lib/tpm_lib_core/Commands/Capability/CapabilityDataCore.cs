@@ -23,7 +23,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 			#region ITpmBlobReadable implementation
 			public void ReadFromTpmBlob (TPMBlob blob)
 			{
-				uint responseSize = blob.ReadUInt32 ();
+				/*uint responseSize = */blob.ReadUInt32 ();
 				
 				this._tag = blob.ReadUInt16 ();
 				this._version = new TPMVersionCore (blob);

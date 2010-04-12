@@ -172,13 +172,13 @@ namespace Iaik.Utils.Hash
 			_hash = null;
 		}
 
-		public override bool Equals (object obj)
+		public bool EqualPassword (ProtectedPasswordStorage obj)
 		{
-			if (!(obj is ProtectedPasswordStorage) || obj == null)
+			if (obj == null)
 				return false;
 			
 			IntPtr plain1 = Marshal.SecureStringToBSTR (_plainPassword);
-			IntPtr plain2 = Marshal.SecureStringToBSTR (((ProtectedPasswordStorage)obj)._plainPassword);
+			IntPtr plain2 = Marshal.SecureStringToBSTR (obj._plainPassword);
 			try
 			{
 				unsafe
@@ -197,7 +197,6 @@ namespace Iaik.Utils.Hash
 						currentIndex++;
 					}
 					
-					return false;
 				}
 			}
 			finally

@@ -227,7 +227,6 @@ namespace Iaik.Tc.TPM
 		
 		private void HandleSecretRequest(SecretRequest request)
 		{
-			ProtectedPasswordStorage pw = null;
 			if(request.KeyInfo.KeyType == HMACKeyInfo.HMACKeyType.OwnerSecret)
 				request.ProtectedPassword = Utils.ReadPassword("Server requests owner password:", this, false);
 			else if(request.KeyInfo.KeyType == HMACKeyInfo.HMACKeyType.SrkSecret)

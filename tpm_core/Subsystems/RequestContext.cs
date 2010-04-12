@@ -25,6 +25,11 @@ namespace Iaik.Tc.TPM.Subsystems
 		/// </summary>
 		private EndpointContext _ctx;
 		
+		public EndpointContext Context
+		{
+			get{ return _ctx;}
+		}
+		
 		/// <summary>
 		/// Request receives from the remote side
 		/// </summary>

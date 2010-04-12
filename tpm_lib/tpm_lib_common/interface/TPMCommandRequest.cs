@@ -29,17 +29,5 @@ namespace Iaik.Tc.TPM.Library.Common
 		{
 		}
 	
-		#region IStreamSerializable implementation
-		public void Write (Stream sink)
-		{
-			base.Write(sink);
-		}
-		
-		
-		public void Read (Stream src)
-		{
-			base.Read(src);
-		}
-		#endregion
 	}
 }

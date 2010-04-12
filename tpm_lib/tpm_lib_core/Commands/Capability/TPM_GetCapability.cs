@@ -20,11 +20,6 @@ namespace Iaik.Tc.TPM.Library.Commands
 		private CapabilityData.TPMCapabilityArea _capArea;
 		
 		/// <summary>
-		/// Further definition of information
-		/// </summary>
-		private byte[] _subCap;
-		
-		/// <summary>
 		/// Parameters need to be cached 
 		/// </summary>
 		private Parameters _param;

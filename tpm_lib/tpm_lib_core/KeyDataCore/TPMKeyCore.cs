@@ -63,7 +63,7 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 			_algorithmParams = new TPMKeyParamsCore (blob);
 			
 			uint pcrInfoSize = blob.ReadUInt32 ();
-			byte[] pcrInfo = blob.ReadBytes ((int)pcrInfoSize);
+			/*byte[] pcrInfo =*/ blob.ReadBytes ((int)pcrInfoSize);
 			
 			_pubKey = new TPMStorePubkeyCore (blob);
 			

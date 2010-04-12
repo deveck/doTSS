@@ -27,7 +27,7 @@ namespace Iaik.Tc.TPM.Library.Commands.Eviction
 			
 			requestBlob.WriteCmdSize ();
 			
-			TPMBlob responseBlob = _tpmProvider.TransmitAndCheck (requestBlob);
+			/*TPMBlob responseBlob =*/ _tpmProvider.TransmitAndCheck (requestBlob);
 			
 			return new TPMCommandResponse (true, TPMCommandNames.TPM_CMD_FlushSpecific, new Parameters ());
 		}

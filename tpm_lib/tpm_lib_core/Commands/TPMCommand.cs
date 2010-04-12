@@ -14,7 +14,6 @@ namespace Iaik.Tc.TPM.Library.Commands
 	{
 		protected TPMProvider _tpmProvider = null;
 		
-		private readonly String name_;
 		protected readonly UInt32 commandOrdinal_;
 		protected readonly UInt32 commandTag_;
 		protected  Parameters _params;

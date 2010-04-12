@@ -86,7 +86,7 @@ namespace Iaik.Tc.TPM.Library.Common
 		/// <param name="sink">
 		/// A <see cref="Stream"/>
 		/// </param>
-		public void Write (Stream sink)
+		public virtual void Write (Stream sink)
 		{
 			StreamHelper.WriteString (_commandIdentifier, sink);
 			_params.Write (sink);
@@ -98,7 +98,7 @@ namespace Iaik.Tc.TPM.Library.Common
 		/// <param name="src">
 		/// A <see cref="Stream"/>
 		/// </param>
-		public void Read (Stream src)
+		public virtual void Read (Stream src)
 		{
 			_commandIdentifier = StreamHelper.ReadString (src);
 			_params = new Parameters (src);
