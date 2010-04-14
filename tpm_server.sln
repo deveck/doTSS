@@ -17,7 +17,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{D7AF28
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tpm_server", "tpm_server\tpm_server.csproj", "{2880E558-F34E-4AA5-A7CB-E6EB68B490EA}"
 EndProject
-<<<<<<< HEAD:tpm_server.sln
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TPM", "TPM", "{AABB2FB3-5027-4D97-A178-F6A6E1B6CAE0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tpm_lowlvl", "tpm_lib\tpm_lowlvl\tpm_lowlvl.csproj", "{1C051352-0BC4-4EE2-A5FF-C694C197A3AA}"
@@ -32,19 +31,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Keystore", "Keystore", "{CB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tpm_keystore", "tpm_keystore\tpm_keystore.csproj", "{60F8FBD3-BD24-444D-972E-B7BC080EA008}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Storage", "Storage", "{B733EB5C-A476-49DE-9173-4EE283EBC071}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "KeyManager", "KeyManager", "{B733EB5C-A476-49DE-9173-4EE283EBC071}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tpm_storage", "tpm_storage\tpm_storage.csproj", "{09F3F97D-CCE4-473E-AAED-21E80C9DBA54}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tpm_keymanger", "tpm_storage\tpm_keymanger.csproj", "{09F3F97D-CCE4-473E-AAED-21E80C9DBA54}"
 EndProject
-=======
->>>>>>> master:tpm_server.sln
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-<<<<<<< HEAD:tpm_server.sln
 		{09F3F97D-CCE4-473E-AAED-21E80C9DBA54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{09F3F97D-CCE4-473E-AAED-21E80C9DBA54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09F3F97D-CCE4-473E-AAED-21E80C9DBA54}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -53,19 +49,14 @@ Global
 		{1C051352-0BC4-4EE2-A5FF-C694C197A3AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C051352-0BC4-4EE2-A5FF-C694C197A3AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C051352-0BC4-4EE2-A5FF-C694C197A3AA}.Release|Any CPU.Build.0 = Release|Any CPU
-=======
->>>>>>> master:tpm_server.sln
 		{2880E558-F34E-4AA5-A7CB-E6EB68B490EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2880E558-F34E-4AA5-A7CB-E6EB68B490EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2880E558-F34E-4AA5-A7CB-E6EB68B490EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2880E558-F34E-4AA5-A7CB-E6EB68B490EA}.Release|Any CPU.Build.0 = Release|Any CPU
-<<<<<<< HEAD:tpm_server.sln
 		{3C66F3CE-CDD7-43CB-9847-9CC97715D683}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3C66F3CE-CDD7-43CB-9847-9CC97715D683}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C66F3CE-CDD7-43CB-9847-9CC97715D683}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C66F3CE-CDD7-43CB-9847-9CC97715D683}.Release|Any CPU.Build.0 = Release|Any CPU
-=======
->>>>>>> master:tpm_server.sln
 		{4299FAC7-1E40-4530-AB1E-EA1CC963F913}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4299FAC7-1E40-4530-AB1E-EA1CC963F913}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4299FAC7-1E40-4530-AB1E-EA1CC963F913}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -74,18 +65,14 @@ Global
 		{4D1DBB08-821E-44F4-BE21-B9695E4EE8F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D1DBB08-821E-44F4-BE21-B9695E4EE8F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D1DBB08-821E-44F4-BE21-B9695E4EE8F1}.Release|Any CPU.Build.0 = Release|Any CPU
-<<<<<<< HEAD:tpm_server.sln
 		{60F8FBD3-BD24-444D-972E-B7BC080EA008}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{60F8FBD3-BD24-444D-972E-B7BC080EA008}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60F8FBD3-BD24-444D-972E-B7BC080EA008}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60F8FBD3-BD24-444D-972E-B7BC080EA008}.Release|Any CPU.Build.0 = Release|Any CPU
-=======
->>>>>>> master:tpm_server.sln
 		{892CAB5C-D501-47B1-82E2-BE8492E7E378}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{892CAB5C-D501-47B1-82E2-BE8492E7E378}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{892CAB5C-D501-47B1-82E2-BE8492E7E378}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{892CAB5C-D501-47B1-82E2-BE8492E7E378}.Release|Any CPU.Build.0 = Release|Any CPU
-<<<<<<< HEAD:tpm_server.sln
 		{9AADA320-4FD9-4CB9-A5AE-3ABE2A6BF368}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9AADA320-4FD9-4CB9-A5AE-3ABE2A6BF368}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AADA320-4FD9-4CB9-A5AE-3ABE2A6BF368}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -94,12 +81,14 @@ Global
 		{A13F9848-D20F-4551-86D7-A53CED2BCAF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A13F9848-D20F-4551-86D7-A53CED2BCAF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A13F9848-D20F-4551-86D7-A53CED2BCAF7}.Release|Any CPU.Build.0 = Release|Any CPU
-=======
->>>>>>> master:tpm_server.sln
 		{F6681243-5DCF-4B0B-BC85-0F1290CF0334}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F6681243-5DCF-4B0B-BC85-0F1290CF0334}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6681243-5DCF-4B0B-BC85-0F1290CF0334}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6681243-5DCF-4B0B-BC85-0F1290CF0334}.Release|Any CPU.Build.0 = Release|Any CPU
+		=======
+		=======
+		=======
+		=======
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F6681243-5DCF-4B0B-BC85-0F1290CF0334} = {D66E45D9-91DC-4445-AE8B-99FF8FEDEEC9}
@@ -107,21 +96,17 @@ Global
 		{892CAB5C-D501-47B1-82E2-BE8492E7E378} = {D66E45D9-91DC-4445-AE8B-99FF8FEDEEC9}
 		{4299FAC7-1E40-4530-AB1E-EA1CC963F913} = {2B35EF26-373D-4910-A5A0-A54D6A798C5D}
 		{2880E558-F34E-4AA5-A7CB-E6EB68B490EA} = {D7AF289D-966B-45F2-99A1-DFCCBEC216D1}
-<<<<<<< HEAD:tpm_server.sln
 		{1C051352-0BC4-4EE2-A5FF-C694C197A3AA} = {AABB2FB3-5027-4D97-A178-F6A6E1B6CAE0}
 		{A13F9848-D20F-4551-86D7-A53CED2BCAF7} = {AABB2FB3-5027-4D97-A178-F6A6E1B6CAE0}
 		{9AADA320-4FD9-4CB9-A5AE-3ABE2A6BF368} = {AABB2FB3-5027-4D97-A178-F6A6E1B6CAE0}
 		{3C66F3CE-CDD7-43CB-9847-9CC97715D683} = {AABB2FB3-5027-4D97-A178-F6A6E1B6CAE0}
 		{60F8FBD3-BD24-444D-972E-B7BC080EA008} = {CB1AAF7C-612A-4ACC-AB2D-1E35E95A8256}
 		{09F3F97D-CCE4-473E-AAED-21E80C9DBA54} = {B733EB5C-A476-49DE-9173-4EE283EBC071}
-=======
->>>>>>> master:tpm_server.sln
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = tpm_server\tpm_server.csproj
 		Policies = $0
 		$0.StandardHeader = $1
-<<<<<<< HEAD:tpm_server.sln
 		$1.Text = @Author: Andreas Reiter <andreas.reiter@student.tugraz.at>\nAuthor: Georg Neubauer <georg.neubauer@student.tugraz.at>
 		$1.inheritsSet = MITX11License
 		$0.VersionControlPolicy = $2
@@ -131,10 +116,6 @@ Global
 		$3.MessageStyle = $4
 		$4.LineAlign = 0
 		$3.inheritsSet = Mono
-=======
-		$1.Text = @\n\n Author: Andreas Reiter <andreas.reiter@student.tugraz.at>\n Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
-		$1.inheritsSet = MITX11License
->>>>>>> master:tpm_server.sln
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

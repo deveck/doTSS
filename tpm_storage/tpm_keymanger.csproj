@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{60F8FBD3-BD24-444D-972E-B7BC080EA008}</ProjectGuid>
+    <ProjectGuid>{09F3F97D-CCE4-473E-AAED-21E80C9DBA54}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>tpm_keystore</RootNamespace>
-    <AssemblyName>tpm_keystore</AssemblyName>
+    <RootNamespace>tpm_storage</RootNamespace>
+    <AssemblyName>tpm_storage</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -31,16 +31,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="Mono.Security" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyClass.cs" />
+    <Compile Include="TpmStorage.cs" />
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\tpm_storage\tpm_keymanger.csproj">
-      <Project>{09F3F97D-CCE4-473E-AAED-21E80C9DBA54}</Project>
-      <Name>tpm_keymanger</Name>
-    </ProjectReference>
+    <Folder Include="backends\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
