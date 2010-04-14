@@ -7,7 +7,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{09F3F97D-CCE4-473E-AAED-21E80C9DBA54}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>tpm_storage</RootNamespace>
+    <RootNamespace>Iaik.Tc.TPM.Keymanager</RootNamespace>
     <AssemblyName>tpm_storage</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -34,8 +34,8 @@
     <Reference Include="Mono.Security" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TpmStorage.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="TpmKeymanager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="backends\" />

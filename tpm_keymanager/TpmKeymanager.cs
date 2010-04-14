@@ -4,14 +4,14 @@
 using System;
 using Mono.Security.X509;
 
-namespace Iaik.Tc.TPM.Storage
+namespace Iaik.Tc.TPM.Keymanager
 {
 
 
-	public class TpmStorage
+	public class TpmKeymanager
 	{
 
-		public TpmStorage ()
+		public TpmKeymanager ()
 		{
 			
 		}
