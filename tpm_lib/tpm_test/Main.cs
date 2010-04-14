@@ -22,22 +22,22 @@ namespace tpm_test
 	{
 		public static void Main (string[] args)
 		{
-			RSA rsa = new RSACryptoServiceProvider (2048);
-			RSAParameters parameters = rsa.ExportParameters (false);
-			
-			Console.WriteLine ("P: {0}\nQ: {1}\nD: {2}\nDP: {3}\nDQ: {4}\nExpo: {5}\nInvQ: {6}\nMod: {7}", 
-				ByteHelper.ByteArrayToHexString (parameters.P),
-				ByteHelper.ByteArrayToHexString (parameters.Q),
-				ByteHelper.ByteArrayToHexString (parameters.D),
-				ByteHelper.ByteArrayToHexString (parameters.DP),
-				ByteHelper.ByteArrayToHexString (parameters.DQ),
-				ByteHelper.ByteArrayToHexString (parameters.Exponent),
-				ByteHelper.ByteArrayToHexString (parameters.InverseQ),
-				ByteHelper.ByteArrayToHexString (parameters.Modulus));
-			
-			rsa = new RSACryptoServiceProvider ();
-			rsa.ImportParameters (parameters);
-			rsa.EncryptValue (new byte[] { 0, 1, 2, 3 });
+//			RSA rsa = new RSACryptoServiceProvider (2048);
+//			RSAParameters parameters = rsa.ExportParameters (false);
+//			
+//			Console.WriteLine ("P: {0}\nQ: {1}\nD: {2}\nDP: {3}\nDQ: {4}\nExpo: {5}\nInvQ: {6}\nMod: {7}", 
+//				ByteHelper.ByteArrayToHexString (parameters.P),
+//				ByteHelper.ByteArrayToHexString (parameters.Q),
+//				ByteHelper.ByteArrayToHexString (parameters.D),
+//				ByteHelper.ByteArrayToHexString (parameters.DP),
+//				ByteHelper.ByteArrayToHexString (parameters.DQ),
+//				ByteHelper.ByteArrayToHexString (parameters.Exponent),
+//				ByteHelper.ByteArrayToHexString (parameters.InverseQ),
+//				ByteHelper.ByteArrayToHexString (parameters.Modulus));
+//			
+//			rsa = new RSACryptoServiceProvider ();
+//			rsa.ImportParameters (parameters);
+//			rsa.EncryptValue (new byte[] { 0, 1, 2, 3 });
 			
 			
 			SetupLogging();
@@ -45,12 +45,13 @@ namespace tpm_test
 			IDictionary<string, string> dict = new Dictionary<string, string>();
 			dict.Add("DeviceName","/dev/tpm0");
 			dict.Add("debug", "True");
-			//tpm.Init("linux/device", dict);
-			tpm.Init("linux/tddl", dict);
+			tpm.Init("linux/device", dict);
+			//tpm.Init("linux/tddl", dict);
 			tpm.Open();
 			
-			//ReadPCRs(tpm);
-			EstablishOIAP(tpm);
+			ReadPCRs(tpm);
+			ReadCapabilities(tpm);
+			//EstablishOIAP(tpm);
 			tpm.Dispose();
 			//tpm.init;
 			//tpm.backend.tpmOpen();
@@ -58,13 +59,21 @@ namespace tpm_test
 		}
 		
 		private static void ReadPCRs(TPMWrapper tpm){
-			UInt32 i = 0;
-			
+			uint i = 0;
+					
 		    ILog log = LogManager.GetLogger("ReadPCRs");
 			
-			for(i=0; i<24; ++i){
+			Parameters param = new Parameters();
+			param.AddPrimitiveType("capArea", CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY);
+			param.AddPrimitiveType("subCap", CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_PCR);
+			TPMCommandRequest request = new TPMCommandRequest(TPMCommandNames.TPM_CMD_GetCapability, param);
+			TPMCommandResponse response = tpm.Process(request);
 			
-				Parameters param = new Parameters();
+			uint maxPcrs = response.Parameters.GetValueOf<uint>(CapabilityData.PARAM_PROP_PCR);
+			
+			for(i=0; i<maxPcrs; ++i){
+			
+				param = new Parameters();
 				param.AddPrimitiveType("pcrnum", i);
 				TPMCommandRequest req = new TPMCommandRequest(TPMCommandNames.TPM_CMD_PCRRead,param);
 				TPMCommandResponse resp = tpm.Process(req);
@@ -115,6 +124,53 @@ namespace tpm_test
 			
 			return null;
 		}
+		
+		private static void ReadCapabilities(TPMWrapper tpm)
+		{
+			ILog log = LogManager.GetLogger("ReadCapabilities");
+			// Read out each capability property
+			foreach(CapabilityData.TPMSubCapProperty subCap in Enum.GetValues(typeof(CapabilityData.TPMSubCapProperty)))
+			{
+				Parameters param = new Parameters();
+				param.AddPrimitiveType("capArea", CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY);
+				param.AddPrimitiveType("subCap", subCap);
+				TPMCommandRequest request = new TPMCommandRequest(TPMCommandNames.TPM_CMD_GetCapability, param);
+				TPMCommandResponse response = tpm.Process(request);
+				switch(subCap)
+				{
+				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_PCR:
+					log.InfoFormat("Number of PCRs is {0}", response.Parameters.GetValueOf<uint>(CapabilityData.PARAM_PROP_PCR));
+					break;
+				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_DIR:
+					log.InfoFormat("Number of DIR is {0} and should be 1 because command is deprecated", response.Parameters.GetValueOf<uint>(CapabilityData.PARAM_PROP_DIR));
+					break;
+				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MANUFACTURER:
+					log.InfoFormat("Manufacturer ID is {0}", response.Parameters.GetValueOf<uint>(CapabilityData.PARAM_PROP_MANUFACTURER));
+					break;
+				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_KEYS:
+					log.InfoFormat("Number of free keyslots is {0}", response.Parameters.GetValueOf<uint>(CapabilityData.PARAM_PROP_KEYS));
+					break;
+				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_AUTHSESS:
+					log.InfoFormat("Number of max Auth Sessions is {0}", response.Parameters.GetValueOf<uint>(CapabilityData.PARAM_PROP_MAX_AUTHSESS));
+					break;
+				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_TRANSESS:
+					log.InfoFormat("Number of max Trans Sessions is {0}", response.Parameters.GetValueOf<uint>(CapabilityData.PARAM_PROP_MAX_TRANSESS));
+					break;
+				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_KEYS:
+					log.InfoFormat("Number of max keys (without EK and SRK) is {0}", response.Parameters.GetValueOf<uint>(CapabilityData.PARAM_PROP_MAX_KEYS));
+					break;
+				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_SESSIONS:
+					log.InfoFormat("Number of max Sessions is {0}", response.Parameters.GetValueOf<uint>(CapabilityData.PARAM_PROP_MAX_SESSIONS));
+					break;
+				default:
+					throw new NotSupportedException("Defined cap or subcap are not supported");
+					break;
+				}
+			}
+			
+			
+		}
+		
 		
 		/// <summary>
 		/// Initializes the logger

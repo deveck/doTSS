@@ -38,26 +38,49 @@ namespace Iaik.Tc.TPM.Library.Commands
 			requestBlob.WriteCmdHeader (TPMCmdTags.TPM_TAG_RQU_COMMAND, TPMOrdinals.TPM_ORD_GetCapability);
 			requestBlob.WriteUInt32 ((uint)_capArea);
 			
-			if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_VERSION_VAL)
+			switch(_capArea)
 			{
+			case CapabilityData.TPMCapabilityArea.TPM_CAP_VERSION_VAL:
 				//Subcaps are ignored by TPM_CAP_VERSION_VAL
 				requestBlob.WriteUInt32 (0);
-			}
-			else if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_HANDLE)
-			{
+				break;
+			case CapabilityData.TPMCapabilityArea.TPM_CAP_HANDLE:
 				requestBlob.WriteUInt32 (4);
 				requestBlob.WriteUInt32 ((uint)_param.GetValueOf<TPMResourceType> ("handle_type"));
-			}
-			else if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY)
-			{
+				break;
+			case CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY:
 				CapabilityData.TPMSubCapProperty subCap = _param.GetValueOf<CapabilityData.TPMSubCapProperty> ("subCap");
 				
 				//Size of subcap
 				requestBlob.WriteUInt32 (4);
 				requestBlob.WriteUInt32 ((uint)subCap);
-			}
-			else
+				break;
+			default:
 				throw new NotSupportedException ("Defined cap or subcap are not supported");
+			}
+				
+			
+			
+//			if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_VERSION_VAL)
+//			{
+//				//Subcaps are ignored by TPM_CAP_VERSION_VAL
+//				requestBlob.WriteUInt32 (0);
+//			}
+//			else if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_HANDLE)
+//			{
+//				requestBlob.WriteUInt32 (4);
+//				requestBlob.WriteUInt32 ((uint)_param.GetValueOf<TPMResourceType> ("handle_type"));
+//			}
+//			else if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY)
+//			{
+//				CapabilityData.TPMSubCapProperty subCap = _param.GetValueOf<CapabilityData.TPMSubCapProperty> ("subCap");
+//				
+//				//Size of subcap
+//				requestBlob.WriteUInt32 (4);
+//				requestBlob.WriteUInt32 ((uint)subCap);
+//			}
+//			else
+//				throw new NotSupportedException ("Defined cap or subcap are not supported");
 			
 			requestBlob.WriteCmdSize ();
 			
@@ -67,13 +90,13 @@ namespace Iaik.Tc.TPM.Library.Commands
 			Parameters parameters = new Parameters ();
 			
 			
-			if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_VERSION_VAL)
+			switch(_capArea)
 			{
+			case CapabilityData.TPMCapabilityArea.TPM_CAP_VERSION_VAL:
 				CapabilityDataCore.TPMCapVersionInfoCore tpmVersionInfo = new CapabilityDataCore.TPMCapVersionInfoCore (responseBlob);
 				parameters.AddValue (CapabilityData.PARAM_TPM_VERSION_INFO, tpmVersionInfo);
-			}
-			else if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_HANDLE)
-			{
+				break;
+			case CapabilityData.TPMCapabilityArea.TPM_CAP_HANDLE:
 				responseBlob.SkipHeader ();
 				
 				//Reads the response size, which is ignored
@@ -81,33 +104,90 @@ namespace Iaik.Tc.TPM.Library.Commands
 				
 				HandleListCore handleList = new HandleListCore (responseBlob, _param.GetValueOf<TPMResourceType> ("handle_type"));
 				parameters.AddValue ("handles", handleList);
-			}
-			else if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY && 
-				    _param.GetValueOf<CapabilityData.TPMSubCapProperty> ("subCap") == CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_PCR) 
-			{
+				break;
+			case CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY:
 				responseBlob.SkipHeader ();
-				parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_PCR, ReadUInt32Response (responseBlob));
+				switch(_param.GetValueOf<CapabilityData.TPMSubCapProperty> ("subCap"))
+				{
+				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_PCR:
+					parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_PCR, ReadUInt32Response (responseBlob));
+					break;
+				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_DIR:
+					parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_DIR, ReadUInt32Response (responseBlob));
+					break;
+				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MANUFACTURER:
+					parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_MANUFACTURER, ReadUInt32Response (responseBlob));
+					break;
+				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_KEYS:
+					parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_KEYS, ReadUInt32Response (responseBlob));
+					break;
+				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_AUTHSESS:
+					parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_MAX_AUTHSESS, ReadUInt32Response (responseBlob));
+					break;
+				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_TRANSESS:
+					parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_MAX_TRANSESS, ReadUInt32Response (responseBlob));
+					break;
+				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_KEYS:
+					parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_MAX_KEYS, ReadUInt32Response (responseBlob));
+					break;
+				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_SESSIONS:
+					parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_MAX_SESSIONS, ReadUInt32Response (responseBlob));
+					break;
+				default:
+					throw new NotSupportedException("Defined cap or subcap are not supported");
+					break;
+				}
+				break;
 			}
-			else if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY && 
-				_param.GetValueOf<CapabilityData.TPMSubCapProperty> ("subCap") == CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_AUTHSESS) 
-			{
-				responseBlob.SkipHeader ();
-				parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_MAX_AUTHSESS, ReadUInt32Response (responseBlob));
-			}
-			else if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY && 
-				_param.GetValueOf<CapabilityData.TPMSubCapProperty> ("subCap") == CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_TRANSESS) 
-			{
-				responseBlob.SkipHeader ();
-				parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_MAX_TRANSESS, ReadUInt32Response (responseBlob));
-			}
-			else if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY && 
-				_param.GetValueOf<CapabilityData.TPMSubCapProperty> ("subCap") == CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_SESSIONS) 
-			{
-				responseBlob.SkipHeader ();
-				parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_MAX_SESSIONS, ReadUInt32Response (responseBlob));
-			}
-			else
-				throw new NotSupportedException("Defined cap or subcap are not supported");
+			
+			
+			
+//			if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_VERSION_VAL)
+//			{
+//				CapabilityDataCore.TPMCapVersionInfoCore tpmVersionInfo = new CapabilityDataCore.TPMCapVersionInfoCore (responseBlob);
+//				parameters.AddValue (CapabilityData.PARAM_TPM_VERSION_INFO, tpmVersionInfo);
+//			}
+//			else if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_HANDLE)
+//			{
+//				responseBlob.SkipHeader ();
+//				
+//				//Reads the response size, which is ignored
+//				responseBlob.ReadUInt32 ();
+//				
+//				HandleListCore handleList = new HandleListCore (responseBlob, _param.GetValueOf<TPMResourceType> ("handle_type"));
+//				parameters.AddValue ("handles", handleList);
+//			}
+//			
+//			
+//			else if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY && 
+//				    _param.GetValueOf<CapabilityData.TPMSubCapProperty> ("subCap") == CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_PCR) 
+//			{
+//				responseBlob.SkipHeader ();
+//				parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_PCR, ReadUInt32Response (responseBlob));
+//			}
+//			
+//			else if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY && 
+//				_param.GetValueOf<CapabilityData.TPMSubCapProperty> ("subCap") == CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_AUTHSESS) 
+//			{
+//				responseBlob.SkipHeader ();
+//				parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_MAX_AUTHSESS, ReadUInt32Response (responseBlob));
+//			}
+//			
+//			else if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY && 
+//				_param.GetValueOf<CapabilityData.TPMSubCapProperty> ("subCap") == CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_TRANSESS) 
+//			{
+//				responseBlob.SkipHeader ();
+//				parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_MAX_TRANSESS, ReadUInt32Response (responseBlob));
+//			}
+//			
+//			else if (_capArea == CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY && 
+//				_param.GetValueOf<CapabilityData.TPMSubCapProperty> ("subCap") == CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_SESSIONS) 
+//			{
+//				responseBlob.SkipHeader ();
+//				parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_MAX_SESSIONS, ReadUInt32Response (responseBlob));
+//			}
+//			else
+//				throw new NotSupportedException("Defined cap or subcap are not supported");
 			
 			return new TPMCommandResponse (true, TPMCommandNames.TPM_CMD_GetCapability, parameters);
 		}

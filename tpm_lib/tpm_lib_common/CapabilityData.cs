@@ -11,8 +11,12 @@ namespace Iaik.Tc.TPM.Library.Common
 	{
 		public const string PARAM_TPM_VERSION_INFO = "tpm_version_info";
 		public const string PARAM_PROP_PCR = "prop_pcr";
+		public const string PARAM_PROP_DIR = "prop_dir";
+		public const string PARAM_PROP_MANUFACTURER = "prop_manafacturer";
+		public const string PARAM_PROP_KEYS = "prop_keys";
 		public const string PARAM_PROP_MAX_AUTHSESS = "max_authsess";
 		public const string PARAM_PROP_MAX_TRANSESS = "max_transess";
+		public const string PARAM_PROP_MAX_KEYS = "max_keys";
 		public const string PARAM_PROP_MAX_SESSIONS = "max_sessions";
 		
 		
@@ -46,19 +50,40 @@ namespace Iaik.Tc.TPM.Library.Common
 			TPM_CAP_PROP_PCR = 0x000000101,
 			
 			/// <summary>
+			/// Deprecated!. Returns the number of DIR, which is now fixed at 1
+			/// </summary>
+			[Obsolete("Deprecated in version 1.2 of TPM")]
+			TPM_CAP_PROP_DIR = 0x000000102,
+			
+			/// <summary>
+			/// Returns the vendor ID unique to each TPM manufacturer
+			/// </summary>
+			TPM_CAP_PROP_MANUFACTURER = 0x000000103,
+			
+			/// <summary>
+			/// Returns the number of 2048-bit RSA keys that can be loaded. This may vary with time an circumstances
+			/// </summary>
+			TPM_CAP_PROP_KEYS = 0x000000104,
+						
+			/// <summary>
 			/// The maximum number of loaded authorization sessions the TPM supports, varies with time
 			/// </summary>
-			TPM_CAP_PROP_MAX_AUTHSESS = 0x010D,
+			TPM_CAP_PROP_MAX_AUTHSESS = 0x00000010D,
 			
 			/// <summary>
 			/// The maximum number of loaded transport sessions the TPM supports, varies with time
 			/// </summary>
-			TPM_CAP_PROP_MAX_TRANSESS = 0x010E,
+			TPM_CAP_PROP_MAX_TRANSESS = 0x00000010E,
+			
+			/// <summary>
+			/// The maximum number of 2048-bit RSA keys that the TPM can support. The number does not include the EK and the SRK.
+			/// </summary>
+			TPM_CAP_PROP_MAX_KEYS = 0x00000110,
 			
 			/// <summary>
 			/// The maximum number of sessions the TPM supports
 			/// </summary>
-			TPM_CAP_PROP_MAX_SESSIONS = 0x011E
+			TPM_CAP_PROP_MAX_SESSIONS = 0x00000011E
 		}
 
 		
