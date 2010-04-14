@@ -248,4 +248,81 @@ namespace Iaik.Tc.TPM.Library.Common
 		TPM_PID_DSAP = 0x06,
 		TPM_PID_TRANSPORT = 0x07
 	}
+	
+	
+	/// <summary>
+	/// Specifies the available ADIP encryption schemes
+	/// </summary>
+	public enum TPMEntityTypeMSB : ushort
+	{
+		TPM_ET_XOR = 0x00,
+		TPM_ET_AES128_CTR = 0x06
+	}
+	
+	/// <summary>
+	/// Specifies types of entities
+	/// </summary>
+	public enum TPMEntityTypeLSB : ushort
+	{
+		/// <summary>
+		/// The entity is a key handle or key
+		/// </summary>
+		TPM_ET_KEYHANDLE = 0x01,
+		
+		/// <summary>
+		/// The entity is the TPM owner
+		/// </summary>
+		TPM_ET_OWNER = 0x02,
+		
+		/// <summary>
+		/// The entity is some data
+		/// </summary>
+		TPM_ET_DATA = 0x03,
+		
+		/// <summary>
+		/// The entity is the SRK
+		/// </summary>
+		TPM_ET_SRK = 0x04,
+		
+		/// <summary>
+		/// The entity is a key or keyhandle
+		/// </summary>
+		TPM_ET_KEY = 0x05,
+		
+		/// <summary>
+		/// The entity is the RevokeTrust value
+		/// </summary>
+		TPM_ET_REVOKE = 0x06,
+		
+		/// <summary>
+		/// The entity is a delegate owner blob
+		/// </summary>
+		TPM_ET_DEL_OWNER_BLOB = 0x07,
+		
+		/// <summary>
+		/// The entity is a delegate row
+		/// </summary>
+		TPM_ET_DEL_ROW = 0x08,
+		
+		/// <summary>
+		/// The entity is a delegate key blob
+		/// </summary>
+		TPM_ET_DEL_KEY_BLOB = 0x09,
+		
+		/// <summary>
+		/// The entity is a counter
+		/// </summary>
+		TPM_ET_COUNTER = 0x0A,
+		
+		/// <summary>
+		/// The entity is a NV index
+		/// </summary>
+		TPM_ET_NV = 0x0B,
+		
+		/// <summary>
+		/// The entity is the operator
+		/// </summary>
+		TPM_ET_OPERATOR = 0x0C
+		
+	}
 }

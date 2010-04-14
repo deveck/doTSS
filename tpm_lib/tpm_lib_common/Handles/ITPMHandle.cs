@@ -12,7 +12,7 @@ namespace Iaik.Tc.TPM.Library.Common.Handles
 		/// <summary>
 		/// Gets the TPM handle identifier
 		/// </summary>
-		uint Handle { get; }
+		uint Handle { get; set;}
 		
 		/// <summary>
 		/// Gets the TPM resource type of this handle

@@ -81,14 +81,8 @@ namespace Iaik.Tc.TPM.Library.Commands.AdminOwnership
 			
 			_tpmKey.WriteToTpmBlob (requestBlob);
 			
-			AuthorizationInfo authInfo = _commandAuthHelper.AuthorizeCommand (
-				this, 
-				AuthSessionNum.Auth1, 
-				null,
-				new HMACKeyInfo (HMACKeyInfo.HMACKeyType.OwnerSecret, null)
-				);
-			
-			WriteAuthorizationInfo (requestBlob, authInfo);
+			foreach(AuthorizationInfo authInfo in _commandAuthHelper.AuthorizeCommand(this))			
+				WriteAuthorizationInfo (requestBlob, authInfo);
 			
 			/*TPMBlob responseBlob =*/ _tpmProvider.TransmitAndCheck (requestBlob);
 			return null;
@@ -150,6 +144,25 @@ namespace Iaik.Tc.TPM.Library.Commands.AdminOwnership
 			_commandAuthHelper = commandAuthHelper;
 		}
 		
+		
+		public TPMEntityTypeLSB GetEntityType(AuthSessionNum authSession)
+		{
+			throw new NotSupportedException();
+		}
+		
+		public bool SupportsAuthType(AuthHandle.AuthType authType)
+		{
+			//TPM_TakeOwnership only supports OIAP
+			return authType == AuthHandle.AuthType.OIAP;
+		}
+		
+		public HMACKeyInfo GetKeyInfo(AuthSessionNum authSessionNum)
+		{
+			if (authSessionNum != AuthSessionNum.Auth1)
+				throw new ArgumentException ("Command only requires Auth1");
+			
+			return new HMACKeyInfo (HMACKeyInfo.HMACKeyType.OwnerSecret, null);
+		}
 		#endregion
 
 	}

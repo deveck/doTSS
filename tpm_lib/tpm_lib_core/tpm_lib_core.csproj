@@ -58,6 +58,8 @@
     <Compile Include="KeyDataCore\TPMKeyCore.cs" />
     <Compile Include="KeyDataCore\TPMStorePubkeyCore.cs" />
     <Compile Include="Hash\HashTPMBlobWritableDataProvider.cs" />
+    <Compile Include="Commands\SessionManagement\TPM_SaveContext.cs" />
+    <Compile Include="Commands\SessionManagement\TPM_LoadContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />
@@ -74,6 +76,7 @@
     <Folder Include="HandlesCore\Authorization\" />
     <Folder Include="Commands\AdminOwnership\" />
     <Folder Include="Hash\" />
+    <Folder Include="Commands\SessionManagement\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_lowlvl\tpm_lowlvl.csproj">

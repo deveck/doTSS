@@ -32,5 +32,31 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		/// <param name="authSessionNum"></param>
 		/// <returns></returns>
 		AuthHandle GetAuthHandle(AuthSessionNum authSessionNum);
+		
+		/// <summary>
+		/// Gets the EntityType for the specified auth session
+		/// </summary>
+		/// <remarks>
+		/// This is required for e.g. OSAP.
+		/// The EntityTypeMSB is selected by the caller itself
+		/// </remarks>
+		/// <param name="austhSessionNum"></param>
+		/// <returns></returns>
+		TPMEntityTypeLSB GetEntityType(AuthSessionNum austhSessionNum);
+		
+		/// <summary>
+		/// Checks if the specified auth type is supported by the command
+		/// </summary>
+		/// <param name="authType"></param>
+		/// <returns></returns>
+		bool SupportsAuthType(AuthHandle.AuthType authType);
+		
+		/// <summary>
+		/// Returns the HMACKeyInfo needed for the specified authSessionNum.
+		/// Returns null if the specified AuthSessionNum is not required
+		/// </summary>
+		/// <param name="authType"></param>
+		/// <returns></returns>
+		HMACKeyInfo GetKeyInfo(AuthSessionNum authSessionNum);
 	}
 }

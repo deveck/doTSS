@@ -7,6 +7,7 @@ using System;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 using Iaik.Tc.TPM.Context;
 using Iaik.Tc.TPM.Subsystems.TPMClient;
+using System.Collections.Generic;
 
 namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {
@@ -37,28 +38,32 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		/// Authorizes the command and returns the necessary authorization info
 		/// </summary>
 		/// <param name="cmd">Command to authorize</param>
-		/// <param name="authNum">Authorization number (Auth1, Auth2)</param>
-		/// <param name="forceAuthType">Lock to a specific authorization type (OSAP, OIAP), if null it is up to
-		/// the framework which type to use (OIAP)
-		/// </param>
-		/// <param name="keyInfo">Contains information about the key to use for HMAC generation, this is transmitted to
-		/// the client which requests the credentials from the user (if not cached) and generates the HMAC</param>
 		/// <returns></returns>
-		public AuthorizationInfo AuthorizeCommand (
-			IAuthorizableCommand cmd, 
-			AuthSessionNum authNum, 
-			AuthHandle.AuthType? forceAuthType, 
-			HMACKeyInfo keyInfo)
+		public AuthorizationInfo[] AuthorizeCommand (IAuthorizableCommand cmd)
 		{
-			GenerateHMACRequest request = new GenerateHMACRequest (_ctx);
-			request.TpmSessionIdentifier = _tpmSessionIdentifier;
-			request.KeyInfo = keyInfo;
 			
-			GenerateHMACResponse response = request.TypedExecute ();
-			response.AssertResponse();
 			
-			Console.WriteLine("YEAAAHHH!!");
-			return null;
+			
+			List<AuthorizationInfo> authorizationInfos = new List<AuthorizationInfo>();
+			
+			foreach(AuthSessionNum authSessionNum in new AuthSessionNum[]{AuthSessionNum.Auth1, AuthSessionNum.Auth2})
+			{
+				HMACKeyInfo keyInfo = cmd.GetKeyInfo(authSessionNum);
+				
+				if(keyInfo == null)
+					continue;
+
+				GenerateHMACRequest request = new GenerateHMACRequest (_ctx);
+				request.TpmSessionIdentifier = _tpmSessionIdentifier;
+				request.KeyInfo = keyInfo;
+			
+				GenerateHMACResponse response = request.TypedExecute ();
+				response.AssertResponse();
+				
+				//TODO: Add new AuthorizationInfo
+			}
+			
+			return authorizationInfos.ToArray();			
 		}
 		
 		#endregion

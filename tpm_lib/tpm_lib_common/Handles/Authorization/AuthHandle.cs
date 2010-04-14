@@ -87,6 +87,7 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		public uint Handle 
 		{
 			get { return _authHandle; }
+			set {_authHandle = value;}
 		}
 		
 		public TPMResourceType ResourceType 

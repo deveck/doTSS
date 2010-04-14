@@ -123,6 +123,7 @@
     <Compile Include="Subsystems\TPMClient\GenerateHMAC.cs" />
     <Compile Include="Subsystems\TypedClientSubsystemRequest.cs" />
     <Compile Include="Subsystems\SubsystemResponseException.cs" />
+    <Compile Include="Subsystems\TPMSubsystem\AuthHandleManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">

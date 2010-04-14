@@ -86,6 +86,22 @@ namespace Iaik.Tc.TPM.Library.Common
 			}
 		}
 		
+		public bool IsDefined<T>(String key)
+		{
+			if(encapsulated_.ContainsKey(key) == false)
+				return false;
+			
+			try
+			{
+				GetValueOf<T>(key);
+				return true;
+			}
+			catch(Exception)
+			{
+				return false;
+			}
+		}
+		
 		#region IStreamSerializable implementation
 		public void Write (Stream sink)
 		{
