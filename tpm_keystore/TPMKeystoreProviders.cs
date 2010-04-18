@@ -68,7 +68,7 @@ namespace Iaik.Tc.TPM.Keystore
         /// <param name="providerName"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static TPMKeystore Create (String providerName, IDictionary<String, String> options)
+        public static TPMKeystoreProvider Create (String providerName, IDictionary<String, String> options)
         {
         	Type provider_type;
 	    	
@@ -84,7 +84,7 @@ namespace Iaik.Tc.TPM.Keystore
         /// <param name="provider"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public static TPMKeystore Create(Type provider, IDictionary<String, String> options)
+        public static TPMKeystoreProvider Create(Type provider, IDictionary<String, String> options)
         {
             if (provider.IsAbstract)
                 throw new ArgumentException("Can't create abstract TPM providers");
@@ -97,12 +97,12 @@ namespace Iaik.Tc.TPM.Keystore
             // First try the specific constructor
             ctor = provider.GetConstructor(new Type[] { typeof(IDictionary<String, String>) });
             if (ctor != null)
-                return (TPMKeystore)ctor.Invoke(new object[] { options });
+                return (TPMKeystoreProvider)ctor.Invoke(new object[] { options });
 
             // Resort to the standard constructor
             ctor = provider.GetConstructor(new Type[] { });
             if (ctor != null)
-                return (TPMKeystore)ctor.Invoke(new object[] { });
+                return (TPMKeystoreProvider)ctor.Invoke(new object[] { });
 
             throw new ArgumentException("Can not find a suitable constructor for this TPM provider");
         }

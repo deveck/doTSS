@@ -14,6 +14,7 @@ using Iaik.Utils;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 using Iaik.Tc.TPM.Library.Common.Handles;
 using Iaik.Utils.Hash;
+using Iaik.Utils.Replacement;
 using System.Security.Cryptography;
 
 namespace tpm_test
@@ -39,23 +40,23 @@ namespace tpm_test
 //			rsa.ImportParameters (parameters);
 //			rsa.EncryptValue (new byte[] { 0, 1, 2, 3 });
 			
-			
 			SetupLogging();
-			TPMWrapper tpm = new TPMWrapper();
-			IDictionary<string, string> dict = new Dictionary<string, string>();
-			dict.Add("DeviceName","/dev/tpm0");
-			dict.Add("debug", "True");
-			tpm.Init("linux/device", dict);
-			//tpm.Init("linux/tddl", dict);
-			tpm.Open();
-			
-			ReadPCRs(tpm);
-			ReadCapabilities(tpm);
-			//EstablishOIAP(tpm);
-			tpm.Dispose();
-			//tpm.init;
-			//tpm.backend.tpmOpen();
-			
+//			TPMWrapper tpm = new TPMWrapper();
+//			IDictionary<string, string> dict = new Dictionary<string, string>();
+//			dict.Add("DeviceName","/dev/tpm0");
+//			dict.Add("debug", "True");
+//			tpm.Init("linux/device", dict);
+//			//tpm.Init("linux/tddl", dict);
+//			tpm.Open();
+//			
+//			ReadPCRs(tpm);
+//			ReadCapabilities(tpm);
+//			//EstablishOIAP(tpm);
+//			tpm.Dispose();
+//			//tpm.init;
+//			//tpm.backend.tpmOpen();
+		
+			TestAging();
 		}
 		
 		private static void ReadPCRs(TPMWrapper tpm){
@@ -169,6 +170,78 @@ namespace tpm_test
 			}
 			
 			
+		}
+		
+		private static void TestAging()
+		{
+			ILog log = LogManager.GetLogger("TestAging");
+			IReplacementAlgorithm alg = new Aging();
+			List<UInt64> li = new List<UInt64>();
+			for(int i=0; i<8;++i)
+				li.Add(alg.RegisterNew());
+			
+			List<UInt64> up = new List<UInt64>();
+			up = alg.Swapables;
+			up = new List<UInt64>();
+			up.Add(1);
+			up.Add(4);
+			alg.Update(up);
+			up = alg.Swapables;
+//			foreach(UInt64 id in up)
+//				log.Info(id);
+//			log.Info("------------------");
+			up = new List<UInt64>();
+			up.Add(3);
+			up.Add(5);
+			alg.Update(up);
+			up = alg.Swapables;
+//			foreach(UInt64 id in up)
+//				log.Info(id);
+//			log.Info("------------------");
+			up = new List<UInt64>();
+			up.Add(0);
+			alg.Update(up);
+			up = alg.Swapables;
+//			foreach(UInt64 id in up)
+//				log.Info(id);
+//			log.Info("------------------");
+			for(int i=0; i<8;++i)
+				alg.Update(null);
+			for(int i=0; i<8;++i)
+			{
+				alg.Update(null);
+				up = new List<UInt64>();
+				up.Add((UInt64)i);
+				alg.Update(up);
+			}
+			
+			alg.SwapOut(1);
+			alg.SwapOut(5);
+			alg.SwapOut(7);
+			alg.Update(null);
+			up = alg.Swapables;
+				foreach(UInt64 id in up)
+					log.Info(id);
+				log.Info("------------------");
+			alg.SwapIn(7);
+			alg.Update(null);
+			up = alg.Swapables;
+				foreach(UInt64 id in up)
+					log.Info(id);
+				log.Info("------------------");
+			up = new List<UInt64>();
+				up.Add(1);
+			up.Add(5);
+			alg.SwapIn(up);
+			alg.Update(null);
+			up = new List<UInt64>();
+			up.Add(0);
+			alg.Update(up);
+						
+			up = alg.Swapables;
+				foreach(UInt64 id in up)
+					log.Info(id);
+				log.Info("------------------");
 		}
 		
 		

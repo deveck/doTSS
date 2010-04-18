@@ -85,6 +85,8 @@
     <Compile Include="Hash\HashEnumDataProvider.cs" />
     <Compile Include="Hash\ProtectedPasswordStorage.cs" />
     <Compile Include="Hash\HashSecureStringDataProvider.cs" />
+    <Compile Include="SwapUtils\IReplacementAlgorithm.cs" />
+    <Compile Include="SwapUtils\Aging.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -122,5 +124,6 @@
     <Folder Include="CommonFactories\" />
     <Folder Include="Nonce\" />
     <Folder Include="Hash\" />
+    <Folder Include="SwapUtils\" />
   </ItemGroup>
 </Project>

@@ -12,6 +12,7 @@ namespace Iaik.Tc.TPM.Keymanager
 	public class TpmKeymanager : IDisposable
 	{
 		TPMWrapper _tpm = null;
+		uint _numFreeKeyslots;
 		
 		bool _isDisposed = false;
 		
@@ -25,6 +26,14 @@ namespace Iaik.Tc.TPM.Keymanager
 			_tpm = tpm;
 		}
 		
+		private void UpdateFreeKeySlots()
+		{
+			lock(this){
+				
+				
+				
+			}
+		}
 		
 		#region IDisposable implementation
 		void IDisposable.Dispose ()
@@ -37,7 +46,6 @@ namespace Iaik.Tc.TPM.Keymanager
 		}
 		
 		#endregion
-
 		
 	}
 }
