@@ -7,23 +7,39 @@ using System.Collections.Generic;
 namespace Iaik.Utils.Replacement
 {
 
-
+	/// <summary>
+	/// This class implements the aging replacement algorithm
+	/// </summary>
 	public sealed class Aging : IReplacementAlgorithm
 	{
+		// TODO: maybe add limits???
 		const UInt64 UPDATE_MASK = 0x8000000000000000;
-		const UInt64 NEW_MASK = 0xffffffffffffffff;
 		List<KeyValuePair<UInt64, UInt64>> _used = new List<KeyValuePair<UInt64, UInt64>>();
 		List<UInt64> _swaped = new List<UInt64>();
+		List<UInt64> _recent = new List<UInt64>();
 		UInt64 _nextID = 0;
 		
-		bool _isSorted;
+		bool _isSorted = false;
 		
 		public Aging ()
 		{
 		}
 		
-		#region IReplacementAlgorithm<TypeID> implementation
-		public void SwapIn(System.Collections.Generic.List<UInt64> ids)
+		/// <summary>
+		/// Internal helper for registering one id per time.
+		/// </summary>
+		/// <param name="id">
+		/// A <see cref="UInt64"/>
+		/// </param>
+		private void InsertUsed(UInt64 id)
+		{
+			KeyValuePair<UInt64, UInt64> pair = new KeyValuePair<UInt64, UInt64>(id, UPDATE_MASK);
+			_used.Add(pair);
+			_isSorted = false;
+		}
+		
+		#region IReplacementAlgorithm implementation
+		public void SwapIn (List<ulong> ids)
 		{
 			lock(this)
 			{
@@ -35,7 +51,8 @@ namespace Iaik.Utils.Replacement
 			}
 		}
 		
-		public void SwapIn(UInt64 id)
+		
+		public void SwapIn (ulong id)
 		{
 			lock(this)
 			{
@@ -44,12 +61,15 @@ namespace Iaik.Utils.Replacement
 			}
 		}
 		
-		public void SwapOut(System.Collections.Generic.List<UInt64> ids)
+		
+		public void SwapOut (List<ulong> ids)
 		{
 			lock(this)
 			{
+				// search for each id
 				foreach(UInt64 id in ids)
 				{
+					// in each pair
 					foreach(KeyValuePair<UInt64, UInt64> pair in _used)
 					{
 						if(pair.Key == id)
@@ -64,7 +84,7 @@ namespace Iaik.Utils.Replacement
 			}
 		}
 		
-		public void SwapOut(UInt64 id)
+		public void SwapOut (ulong id)
 		{
 			lock(this)
 			{
@@ -81,24 +101,15 @@ namespace Iaik.Utils.Replacement
 			}
 		}
 		
-		
 		public bool IsSwaped (UInt64 id)
 		{
-			foreach(UInt64 item in _swaped)
+			lock(this)
 			{
-				if(item == id)
-					return true;
+				return _swaped.Contains(id);
 			}
-			return false;
 		}
 		
-		/// <summary>
-		/// Update the age of all items in current set. Used would get younger. If used==null, all items in set would get older.
-		/// </summary>
-		/// <param name="used">
-		/// A <see cref="List<UInt64>"/>
-		/// </param>
-		public void Update(List<UInt64> used)
+		public void Update ()
 		{
 			lock(this)
 			{
@@ -110,10 +121,10 @@ namespace Iaik.Utils.Replacement
 				{
 					KeyValuePair<UInt64, UInt64> newpair;
 					// update if it was used
-					if(used != null && used.Contains(pair.Key))
+					if(_recent.Contains(pair.Key))
 					{
 						newpair =  new KeyValuePair<UInt64,UInt64>(pair.Key, (pair.Value >> 1) | UPDATE_MASK);
-						used.Remove(pair.Key);
+						_recent.Remove(pair.Key);
 					}
 					// also if not
 					else
@@ -123,13 +134,71 @@ namespace Iaik.Utils.Replacement
 					helper.Add(newpair);
 				}
 				_used = helper;
+				// be sure nothing is registered
+				_recent.Clear();
+			}
+		}
+				
+		public void RegisterUsed (ulong id)
+		{
+			lock(this)
+			{
+				_recent.Add(id);
 			}
 		}
 		
-		public List<UInt64> Swapables
+		
+		public void RegisterUsed (List<ulong> ids)
 		{
-			get
+			lock(this)
 			{
+				foreach(ulong id in ids)
+				{
+					_recent.Add(id);
+				}
+			}
+		}
+		
+		
+		public ulong RegisterNew ()
+		{
+			lock(this)
+			{
+				InsertUsed(_nextID);
+				++_nextID;
+				return _nextID - 1;
+			}
+		}
+		
+		
+		public void Remove (ulong id)
+		{
+			lock(this)
+			{
+				// search in used
+				foreach(KeyValuePair<UInt64, UInt64> pair in _used)
+				{
+					if(pair.Key == id)
+					{
+						_used.Remove(pair);
+						return;
+					}
+				}
+				// and in swaped
+				foreach(UInt64 item in _swaped)
+				{
+					if(id == item)
+					{
+						_swaped.Remove(id);
+						return;
+					}
+				}
+			}
+		}
+		
+		
+		public List<ulong> Swapables {
+			get {
 				lock(this)
 				{
 					if(!_isSorted)
@@ -146,47 +215,6 @@ namespace Iaik.Utils.Replacement
 			}
 		}
 		
-		public UInt64 RegisterNew()
-		{
-			lock(this)
-			{
-				InsertUsed(_nextID);
-				++_nextID;
-				return _nextID - 1;
-			}
-		}
-		
-		
-		public void Delete (UInt64 item)
-		{
-			lock(this)
-			{
-				foreach(KeyValuePair<UInt64, UInt64> pair in _used)
-				{
-					if(pair.Key == item)
-					{
-						_used.Remove(pair);
-						return;
-					}
-				}
-				foreach(UInt64 id in _swaped)
-				{
-					if(id == item)
-					{
-						_swaped.Remove(id);
-						return;
-					}
-				}
-			}
-		}
-		
 		#endregion
-		
-		private void InsertUsed(UInt64 id)
-		{
-			KeyValuePair<UInt64, UInt64> pair = new KeyValuePair<UInt64, UInt64>(id, NEW_MASK);
-			_used.Add(pair);
-			_isSorted = false;
-		}
 	}
 }

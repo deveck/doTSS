@@ -185,46 +185,53 @@ namespace tpm_test
 			up = new List<UInt64>();
 			up.Add(1);
 			up.Add(4);
-			alg.Update(up);
+			alg.RegisterUsed(up);
+			alg.Update();
 			up = alg.Swapables;
-//			foreach(UInt64 id in up)
-//				log.Info(id);
-//			log.Info("------------------");
+			foreach(UInt64 id in up)
+				log.Info(id);
+			log.Info("------------------");
 			up = new List<UInt64>();
 			up.Add(3);
 			up.Add(5);
-			alg.Update(up);
+			alg.RegisterUsed(up);
+			alg.Update();
 			up = alg.Swapables;
-//			foreach(UInt64 id in up)
-//				log.Info(id);
-//			log.Info("------------------");
+			foreach(UInt64 id in up)
+				log.Info(id);
+			log.Info("------------------");
 			up = new List<UInt64>();
 			up.Add(0);
-			alg.Update(up);
+			alg.RegisterUsed(up);
+			alg.Update();
 			up = alg.Swapables;
-//			foreach(UInt64 id in up)
-//				log.Info(id);
-//			log.Info("------------------");
+			foreach(UInt64 id in up)
+				log.Info(id);
+			log.Info("------------------");
 			for(int i=0; i<8;++i)
-				alg.Update(null);
-			for(int i=0; i<8;++i)
+				alg.Update();
+			log.Info("------------------");
+			for(ulong i=0; i<8;++i)
 			{
-				alg.Update(null);
-				up = new List<UInt64>();
-				up.Add((UInt64)i);
-				alg.Update(up);
+				alg.Update();
+				alg.RegisterUsed(i);
+				alg.Update();
 			}
+			up = alg.Swapables;
+			foreach(UInt64 id in up)
+				log.Info(id);
+			log.Info("------------------");
 			
 			alg.SwapOut(1);
 			alg.SwapOut(5);
 			alg.SwapOut(7);
-			alg.Update(null);
+			alg.Update();
 			up = alg.Swapables;
 				foreach(UInt64 id in up)
 					log.Info(id);
 				log.Info("------------------");
 			alg.SwapIn(7);
-			alg.Update(null);
+			alg.Update();
 			up = alg.Swapables;
 				foreach(UInt64 id in up)
 					log.Info(id);
@@ -233,10 +240,9 @@ namespace tpm_test
 				up.Add(1);
 			up.Add(5);
 			alg.SwapIn(up);
-			alg.Update(null);
-			up = new List<UInt64>();
-			up.Add(0);
-			alg.Update(up);
+			alg.Update();
+			alg.RegisterUsed(0);
+			alg.Update();
 						
 			up = alg.Swapables;
 				foreach(UInt64 id in up)
