@@ -12,6 +12,11 @@ namespace Iaik.Utils.Replacement
 	/// </summary>
 	public sealed class Aging : IReplacementAlgorithm
 	{
+		/// <summary>
+		/// Local locking
+		/// </summary>
+		private object _syncLock = new object();
+		
 		// TODO: maybe add limits???
 		const UInt64 UPDATE_MASK = 0x8000000000000000;
 		List<KeyValuePair<UInt64, UInt64>> _used = new List<KeyValuePair<UInt64, UInt64>>();
@@ -41,7 +46,7 @@ namespace Iaik.Utils.Replacement
 		#region IReplacementAlgorithm implementation
 		public void SwapIn (List<ulong> ids)
 		{
-			lock(this)
+			lock(_syncLock)
 			{
 				foreach(UInt64 id in ids)
 				{
@@ -54,7 +59,7 @@ namespace Iaik.Utils.Replacement
 		
 		public void SwapIn (ulong id)
 		{
-			lock(this)
+			lock(_syncLock)
 			{
 				_swaped.Remove(id);
 				InsertUsed(id);
@@ -64,7 +69,7 @@ namespace Iaik.Utils.Replacement
 		
 		public void SwapOut (List<ulong> ids)
 		{
-			lock(this)
+			lock(_syncLock)
 			{
 				// search for each id
 				foreach(UInt64 id in ids)
@@ -86,7 +91,7 @@ namespace Iaik.Utils.Replacement
 		
 		public void SwapOut (ulong id)
 		{
-			lock(this)
+			lock(_syncLock)
 			{
 				foreach(KeyValuePair<UInt64, UInt64> pair in _used)
 				{
@@ -103,7 +108,7 @@ namespace Iaik.Utils.Replacement
 		
 		public bool IsSwaped (UInt64 id)
 		{
-			lock(this)
+			lock(_syncLock)
 			{
 				return _swaped.Contains(id);
 			}
@@ -111,7 +116,7 @@ namespace Iaik.Utils.Replacement
 		
 		public void Update ()
 		{
-			lock(this)
+			lock(_syncLock)
 			{
 				_isSorted = false;
 				// create a new list, because KeyValuePairs can't be changed in place
@@ -141,7 +146,7 @@ namespace Iaik.Utils.Replacement
 				
 		public void RegisterUsed (ulong id)
 		{
-			lock(this)
+			lock(_syncLock)
 			{
 				_recent.Add(id);
 			}
@@ -150,7 +155,7 @@ namespace Iaik.Utils.Replacement
 		
 		public void RegisterUsed (List<ulong> ids)
 		{
-			lock(this)
+			lock(_syncLock)
 			{
 				foreach(ulong id in ids)
 				{
@@ -162,7 +167,7 @@ namespace Iaik.Utils.Replacement
 		
 		public ulong RegisterNew ()
 		{
-			lock(this)
+			lock(_syncLock)
 			{
 				InsertUsed(_nextID);
 				++_nextID;
@@ -173,7 +178,7 @@ namespace Iaik.Utils.Replacement
 		
 		public void Remove (ulong id)
 		{
-			lock(this)
+			lock(_syncLock)
 			{
 				// search in used
 				foreach(KeyValuePair<UInt64, UInt64> pair in _used)
@@ -199,7 +204,7 @@ namespace Iaik.Utils.Replacement
 		
 		public List<ulong> Swapables {
 			get {
-				lock(this)
+				lock(_syncLock)
 				{
 					if(!_isSorted)
 						_used.Sort(delegate(KeyValuePair<UInt64, UInt64> firstpair,
