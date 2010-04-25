@@ -13,6 +13,7 @@ namespace Iaik.Tc.TPM.Lowlevel
 		{
 			TPM_SUCCESS = 0x00,
 			TPM_AUTHFAIL = 0x01,
+			TPM_DISABLED_CMD = 0x08,
 			TPM_OWNER_SET = 0x14
 		}
 		
@@ -24,6 +25,8 @@ namespace Iaik.Tc.TPM.Lowlevel
 				return "No error";
 			case TPMStatusCodesEnum.TPM_AUTHFAIL:
 				return "Authentication failed";
+			case TPMStatusCodesEnum.TPM_DISABLED_CMD:
+				return "The target command has been disabled";
 			case TPMStatusCodesEnum.TPM_OWNER_SET:
 				return "Owner already set";
 			default:

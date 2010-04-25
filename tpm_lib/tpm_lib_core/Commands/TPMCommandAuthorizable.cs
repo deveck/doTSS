@@ -153,5 +153,19 @@ namespace Iaik.Tc.TPM.Library.Commands
 			
 		}	
 
+		protected void AuthorizeMe(TPMBlob requestBlob)
+		{
+			_currentAuthorizationInfos = _commandAuthHelper.AuthorizeCommand(this);
+			
+			using(_commandLockProvider.AcquireLock())
+			{
+				//Make sure that all Authorization handles are loaded
+				_commandAuthHelper.LoadAuthorizationHandles(_currentAuthorizationInfos);
+				
+				foreach(AuthorizationInfo authInfo in _currentAuthorizationInfos)			
+					WriteAuthorizationInfo (requestBlob, authInfo);
+			}
+		}
+		
 	}
 }

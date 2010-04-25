@@ -42,6 +42,11 @@ namespace Iaik.Tc.TPM.Context
 		}
 
 		
+		public void ClearOwner()
+		{
+			BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_OwnerClear, new Parameters());
+		}
+		
 		public void TakeOwnership (ProtectedPasswordStorage ownerSecret, ProtectedPasswordStorage srkSecret)
 		{
 			_tpmSession.SetValue (TPMSession.PARAM_AUTH_OWNER, ownerSecret);
@@ -65,6 +70,8 @@ namespace Iaik.Tc.TPM.Context
 			TPMCommandResponse response = BuildDoVerifyRequest (TPMCommandNames.TPM_CMD_TakeOwnership, parameters);
 				
 		}
+		
+		
 		
 		private TPMCommandResponse BuildDoVerifyRequest (string commandIdentifier, Parameters parameters)
 		{

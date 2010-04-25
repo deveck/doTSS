@@ -13,6 +13,9 @@ using Iaik.Tc.TPM.Library.HandlesCore.Authorization;
 namespace Iaik.Tc.TPM.Library.Commands.AdminOwnership
 {
 
+	/// <summary>
+	/// This command inserts the TPM Ownership value into the TPM.
+	/// </summary>
 	[TPMCommands(TPMCommandNames.TPM_CMD_TakeOwnership)]
 	public class TPM_TakeOwnership : TPMCommandAuthorizable
 	{
@@ -91,16 +94,7 @@ namespace Iaik.Tc.TPM.Library.Commands.AdminOwnership
 			
 			_tpmKey.WriteToTpmBlob (requestBlob);
 			
-			_currentAuthorizationInfos = _commandAuthHelper.AuthorizeCommand(this);
-			
-			using(_commandLockProvider.AcquireLock())
-			{
-				//Make sure that all Authorization handles are loaded
-				_commandAuthHelper.LoadAuthorizationHandles(_currentAuthorizationInfos);
-				
-				foreach(AuthorizationInfo authInfo in _currentAuthorizationInfos)			
-					WriteAuthorizationInfo (requestBlob, authInfo);
-			}
+			AuthorizeMe(requestBlob);
 
 			_responseBlob = _tpmProvider.TransmitAndCheck (requestBlob);			
 			CheckResponseAuthInfo();			

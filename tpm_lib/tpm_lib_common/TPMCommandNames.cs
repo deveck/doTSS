@@ -10,6 +10,7 @@ namespace Iaik.Tc.TPM.Library.Common
 	{
 		#region Admin Ownership
 		public const string TPM_CMD_TakeOwnership = "TPM_CMD_TakeOwnership";
+		public const string TPM_CMD_OwnerClear = "TPM_CMD_OwnerClear";
 		#endregion
 		
 		#region Integrity Collection and Reporting

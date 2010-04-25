@@ -163,7 +163,9 @@ namespace Iaik.Tc.TPM
 
         }
 
-        /// <summary>
+		private volatile bool _commandReady = true;
+		
+		/// <summary>
         /// Runs the Console loop, returns on console exit
         /// </summary>
         public void Run ()
@@ -171,7 +173,6 @@ namespace Iaik.Tc.TPM
 			bool outputPrompt = true;
 			StringBuilder currentCommandLine = new StringBuilder();
 			
-			bool commandReady = true;
 			bool commandRunning = false;
 			
         	while (_runConsoleLoop)
@@ -191,9 +192,9 @@ namespace Iaik.Tc.TPM
 						currentCommandLine.Remove(currentCommandLine.Length - 1, 1);
 					else if(keyInfo.Key == ConsoleKey.Enter)
 					{
-						commandReady = false;
+						_commandReady = false;
 						commandRunning = true;
-						InterpretCommand(currentCommandLine.ToString(), false, false, ref commandReady);
+						InterpretCommand(currentCommandLine.ToString(), false, false);
 						
 						currentCommandLine.Remove(0, currentCommandLine.Length);
 						outputPrompt = true;
@@ -202,7 +203,7 @@ namespace Iaik.Tc.TPM
 						currentCommandLine.Append(keyInfo.KeyChar);
 				}
 				
-				if(commandReady)
+				if(_commandReady)
 				{
 					commandRunning = false;
 				}
@@ -296,8 +297,7 @@ namespace Iaik.Tc.TPM
 					{
 						try
 						{
-							bool dummy = false;
-							InterpretCommand (currentLine, true, true, ref dummy);
+							InterpretCommand (currentLine, true, true);
 						}
 						catch (Exception)
 						{
@@ -310,7 +310,7 @@ namespace Iaik.Tc.TPM
 			}
 		}
 		
-		private void  InterpretCommand (string commandLine, bool throwOnException, bool sync, ref bool commandReady)
+		private void  InterpretCommand (string commandLine, bool throwOnException, bool sync)
 		{
 			AutoResetEvent evt = null;
 			
@@ -337,6 +337,10 @@ namespace Iaik.Tc.TPM
 								if (throwOnException)
 									throw;
 		    				}
+							finally
+							{
+								_commandReady = true;
+							}
 		    			}
 		                else
 		    				Out.WriteLine ("Unknown command...");
@@ -353,6 +357,7 @@ namespace Iaik.Tc.TPM
 				
 			if(sync)
 				evt.WaitOne();
+			
 			
 		}
 		

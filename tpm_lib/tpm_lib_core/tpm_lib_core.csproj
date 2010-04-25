@@ -62,6 +62,7 @@
     <Compile Include="Commands\SessionManagement\TPM_LoadContext.cs" />
     <Compile Include="HandlesCore\Authorization\ResponseAuthHandleInfoCore.cs" />
     <Compile Include="Commands\TPMCommandAuthorizable.cs" />
+    <Compile Include="Commands\AdminOwnership\TPM_OwnerClear.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />

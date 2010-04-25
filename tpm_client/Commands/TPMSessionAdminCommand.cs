@@ -19,7 +19,7 @@ namespace Iaik.Tc.TPM.Commands
                 return @"tpm_session_admin Args: [local_alias] [admin_subcommand]
     Specify the tpm to use by [local_alias]. These aliases can be defined using the tpm_select command.
 	Performs administrative functions.
-    Valid values for admin_subcommand: take_ownership";
+    Valid values for admin_subcommand: take_ownership, owner_clear";
             }
         }
 
@@ -85,8 +85,12 @@ namespace Iaik.Tc.TPM.Commands
 				tpmSessions[localAlias].AdministrationClient.TakeOwnership (ownerAuth, srkAuth);
 
         	}
+			else if(adminCommand == "owner_clear")
+			{
+				tpmSessions[localAlias].AdministrationClient.ClearOwner();
+			}
 			else
-        		_console.Out.WriteLine ("Error, unknown admin_subcommand '{0}'", commandline[1]);
+        		_console.Out.WriteLine ("Error, unknown admin_subcommand '{0}'", adminCommand);
         }
     }
 }

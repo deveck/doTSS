@@ -523,7 +523,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		public AuthHandleItem(AuthHandle authHandle, AuthHandleStatus status)
 		{
 			_authHandle = authHandle;
-			_status = Status;
+			_status = status;
 		}
 		
 		/// <summary>
