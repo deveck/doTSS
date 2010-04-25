@@ -325,4 +325,45 @@ namespace Iaik.Tc.TPM.Library.Common
 		TPM_ET_OPERATOR = 0x0C
 		
 	}
+	
+	/// <summary>
+	/// Specifies all available predefined Key Handles
+	/// </summary>
+	public enum TPMKeyHandles : uint
+	{
+		/// <summary>
+		/// The handle points to the SRK
+		/// </summary>
+		TPM_KH_SRK = 0x40000000,
+		
+		/// <summary>
+		/// The handle points to the TPM owner
+		/// </summary>
+		TPM_KH_OWNER = 0x40000001,
+		
+		/// <summary>
+		/// The handle points to the RevokeTrust value
+		/// </summary>
+		TPM_KH_REVOKE = 0x40000002,
+		
+		/// <summary>
+		/// The handle points to the TPM_EstablishTransport static authorization
+		/// </summary>
+		TPM_KH_TRANSPORT = 0x40000003,
+		
+		/// <summary>
+		/// The handle points to the operator auth
+		/// </summary>
+		TPM_KH_OPERATOR = 0x40000004,
+		
+		/// <summary>
+		/// The handle points to the delegation administration auth
+		/// </summary>
+		TPM_KH_ADMIN = 0x40000005,
+		
+		/// <summary>
+		/// The handle points to ti the PUBEK
+		/// </summary>
+		TPM_KH_EK = 0x40000006
+	}
 }
