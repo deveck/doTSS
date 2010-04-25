@@ -4,11 +4,11 @@
 using System;
 using System.Collections.Generic;
 
-namespace Iaik.Utils.Replacement
+namespace Iaik.Utils.SwapUtils
 {
 
 	/// <summary>
-	/// This is the common interface for different replacement algorithms. An implementet replacement algorithm
+	/// This is the common interface for different replacement algorithms. A replacement algorithm
 	/// has to implement this interface. The algorithmen has to register unique ids, for each element registered
 	/// via the RegisterNew() method. The mapping from id to object, has to be done outside. 
 	/// </summary>

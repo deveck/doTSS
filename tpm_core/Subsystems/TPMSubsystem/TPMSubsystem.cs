@@ -121,11 +121,14 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			{
 				TPMCommandResponse commandResponse;
 				
-				lock (tpmContext)
-				{
+				//Locking here is not a good idea, because the Process method 
+				//block until the final command is executed. This could take a long time,
+				//because the user might be asked to authenticate several commands
+				//lock (tpmContext)
+				//{
 					commandResponse = tpmContext.TPM.Process (requestContext.Request.CommandRequest, 
-						new CommandAuthorizationHelper(ServerContext, requestContext.Request.TPMIdentifier));
-				}
+						new CommandAuthorizationHelper(ServerContext, requestContext.Request.TPMIdentifier, tpmContext));
+				//}
 			
 				response.CommandResponse = commandResponse;
 				response.Execute ();

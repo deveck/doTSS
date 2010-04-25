@@ -8,6 +8,7 @@ using Iaik.Tc.TPM.Library.Common;
 using Iaik.Tc.TPM.Subsystems.TPMSubsystem;
 using Iaik.Utils.Hash;
 using System.Security.Cryptography;
+using Org.BouncyCastle.Crypto;
 
 namespace Iaik.Tc.TPM.Context
 {
@@ -47,14 +48,14 @@ namespace Iaik.Tc.TPM.Context
 			_tpmSession.SetValue (TPMSession.PARAM_AUTH_SRK, srkSecret);
 			
 			
-			RSA ekEncryptor = _tpmSession.EndorsementKeyHandling.PublicKey.CreateRSAEncrypter ();
+			IAsymmetricBlockCipher ekEncryptor = _tpmSession.EndorsementKeyHandling.PublicKey.CreateRSAEncrypter ();
 			
 			ownerSecret.DecryptHash ();
-			byte[] encOwnerSecret = ekEncryptor.EncryptValue (ownerSecret.HashValue);
+			byte[] encOwnerSecret = ekEncryptor.ProcessBlock (ownerSecret.HashValue, 0,  ownerSecret.HashValue.Length);
 			ownerSecret.ClearHash ();
 			
 			srkSecret.DecryptHash ();
-			byte[] encSrkSecret = ekEncryptor.EncryptValue (srkSecret.HashValue);
+			byte[] encSrkSecret = ekEncryptor.ProcessBlock (srkSecret.HashValue, 0, srkSecret.HashValue.Length);
 			srkSecret.ClearHash ();
 			
 			Parameters parameters = new Parameters ();

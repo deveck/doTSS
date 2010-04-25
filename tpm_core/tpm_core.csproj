@@ -47,6 +47,10 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Security" />
     <Reference Include="Mono.Security" />
+    <Reference Include="BouncyCastle.Crypto, Version=1.6.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\AuthenticationMechanismChecker.cs" />

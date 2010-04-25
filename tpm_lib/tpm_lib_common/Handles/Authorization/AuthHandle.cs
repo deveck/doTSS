@@ -7,6 +7,7 @@ using System;
 using Iaik.Tc.TPM.Library.Common;
 using Iaik.Utils.Serialization;
 using Iaik.Utils.Nonce;
+using System.IO;
 
 namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 {
@@ -54,9 +55,19 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		{
 			get { return _nonceOdd;}
 		}
-			
+		
+		[SerializeMe(4)]
+		protected byte[] _contextBlob = null;
+		
+		
 		protected AuthHandle()
 		{
+			_nonceOdd = new byte[20];
+		}
+		
+		public AuthHandle(Stream src)
+		{
+			Read(src);
 		}
 		
 		public AuthHandle (uint authHandle)
@@ -83,6 +94,12 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		}
 		
 		#region ITPMHandle implementation
+		
+		public byte[] ContextBlob
+		{
+			get{ return _contextBlob;}
+			set{ _contextBlob = value;}
+		}
 		
 		public uint Handle 
 		{

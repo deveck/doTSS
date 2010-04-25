@@ -1,5 +1,7 @@
 
 using System;
+using Iaik.Utils.Hash;
+using Iaik.Tc.TPM.Library.HandlesCore.Authorization;
 
 namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 {
@@ -19,6 +21,21 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		/// Gets the SHA1 hash of the concatenated parameters
 		/// </summary>
 		byte[] Digest { get; }
+		
+		/// <summary>
+		/// Gets the SHA1 hash of the concatenated response parameters
+		/// </summary>
+		byte[] ResponseDigest { get; }
+		
+		/// <summary>
+		/// Gets informations about the received auth data
+		/// </summary>
+		ResponseAuthHandleInfo[] ResponseAuthHandleInfos{ get; }
+	
+		/// <summary>
+		/// Gets information about the current auth handles in use
+		/// </summary>
+		AuthorizationInfo[] AuthorizationInfos{get;}
 		
 		/// <summary>
 		/// Sets the command authorization helper 
@@ -58,5 +75,7 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		/// <param name="authType"></param>
 		/// <returns></returns>
 		HMACKeyInfo GetKeyInfo(AuthSessionNum authSessionNum);
+		
+		
 	}
 }

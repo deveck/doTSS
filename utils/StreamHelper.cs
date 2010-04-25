@@ -137,6 +137,41 @@ namespace Iaik.Utils
 			return src.ReadByte () != 0;
 		}
 		
+		public static void WriteStream(Stream src, Stream target)
+		{
+			WriteInt32((int)(src.Length - src.Position), target);
+			
+			byte[] buffer = new byte[4096];
+			int read = 0;
+			do
+			{
+				read = src.Read(buffer, 0, buffer.Length);
+				target.Write(buffer, 0, read);
+			}while(read > 0);
+		}
+		
+		public static Stream ReadStream(Stream src)
+		{
+			byte[] buffer = new byte[4096];
+			MemoryStream memSink = new MemoryStream();
+			int dataLength = ReadInt32(src);
+			int currentIndex = 0;
+			int read = 0;
+			
+			do
+			{
+				int toRead = Math.Min(buffer.Length, dataLength - currentIndex);				
+				read = src.Read(buffer, 0, toRead);
+				
+				memSink.Write(buffer, 0, read);
+				currentIndex += read;
+				
+			}while(currentIndex < dataLength && read > 0);
+			
+			return memSink;
+			
+		}
+		
 		public static void WriteTypedStreamSerializable (ITypedStreamSerializable victim, Stream sink)
 		{
 			if (victim == null)
@@ -174,5 +209,7 @@ namespace Iaik.Utils
 			
 			throw new ArgumentException (string.Format ("Could not find TypedStreamSerializable-Type with identifier={0}", identifier));
 		}
+		
+		
 	}
 }

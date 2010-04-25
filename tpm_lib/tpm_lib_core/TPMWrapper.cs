@@ -8,6 +8,7 @@ using Iaik.Tc.TPM.Library.Commands;
 using System.Collections.Generic;
 using System.IO;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
+using Iaik.Utils.Locking;
 
 namespace Iaik.Tc.TPM.Library
 {
@@ -58,6 +59,17 @@ namespace Iaik.Tc.TPM.Library
 		#endregion
 
 		private TPMProvider _backend;
+		
+		/// <summary>
+		/// Provides the ability to acquire exclusive locks for command execution
+		/// for critical sections
+		/// </summary>
+		private LockProvider _commandLockProvider  = new LockProvider(new object());
+		
+		public LockProvider CommandLockProvider
+		{
+			get{ return _commandLockProvider;}
+		}
 		
 //		public TPMProvider backend{
 //			get{
@@ -135,8 +147,10 @@ namespace Iaik.Tc.TPM.Library
 		{
 			try
 			{
-				_backend.Open ();
+				//Opening is done automatically
+				//_backend.Open ();
 				TPMCommand command = TPMCommandFactory.Create (request.CommandIdentifier);
+				command.SetCommandLockProvider(_commandLockProvider);
 				if(typeof(IAuthorizableCommand).IsAssignableFrom(command.GetType()))
 					((IAuthorizableCommand)command).SetCommandAuthorizationHelper(commandAuthorizationHelper);
 				command.Init (request.Parameters, _backend);

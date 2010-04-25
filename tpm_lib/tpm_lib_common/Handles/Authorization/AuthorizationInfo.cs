@@ -32,8 +32,11 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 			get { return _continueAuthSession;}
 		}
 		
-		public AuthorizationInfo ()
+		public AuthorizationInfo (AuthHandle authHandle, bool continueAuthSession, byte[] authData)
 		{
+			_authHandle = authHandle;
+			_authData = authData;
+			_continueAuthSession = continueAuthSession;
 		}
 	}
 }

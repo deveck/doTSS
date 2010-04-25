@@ -53,11 +53,25 @@ namespace Iaik.Tc.TPM.Commands
 			
 			if (adminCommand == "take_ownership")
 			{
-        		ProtectedPasswordStorage ownerAuth = Utils.ReadPassword ("Enter new owner password:", _console, true);
+				ProtectedPasswordStorage ownerAuth;
+				if(commandline.Length >= 4)
+				{
+					ownerAuth = new ProtectedPasswordStorage();
+					foreach(char c in commandline[3])
+						ownerAuth.AppendPasswordChar(c);
+				}
+				else
+        		 ownerAuth = Utils.ReadPassword ("Enter new owner password:", _console, true);
         		
 				ProtectedPasswordStorage srkAuth = null;
     
-				if (ownerAuth != null)
+				if (ownerAuth != null && commandline.Length >= 5)
+				{
+					srkAuth = new ProtectedPasswordStorage();
+					foreach(char c in commandline[4])
+						srkAuth.AppendPasswordChar(c);
+				}
+				else if(ownerAuth != null)
         			srkAuth = Utils.ReadPassword ("Enter new srk password:", _console, true);
     
 				if (ownerAuth == null || srkAuth == null)

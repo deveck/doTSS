@@ -85,10 +85,6 @@ Global
 		{F6681243-5DCF-4B0B-BC85-0F1290CF0334}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6681243-5DCF-4B0B-BC85-0F1290CF0334}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6681243-5DCF-4B0B-BC85-0F1290CF0334}.Release|Any CPU.Build.0 = Release|Any CPU
-		=======
-		=======
-		=======
-		=======
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F6681243-5DCF-4B0B-BC85-0F1290CF0334} = {D66E45D9-91DC-4445-AE8B-99FF8FEDEEC9}

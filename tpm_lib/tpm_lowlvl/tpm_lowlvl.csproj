@@ -49,6 +49,9 @@
     <Compile Include="backends\linux\TPMDevice.cs" />
     <Compile Include="exceptions\TPMLowLvlException.cs" />
     <Compile Include="data\GenericBlob.cs" />
+    <Compile Include="TPMProviderException.cs" />
+    <Compile Include="TPMResponseException.cs" />
+    <Compile Include="TPMErrorCodes.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />

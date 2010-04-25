@@ -1,6 +1,7 @@
 
 using System;
 using Iaik.Tc.TPM.Library;
+using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 
 namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {
@@ -30,10 +31,21 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			get { return _tpm;}
 		}
 		
+		private IAuthHandleManager _authHandleManager;
+		
+		/// <summary>
+		/// Manages and swaps the authorization handles as needed
+		/// </summary>
+		public IAuthHandleManager AuthHandleManager
+		{
+			get{ return _authHandleManager; }
+		}
+		
 		public TPMContext (string deviceName, TPMWrapper tpm)
 		{
 			_deviceName = deviceName;
 			_tpm = tpm;
+			_authHandleManager = new AuthHandleManager(this);
 		}
 	}
 }

@@ -20,8 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>--script=/home/andi/Repos/TpmCSStack-impl/tpm_client/TestScripts/tpm_session_cap.txt</Commandlineparameters>
-    <ConsolePause>false</ConsolePause>
+    <Commandlineparameters>--script=/home/andi/Repos/IAIK_ITProject/TpmCSStack-impl/tpm_client/TestScripts/tpm_session_admin.txt</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -97,5 +96,6 @@
     <None Include="TestScripts\tpm_session_cap.txt" />
     <None Include="TestScripts\select_tpm.txt" />
     <None Include="TestScripts\tpm_session_ek.txt" />
+    <None Include="TestScripts\tpm_session_admin.txt" />
   </ItemGroup>
 </Project>

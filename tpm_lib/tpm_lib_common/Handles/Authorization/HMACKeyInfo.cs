@@ -65,6 +65,7 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		
 		public HMACKeyInfo (Stream src)
 		{
+			Read(src);
 		}
 	}
 }

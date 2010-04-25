@@ -25,14 +25,13 @@ namespace Iaik.Tc.TPM.Library.Commands.SessionManagement
 			
 			ITPMHandle handle = _params.GetValueOf<ITPMHandle>("handle");
 			bool keepHandle = _params.GetValueOf<bool>("keep_handle");
-			byte[] contextBlob = _params.GetValueOf<byte[]>("context_blob");
 			
 			TPMBlob blob = new TPMBlob();
 			blob.WriteCmdHeader(TPMCmdTags.TPM_TAG_RQU_COMMAND, TPMOrdinals.TPM_ORD_LoadContext);
 			blob.WriteUInt32(handle.Handle);
 			blob.WriteBool(keepHandle);
-			blob.WriteUInt32((uint)contextBlob.Length);
-			blob.Write(contextBlob, 0, contextBlob.Length);
+			blob.WriteUInt32((uint)handle.ContextBlob.Length);
+			blob.Write(handle.ContextBlob, 0, handle.ContextBlob.Length);
 			
 			TPMBlob responseBlob = _tpmProvider.TransmitAndCheck(blob);
 			responseBlob.SkipHeader();

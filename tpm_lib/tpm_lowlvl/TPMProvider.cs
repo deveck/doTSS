@@ -136,6 +136,9 @@ namespace Iaik.Tc.TPM.Lowlevel
         /// <returns></returns>
         public byte[] Transmit(byte[] blob, int size)
         {
+			if(!IsOpen)
+				Open();
+			
             lock (this)
             {
                 if (_isDisposed)
@@ -220,11 +223,11 @@ namespace Iaik.Tc.TPM.Lowlevel
                     break;
 
                 case TPMCmdTags.TPM_TAG_RQU_AUTH1_COMMAND:
-                    expected_rsp_tag = TPMCmdTags.TPM_TAG_RQU_AUTH1_COMMAND;
+                    expected_rsp_tag = TPMCmdTags.TPM_TAG_RSP_AUTH1_COMMAND;
                     break;
 
                 case TPMCmdTags.TPM_TAG_RQU_AUTH2_COMMAND:
-                    expected_rsp_tag = TPMCmdTags.TPM_TAG_RQU_AUTH2_COMMAND;
+                    expected_rsp_tag = TPMCmdTags.TPM_TAG_RSP_AUTH2_COMMAND;
                     break;
 
                 default:
@@ -355,8 +358,7 @@ namespace Iaik.Tc.TPM.Lowlevel
             uint tpmResult = reply.ReadUInt32();
             if (tpmResult != 0)
             {
-				throw new Exception();
-                //throw new TpmCommandFailedException(tpmResult, reply);
+                throw new TPMResponseException((Int64)tpmResult, TPMErrorCodeToMessage(tpmResult), reply);
             }
 
             return replyTag;
@@ -369,10 +371,16 @@ namespace Iaik.Tc.TPM.Lowlevel
         /// <param name="p"></param>
         public void CheckTpmReponse(TPMBlob rsp, ushort expected_tag)
         {
-            if (CheckTpmReponse(rsp) != expected_tag)
-               throw new Exception();
-				// throw new TpmCommandException("TPM response tag does not match request tag", rsp);
+			ushort currentTag = CheckTpmReponse(rsp);
+            if( currentTag != expected_tag)
+				throw new TPMResponseException(-1, string.Format("TPM response tag does not match request tag, received: {0}, expected: {1}", currentTag, expected_tag), rsp);
         }
+		
+		private string TPMErrorCodeToMessage(uint tpmResult)
+		{
+			return string.Format("{0} (0x{1:X2})", TPMStatusCodes.ErrorCodeToMessage(tpmResult), tpmResult);
+		}
+		
         #endregion
 
 //        #region 16. Integrity Collection and Reporting

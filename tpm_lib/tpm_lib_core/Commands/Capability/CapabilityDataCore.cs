@@ -58,6 +58,17 @@ namespace Iaik.Tc.TPM.Library.Commands
 				return version;
 			}
 			
+			public static TPMVersionCore CreateVersion11 ()
+			{
+				CapabilityDataCore.TPMVersionCore version = new CapabilityDataCore.TPMVersionCore ();
+				version._major = 0x01;
+				version._minor = 0x01;
+				version._revMajor = 0;
+				version._revMinor = 0;
+				
+				return version;
+			}
+			
 			private TPMVersionCore ()
 			{
 			}

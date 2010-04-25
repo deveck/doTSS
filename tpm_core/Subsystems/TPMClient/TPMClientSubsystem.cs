@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Iaik.Utils.CommonFactories;
 using System.Security.Cryptography;
 using Iaik.Utils.Hash;
+using Iaik.Utils;
 
 namespace Iaik.Tc.TPM.Subsystems.TPMClient
 {
@@ -82,11 +83,17 @@ namespace Iaik.Tc.TPM.Subsystems.TPMClient
 				response.Execute();
 				return;
 			}
+
 			
+			HMACProvider hmacProvider = new HMACProvider(pw);
+			response.Succeeded = true;
+        	response.TpmAuthData = hmacProvider.Hash(requestContext.Request.HMACDataProviders);
+//			    new HashByteDataProvider(requestContext.Request.Digest),
+//			    new HashByteDataProvider(requestContext.Request.AuthHandle.NonceEven),
+//			    new HashByteDataProvider(requestContext.Request.AuthHandle.NonceOdd),
+//			    new HashPrimitiveDataProvider(requestContext.Request.ContinueAuthSession));
 			
-        	Console.WriteLine ("i should really compute a hmac value");
-        	response.Succeeded = true;
-        	response.TpmAuthData = new byte[20];
+        	
         	response.Execute();
 		}
         #endregion

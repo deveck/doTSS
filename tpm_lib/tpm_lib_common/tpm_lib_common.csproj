@@ -32,6 +32,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="BouncyCastle.Crypto, Version=1.6.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -57,6 +61,7 @@
     <Compile Include="Handles\Authorization\AuthorizationInfo.cs" />
     <Compile Include="Handles\Authorization\HMACKeyInfo.cs" />
     <Compile Include="Handles\Authorization\IAuthHandleManager.cs" />
+    <Compile Include="Handles\Authorization\ResponseAuthHandleInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="interface\" />

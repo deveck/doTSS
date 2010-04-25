@@ -14,8 +14,8 @@ using Iaik.Utils;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 using Iaik.Tc.TPM.Library.Common.Handles;
 using Iaik.Utils.Hash;
-using Iaik.Utils.Replacement;
 using System.Security.Cryptography;
+using Iaik.Utils.SwapUtils;
 
 namespace tpm_test
 {
@@ -56,7 +56,8 @@ namespace tpm_test
 //			//tpm.init;
 //			//tpm.backend.tpmOpen();
 		
-			TestAging();
+			//TestAging();
+			TestHMAC();
 		}
 		
 		private static void ReadPCRs(TPMWrapper tpm){
@@ -250,7 +251,60 @@ namespace tpm_test
 				log.Info("------------------");
 		}
 		
-		
+		public enum testenum: ushort
+		{
+			test = 0x14
+		}
+		private static void TestHMAC()
+		{
+			ILog log = LogManager.GetLogger("TestHMAC");
+			
+			HashProvider hash = new HashProvider();
+			byte[] h1 = hash.Hash(
+			   new HashPrimitiveDataProvider((uint)0x3c),
+			   new HashPrimitiveDataProvider((ushort)0x00),
+			   new HashEnumDataProvider(testenum.test),
+			   new HashByteDataProvider(new byte[]{0xb3,0xd5,0xcb, 0x12,0x73,
+			0x8b, 0xb6, 0xf9, 0x21, 0xa3,
+			0xda, 0x42,0xe0, 0x18, 0xd1,
+			0x43, 0xfa, 0x29, 0x7c, 0xa6}));
+			  
+			
+			HMACProvider hmac = new HMACProvider(
+			   new byte[]{0x75, 0xf0, 0x86, 0x84, 0x78, 
+				0x24, 0xf8, 0x79, 0x39, 0x5a,
+				0x18, 0x14, 0x1d, 0x19, 0x0c,
+				0x2f, 0x01, 0x29, 0x0b, 0x05});
+			
+			byte[] h2 = new byte[20];
+			for(int i = 0; i<20; i++)
+				h2[i] = 0xa5;
+			
+			byte[] h3 = new byte[]{
+				0xb9, 0x73, 0x05, 0xfa, 0xdb,
+				0xe3, 0x4d, 0xc5, 0x46, 0x65,
+				0x10, 0x00, 0x0a, 0x55, 0x04,
+				0x2e, 0x3f, 0xea, 0xbf, 0x27};
+			 
+			byte[] result = hmac.Hash(new HashByteDataProvider(h1),
+			          new HashByteDataProvider(h2),
+			          new HashByteDataProvider(h3),
+			          new HashPrimitiveDataProvider(true));
+			     
+			byte[] expected = new byte[]{
+				0x26, 0x7e, 0xca, 0x16, 0xa1,
+				0x4d, 0x36, 0xe6, 0x72, 0x2e,
+				0xaa, 0x7f, 0x7b, 0x53, 0x4a,
+				0xb3, 0xce, 0x8b, 0x2a, 0xaa};
+			
+			for(int i = 0; i<20; i++)
+			{
+				if(result[i] != expected[i])
+					Console.WriteLine("FAILED");
+			}
+			
+			Console.WriteLine("SUCCESS");
+		}
 		/// <summary>
 		/// Initializes the logger
 		/// </summary>

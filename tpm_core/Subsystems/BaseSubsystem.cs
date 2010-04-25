@@ -32,7 +32,7 @@ namespace Iaik.Tc.TPM.Subsystems
 		/// <summary>
 		/// Logger
 		/// </summary>
-		protected ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+		protected ILog _logger;
 	
 		/// <summary>
 		/// The Client/Server context this subsystm runs in
@@ -54,6 +54,7 @@ namespace Iaik.Tc.TPM.Subsystems
 
 		public BaseSubsystem(EndpointContext context)
 		{
+			_logger = LogManager.GetLogger(SubsystemIdentifier + "-subsystem");
 			_context = context;
 	
 			//The ctor needs to check if T is a enum type and if T has ushort as base type,
@@ -80,6 +81,7 @@ namespace Iaik.Tc.TPM.Subsystems
 		#region ISubsystem implementation
 		public virtual void HandlePacket (DataPacket packet)
 		{
+			_logger.DebugFormat("Handling request in '{0}'", SubsystemIdentifier);
 			using(ByteStream src = new ByteStream(packet.Payload))
 			{
 				TRequest requestTypeIdentifier = (TRequest)Enum.ToObject(typeof(TRequest), StreamHelper.ReadUInt16(src));
@@ -100,6 +102,7 @@ namespace Iaik.Tc.TPM.Subsystems
 			if(_requestExecutionInfos.ContainsKey(requestTypeIdentifier) == false)
 				throw new NotSupportedException("Not supported request detected");
 			
+			_logger.DebugFormat("Executing request in '{0}'", SubsystemIdentifier);
 			
 			Type requestCtxType = typeof(RequestContext<,>);
 			requestCtxType = requestCtxType.MakeGenericType(request.GetType(), request.ResponseType);

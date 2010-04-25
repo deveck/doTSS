@@ -49,7 +49,6 @@ namespace Iaik.Tc.TPM.Library.Commands
 				throw new TPMResponseException ("Local digest does not match remote digest");
 			}			
 			
-			
 			Parameters responseParams = new Parameters ();
 			responseParams.AddValue (TPMPubkey.PARAM_TPM_PUBKEY, pubkey);
 			

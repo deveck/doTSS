@@ -14,6 +14,7 @@ using System.Threading;
 using Iaik.Tc.TPM.Configuration;
 using Iaik.Tc.TPM.Library;
 using Iaik.Tc.TPM.Subsystems.TPMSubsystem;
+using log4net;
 
 namespace Iaik.Tc.TPM.Context
 {
@@ -28,6 +29,12 @@ namespace Iaik.Tc.TPM.Context
 		/// The subsystems get registered by the finally implementing classes
 		/// </summary>
 		private Dictionary<string, ISubsystem> _subsystems = new Dictionary<string, ISubsystem>();
+		
+		
+		/// <summary>
+		/// Logger
+		/// </summary>
+		protected ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 		
 		/// <summary>
 		/// Creates a ServerContext for the specified connection
@@ -95,10 +102,13 @@ namespace Iaik.Tc.TPM.Context
 				_configuredEvent.WaitOne();
 				
 			if(_subsystems.ContainsKey(packet.Subsystem))
+			{
+				_logger.DebugFormat("Redirecting packet to subsystem '{0}'", packet.Subsystem);
 				_subsystems[packet.Subsystem].HandlePacket(packet);
+			}
 			else
 			{
-				//TODO: log this! Specified subsystem has not been found
+				 _logger.WarnFormat("Subsystem '{0}' has not been found", packet.Subsystem);
 			}
 		}		
 

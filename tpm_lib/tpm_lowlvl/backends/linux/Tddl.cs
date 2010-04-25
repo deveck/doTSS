@@ -76,8 +76,7 @@ namespace Iaik.Tc.TPM.Lowlevel.Backends.Linux
             if (result != 0)
             {
                 if (rxlen > 0)
-						throw new Exception();
-                    //throw new TpmException("TDDL I/O error (partial result)", result, rxBuffer_, (int)rxlen);
+                    throw new TPMProviderException(string.Format("TDDL I/O error (partial result) result: '{0}'", result));
                 else
                     throw new TPMLowLvlException(result);
             }

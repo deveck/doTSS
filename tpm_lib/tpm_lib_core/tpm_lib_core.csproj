@@ -60,6 +60,8 @@
     <Compile Include="Hash\HashTPMBlobWritableDataProvider.cs" />
     <Compile Include="Commands\SessionManagement\TPM_SaveContext.cs" />
     <Compile Include="Commands\SessionManagement\TPM_LoadContext.cs" />
+    <Compile Include="HandlesCore\Authorization\ResponseAuthHandleInfoCore.cs" />
+    <Compile Include="Commands\TPMCommandAuthorizable.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />

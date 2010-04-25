@@ -4,7 +4,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Iaik.Utils.Replacement
+namespace Iaik.Utils.SwapUtils
 {
 
 	/// <summary>

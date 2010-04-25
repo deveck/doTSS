@@ -5,6 +5,14 @@ using Iaik.Tc.TPM.Library.Common.KeyData;
 using Iaik.Utils;
 using System.IO;
 using System.Security.Cryptography;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Encodings;
+using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Digests;
+using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Math;
+using System.Text;
+using Iaik.Utils.Hash;
 
 namespace Iaik.Tc.TPM.Library.Common
 {
@@ -52,14 +60,25 @@ namespace Iaik.Tc.TPM.Library.Common
 		/// ready for encryption
 		/// </summary>
 		/// <returns></returns>
-		public RSA CreateRSAEncrypter ()
+		public IAsymmetricBlockCipher CreateRSAEncrypter ()
 		{
 			if (_keyParams.AlgorithmId == TPMAlgorithmId.TPM_ALG_RSA) 
 			{
-				RSA rsaInstance = new RSACryptoServiceProvider ();
-				RSAParameters parameters = new RSAParameters ();
-				parameters.Modulus = _publicKey.Pubkey;
-				parameters.Exponent = ((TPMRSAKeyParams)_keyParams.Params).GetExponent();
+				IAsymmetricBlockCipher cipher = new OaepEncoding(new RsaEngine(), new Sha1Digest(), Encoding.ASCII.GetBytes("TCPA"));
+				
+				RsaKeyParameters parameters = 
+					new RsaKeyParameters( false,
+					                     new BigInteger(1, _publicKey.Pubkey),
+					                     new BigInteger(1, ((TPMRSAKeyParams)_keyParams.Params).GetExponent()));
+				                                             
+				cipher.Init(true, parameters);
+				
+				return cipher;                                       
+//				RSACryptoServiceProvider rsaInstance = new RSACryptoServiceProvider ();
+//				RSAParameters parameters = new RSAParameters ();
+//				parameters.Modulus = _publicKey.Pubkey;
+//				parameters.Exponent = ((TPMRSAKeyParams)_keyParams.Params).GetExponent();
+				
 				
 //				Console.WriteLine ("P: {0}\nQ: {1}\nD: {2}\nDP: {3}\nDQ: {4}\nExpo: {5}\nInvQ: {6}\nMod: {7}", 
 //				ByteHelper.ByteArrayToHexString (parameters.P), 
@@ -71,8 +90,8 @@ namespace Iaik.Tc.TPM.Library.Common
 //				ByteHelper.ByteArrayToHexString (parameters.InverseQ), 
 //				ByteHelper.ByteArrayToHexString (parameters.Modulus));
 				
-				rsaInstance.ImportParameters (parameters);
-				return rsaInstance;
+//				rsaInstance.ImportParameters (parameters);
+//				return rsaInstance;
 			} 
 			else
 			 throw new NotSupportedException (string.Format ("Algorithm '{0}' is not supported", _keyParams.AlgorithmId));

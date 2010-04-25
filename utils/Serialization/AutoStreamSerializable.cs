@@ -78,7 +78,8 @@ namespace Iaik.Utils.Serialization
 					StreamHelper.WriteUInt32 ((uint)memberInfo.GetValue (this), sink);
 				else if (curType == typeof(ushort))
 					StreamHelper.WriteUInt16 ((ushort)memberInfo.GetValue (this), sink);
-				
+				else if(curType == typeof(Stream))
+					StreamHelper.WriteStream((Stream)memberInfo.GetValue(this), sink);
 				else
 					throw new ArgumentException (string.Format ("Type '{0}' is not supported by AutoStreamSerializable", curType));
 			}
@@ -134,6 +135,8 @@ namespace Iaik.Utils.Serialization
 					memberInfo.SetValue (this, StreamHelper.ReadUInt32 (src)); 
 				else if (curType == typeof(ushort))
 					memberInfo.SetValue (this, StreamHelper.ReadUInt16 (src));
+				else if(curType == typeof(Stream))
+					memberInfo.SetValue(this, StreamHelper.ReadStream(src));
 				else
 					throw new ArgumentException (string.Format ("Type '{0}' is not supported by AutoStreamSerializable", curType));
 			}

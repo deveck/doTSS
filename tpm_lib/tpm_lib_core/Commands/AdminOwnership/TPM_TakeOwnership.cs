@@ -7,12 +7,14 @@ using Iaik.Tc.TPM.Lowlevel;
 using Iaik.Utils.Hash;
 using Iaik.Tc.TPM.Library.Hash;
 using Iaik.Tc.TPM.Lowlevel.Data;
+using System.IO;
+using Iaik.Tc.TPM.Library.HandlesCore.Authorization;
 
 namespace Iaik.Tc.TPM.Library.Commands.AdminOwnership
 {
 
 	[TPMCommands(TPMCommandNames.TPM_CMD_TakeOwnership)]
-	public class TPM_TakeOwnership : TPMCommand, IAuthorizableCommand
+	public class TPM_TakeOwnership : TPMCommandAuthorizable
 	{
 		/// <summary>
 		/// Specifies the authorization handle to use for this command
@@ -39,6 +41,14 @@ namespace Iaik.Tc.TPM.Library.Commands.AdminOwnership
 		/// </summary>
 		private byte[] _digest = null;
 		
+		/// <summary>
+		/// The out parameter digest (1HX)
+		/// </summary>
+		private byte[] _responseDigest = null;
+		
+		
+		
+		
 		public override void Init (Parameters param, TPMProvider tpmProvider)
 		{
 			base.Init (param, tpmProvider);
@@ -46,7 +56,7 @@ namespace Iaik.Tc.TPM.Library.Commands.AdminOwnership
 			_digest = null;
 			
 			_tpmKey = TPMKeyCore.Create (
-				null,  //use default tpm version
+			    CapabilityDataCore.TPMVersionCore.CreateVersion11(),
 				TPMKeyUsage.TPM_KEY_STORAGE, 
 				TPMKeyFlags.None,
 				TPMAuthDataUsage.TPM_AUTH_ALWAYS,
@@ -62,7 +72,7 @@ namespace Iaik.Tc.TPM.Library.Commands.AdminOwnership
 		}
 
 		
-		public override TPMCommandResponse Process ()
+		protected override TPMCommandResponse InternalProcess ()
 		{
 			byte[] ownerAuth = _params.GetValueOf<byte[]> (PARAM_OWNERAUTH);
 			byte[] srkAuth = _params.GetValueOf<byte[]> (PARAM_SRKAUTH);
@@ -81,11 +91,21 @@ namespace Iaik.Tc.TPM.Library.Commands.AdminOwnership
 			
 			_tpmKey.WriteToTpmBlob (requestBlob);
 			
-			foreach(AuthorizationInfo authInfo in _commandAuthHelper.AuthorizeCommand(this))			
-				WriteAuthorizationInfo (requestBlob, authInfo);
+			_currentAuthorizationInfos = _commandAuthHelper.AuthorizeCommand(this);
 			
-			/*TPMBlob responseBlob =*/ _tpmProvider.TransmitAndCheck (requestBlob);
-			return null;
+			using(_commandLockProvider.AcquireLock())
+			{
+				//Make sure that all Authorization handles are loaded
+				_commandAuthHelper.LoadAuthorizationHandles(_currentAuthorizationInfos);
+				
+				foreach(AuthorizationInfo authInfo in _currentAuthorizationInfos)			
+					WriteAuthorizationInfo (requestBlob, authInfo);
+			}
+
+			_responseBlob = _tpmProvider.TransmitAndCheck (requestBlob);			
+			CheckResponseAuthInfo();			
+			
+			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_TakeOwnership, new Parameters());
 		}
 		
 		public override void Clear ()
@@ -99,12 +119,7 @@ namespace Iaik.Tc.TPM.Library.Commands.AdminOwnership
 
 		#region IAuthorizableCommand implementation
 		
-		/// <summary>
-		/// Provides command hmac generation
-		/// </summary>
-		private ICommandAuthorizationHelper _commandAuthHelper = null;
-		
-		public byte[] Digest 
+		public override byte[] Digest 
 		{
 			get 
 			{
@@ -130,36 +145,43 @@ namespace Iaik.Tc.TPM.Library.Commands.AdminOwnership
 			}
 		}
 		
-		public AuthHandle GetAuthHandle (AuthSessionNum authSessionNum)
+		public override byte[] ResponseDigest
 		{
-			if (authSessionNum != AuthSessionNum.Auth1)
-				throw new ArgumentException ("Command only requires Auth1");
-			
-			return _params.GetValueOf<AuthHandle> (PARAM_AUTHHANDLE, null);
+			get
+			{
+				if(_responseDigest == null)
+				{
+					HashProvider hasher = new HashProvider();
+					
+					int offset = 2+4; //tag + paramsize
+					
+					int authHandleSize = ResponseAuthHandleInfoCore.ReadAuthHandleInfos(this, _responseBlob).Length *
+						ResponseAuthHandleInfoCore.SINGLE_AUTH_HANDLE_SIZE;
+					
+					_responseDigest = hasher.Hash(
+					      //1S
+					      new HashStreamDataProvider(_responseBlob, offset, 4, false),
+					      //2S
+					      new HashPrimitiveDataProvider(TPMOrdinals.TPM_ORD_TakeOwnership),
+					      //3S
+					      new HashStreamDataProvider(_responseBlob, offset + 4, _responseBlob.Length - offset - 4 - authHandleSize, false));
+				}
+				
+				return _responseDigest;
+				
+			}
 		}
 		
-		
-		public void SetCommandAuthorizationHelper (ICommandAuthorizationHelper commandAuthHelper)
-		{
-			_commandAuthHelper = commandAuthHelper;
-		}
-		
-		
-		public TPMEntityTypeLSB GetEntityType(AuthSessionNum authSession)
-		{
-			throw new NotSupportedException();
-		}
-		
-		public bool SupportsAuthType(AuthHandle.AuthType authType)
+		public override bool SupportsAuthType(AuthHandle.AuthType authType)
 		{
 			//TPM_TakeOwnership only supports OIAP
 			return authType == AuthHandle.AuthType.OIAP;
 		}
 		
-		public HMACKeyInfo GetKeyInfo(AuthSessionNum authSessionNum)
+		public override HMACKeyInfo GetKeyInfo(AuthSessionNum authSessionNum)
 		{
 			if (authSessionNum != AuthSessionNum.Auth1)
-				throw new ArgumentException ("Command only requires Auth1");
+				return null;
 			
 			return new HMACKeyInfo (HMACKeyInfo.HMACKeyType.OwnerSecret, null);
 		}

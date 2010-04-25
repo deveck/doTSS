@@ -18,5 +18,62 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		/// <param name="forceAuthType">If not null, forces the framework to use the specified Authentication method</param>
 		/// <returns></returns>
 		AuthorizationInfo[] AuthorizeCommand(IAuthorizableCommand cmd);
+		
+		/// <summary>
+		/// Generates auth data from a tpm response, to compare to the 
+		/// received auth data
+		/// </summary>
+		/// <param name="cmd"></param>
+		/// <returns></returns>
+		AuthorizationInfo[] GenerateResponseAuthData(IAuthorizableCommand cmd);
+		
+		/// <summary>
+		/// Extracts the AuthHandles and loads them
+		/// </summary>
+		/// <param name="authInfos">
+		/// A <see cref="AuthorizationInfo[]"/>
+		/// </param>
+		void LoadAuthorizationHandles(params AuthorizationInfo[] authInfos);
+		
+		/// <summary>
+		/// Loads the auth handles into the tpm
+		/// </summary>
+		/// <param name="authHandles">
+		/// A <see cref="AuthHandle[]"/>
+		/// </param>
+		void LoadAuthorizationHandles(params AuthHandle[] authHandles);
+		
+		/// <summary>
+		/// Extracts the AuthHandles and destroys them
+		/// </summary>
+		/// <param name="authInfos">
+		/// A <see cref="AuthorizationInfo[]"/>
+		/// </param>
+		void DestroyAuthorizationHandles(IAuthorizableCommand cmd);
+		
+		/// <summary>
+		/// Destroys the authorization handle
+		/// </summary>
+		/// <param name="handle">
+		/// A <see cref="AuthHandle"/>
+		/// </param>
+		void DestroyAuthorizationHandle(AuthHandle handle);
+		
+		/// <summary>
+		/// Extracts the AuthHandles and releases them
+		/// </summary>
+		/// <param name="authInfos">
+		/// A <see cref="AuthorizationInfo[]"/>
+		/// </param>
+		void ReleaseAuthorizationHandles(IAuthorizableCommand cmd);
+	
+		
+		/// <summary>
+		/// Removes the authorization handles from the local auth manager
+		/// </summary>
+		/// <param name="cmd">
+		/// A <see cref="IAuthorizableCommand"/>
+		/// </param>
+		void RemoveAuthorizationHandle(IAuthorizableCommand cmd);
 	}
 }
