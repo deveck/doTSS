@@ -14,7 +14,7 @@ namespace Iaik.Utils.Hash
 		/// <summary>
 		/// The hash algorithm instance to use
 		/// </summary>
-		private HashAlgorithm _hashAlgorithm;
+		protected HashAlgorithm _hashAlgorithm;
 		
 		public int HashBitSize
 		{

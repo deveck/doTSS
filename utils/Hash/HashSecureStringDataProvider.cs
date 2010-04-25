@@ -6,7 +6,9 @@ using System.Text;
 namespace Iaik.Utils.Hash
 {
 
-
+	/// <summary>
+	/// Does not support stream serialization
+	/// </summary>
 	public class HashSecureStringDataProvider : HashDataProvider
 	{
 		

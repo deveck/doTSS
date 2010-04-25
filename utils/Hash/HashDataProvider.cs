@@ -1,11 +1,12 @@
 
 using System;
+using Iaik.Utils.Serialization;
 
 namespace Iaik.Utils.Hash
 {
 
 
-	public abstract class HashDataProvider : IDisposable
+	public abstract class HashDataProvider : AutoStreamSerializable, IDisposable, ITypedStreamSerializable
 	{
 
 		/// <summary>

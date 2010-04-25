@@ -1,6 +1,7 @@
 
 using System;
 using System.IO;
+using Iaik.Utils.Serialization;
 
 namespace Iaik.Utils.Hash
 {
@@ -8,18 +9,26 @@ namespace Iaik.Utils.Hash
 	/// <summary>
 	/// Provides data for hasher for (seekable) streams
 	/// </summary>
+	[TypedStreamSerializable("h_stream_dp")]
 	public class HashStreamDataProvider : HashDataProvider
 	{
 
 		/// <summary>
 		/// Source stream to read from
 		/// </summary>
+		[SerializeMe(0)]
 		private Stream _source;
 		
-	
+		/// <summary>
+		/// Current position inside the stream
+		/// </summary>
+		[SerializeMe(1)]
+		private long _currentPosition;
+		
 		/// <summary>
 		/// Length to read from the stream
 		/// </summary>
+		[SerializeMe(2)]
 		private long _length;
 		
 		/// <summary>
@@ -27,26 +36,28 @@ namespace Iaik.Utils.Hash
 		/// </summary>
 		private bool _streamOwner = false;
 		
-		public HashStreamDataProvider (Stream src)
-			:this(src, null, null, false)
-		{
-		}
-		
+				
 		public HashStreamDataProvider (Stream src, long? startPosition, long? length, bool streamOwner)
 		{
 			_streamOwner = streamOwner;
 			_source = src;
 			
 			if (startPosition == null)
-				src.Position = 0;
+				_currentPosition = 0;
 			else
-				src.Position = startPosition.Value;
+				_currentPosition = startPosition.Value;
 			
 			if (length == null)
-				_length = _source.Length - src.Position;
+				_length = _source.Length - _currentPosition;
 			else
 				_length = length.Value;
 		}
+		
+//		public HashStreamDataProvider(Stream src)
+//		{
+//			Read(src);
+//			_streamOwner = true;
+//		}
 		
 		public override int NextBytes (byte[] buffer)
 		{
@@ -61,10 +72,11 @@ namespace Iaik.Utils.Hash
 			
 			int toRead = (int)Math.Min (buffer.Length, _length);
 			
+			_source.Position = _currentPosition;			
 			int read = _source.Read (buffer, 0, toRead);
 			
 			_length -= read;
-			
+			_currentPosition = _source.Position;
 			return read;
 		}
 		
@@ -77,5 +89,12 @@ namespace Iaik.Utils.Hash
 		}
 
 
+		public override void Write (Stream sink)
+		{
+			_source.Position = _currentPosition;
+			base.Write(sink);
+		}
+
+		
 	}
 }

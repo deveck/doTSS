@@ -1,5 +1,7 @@
 
 using System;
+using Iaik.Utils.Serialization;
+using System.IO;
 
 namespace Iaik.Utils.Hash
 {
@@ -7,22 +9,26 @@ namespace Iaik.Utils.Hash
 	/// <summary>
 	/// Provides data for hasher for byte arrays
 	/// </summary>
+	[TypedStreamSerializable("h_byte_dp")]
 	public class HashByteDataProvider : HashDataProvider
 	{
 		
 		/// <summary>
 		/// Data to read from
 		/// </summary>
+		[SerializeMe(0)]
 		private byte[] _data;
 		
 		/// <summary>
 		/// CurrentIndex in the data bytes
 		/// </summary>
+		[SerializeMe(1)]
 		private int _currentIndex;
 		
 		/// <summary>
 		/// length to read
 		/// </summary>
+		[SerializeMe(2)]
 		private int _length;
 		
 		public HashByteDataProvider (byte[] data)
@@ -45,6 +51,11 @@ namespace Iaik.Utils.Hash
 				_length = length.Value;
 			
 			
+		}
+		
+		public HashByteDataProvider(Stream src)
+		{
+			Read(src);
 		}
 		
 		public override int NextBytes (byte[] buffer)
