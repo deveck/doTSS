@@ -128,6 +128,7 @@
     <Compile Include="Subsystems\TypedClientSubsystemRequest.cs" />
     <Compile Include="Subsystems\SubsystemResponseException.cs" />
     <Compile Include="Subsystems\TPMSubsystem\AuthHandleManager.cs" />
+    <Compile Include="Context\TPMKeyClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">

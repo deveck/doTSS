@@ -116,6 +116,18 @@ namespace Iaik.Tc.TPM.Context
 			get { return _administrationClient;}
 		}
 		
+		
+		private TPMKeyClient _keyClient;
+		
+		/// <summary>
+		/// Returns the key client for this session which performs several 
+		/// operations on key handles, including key creation
+		/// </summary>
+		public TPMKeyClient KeyClient
+		{
+			get{ return _tpmKeyClient; }
+		}
+		
 		public TPMSession (EndpointContext ctx, int sessionIdentifier, TPMClient tpmClient)
 		{
 			_ctx = ctx;
@@ -124,6 +136,7 @@ namespace Iaik.Tc.TPM.Context
 			_capabilityClient = new TPMCapabilityClient (this);
 			_endorsementKeyHandling = new TPMEndorsementKeyHandlingClient (this);
 			_administrationClient = new TPMAdministrationClient (this);
+			_keyClient = new TPMKeyClient(this);
 		}
 		
 		internal TPMCommandResponse DoTPMCommandRequest (TPMCommandRequest commandRequest)
