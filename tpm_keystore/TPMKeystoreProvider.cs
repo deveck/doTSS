@@ -13,6 +13,11 @@ namespace Iaik.Tc.TPM.Keystore
 		{
 		}
 		
+		
+		/// <summary>
+		/// Gets the overal count of recorded keys
+		/// </summary>
+		public abstract Int64 KeyCount{ get; }
 		/// <summary>
 		/// Lists all unique identifiers of all stored keys
 		/// </summary>

@@ -43,6 +43,19 @@ namespace Iaik.Tc.TPM.Keystore.Backends
 			return cmd;
 		}
 		
+		public override Int64 KeyCount 
+		{
+			get 
+			{
+				using(IDbCommand cmd = BuildCommand("SELECT COUNT(*) FROM tpm_keys ;"))
+				{
+					object i = cmd.ExecuteScalar();
+					return (Int64)i;
+				}
+			}
+		}
+
+		
 		public override string[] EnumerateFriendlyNames ()
 		{
 			using(IDbCommand cmd = BuildCommand("SELECT friendly_name FROM tpm_keys ORDER BY friendly_name"))
@@ -65,7 +78,7 @@ namespace Iaik.Tc.TPM.Keystore.Backends
 					SELECT pk.friendly_name, pk.identifier FROM tpm_keys 
 					LEFT JOIN tpm_keys AS pk ON tpm_keys.parent_key= pk.friendly_name
 					WHERE tpm_keys.friendly_name={0}
-					ORDER BY friendly_name", DeriveParameterName("friendlyName"))))
+					ORDER BY pk.friendly_name", DeriveParameterName("friendlyName"))))
 			{
 				CreateParameter(cmd, "friendlyName", DbType.String, friendlyName);
 		
@@ -79,7 +92,7 @@ namespace Iaik.Tc.TPM.Keystore.Backends
 					SELECT pk.friendly_name, pk.identifier FROM tpm_keys 
 					LEFT JOIN tpm_keys AS pk ON tpm_keys.parent_key= pk.friendly_name
 					WHERE tpm_keys.identifier={0}
-					ORDER BY friendly_name", DeriveParameterName("identifier"))))
+					ORDER BY pk.friendly_name", DeriveParameterName("identifier"))))
 			{
 				CreateParameter(cmd, "identifier", DbType.String, identifier);
 				
@@ -182,8 +195,13 @@ namespace Iaik.Tc.TPM.Keystore.Backends
 			{
 				if(rdr.Read())
 				{
-					string friendlyName = rdr.GetString(0);
-					string identifier = rdr.GetString(1);
+					
+					string friendlyName = rdr.IsDBNull(0)? null :rdr.GetString(0);
+					string identifier = rdr.IsDBNull(1)? null : rdr.GetString(1);
+					
+					if(friendlyName == null || identifier == null)
+						return null;
+						
 					return new KeyValuePair<string, string>(friendlyName, identifier);
 				}
 			}

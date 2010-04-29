@@ -326,7 +326,31 @@ namespace tpm_test
 			
 			using(TPMKeystoreProvider keystore = TPMKeystoreProviders.Create("SQLiteKeystore", parameters))
 			{
-				keystore.AddKey("FriendlyName1", "ident1", null, new byte[]{0,1,2,3,4});
+				
+				if(keystore.KeyCount == 0)
+				{
+					for(int i = 0; i<1000; i++)
+					{
+					  Console.WriteLine("Inserting {0}/1000", i);
+					  keystore.AddKey("FN" + i.ToString(), "ident" + i.ToString(), null, new byte[]{0,1,2,3,(byte)(i % 255)});
+					}
+				}
+				  
+				Console.WriteLine("FriendlyNames: ");
+				foreach(string friendlyName in keystore.EnumerateFriendlyNames())
+				{
+					Console.WriteLine("{0} - {1} - Parent: {2}, data: {3}", friendlyName, keystore.FriendlyNameToIdentifier(friendlyName), 
+					keystore.FindParentKeyByFriendlyName(friendlyName), ByteHelper.ByteArrayToHexString(keystore.GetKeyBlob(keystore.FriendlyNameToIdentifier(friendlyName))));
+				}
+				Console.WriteLine("End of friendlynames\n");
+				
+				Console.WriteLine("Identifiers: ");
+				//keystore.AddKey("FriendlyName1", "ident1", null, new byte[]{0,1,2,3,4});
+				foreach(string ident in keystore.EnumerateIdentifiers())
+				{
+					Console.WriteLine("{0} - {1}", ident, keystore.IdentifierToFriendlyName(ident));
+				}
+				Console.WriteLine("End of Identifiers\n");
 			}
 		}
 	}

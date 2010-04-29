@@ -29,7 +29,7 @@ namespace Iaik.Tc.TPM.Keystore.Backends
 		/// <param name="parameters"></param>
 		protected override void BuildConnection (IDictionary<string, string> parameters)
 		{
-			SqliteConnection connection = new SqliteConnection(string.Format("Data Source=file:{0},version=3", parameters["file"]));
+			SqliteConnection connection = new SqliteConnection(string.Format("Data Source={0},version=3", parameters["file"]));
 			connection.Open();
 			_connection = connection;
 			
