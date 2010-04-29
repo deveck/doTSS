@@ -16,6 +16,7 @@ using Iaik.Tc.TPM.Library.Common.Handles;
 using Iaik.Utils.Hash;
 using System.Security.Cryptography;
 using Iaik.Utils.SwapUtils;
+using Iaik.Tc.TPM.Keystore;
 
 namespace tpm_test
 {
@@ -57,7 +58,8 @@ namespace tpm_test
 //			//tpm.backend.tpmOpen();
 		
 			//TestAging();
-			TestHMAC();
+			//TestHMAC();
+			TestKeystoreSqlite();
 		}
 		
 		private static void ReadPCRs(TPMWrapper tpm){
@@ -315,6 +317,17 @@ namespace tpm_test
 			appender.Name = "ConsoleAppender";
 			appender.Layout = new log4net.Layout.PatternLayout("[%date{dd.MM.yyyy HH:mm:ss,fff}]-%-5level-[%c]: %message%newline");
 			log4net.Config.BasicConfigurator.Configure(appender);
+		}
+		
+		private static void TestKeystoreSqlite()
+		{
+			Dictionary<string, string> parameters = new Dictionary<string, string>();
+			parameters.Add("file", "test.db");
+			
+			using(TPMKeystoreProvider keystore = TPMKeystoreProviders.Create("SQLiteKeystore", parameters))
+			{
+				keystore.AddKey("FriendlyName1", "ident1", null, new byte[]{0,1,2,3,4});
+			}
 		}
 	}
 }

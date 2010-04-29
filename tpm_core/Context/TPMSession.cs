@@ -125,7 +125,7 @@ namespace Iaik.Tc.TPM.Context
 		/// </summary>
 		public TPMKeyClient KeyClient
 		{
-			get{ return _tpmKeyClient; }
+			get{ return _keyClient; }
 		}
 		
 		public TPMSession (EndpointContext ctx, int sessionIdentifier, TPMClient tpmClient)

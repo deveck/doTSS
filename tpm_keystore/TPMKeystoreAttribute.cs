@@ -2,6 +2,7 @@
 // Author: Georg Neubauer <georg.neubauer@student.tugraz.at>
 
 using System;
+using Iaik.Utils.CommonAttributes;
 
 namespace Iaik.Tc.TPM.Keystore
 {
@@ -10,21 +11,15 @@ namespace Iaik.Tc.TPM.Keystore
     /// Attribute to flag a class as TPM Keystore provider.
     /// </summary>    
     [AttributeUsage(AttributeTargets.Class)]
-	public sealed class TPMKeystoreAttribute : System.Attribute
+	public sealed class TPMKeystoreAttribute : ClassIdentifierAttribute
 	{
-
-		/// <summary>
-        /// The name of this provider
-        /// </summary>
-        private readonly String providerName_;
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="providerName"></param>
         public TPMKeystoreAttribute(String providerName)
+        	: base(providerName)
         {
-            providerName_ = providerName;
         }
 
         /// <summary>
@@ -32,10 +27,7 @@ namespace Iaik.Tc.TPM.Keystore
         /// </summary>
         public String ProviderName
         {
-            get
-            {
-                return providerName_;
-            }
+            get{ return base.Identifier; }
         }
 	}
 }

@@ -24,7 +24,7 @@ namespace Iaik.Tc.TPM.Context
 		/// </summary>
 		private TPMSession _tpmSession;
 
-		public TPMAdministrationClient (TPMSession tpmSession)
+		public TPMKeyClient (TPMSession tpmSession)
 		{
 			_tpmSession = tpmSession;
 		}		
