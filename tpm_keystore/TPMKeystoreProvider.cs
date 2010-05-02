@@ -83,6 +83,11 @@ namespace Iaik.Tc.TPM.Keystore
 		/// <param name="keyData">Key data to save</param>
 		public abstract void AddKey(string friendlyName, string identifier, string parentFriendlyName, byte[] keyData);
 		
+		/// <summary>
+		/// Removes the key with the specified friendly name
+		/// </summary>
+		/// <param name="friendlyName"></param>
+		public abstract void RemoveKey(string friendlyName);
 		#region IDisposable implementation
 		 void  IDisposable.Dispose ()
 		{

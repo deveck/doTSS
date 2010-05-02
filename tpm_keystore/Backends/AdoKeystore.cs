@@ -175,6 +175,16 @@ namespace Iaik.Tc.TPM.Keystore.Backends
 		}
 
 
+		public override void RemoveKey (string friendlyName)
+		{
+			using(IDbCommand cmd = BuildCommand(string.Format(@"
+				DELETE FROM tpm_keys WHERE friendly_name={0}", DeriveParameterName("friendlyName"))))
+			{
+				CreateParameter(cmd, "friendlyName", DbType.String, friendlyName);
+				cmd.ExecuteNonQuery();
+			}
+		}
+
 								
 		private string[] ReadStringColumn(IDbCommand cmd)
 		{
