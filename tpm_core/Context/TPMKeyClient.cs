@@ -29,6 +29,22 @@ namespace Iaik.Tc.TPM.Context
 			_tpmSession = tpmSession;
 		}		
 		
+		
+		/// <summary>
+		/// Creates a new Keypair on the tpm and exports it
+		/// </summary>
+		/// <param name="friendlyName">Specifies the local name, that must be unique in the context of the opened keystorage</param>
+		/// <param name="keyUsage">Specifies the usage of the key</param>
+		/// <param name="keyFlags">Sets some options for the key creation process</param>
+		/// <param name="parentKey">Specifies the parent key or null for SRK</param>
+		/// <returns>Client handle to newly generated key or null</returns>
+		public ClientKeyHandle CreateKey(string friendlyName, TPMKeyUsage keyUsage, TPMKeyFlags keyFlags, ClientKeyHandle parentKey)
+		{
+			
+		}
+		
+		
+		
 		private TPMCommandResponse BuildDoVerifyRequest (string commandIdentifier, Parameters parameters)
 		{
 			TPMCommandRequest versionRequest = new TPMCommandRequest (commandIdentifier, parameters);
@@ -43,12 +59,7 @@ namespace Iaik.Tc.TPM.Context
 	
 	public class ClientKeyHandle
 	{
-		/// <summary>
-		/// Key strcture from the key storage
-		/// </summary>
-		private TPMKey _tpmKey;
-		
-		/// <summary>
+	    /// <summary>
 		/// Unique identifier of the TPM key
 		/// </summary>
 		private string _keyIdentifier;

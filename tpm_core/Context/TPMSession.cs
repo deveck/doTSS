@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Iaik.Utils.Hash;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 using log4net;
+using Iaik.Tc.TPM.Keystore;
 
 namespace Iaik.Tc.TPM.Context
 {
@@ -94,6 +95,18 @@ namespace Iaik.Tc.TPM.Context
 		public TPMCapabilityClient CapabilityClient
 		{
 			get { return _capabilityClient; }
+		}
+		
+		
+		private TPMKeystoreProvider _keystore = null;
+		
+		/// <summary>
+		/// Gets or Sets the keystore used for this tpm session
+		/// </summary>
+		public TPMKeystoreProvider Keystore
+		{
+			get{ return _keystore; }
+			set{ _keystore = value; }
 		}
 		
 		private TPMEndorsementKeyHandlingClient _endorsementKeyHandling;

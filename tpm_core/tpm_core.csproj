@@ -151,6 +151,10 @@
       <Project>{3C66F3CE-CDD7-43CB-9847-9CC97715D683}</Project>
       <Name>tpm_lib_core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\tpm_keystore\tpm_keystore.csproj">
+      <Project>{60F8FBD3-BD24-444D-972E-B7BC080EA008}</Project>
+      <Name>tpm_keystore</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
