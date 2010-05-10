@@ -10,6 +10,7 @@ using Iaik.Tc.TPM.Subsystems.TPMClient;
 using System.Collections.Generic;
 using Iaik.Utils.Hash;
 using Iaik.Tc.TPM.Library.HandlesCore.Authorization;
+using Iaik.Tc.TPM.Library.Common;
 
 namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {
@@ -40,7 +41,61 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		#region ICommandAuthorizationHelper implementation
 		
 		/// <summary>
+		/// Assures that the shared secret for the specified authorization handle has been
+		/// calculated, if not it gets calculated. If no OSAP session exists, create it
+		/// </summary>
+		/// <param name="cmd"></param>
+		/// <param name="sessionNum"></param>
+		/// <returns></returns>
+		public AuthHandle AssureOSAPSharedSecret(IAuthorizableCommand cmd, AuthSessionNum authSessionNum)
+		{
+		
+			lock(_tpmContext.AuthHandleManager)
+			{
+				//Must not be called for OSAP at the moment because OSAP session are not cached
+				_tpmContext.AuthHandleManager.ReserveAuthHandleSlots(cmd);
+			}
+			
+			HMACKeyInfo keyInfo = cmd.GetKeyInfo(authSessionNum);
+			
+			if(keyInfo == null)
+				return null;
+
+			AuthHandle authHandle; 
+				
+			lock(_tpmContext.AuthHandleManager)
+			{					
+				authHandle = _tpmContext.AuthHandleManager.GetAuthHandle(cmd, authSessionNum);
+			}
+	
+			// If shared secret has not yet been generated, do it
+			if(authHandle.SharedSecret == null)
+			{
+				GenerateHMACRequest request = GenerateHMACRequest.CreateGenerateHMACRequest(
+					_ctx,
+					new HashByteDataProvider(authHandle.NonceEvenOSAP),
+					new HashByteDataProvider(authHandle.NonceOddOSAP)
+					);
+					
+				request.TpmSessionIdentifier = _tpmSessionIdentifier;
+				
+				Parameters paramsSharedSecret = new Parameters();
+				paramsSharedSecret.AddPrimitiveType("identifier", cmd.GetHandle(authSessionNum));
+				request.KeyInfo = new HMACKeyInfo(HMACKeyInfo.HMACKeyType.KeyUsageSecret, paramsSharedSecret);
+				
+				GenerateHMACResponse response = request.TypedExecute ();
+				response.AssertResponse();
+				
+				authHandle.SharedSecret = response.TpmAuthData;
+			}
+			
+			return authHandle;
+		}
+		
+		
+		/// <summary>
 		/// Authorizes the command and returns the necessary authorization info
+		/// Blocks till the user has entered the credentials
 		/// </summary>
 		/// <param name="cmd">Command to authorize</param>
 		/// <returns></returns>
@@ -67,29 +122,52 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 					authHandle = _tpmContext.AuthHandleManager.GetAuthHandle(cmd, authSessionNum);
 				}
 				
-				//Generates the new noneOdd before the client generates the auth data
+				//Generates the new nonceOdd before the client generates the auth data
 				authHandle.NewNonceOdd();
 				
-				GenerateHMACRequest request = GenerateHMACRequest .CreateGenerateHMACRequest
-					(_ctx,
-					 new HashByteDataProvider(cmd.Digest),
-					 new HashByteDataProvider(authHandle.NonceEven),
-					 new HashByteDataProvider(authHandle.NonceOdd),
-					 new HashPrimitiveDataProvider(true)
-					 );					 
-				                                                       
-				                                                      
-				request.TpmSessionIdentifier = _tpmSessionIdentifier;
-				request.KeyInfo = keyInfo;
-//				request.AuthHandle = authHandle;
-//				request.Digest = cmd.Digest;
-//				request.ContinueAuthSession = true;
-//				
-				
-				GenerateHMACResponse response = request.TypedExecute ();
-				response.AssertResponse();
-				
-				authorizationInfos.Add(new AuthorizationInfo(authHandle, true, response.TpmAuthData));
+				if(authHandle.HandleAuthType == AuthHandle.AuthType.OIAP)
+				{
+					GenerateHMACRequest request = GenerateHMACRequest.CreateGenerateHMACRequest
+						(_ctx,
+						 new HashByteDataProvider(cmd.Digest),
+						 new HashByteDataProvider(authHandle.NonceEven),
+						 new HashByteDataProvider(authHandle.NonceOdd),
+						 new HashPrimitiveDataProvider(true)
+						 );					 
+					                                                       
+					                                                      
+					request.TpmSessionIdentifier = _tpmSessionIdentifier;
+					request.KeyInfo = keyInfo;
+
+					
+					GenerateHMACResponse response = request.TypedExecute ();
+					response.AssertResponse();
+					
+					authorizationInfos.Add(new AuthorizationInfo(authHandle, true, response.TpmAuthData));
+				}
+				else if(authHandle.HandleAuthType == AuthHandle.AuthType.OSAP)
+				{
+					AssureOSAPSharedSecret(cmd, authSessionNum);					
+					
+					GenerateHMACRequest request = GenerateHMACRequest.CreateGenerateHMACRequest
+						(_ctx,
+						 new HashByteDataProvider(cmd.Digest),
+						 new HashByteDataProvider(authHandle.NonceEven),
+						 new HashByteDataProvider(authHandle.NonceOdd),
+						 new HashPrimitiveDataProvider(false)
+						 );					 
+					                                                       
+					                                                      
+					request.TpmSessionIdentifier = _tpmSessionIdentifier;
+					request.KeyInfo = keyInfo;
+		
+					
+					GenerateHMACResponse response = request.TypedExecute ();
+					response.AssertResponse();
+					
+					authorizationInfos.Add(new AuthorizationInfo(authHandle, false, response.TpmAuthData));
+					
+				}
 			}
 			
 			return authorizationInfos.ToArray();			

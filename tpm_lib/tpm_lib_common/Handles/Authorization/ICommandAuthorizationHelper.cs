@@ -10,6 +10,16 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 	public interface ICommandAuthorizationHelper
 	{
 	
+	
+		/// <summary>
+		/// Assures that the shared secret for the specified authorization handle has been
+		/// calculated, if not it gets calculated
+		/// </summary>
+		/// <param name="cmd"></param>
+		/// <param name="sessionNum"></param>
+		/// <returns></returns>
+		AuthHandle AssureOSAPSharedSecret(IAuthorizableCommand cmd, AuthSessionNum sessionNum);
+	
 		/// <summary>
 		/// Returns the required authorization information for the specified command
 		/// </summary>

@@ -2,6 +2,7 @@
 using System;
 using Iaik.Tc.TPM.Library;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
+using Iaik.Tc.TPM.Library.Common.KeyData;
 
 namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {
@@ -41,11 +42,22 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			get{ return _authHandleManager; }
 		}
 		
+		private IKeyManager _keyManager;
+		
+		/// <summary>
+		/// Manages and swapt the key handles as needed
+		/// </summary>
+		public IKeyManager KeyManager
+		{
+			get{ return _keyManager; }	
+		}
+		
 		public TPMContext (string deviceName, TPMWrapper tpm)
 		{
 			_deviceName = deviceName;
 			_tpm = tpm;
 			_authHandleManager = new AuthHandleManager(this);
+			_keyManager = new KeyManager(this);
 		}
 	}
 }

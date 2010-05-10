@@ -184,6 +184,17 @@ namespace Iaik.Tc.TPM.Keystore.Backends
 				cmd.ExecuteNonQuery();
 			}
 		}
+		
+		public override bool ContainsIdentifier (string identifier)
+		{
+			using(IDbCommand cmd = BuildCommand(string.Format(@"
+				SELECT COUNT(*) FROM tpm_keys WHERE identifier={0}", DeriveParameterName("identifier"))))
+			{
+				CreateParameter(cmd, "identifier", DbType.String, identifier);
+				return ((Int64)cmd.ExecuteScalar()) > 0;
+			}
+		}
+
 
 								
 		private string[] ReadStringColumn(IDbCommand cmd)

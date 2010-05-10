@@ -12,8 +12,9 @@ namespace Iaik.Tc.TPM.Library.HandlesCore.Authorization
 	public class AuthHandleCore : AuthHandle, ITPMBlobReadable
 	{
 		
-		public AuthHandleCore(TPMBlob blob)
+		public AuthHandleCore(AuthType authType, TPMBlob blob)
 		{
+			_authType = authType;
 			ReadFromTpmBlob(blob);
 		}
 		
@@ -24,6 +25,9 @@ namespace Iaik.Tc.TPM.Library.HandlesCore.Authorization
 			
 			_nonceEven = new byte[20];
 			blob.Read(_nonceEven, 0, _nonceEven.Length);
+			
+			if(_authType == AuthHandle.AuthType.OSAP)
+				blob.Read(_nonceOddOSAP, 0, _nonceOddOSAP.Length);
 		}
 		
 		#endregion

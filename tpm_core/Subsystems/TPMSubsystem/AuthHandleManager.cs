@@ -40,12 +40,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		{
 			get
 			{
-				uint loadedSessions = 0;
-				
-				foreach(AuthHandleItem item in _authHandles.FindAuthHandles(AuthHandleItem.AuthHandleStatus.SwappedIn))
-					loadedSessions++;
-				
-				return loadedSessions;
+				return (uint)_authHandles.FindAuthHandles(AuthHandleItem.AuthHandleStatus.SwappedIn).Count;
 			}
 		}
 		
@@ -70,20 +65,19 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		
 		#region IAuthHandleManager implementation
 		/// <summary>
-		/// Reserves the number of session slots this command requires on the tpm.
+		/// Reserves the number of session slots the given command requires on the tpm.
 		/// </summary>
 		/// <remarks>
 		/// If the command supports OIAP auth handles, it is also possible for the AuthHandleManager to recycle
 		/// existing OIAP AuthHandles.
 		/// 
-		/// If the command needs OSAP auth handles the AuthHandleManager always creates new sessions (for the present)
+		/// If the command needs OSAP auth handles the AuthHandleManager always creates new sessions, because OSAP is
+		/// used for auth data insertion, so nothing happens in here for OSAP
 		/// </remarks>
 		/// <param name="cmd"></param>
 		/// <param name="tpmSession"></param>
 		public void ReserveAuthHandleSlots(IAuthorizableCommand cmd)
 		{
-			uint maxSlots = this.AvailableSessionSlots;
-			uint loadedSlots = this.LoadedSessions;
 			
 			lock(_authHandles)
 			{
@@ -100,7 +94,10 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 						useOIAP = true;
 						
 					
-					//Currently we only cache OIAP sessions, so maybe there is a free
+					if(FindReservedHandle(cmd, authSession) != null)
+						continue;						
+					
+					//We only cache OIAP sessions, so maybe there is a free
 					//OIAP session we can use
 					if(useOIAP)
 					{
@@ -157,7 +154,29 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			}
 			else if(cmd.SupportsAuthType(AuthHandle.AuthType.OSAP))
 			{
-				throw new NotImplementedException();
+				Parameters parameters = new Parameters();
+				parameters.AddPrimitiveType("entity_msb", TPMEntityTypeMSB.TPM_ET_XOR);
+				parameters.AddPrimitiveType("entity_lsb", TPMEntityTypeLSB.TPM_ET_KEYHANDLE);
+				string identifier = cmd.GetHandle(authSession);
+				
+				if(identifier == null)
+					throw new TPMRequestException("Missing entity value for OSAP session");
+				
+				parameters.AddPrimitiveType("entity_value", identifier);
+				
+				TPMCommandRequest osapRequest = new TPMCommandRequest(TPMCommandNames.TPM_CMD_OSAP, parameters);
+				
+				TPMCommandResponse osapResponse = _tpmContext.TPM.Process(osapRequest);
+				if(osapResponse.Status == false)
+					throw new TPMRequestException("Unknown error while creating osap auth handle");
+					
+				AuthHandle newAuthHandle = osapResponse.Parameters.GetValueOf<AuthHandle>("auth_handle");
+				AuthHandleItem authHandleItem = new AuthHandleItem(newAuthHandle, AuthHandleItem.AuthHandleStatus.SwappedIn);
+				authHandleItem.AssociatedCommand = new KeyValuePair<AuthSessionNum, IAuthorizableCommand>(authSession, cmd);
+				_authHandles.AddAuthHandle(authHandleItem);
+				AddNewItem(authHandleItem);
+				
+				return authHandleItem;
 			}
 			else 
 				throw new NotSupportedException("Command does not support a suitable AuthType");

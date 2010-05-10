@@ -44,11 +44,11 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		void SetCommandAuthorizationHelper(ICommandAuthorizationHelper commandAuthorizer);
 		
 		/// <summary>
-		/// Gets a predefined Auth1 or Auth2 handle. Retnrus null if no predefined handle is available.
+		/// Gets a handle needed by the authorization process (e.g. key handle for osap)
 		/// </summary>
 		/// <param name="authSessionNum"></param>
-		/// <returns></returns>
-		AuthHandle GetAuthHandle(AuthSessionNum authSessionNum);
+		/// <returns>Null or handle identifier</returns>
+		string GetHandle(AuthSessionNum authSessionNum);
 		
 		/// <summary>
 		/// Gets the EntityType for the specified auth session

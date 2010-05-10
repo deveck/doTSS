@@ -19,15 +19,21 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		public enum AuthType
 		{
 			OIAP,
-			OSAP
+			OSAP,
+			Unknown
 		}
 		
 		/// <summary>
 		/// Specifies the authorization type this handle represents
 		/// </summary>
-//		[SerializeMe(0)]
-//		protected AuthType _authType;
-//		
+		[SerializeMe(0)]
+		protected AuthType _authType = AuthHandle.AuthType.OIAP;
+		
+		public AuthType HandleAuthType
+		{
+			get{ return _authType; }
+		}
+		
 		/// <summary>
 		/// TPM_AUTHHANDLE of the authorization session
 		/// </summary>
@@ -59,10 +65,40 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		[SerializeMe(4)]
 		protected byte[] _contextBlob = null;
 		
+		[SerializeMe(5)]
+		protected byte[] _nonceOddOSAP = null;
+		
+		
+		public byte[] NonceOddOSAP
+		{
+			get{ return _nonceOddOSAP; }
+		}		
+						
+		[SerializeMe(6)]
+		protected byte[] _nonceEvenOSAP = null;
+		
+		public byte[] NonceEvenOSAP
+		{
+			get{ return _nonceEvenOSAP; }
+		}
+				
+		[SerializeMe(7)]
+		protected byte[] _sharedSecret = null;
+		
+		/// <summary>
+		/// Gets the shared OSAP secret, or null if not generated yet
+		/// </summary>
+		public byte[] SharedSecret
+		{
+			get{ return _sharedSecret;}
+			set{ _sharedSecret = value;}
+		}
+		
 		
 		protected AuthHandle()
 		{
 			_nonceOdd = new byte[20];
+			_nonceOddOSAP = new byte[20];
 		}
 		
 		public AuthHandle(Stream src)
@@ -70,9 +106,10 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 			Read(src);
 		}
 		
-		public AuthHandle (uint authHandle)
+		public AuthHandle (AuthType authType, uint authHandle)
+			:this()
 		{
-			//_authType = authType;
+			_authType = authType;
 			_authHandle = authHandle;
 		}
 		
@@ -86,11 +123,41 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		}
 		
 		/// <summary>
+		/// Updates the TPM-received nonce OSAP
+		/// </summary>
+		/// <param name="nonce">new nonce</param>
+		public void UpdateNonceEvenOSAP (byte[] nonce)
+		{
+			_nonceEvenOSAP = nonce;
+		}
+		
+		/// <summary>
+		/// Integrates the nonce even, nonce even osap and auth handle from the givn authhandle
+		/// </summary>
+		/// <param name="other">
+		/// A <see cref="AuthHandle"/>
+		/// </param>
+		public void UpdateFromOtherAuthHandle(AuthHandle other)
+		{
+			_nonceEven = other._nonceEven;
+			_nonceEvenOSAP = other._nonceEvenOSAP;
+			_authHandle = other._authHandle;
+		}
+		
+		/// <summary>
 		/// Generates a new nonce odd
 		/// </summary>
 		public void NewNonceOdd ()
 		{
 			NonceGenerator.GenerateByteNonce (_nonceOdd);
+		}
+		
+		/// <summary>
+		/// Generates a new nonce odd
+		/// </summary>
+		public void NewNonceOddOSAP ()
+		{
+			NonceGenerator.GenerateByteNonce (_nonceOddOSAP);
 		}
 		
 		#region ITPMHandle implementation

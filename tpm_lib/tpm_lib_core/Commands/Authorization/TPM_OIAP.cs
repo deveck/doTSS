@@ -4,6 +4,7 @@ using Iaik.Tc.TPM.Library.Common;
 using Iaik.Tc.TPM.Lowlevel;
 using Iaik.Tc.TPM.Lowlevel.Data;
 using Iaik.Tc.TPM.Library.HandlesCore.Authorization;
+using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 
 namespace Iaik.Tc.TPM.Library.Commands
 {
@@ -21,7 +22,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 			
 			TPMBlob responseBlob = _tpmProvider.TransmitAndCheck(requestBlob);
 			responseBlob.SkipHeader();
-			AuthHandleCore authHandle = new AuthHandleCore(responseBlob);
+			AuthHandleCore authHandle = new AuthHandleCore(AuthHandle.AuthType.OIAP, responseBlob);
 			
 			Parameters parameters = new Parameters();
 			parameters.AddValue("auth_handle", authHandle);

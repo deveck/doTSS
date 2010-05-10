@@ -88,6 +88,14 @@ namespace Iaik.Tc.TPM.Keystore
 		/// </summary>
 		/// <param name="friendlyName"></param>
 		public abstract void RemoveKey(string friendlyName);
+		
+		/// <summary>
+		/// Returns if the keystore contains a key with the specified identifier
+		/// </summary>
+		/// <param name="identifier"></param>
+		/// <returns></returns>
+		public abstract bool ContainsIdentifier(string identifier);
+		
 		#region IDisposable implementation
 		 void  IDisposable.Dispose ()
 		{

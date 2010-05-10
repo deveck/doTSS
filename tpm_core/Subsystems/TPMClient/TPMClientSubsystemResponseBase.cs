@@ -23,7 +23,12 @@ namespace Iaik.Tc.TPM.Subsystems.TPMClient
 			/// <summary>
 			/// The secret for hmac generation was not entered correctly
 			/// </summary>
-			HMACSecretMissing
+			HMACSecretMissing,
+			
+			/// <summary>
+			///The keystore does not contain a key with the specified identifier 
+			/// </summary>
+			KeyIdentifierMissing
         }
 
 
@@ -35,6 +40,8 @@ namespace Iaik.Tc.TPM.Subsystems.TPMClient
     				return "The session identifier is not associated with an active tpm session";
 				else if(_errorCode.Value == (int)ErrorCodeEnum.HMACSecretMissing)
 					return "The HMAC secret could not be retrieved!";
+				else if(_errorCode.Value == (int)ErrorCodeEnum.KeyIdentifierMissing)
+					return "The keystore does not contain a key with the specified identifier";
     			else
     				return null;
 			}

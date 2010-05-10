@@ -94,9 +94,8 @@ namespace Iaik.Tc.TPM.Library.Commands.AdminOwnership
 			
 			_tpmKey.WriteToTpmBlob (requestBlob);
 			
-			AuthorizeMe(requestBlob);
+			_responseBlob = AuthorizeMeAndTransmit(requestBlob);
 
-			_responseBlob = _tpmProvider.TransmitAndCheck (requestBlob);			
 			CheckResponseAuthInfo();			
 			
 			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_TakeOwnership, new Parameters());

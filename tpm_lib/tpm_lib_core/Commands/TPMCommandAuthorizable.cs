@@ -54,7 +54,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 		}
 		
 		
-		public virtual AuthHandle GetAuthHandle (AuthSessionNum authSessionNum)
+		public virtual string GetHandle (AuthSessionNum authSessionNum)
 		{
 			return null;
 		}
@@ -152,11 +152,14 @@ namespace Iaik.Tc.TPM.Library.Commands
 			}
 			
 		}	
-
+		
 		protected void AuthorizeMe(TPMBlob requestBlob)
 		{
 			_currentAuthorizationInfos = _commandAuthHelper.AuthorizeCommand(this);
-			
+		}
+		
+		protected TPMBlob TransmitMe(TPMBlob requestBlob)
+		{
 			using(_commandLockProvider.AcquireLock())
 			{
 				//Make sure that all Authorization handles are loaded
@@ -164,7 +167,15 @@ namespace Iaik.Tc.TPM.Library.Commands
 				
 				foreach(AuthorizationInfo authInfo in _currentAuthorizationInfos)			
 					WriteAuthorizationInfo (requestBlob, authInfo);
+					
+				return _tpmProvider.TransmitAndCheck(requestBlob);
 			}
+		}
+
+		protected TPMBlob AuthorizeMeAndTransmit(TPMBlob requestBlob)
+		{
+			AuthorizeMe(requestBlob);
+			return TransmitMe(requestBlob);
 		}
 		
 	}

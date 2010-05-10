@@ -80,9 +80,8 @@ namespace Iaik.Tc.TPM.Library.Commands.AdminOwnership
 			TPMBlob ownerClearRequest = new TPMBlob();
 			ownerClearRequest.WriteCmdHeader(TPMCmdTags.TPM_TAG_RQU_AUTH1_COMMAND, TPMOrdinals.TPM_ORD_OwnerClear);
 			
-			AuthorizeMe(ownerClearRequest);	
+			_responseBlob = AuthorizeMeAndTransmit(ownerClearRequest);	
 		
-			_responseBlob = _tpmProvider.TransmitAndCheck (ownerClearRequest);			
 			CheckResponseAuthInfo();			
 			
 			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_OwnerClear, new Parameters());

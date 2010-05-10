@@ -67,7 +67,7 @@ namespace Iaik.Tc.TPM.Context
 			parameters.AddPrimitiveType (PARAM_OWNERAUTH, encOwnerSecret);
 			parameters.AddPrimitiveType (PARAM_SRKAUTH, encSrkSecret);
 			
-			TPMCommandResponse response = BuildDoVerifyRequest (TPMCommandNames.TPM_CMD_TakeOwnership, parameters);
+			/*TPMCommandResponse response = */BuildDoVerifyRequest (TPMCommandNames.TPM_CMD_TakeOwnership, parameters);
 				
 		}
 		

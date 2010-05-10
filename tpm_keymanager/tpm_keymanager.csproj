@@ -39,16 +39,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="TpmKeymanager.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="backends\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\tpm_lib\tpm_lib_core\tpm_lib_core.csproj">
       <Project>{3C66F3CE-CDD7-43CB-9847-9CC97715D683}</Project>
       <Name>tpm_lib_core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\utils\utils.csproj">
+      <Project>{892CAB5C-D501-47B1-82E2-BE8492E7E378}</Project>
+      <Name>utils</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

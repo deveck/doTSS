@@ -5,7 +5,7 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 {
 
 	/// <summary>
-	/// Implemented by classes 
+	/// Implemented by classes which swap in/swap out and establish new authorization sessions for commands
 	/// </summary>
 	public interface IAuthHandleManager
 	{

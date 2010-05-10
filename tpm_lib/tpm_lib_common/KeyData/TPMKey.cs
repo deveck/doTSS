@@ -9,6 +9,9 @@ namespace Iaik.Tc.TPM.Library.Common.KeyData
 	[TypedStreamSerializable("TPM_Key")]
 	public class TPMKey : AutoStreamSerializable, ITypedParameter
 	{
+		
+	
+	
 		[SerializeMe(0)]
 		protected CapabilityData.TPMVersion _version;
 		

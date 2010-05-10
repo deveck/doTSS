@@ -62,6 +62,9 @@
     <Compile Include="Handles\Authorization\HMACKeyInfo.cs" />
     <Compile Include="Handles\Authorization\IAuthHandleManager.cs" />
     <Compile Include="Handles\Authorization\ResponseAuthHandleInfo.cs" />
+    <Compile Include="KeyData\KeyHandle.cs" />
+    <Compile Include="KeyData\IKeyManagerHelper.cs" />
+    <Compile Include="KeyData\IKeyManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="interface\" />
@@ -73,6 +76,10 @@
     <ProjectReference Include="..\..\utils\utils.csproj">
       <Project>{892CAB5C-D501-47B1-82E2-BE8492E7E378}</Project>
       <Name>utils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\tpm_keystore\tpm_keystore.csproj">
+      <Project>{60F8FBD3-BD24-444D-972E-B7BC080EA008}</Project>
+      <Name>tpm_keystore</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

@@ -31,34 +31,58 @@ namespace Iaik.Tc.TPM.Context
 		
 		
 		/// <summary>
-		/// Creates a new Keypair on the tpm and exports it
+		/// Gets the Key handle by friendly Name
 		/// </summary>
-		/// <param name="friendlyName">Specifies the local name, that must be unique in the context of the opened keystorage</param>
-		/// <param name="keyUsage">Specifies the usage of the key</param>
-		/// <param name="keyFlags">Sets some options for the key creation process</param>
-		/// <param name="parentKey">Specifies the parent key or null for SRK</param>
-		/// <returns>Client handle to newly generated key or null</returns>
-		public ClientKeyHandle CreateKey(string friendlyName, TPMKeyUsage keyUsage, TPMKeyFlags keyFlags, ClientKeyHandle parentKey)
+		/// <param name="friendlyName"></param>
+		/// <returns></returns>
+		public ClientKeyHandle GetKeyHandleByFriendlyName(string friendlyName)
 		{
+			string identifier = _tpmSession.Keystore.FriendlyNameToIdentifier(friendlyName);
 			
+			if(friendlyName == null || identifier == null)
+				return null;
+			
+			return new ClientKeyHandle(friendlyName, identifier, _tpmSession);
+		}
+		
+		/// <summary>
+		/// Gets the key handle by global identifier
+		/// </summary>
+		/// <param name="identifier"></param>
+		/// <returns></returns>
+		public ClientKeyHandle GetKeyHandleByIdentifier(string identifier)
+		{
+			string friendlyName = _tpmSession.Keystore.IdentifierToFriendlyName(identifier);
+			
+			if(friendlyName == null || identifier == null)
+				return null;
+			
+			return new ClientKeyHandle(friendlyName, identifier, _tpmSession);
 		}
 		
 		
-		
-		private TPMCommandResponse BuildDoVerifyRequest (string commandIdentifier, Parameters parameters)
+		/// <summary>
+		/// Returns the SRK key handle, it is not checked at this point if the
+		/// authorized user is allowed to use the SRK
+		/// </summary>
+		/// <returns>
+		/// A <see cref="ClientKeyHandle"/>
+		/// </returns>
+		public ClientKeyHandle GetSrkKeyHandle()
 		{
-			TPMCommandRequest versionRequest = new TPMCommandRequest (commandIdentifier, parameters);
-			TPMCommandResponse response = _tpmSession.DoTPMCommandRequest (versionRequest);
-			
-			if (response.Status == false)
-				throw new TPMRequestException ("An unknown tpm error occured");
-			
-			return response;
+		return new ClientKeyHandle("srk", "srk", _tpmSession);
 		}
+		
+		
 	}
 	
 	public class ClientKeyHandle
 	{
+		/// <summary>
+		/// The session this key handle belongs to
+		/// </summary>
+		private TPMSession _tpmSession;
+		
 	    /// <summary>
 		/// Unique identifier of the TPM key
 		/// </summary>
@@ -85,6 +109,67 @@ namespace Iaik.Tc.TPM.Context
 		public string FriendlyName
 		{
 			get{ return _friendlyName; }
+		}
+		
+		public ClientKeyHandle(string friendlyName, string identifier, TPMSession tpmSession)
+		{
+			_friendlyName = friendlyName;
+			_keyIdentifier = identifier;
+			_tpmSession = tpmSession;
+		}
+		
+		/// <summary>
+		/// Creates a new key with the specified parameters and adds it to the key storage
+		/// </summary>
+		/// <param name="friendlyName">Unique name in the current keystore</param>
+		/// <param name="keyUsage">Specifies the keyUsage of the new key</param>
+		/// <param name="keyFlags">Some additional flags</param>
+		/// <returns>Returns the newly created key</returns>
+		public ClientKeyHandle CreateKey(string friendlyName, TPMKeyUsage keyUsage)
+		{
+			return CreateKey(friendlyName, keyUsage, TPMKeyFlags.None);
+		}
+		
+		public ClientKeyHandle CreateKey(string friendlyName, TPMKeyUsage keyUsage, TPMKeyFlags keyFlags)
+		{
+			return CreateKey(friendlyName, 2048, keyUsage, keyFlags);
+		}
+		
+		public ClientKeyHandle CreateKey(string friendlyName, int keyLength, TPMKeyUsage keyUsage)
+		{
+			return CreateKey(friendlyName, keyLength, keyUsage, TPMKeyFlags.None);
+		}
+		
+		public ClientKeyHandle CreateKey(string friendlyName, int keyLength, TPMKeyUsage keyUsage, TPMKeyFlags keyFlags)
+		{
+			Parameters paramsCreateWrapKey = new Parameters();
+			paramsCreateWrapKey.AddPrimitiveType("parent", KeyIdentifier);
+			paramsCreateWrapKey.AddPrimitiveType("key_usage", keyUsage);
+			paramsCreateWrapKey.AddPrimitiveType("key_flags", keyFlags);
+			paramsCreateWrapKey.AddPrimitiveType("key_length", keyFlags);
+			
+			TPMCommandResponse responseCreateWrapKey = 
+				BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_CreateWrapKey, paramsCreateWrapKey);
+			
+			_tpmSession.Keystore.AddKey(
+			            friendlyName,
+			            responseCreateWrapKey.Parameters.GetValueOf<string>("identifier"),
+			            this.FriendlyName,
+			            responseCreateWrapKey.Parameters.GetValueOf<byte[]>("key_data"));
+			                            
+			
+			return new ClientKeyHandle(friendlyName, responseCreateWrapKey.Parameters.GetValueOf<string>("identifier"), _tpmSession);
+		}
+		
+		private TPMCommandResponse BuildDoVerifyRequest (string commandIdentifier, Parameters parameters)
+		{
+			TPMCommandRequest versionRequest = new TPMCommandRequest (commandIdentifier, parameters);
+			TPMCommandResponse response = _tpmSession.DoTPMCommandRequest (versionRequest);
+			
+			if (response.Status == false)
+				throw new TPMRequestException ("An unknown tpm error occured");
+			
+			return response;
 		}
 	}
 }

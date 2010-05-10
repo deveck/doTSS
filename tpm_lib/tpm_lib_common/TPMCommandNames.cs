@@ -27,6 +27,7 @@ namespace Iaik.Tc.TPM.Library.Common
 		
 		#region Authorization sessions
 		public const string TPM_CMD_OIAP = "TPM_CMD_OIAP";
+		public const string TPM_CMD_OSAP = "TPM_CMD_OSAP";
 		#endregion
 		
 		#region Eviction
@@ -36,6 +37,11 @@ namespace Iaik.Tc.TPM.Library.Common
 		#region SessionManagement
 		public const string TPM_CMD_SaveContext = "TPM_CMD_SaveContext";
 		public const string TPM_CMD_LoadContext = "TPM_CMD_LoadContext";
+		#endregion
+		
+		#region StorageFunctions
+		public const string TPM_CMD_CreateWrapKey = "TPM_CMD_CreateWrapKey";
+		public const string TPM_CMD_LoadKey2 = "TPM_CMD_LoadKey2";
 		#endregion
 		
 		// TODO: tbd. DELETE!!!

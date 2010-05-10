@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 using Iaik.Utils.Locking;
+using Iaik.Tc.TPM.Library.Common.KeyData;
 
 namespace Iaik.Tc.TPM.Library
 {
@@ -140,10 +141,11 @@ namespace Iaik.Tc.TPM.Library
 		
 		public TPMCommandResponse Process(TPMCommandRequest request)
 		{
-			return Process(request, null);
+			return Process(request, null, null);
 		}
 		
-		public TPMCommandResponse Process (TPMCommandRequest request, ICommandAuthorizationHelper commandAuthorizationHelper)
+		public TPMCommandResponse Process (TPMCommandRequest request, ICommandAuthorizationHelper commandAuthorizationHelper, 
+			IKeyManagerHelper keyManager)
 		{
 			try
 			{
@@ -151,6 +153,7 @@ namespace Iaik.Tc.TPM.Library
 				//_backend.Open ();
 				TPMCommand command = TPMCommandFactory.Create (request.CommandIdentifier);
 				command.SetCommandLockProvider(_commandLockProvider);
+				command.SetKeyManager(keyManager);
 				if(typeof(IAuthorizableCommand).IsAssignableFrom(command.GetType()))
 					((IAuthorizableCommand)command).SetCommandAuthorizationHelper(commandAuthorizationHelper);
 				command.Init (request.Parameters, _backend);

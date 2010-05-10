@@ -5,6 +5,7 @@ using Iaik.Utils.Serialization;
 using Iaik.Tc.TPM.Lowlevel.Data;
 using Iaik.Tc.TPM.Library.Commands;
 using Iaik.Tc.TPM.Library.Common;
+using System.IO;
 
 namespace Iaik.Tc.TPM.Library.KeyDataCore
 {
@@ -13,6 +14,13 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 	[TypedStreamSerializable("TPM_Key")]
 	public class TPMKeyCore : TPMKey, ITPMBlobReadable, ITPMBlobWritable
 	{
+		public static TPMKeyCore CreateFromStream(Stream sink)
+		{
+			TPMKeyCore tpmKey = new TPMKeyCore();
+			tpmKey.Read(sink);
+			return tpmKey;
+		}
+	
 		public static TPMKeyCore Create (CapabilityDataCore.TPMVersionCore version, TPMKeyUsage keyUsage, TPMKeyFlags keyFlags, 
 			TPMAuthDataUsage authDataUsage, TPMKeyParamsCore algorithmParams, TPMStorePubkeyCore pubkey, byte[] encdata)
 		{

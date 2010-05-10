@@ -10,6 +10,7 @@ using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 using Iaik.Utils.Locking;
 using Iaik.Tc.TPM.Library.HandlesCore.Authorization;
 using Iaik.Utils.Hash;
+using Iaik.Tc.TPM.Library.Common.KeyData;
 
 namespace Iaik.Tc.TPM.Library.Commands
 {
@@ -44,7 +45,30 @@ namespace Iaik.Tc.TPM.Library.Commands
 		/// </summary>
 		protected LockProvider _commandLockProvider;
 		
+		/// <summary>
+		/// Manages key access/loading/swaping, 
+		/// </summary>
+		/// <remarks>
+		/// To be sure that a key is available (loaded into the tpm) at a specific point follow the 
+		/// instructions below:
+		///
+		///    * LoadKey (identifier)
+		///       The Key manager reconstructs the key hierachy of the specified key and loads them one after
+		///       another. Once the key with the specified identifier is loaded the method returns (no return value)
+		///
+		///	   * Acquire lock
+		///    * Call keymanager.IdentifierToHandle(identifier)
+		///	   * Insert the missing handle(s)
+		///    * Run command
+		///    * Release Lock 
+		/// </remarks>
+		protected IKeyManagerHelper _keyManager = null;
 		
+		/// <summary>
+		/// Specifies the key context for this command,
+		/// for further information <see cref="Iaik.Tc.TPM.Library.Common.KeyData.IKeyManager"/>
+		/// </summary>
+		protected object _keyContext = null;
 		
 		/// <summary>
 		/// The response
@@ -62,6 +86,16 @@ namespace Iaik.Tc.TPM.Library.Commands
 		public void SetCommandLockProvider(LockProvider cmdLockProvider)
 		{
 			_commandLockProvider = cmdLockProvider;
+		}
+		
+		public void SetKeyManager(IKeyManagerHelper keyManager)
+		{
+			_keyManager = keyManager;
+		}
+		
+		public void SetKeyContext(object keyContext)
+		{
+			_keyContext = keyContext;
 		}
 		
 //		private TPMCommand (UInt32 tag, UInt32 ordinal, Parameters param) : this(tag, ordinal)

@@ -129,6 +129,11 @@
     <Compile Include="Subsystems\SubsystemResponseException.cs" />
     <Compile Include="Subsystems\TPMSubsystem\AuthHandleManager.cs" />
     <Compile Include="Context\TPMKeyClient.cs" />
+    <Compile Include="Subsystems\TPMClient\GetParentKey.cs" />
+    <Compile Include="Subsystems\TPMClient\GetKeyData.cs" />
+    <Compile Include="Subsystems\TPMSubsystem\KeyManager.cs" />
+    <Compile Include="Subsystems\TPMSubsystem\KeyManagerHelper.cs" />
+    <Compile Include="Subsystems\TPMClient\ContainsKey.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">
@@ -154,6 +159,10 @@
     <ProjectReference Include="..\tpm_keystore\tpm_keystore.csproj">
       <Project>{60F8FBD3-BD24-444D-972E-B7BC080EA008}</Project>
       <Name>tpm_keystore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\tpm_keymanager\tpm_keymanager.csproj">
+      <Project>{09F3F97D-CCE4-473E-AAED-21E80C9DBA54}</Project>
+      <Name>tpm_keymanager</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

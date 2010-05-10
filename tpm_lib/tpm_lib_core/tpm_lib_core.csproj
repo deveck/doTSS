@@ -63,6 +63,9 @@
     <Compile Include="HandlesCore\Authorization\ResponseAuthHandleInfoCore.cs" />
     <Compile Include="Commands\TPMCommandAuthorizable.cs" />
     <Compile Include="Commands\AdminOwnership\TPM_OwnerClear.cs" />
+    <Compile Include="Commands\StorageFunctions\TPM_CreateWrapKey.cs" />
+    <Compile Include="Commands\Authorization\TPM_OSAP.cs" />
+    <Compile Include="Commands\StorageFunctions\TPM_LoadKey2.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />
@@ -80,6 +83,7 @@
     <Folder Include="Commands\AdminOwnership\" />
     <Folder Include="Hash\" />
     <Folder Include="Commands\SessionManagement\" />
+    <Folder Include="Commands\StorageFunctions\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_lowlvl\tpm_lowlvl.csproj">
