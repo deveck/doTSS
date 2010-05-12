@@ -27,7 +27,10 @@ namespace Iaik.Tc.TPM.Library.HandlesCore.Authorization
 			blob.Read(_nonceEven, 0, _nonceEven.Length);
 			
 			if(_authType == AuthHandle.AuthType.OSAP)
-				blob.Read(_nonceOddOSAP, 0, _nonceOddOSAP.Length);
+			{
+				_nonceEvenOSAP = new byte[20];
+				blob.Read(_nonceEvenOSAP, 0, _nonceEvenOSAP.Length);
+			}
 		}
 		
 		#endregion

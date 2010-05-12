@@ -64,6 +64,21 @@ namespace Iaik.Tc.TPM.Library.Commands
 		/// </remarks>
 		protected IKeyManagerHelper _keyManager = null;
 		
+		public IKeyManagerHelper KeyManager
+		{
+			get{ return _keyManager; }
+		}
+	
+		protected ICommandAuthorizationHelper _commandAuthHelper;
+		
+		/// <summary>
+		/// Gets the command authorization helper
+		/// </summary>
+		public ICommandAuthorizationHelper CommandAuthHelper 
+		{ 
+			get{ return _commandAuthHelper;}
+		}
+		
 		/// <summary>
 		/// Specifies the key context for this command,
 		/// for further information <see cref="Iaik.Tc.TPM.Library.Common.KeyData.IKeyManager"/>
@@ -93,6 +108,15 @@ namespace Iaik.Tc.TPM.Library.Commands
 			_keyManager = keyManager;
 		}
 		
+		/// <summary>
+		/// Sets the command authorization helper 
+		/// </summary>
+		/// <param name="commandAuthorizer"></param>
+		public void SetCommandAuthorizationHelper(ICommandAuthorizationHelper commandAuthorizer)
+		{
+			_commandAuthHelper = commandAuthorizer;
+		}
+		
 		public void SetKeyContext(object keyContext)
 		{
 			_keyContext = keyContext;
@@ -119,7 +143,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 		{
 		}
 		
-			
+		
 	}
 		
 }

@@ -37,6 +37,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		{
 			ContainsKeyRequest requestContainsKey = new ContainsKeyRequest(_ctx);
 			requestContainsKey.Identifier = identifier;
+			requestContainsKey.TpmSessionIdentifier = _tpmSessionIdentifier;
 			ContainsKeyResponse responseContainsKey = requestContainsKey.TypedExecute();
 			responseContainsKey.AssertResponse();
 			
@@ -48,6 +49,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		{
 			GetParentKeyRequest requestGetParent = new GetParentKeyRequest(_ctx);
 			requestGetParent.Identifier = identifier;
+			requestGetParent.TpmSessionIdentifier = _tpmSessionIdentifier;
 			GetParentKeyResponse responseGetParent = requestGetParent.TypedExecute();
 			responseGetParent.AssertResponse();
 			
@@ -58,6 +60,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		{
 			GetKeyDataRequest requestGetKeyData = new GetKeyDataRequest(_ctx);
 			requestGetKeyData.Identifier = identifier;
+			requestGetKeyData.TpmSessionIdentifier = _tpmSessionIdentifier;
 			GetKeyDataResponse responseGetKeyData = requestGetKeyData.TypedExecute();
 			responseGetKeyData.AssertResponse();
 			
@@ -76,10 +79,16 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		/// </summary>
 		private TPMContext _tpmContext;
 
-		public KeyManagerHelper (ServerContext ctx, TPMContext tpmContext)
+		/// <summary>
+		/// Identifies the asociated tpm session
+		/// </summary>
+		private int _tpmSessionIdentifier;
+		
+		public KeyManagerHelper (ServerContext ctx, TPMContext tpmContext, int tpmSessionIdentifier)
 		{
 			_ctx = ctx;
 			_tpmContext = tpmContext;
+			_tpmSessionIdentifier = tpmSessionIdentifier;
 		}
 
 	}

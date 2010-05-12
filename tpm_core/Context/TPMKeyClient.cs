@@ -135,20 +135,20 @@ namespace Iaik.Tc.TPM.Context
 			return CreateKey(friendlyName, 2048, keyUsage, keyFlags);
 		}
 		
-		public ClientKeyHandle CreateKey(string friendlyName, int keyLength, TPMKeyUsage keyUsage)
+		public ClientKeyHandle CreateKey(string friendlyName, uint keyLength, TPMKeyUsage keyUsage)
 		{
 			return CreateKey(friendlyName, keyLength, keyUsage, TPMKeyFlags.None);
 		}
 		
-		public ClientKeyHandle CreateKey(string friendlyName, int keyLength, TPMKeyUsage keyUsage, TPMKeyFlags keyFlags)
+		public ClientKeyHandle CreateKey(string friendlyName, uint keyLength, TPMKeyUsage keyUsage, TPMKeyFlags keyFlags)
 		{
 			Parameters paramsCreateWrapKey = new Parameters();
 			paramsCreateWrapKey.AddPrimitiveType("parent", KeyIdentifier);
 			paramsCreateWrapKey.AddPrimitiveType("key_usage", keyUsage);
 			paramsCreateWrapKey.AddPrimitiveType("key_flags", keyFlags);
-			paramsCreateWrapKey.AddPrimitiveType("key_length", keyFlags);
+			paramsCreateWrapKey.AddPrimitiveType("key_length", keyLength);
 			paramsCreateWrapKey.AddPrimitiveType("exponent", new byte[0]);
-			paramsCreateWrapKey.AddPrimitiveType("num_primes", 0);
+			paramsCreateWrapKey.AddPrimitiveType("num_primes", (uint)0);
 			
 			
 			

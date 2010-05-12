@@ -154,8 +154,7 @@ namespace Iaik.Tc.TPM.Library
 				TPMCommand command = TPMCommandFactory.Create (request.CommandIdentifier);
 				command.SetCommandLockProvider(_commandLockProvider);
 				command.SetKeyManager(keyManager);
-				if(typeof(IAuthorizableCommand).IsAssignableFrom(command.GetType()))
-					((IAuthorizableCommand)command).SetCommandAuthorizationHelper(commandAuthorizationHelper);
+				command.SetCommandAuthorizationHelper(commandAuthorizationHelper);
 				command.Init (request.Parameters, _backend);
 				return command.Process ();
 			}

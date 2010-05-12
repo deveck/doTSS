@@ -6,6 +6,7 @@ using Iaik.Tc.TPM.Lowlevel.Data;
 using Iaik.Tc.TPM.Library.HandlesCore.Authorization;
 using Iaik.Tc.TPM.Library.Common.Handles;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
+using Iaik.Tc.TPM.Library.Common.KeyData;
 
 namespace Iaik.Tc.TPM.Library.Commands
 {
@@ -19,7 +20,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 		{
 			TPMEntityTypeLSB entityLSB = _params.GetValueOf<TPMEntityTypeLSB>("entity_lsb");
 			TPMEntityTypeMSB entityMSB = _params.GetValueOf<TPMEntityTypeMSB>("entity_msb");
-			string identifier = _params.GetValueOf<string>("identifier");
+			string identifier = _params.GetValueOf<string>("entity_value");
 			
 			
 			if( entityLSB != TPMEntityTypeLSB.TPM_ET_KEYHANDLE &&
@@ -49,7 +50,12 @@ namespace Iaik.Tc.TPM.Library.Commands
 				TPMBlob requestBlob = new TPMBlob();
 				requestBlob.WriteCmdHeader(TPMCmdTags.TPM_TAG_RQU_COMMAND, TPMOrdinals.TPM_ORD_OSAP);
 				requestBlob.WriteUInt16((ushort)(((ushort)entityMSB <<  8) | (ushort)entityLSB));
-				requestBlob.WriteUInt32(_keyManager.IdentifierToHandle(identifier).Handle);
+				
+				if(identifier == KeyHandle.KEY_SRK)
+					requestBlob.WriteUInt32((uint)TPMKeyHandles.TPM_KH_SRK);
+				else
+					requestBlob.WriteUInt32(_keyManager.IdentifierToHandle(identifier).Handle);
+				
 				requestBlob.Write(authHandle.NonceOddOSAP, 0, authHandle.NonceOddOSAP.Length);
 				requestBlob.WriteCmdSize();
 				
@@ -62,7 +68,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 			
 			
 			Parameters parameters = new Parameters();
-			parameters.AddValue("auth_handle", receivedAuthHandle);
+			parameters.AddValue("auth_handle", authHandle);
 			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_OIAP, parameters);
 		}
 

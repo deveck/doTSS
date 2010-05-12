@@ -2,6 +2,7 @@
 using System;
 using Iaik.Utils.Hash;
 using Iaik.Tc.TPM.Library.HandlesCore.Authorization;
+using Iaik.Tc.TPM.Library.Common.KeyData;
 
 namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 {
@@ -27,6 +28,10 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		/// </summary>
 		byte[] ResponseDigest { get; }
 		
+		IKeyManagerHelper KeyManager{get;}
+		
+		ICommandAuthorizationHelper CommandAuthHelper{get;}
+		
 		/// <summary>
 		/// Gets informations about the received auth data
 		/// </summary>
@@ -36,12 +41,6 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		/// Gets information about the current auth handles in use
 		/// </summary>
 		AuthorizationInfo[] AuthorizationInfos{get;}
-		
-		/// <summary>
-		/// Sets the command authorization helper 
-		/// </summary>
-		/// <param name="commandAuthorizer"></param>
-		void SetCommandAuthorizationHelper(ICommandAuthorizationHelper commandAuthorizer);
 		
 		/// <summary>
 		/// Gets a handle needed by the authorization process (e.g. key handle for osap)

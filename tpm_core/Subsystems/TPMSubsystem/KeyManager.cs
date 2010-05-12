@@ -169,13 +169,16 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		/// <returns></returns>
 		private string InternalLoadKey(string identifier, object keyContext, IKeyManagerHelper keymanagerHelper)
 		{
-			if(keymanagerHelper.ContainsIdentifier(identifier) == false)
-				throw new ArgumentException(string.Format("Keystore does not contain key with identifier: '{0}'", identifier));
-		
+			if(identifier == KeyHandle.KEY_SRK)
+				return null;			   
 			
 			//SRK
 			if(identifier == null)
 				return null;
+			
+			if(keymanagerHelper.ContainsIdentifier(identifier) == false)
+				throw new ArgumentException(string.Format("Keystore does not contain key with identifier: '{0}'", identifier));
+				
 			
 			bool reloadKey = true;
 			KeyHandleItem keyHandleItem = null;

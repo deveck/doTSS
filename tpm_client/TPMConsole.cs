@@ -326,7 +326,7 @@ namespace Iaik.Tc.TPM
 			{
 				try
 				{
-					if (!commandLine.Equals (String.Empty))
+					//if (!commandLine.Equals (String.Empty))
 		            {
 		
 		                string[] commandParts = commandLine.Split (' ');
@@ -348,7 +348,10 @@ namespace Iaik.Tc.TPM
 							}
 		    			}
 		                else
+						{
 		    				Out.WriteLine ("Unknown command...");
+							_commandReady = true;
+						}
 						
 		
 		            }
@@ -415,6 +418,23 @@ namespace Iaik.Tc.TPM
 			AddSecretRequest(request);
 			request.PasswordReady.WaitOne();
 			return request.ProtectedPassword;
+		}
+		
+		public IDictionary<string, string> SplitArguments(string sArguments, int startIndex)
+		{
+			Dictionary<string, string> arguments = new Dictionary<string, string>();
+			
+			string[] splittedArguments = sArguments.Split(',');
+			if(splittedArguments.Length > 1)
+			{
+				for(int i = startIndex; i<splittedArguments.Length; i++)
+				{
+					string[] splittedArgument = splittedArguments[i].Split('=');
+					arguments.Add(splittedArgument[0], splittedArgument[1]);
+				}
+			}
+			
+			return arguments;
 		}
 			
 	}

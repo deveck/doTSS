@@ -128,7 +128,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				//{
 					commandResponse = tpmContext.TPM.Process (requestContext.Request.CommandRequest, 
 						new CommandAuthorizationHelper(ServerContext, requestContext.Request.TPMIdentifier, tpmContext),
-						new KeyManagerHelper(ServerContext, tpmContext));
+						new KeyManagerHelper(ServerContext, tpmContext, requestContext.Request.TPMIdentifier));
 				//}
 			
 				response.CommandResponse = commandResponse;

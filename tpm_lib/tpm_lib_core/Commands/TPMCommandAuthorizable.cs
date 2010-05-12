@@ -16,12 +16,6 @@ namespace Iaik.Tc.TPM.Library.Commands
 	{
 		
 		/// <summary>
-		/// Generates the authorization data for this command,
-		/// or delegates the auth data generation
-		/// </summary>
-		protected ICommandAuthorizationHelper _commandAuthHelper;
-		
-		/// <summary>
 		/// Saves the assigned authorization infos of the current command
 		/// </summary>
 		protected AuthorizationInfo[] _currentAuthorizationInfos = null;
@@ -43,12 +37,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 		{
 			get { return ResponseAuthHandleInfoCore.ReadAuthHandleInfos(this, _responseBlob); }
 		}
-		
-		public void SetCommandAuthorizationHelper (ICommandAuthorizationHelper commandAuthHelper)
-		{
-			_commandAuthHelper = commandAuthHelper;
-		}
-		
+			
 		
 		public virtual string GetHandle (AuthSessionNum authSessionNum)
 		{

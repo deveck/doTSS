@@ -94,7 +94,9 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 		{
 			base.Init (param, tpmProvider);
 			
+			
 			_digest = null;
+			
 			
 			_tpmKey = TPMKeyCore.Create (
 			    CapabilityDataCore.TPMVersionCore.CreateVersion11(),
@@ -195,7 +197,14 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 		}
 
 
-		
+		public override string GetHandle (AuthSessionNum authSessionNum)
+		{
+			if(authSessionNum == AuthSessionNum.Auth1)
+				return _params.GetValueOf<string>("parent");
+			
+			return null;
+		}
+
 	
 	}
 }

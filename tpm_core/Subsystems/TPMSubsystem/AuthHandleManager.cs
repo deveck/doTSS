@@ -140,7 +140,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			if(cmd.SupportsAuthType(AuthHandle.AuthType.OIAP))
 			{
 				TPMCommandRequest oiapRequest = new TPMCommandRequest(TPMCommandNames.TPM_CMD_OIAP, new Parameters());
-				TPMCommandResponse oiapResponse = _tpmContext.TPM.Process(oiapRequest);
+				TPMCommandResponse oiapResponse = _tpmContext.TPM.Process(oiapRequest, cmd.CommandAuthHelper, cmd.KeyManager);
 				if(oiapResponse.Status == false)
 					throw new TPMRequestException("Unknown error while creating oiap auth handle");
 				
@@ -166,7 +166,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				
 				TPMCommandRequest osapRequest = new TPMCommandRequest(TPMCommandNames.TPM_CMD_OSAP, parameters);
 				
-				TPMCommandResponse osapResponse = _tpmContext.TPM.Process(osapRequest);
+				TPMCommandResponse osapResponse = _tpmContext.TPM.Process(osapRequest, cmd.CommandAuthHelper, cmd.KeyManager);
 				if(osapResponse.Status == false)
 					throw new TPMRequestException("Unknown error while creating osap auth handle");
 					
