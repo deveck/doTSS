@@ -14,10 +14,6 @@ namespace Iaik.Tc.TPM.Library.Commands
 
 	public abstract class TPMCommandAuthorizable : TPMCommand, IAuthorizableCommand
 	{
-		/// <summary>
-		/// Response received by the tpm after execution
-		/// </summary>
-		protected TPMBlob _responseBlob = null;
 		
 		/// <summary>
 		/// Generates the authorization data for this command,

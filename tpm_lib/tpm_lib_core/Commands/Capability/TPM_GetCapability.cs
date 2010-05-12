@@ -135,7 +135,6 @@ namespace Iaik.Tc.TPM.Library.Commands
 					break;
 				default:
 					throw new NotSupportedException("Defined cap or subcap are not supported");
-					break;
 				}
 				break;
 			}

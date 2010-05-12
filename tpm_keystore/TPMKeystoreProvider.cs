@@ -97,7 +97,7 @@ namespace Iaik.Tc.TPM.Keystore
 		public abstract bool ContainsIdentifier(string identifier);
 		
 		#region IDisposable implementation
-		 void  IDisposable.Dispose ()
+		public virtual void  Dispose ()
 		{
 		}
 		#endregion

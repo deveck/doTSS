@@ -70,7 +70,7 @@ namespace Iaik.Tc.TPM.Context
 		/// </returns>
 		public ClientKeyHandle GetSrkKeyHandle()
 		{
-		return new ClientKeyHandle("srk", "srk", _tpmSession);
+			return new ClientKeyHandle("srk", "srk", _tpmSession);
 		}
 		
 		
@@ -147,18 +147,22 @@ namespace Iaik.Tc.TPM.Context
 			paramsCreateWrapKey.AddPrimitiveType("key_usage", keyUsage);
 			paramsCreateWrapKey.AddPrimitiveType("key_flags", keyFlags);
 			paramsCreateWrapKey.AddPrimitiveType("key_length", keyFlags);
+			paramsCreateWrapKey.AddPrimitiveType("exponent", new byte[0]);
+			paramsCreateWrapKey.AddPrimitiveType("num_primes", 0);
+			
+			
 			
 			TPMCommandResponse responseCreateWrapKey = 
 				BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_CreateWrapKey, paramsCreateWrapKey);
 			
 			_tpmSession.Keystore.AddKey(
 			            friendlyName,
-			            responseCreateWrapKey.Parameters.GetValueOf<string>("identifier"),
+			            responseCreateWrapKey.Parameters.GetValueOf<string>("key_identifier"),
 			            this.FriendlyName,
 			            responseCreateWrapKey.Parameters.GetValueOf<byte[]>("key_data"));
 			                            
 			
-			return new ClientKeyHandle(friendlyName, responseCreateWrapKey.Parameters.GetValueOf<string>("identifier"), _tpmSession);
+			return new ClientKeyHandle(friendlyName, responseCreateWrapKey.Parameters.GetValueOf<string>("key_identifier"), _tpmSession);
 		}
 		
 		private TPMCommandResponse BuildDoVerifyRequest (string commandIdentifier, Parameters parameters)

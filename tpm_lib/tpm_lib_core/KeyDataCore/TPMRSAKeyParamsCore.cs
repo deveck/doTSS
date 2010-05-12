@@ -22,7 +22,11 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 		{
 			TPMRSAKeyParamsCore rsaKeyParams = new TPMRSAKeyParamsCore ();
 			rsaKeyParams._keyLength = keyLength;
-			rsaKeyParams._numPrimes = numPrimes;
+			
+			if(numPrimes == 0)
+				rsaKeyParams._numPrimes = DEFAULT_NUMPRIMES;
+			else
+				rsaKeyParams._numPrimes = numPrimes;
 			
 			if (exponent == null)
 				rsaKeyParams._exponent = new byte[0];

@@ -168,7 +168,6 @@ namespace tpm_test
 					break;
 				default:
 					throw new NotSupportedException("Defined cap or subcap are not supported");
-					break;
 				}
 			}
 			

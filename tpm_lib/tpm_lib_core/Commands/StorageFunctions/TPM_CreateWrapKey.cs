@@ -7,6 +7,11 @@ using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 using Iaik.Tc.TPM.Library.Common.KeyData;
 using Iaik.Tc.TPM.Library.KeyDataCore;
 using Iaik.Tc.TPM.Lowlevel;
+using Iaik.Utils.Hash;
+using Iaik.Utils;
+using Iaik.Tc.TPM.Lowlevel.Data;
+using Iaik.Tc.TPM.Library.Hash;
+using Iaik.Tc.TPM.Library.HandlesCore.Authorization;
 
 namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 {
@@ -26,9 +31,19 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 		private byte[] _responseDigest = null;
 	
 		/// <summary>
+		/// Contains the encoded usage auth of the new key
+		/// </summary>
+		private byte[] _usageAuth = null;
+		
+		/// <summary>
+		/// Contains the encoded migration auth of the new key
+		/// </summary>
+		private byte[] _migrationAuth = null;
+	
+		/// <summary>
 		/// Key specification of the key being created
 		/// </summary>
-		private TPMKey _tpmKey = null;
+		private TPMKeyCore _tpmKey = null;
 	
 		public override byte[] Digest 
 		{
@@ -36,7 +51,11 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 			{
 				if(_digest == null)
 				{
-					
+					_digest = new HashProvider().Hash(
+						new HashPrimitiveDataProvider(TPMOrdinals.TPM_ORD_CreateWrapKey),
+						new HashByteDataProvider(_usageAuth),
+						new HashByteDataProvider(_migrationAuth),
+						new HashTPMBlobWritableDataProvider(_tpmKey));
 				}
 				
 				return _digest;
@@ -50,6 +69,20 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 			{
 				if(_responseDigest == null)
 				{
+					HashProvider hasher = new HashProvider();
+					
+					int offset = 2+4; //tag + paramsize
+					
+					int authHandleSize = ResponseAuthHandleInfoCore.ReadAuthHandleInfos(this, _responseBlob).Length *
+						ResponseAuthHandleInfoCore.SINGLE_AUTH_HANDLE_SIZE;
+					
+					_responseDigest = hasher.Hash(
+					      //1S
+					      new HashStreamDataProvider(_responseBlob, offset, 4, false),
+					      //2S
+					      new HashPrimitiveDataProvider(TPMOrdinals.TPM_ORD_TakeOwnership),
+					      //3S
+					      new HashStreamDataProvider(_responseBlob, offset + 4, _responseBlob.Length - offset - 4 - authHandleSize, false));
 				}
 				
 				return _responseDigest;
@@ -89,13 +122,54 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 			// XOR(auth, SHA-1(OSAP shared secret | session nonce))
 			//
 			// OSAP_shared_secret = HMAC(key=usage secret of key handle, nonce even osap | nonce odd osap)
-			
-			byte[] usageAuth = _params.GetValueOf<byte[]> ("usage_auth");
-			byte[] migrationAuth = _params.GetValueOf<byte[]> ("migration_auth");
+			AuthHandle auth1OSAP = _commandAuthHelper.AssureOSAPSharedSecret(this, AuthSessionNum.Auth1);
 			
 			
+			_usageAuth = _params.GetValueOf<byte[]> ("usage_auth");
+			_migrationAuth = _params.GetValueOf<byte[]> ("migration_auth");
+			byte[] xorKey = new HashProvider().Hash(
+					new HashByteDataProvider(auth1OSAP.SharedSecret),
+					new HashByteDataProvider(auth1OSAP.NonceEven));
+			
+			ByteHelper.XORBytes(_usageAuth, xorKey);
+			ByteHelper.XORBytes(_migrationAuth, xorKey);
+			
+			TPMBlob requestBlob = new TPMBlob();
+			requestBlob.WriteCmdHeader(TPMCmdTags.TPM_TAG_RQU_AUTH1_COMMAND, TPMOrdinals.TPM_ORD_CreateWrapKey);
+			
+			//parent key handle gets inserted later, it may be not available now
+			requestBlob.WriteUInt32(0);
+			requestBlob.Write(_usageAuth, 0, 20);
+			requestBlob.Write(_migrationAuth, 0, 20);
+			_tpmKey.WriteToTpmBlob(requestBlob);
+			
+			AuthorizeMe(requestBlob);
+			
+			using(_keyManager.AcquireLock())
+			{
+				_responseBlob = TransmitMe(requestBlob);
+			}
+			
+			CheckResponseAuthInfo();
 		
-			return null;
+			_responseBlob.SkipHeader();
+			TPMKeyCore newKey = new TPMKeyCore(_responseBlob);
+			Parameters responseParams = new Parameters();
+			
+			//Build and save the key identifier
+			//The key identifier is the hex-string representation of the hash of the newly created key
+			responseParams.AddPrimitiveType("key_identifier", 
+				ByteHelper.ByteArrayToHexString(
+					new HashProvider().Hash(
+							new HashByteDataProvider(
+								ByteHelper.SerializeToBytes(newKey)
+							)
+						),
+					""));
+					
+			responseParams.AddPrimitiveType("key_data", ByteHelper.SerializeToBytes(newKey));
+		
+			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_CreateWrapKey, responseParams);
 		}
 		
 		

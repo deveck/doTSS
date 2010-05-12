@@ -113,6 +113,11 @@ namespace Iaik.Tc.TPM
             }
         }
 
+		public void ClearValue(string name)
+		{
+			_values.Remove(name);
+		}
+		
 
         public TPMConsole()
         {

@@ -246,7 +246,7 @@ namespace Iaik.Tc.TPM.Keystore.Backends
 		/// <returns> </returns>
 		protected abstract string DeriveParameterName(string rawName);
 
-		public void Dispose ()
+		public override void Dispose ()
 		{
 			_connection.Close();
 		}

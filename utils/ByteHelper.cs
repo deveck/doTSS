@@ -1,6 +1,8 @@
 
 using System;
 using System.Text;
+using System.IO;
+using Iaik.Utils.Serialization;
 
 namespace Iaik.Utils
 {
@@ -13,15 +15,32 @@ namespace Iaik.Utils
 		/// Converts a byte array to a space seperated hex string
 		/// </summary>
 		/// <param name="data"></param>
+		/// <param name="seperator">seperator which is appended to each hex value (except the last)</param>		
 		/// <returns></returns>
-		public static string ByteArrayToHexString (byte[] data)
+		public static string ByteArrayToHexString(byte[] data)
+		{
+			return ByteArrayToHexString(data, " "); 
+		}
+		
+		/// <summary>
+		/// Converts a byte array to a hex string
+		/// </summary>
+		/// <param name="data"></param>
+		/// <param name="seperator">seperator which is appended to each hex value (except the last)</param>		
+		/// <returns></returns>
+		public static string ByteArrayToHexString (byte[] data, string seperator)
 		{
 			if (data == null)
 				return "<null>";
 			StringBuilder returnVal = new StringBuilder ();
 			
-			foreach (byte b in data)
-				returnVal.AppendFormat ("{0:X2} ", b);
+			for(int i = 0; i<data.Length; i++)
+			{
+				returnVal.AppendFormat ("{0:X2}", data[i]);
+				
+				if(i+1 < data.Length)
+					returnVal.Append(seperator);
+			}
 			
 			return returnVal.ToString ();
 		}
@@ -49,6 +68,34 @@ namespace Iaik.Utils
 		public static void ClearBytes (byte[] data)
 		{
 			Array.Clear (data, 0, data.Length);
+		}
+		
+		
+		/// <summary>
+		/// XORs all bytes from data with key and saves them to data
+		/// </summary>
+		/// <param name="data"> </param>
+		/// <param name="key"></param>
+		public static void XORBytes(byte[] data, byte[] key)
+		{
+			if(data.Length != key.Length)
+				throw new ArgumentException("Error XORBytes needs two arrays with same dimension");
+		
+			for(int i = 0; i<data.Length;i++)
+			{
+				data[i] = (byte)(data[i] ^ key[i]);
+			}
+		}
+		
+		public static byte[] SerializeToBytes(params IStreamSerializable[] victims)
+		{
+			using(MemoryStream sink = new MemoryStream())
+			{
+				foreach(IStreamSerializable victim in victims)
+					victim.Write(sink);
+					
+				return sink.ToArray();
+			}
 		}
 		
 	}

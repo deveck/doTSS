@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using Iaik.Utils.Hash;
 using Iaik.Tc.TPM.Library.HandlesCore.Authorization;
 using Iaik.Tc.TPM.Library.Common;
+using Iaik.Tc.TPM.Library.Common.KeyData;
 
 namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {
@@ -80,8 +81,14 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				request.TpmSessionIdentifier = _tpmSessionIdentifier;
 				
 				Parameters paramsSharedSecret = new Parameters();
-				paramsSharedSecret.AddPrimitiveType("identifier", cmd.GetHandle(authSessionNum));
-				request.KeyInfo = new HMACKeyInfo(HMACKeyInfo.HMACKeyType.KeyUsageSecret, paramsSharedSecret);
+				
+				if(cmd.GetHandle(authSessionNum) == KeyHandle.KEY_SRK)
+					request.KeyInfo = new HMACKeyInfo(HMACKeyInfo.HMACKeyType.SrkSecret, new Parameters());
+				else
+				{
+					paramsSharedSecret.AddPrimitiveType("identifier", cmd.GetHandle(authSessionNum));
+					request.KeyInfo = new HMACKeyInfo(HMACKeyInfo.HMACKeyType.KeyUsageSecret, paramsSharedSecret);
+				}
 				
 				GenerateHMACResponse response = request.TypedExecute ();
 				response.AssertResponse();

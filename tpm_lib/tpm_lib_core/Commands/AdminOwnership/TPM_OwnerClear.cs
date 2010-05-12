@@ -57,9 +57,6 @@ namespace Iaik.Tc.TPM.Library.Commands.AdminOwnership
 					
 					int offset = 2+4; //tag + paramsize
 					
-					int authHandleSize = ResponseAuthHandleInfoCore.ReadAuthHandleInfos(this, _responseBlob).Length *
-						ResponseAuthHandleInfoCore.SINGLE_AUTH_HANDLE_SIZE;
-					
 					_responseDigest = hasher.Hash(
 					      //1S
 					      new HashStreamDataProvider(_responseBlob, offset, 4, false),
