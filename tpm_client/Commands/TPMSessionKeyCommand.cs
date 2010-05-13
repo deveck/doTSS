@@ -6,6 +6,8 @@ using Iaik.Tc.TPM.Context;
 using Iaik.Tc.TPM.Library.Common;
 using Iaik.Utils;
 using Iaik.Tc.TPM.Keystore;
+using Iaik.Utils.Hash;
+using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 
 namespace Iaik.Tc.TPM.Commands
 {
@@ -193,7 +195,26 @@ namespace Iaik.Tc.TPM.Commands
 						break;
 					}
 				}
-				_console.Out.WriteLine("keyLength={0}", keyLength);
+				
+				//Make sure that key usage auth and if required migration auth is in the secret cache
+				Parameters hmacParams = new Parameters();
+				hmacParams.AddPrimitiveType("identifier", arguments["name"]);
+				ProtectedPasswordStorage usageAuth = tpmSessions[localAlias].RequestSecret(
+					new HMACKeyInfo(HMACKeyInfo.HMACKeyType.KeyUsageSecret, hmacParams));
+					
+				if(usageAuth != null)
+					tpmSessions[localAlias].SetValue("secret_usage_" + arguments["name"], usageAuth);
+					
+				if((keyFlags & TPMKeyFlags.Migratable) == TPMKeyFlags.Migratable)
+				{
+					ProtectedPasswordStorage migrationAuth = tpmSessions[localAlias].RequestSecret(
+						new HMACKeyInfo(HMACKeyInfo.HMACKeyType.KeyMigrationSecret, hmacParams));
+						
+					if(migrationAuth != null)
+						tpmSessions[localAlias].SetValue("secret_migration_" + arguments["name"], migrationAuth);					
+				}
+				
+				
 				ClientKeyHandle newKey = keyHandle.CreateKey(arguments["name"], keyLength, keyUsage, keyFlags);
 			}
 			else

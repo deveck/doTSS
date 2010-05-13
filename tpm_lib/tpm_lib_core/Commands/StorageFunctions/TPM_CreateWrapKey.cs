@@ -136,6 +136,9 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 			ByteHelper.XORBytes(_usageAuth, xorKey);
 			ByteHelper.XORBytes(_migrationAuth, xorKey);
 			
+			//Load parent key if not loaded
+			_keyManager.LoadKey(_params.GetValueOf<string>("parent"));
+			
 			TPMBlob requestBlob = new TPMBlob();
 			requestBlob.WriteCmdHeader(TPMCmdTags.TPM_TAG_RQU_AUTH1_COMMAND, TPMOrdinals.TPM_ORD_CreateWrapKey);
 			
@@ -149,6 +152,13 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 			
 			using(_keyManager.AcquireLock())
 			{
+				requestBlob.SkipHeader();
+				
+				if(_params.GetValueOf<string>("parent") == KeyHandle.KEY_SRK)
+					requestBlob.WriteUInt32((uint)TPMKeyHandles.TPM_KH_SRK);
+				else
+					requestBlob.WriteUInt32(_keyManager.IdentifierToHandle(_params.GetValueOf<string>("parent")).Handle);
+					
 				_responseBlob = TransmitMe(requestBlob);
 			}
 			
@@ -182,10 +192,15 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 		
 			string parentIdentifier = _params.GetValueOf<string>("parent");
 			
-			Parameters parameters = new Parameters();
-			parameters.AddPrimitiveType("identifier", parentIdentifier);
+			if(parentIdentifier == KeyHandle.KEY_SRK)
+				return new HMACKeyInfo(HMACKeyInfo.HMACKeyType.SrkSecret, new Parameters());
+			else
+			{
+				Parameters parameters = new Parameters();
+				parameters.AddPrimitiveType("identifier", parentIdentifier);
 			
-			return new HMACKeyInfo(HMACKeyInfo.HMACKeyType.KeyUsageSecret, parameters);
+				return new HMACKeyInfo(HMACKeyInfo.HMACKeyType.KeyUsageSecret, parameters);
+			}
 			
 		}
 

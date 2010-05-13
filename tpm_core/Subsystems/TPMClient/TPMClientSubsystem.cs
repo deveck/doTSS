@@ -100,6 +100,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMClient
 			
 			_logger.DebugFormat("Requesting password: {0}", requestContext.Request.KeyInfo.KeyType);
 			ProtectedPasswordStorage pw = session.RequestSecret(requestContext.Request.KeyInfo);
+			_logger.Debug("1");
 			if(pw == null)
 			{
 				response.Succeeded = false;
@@ -108,16 +109,19 @@ namespace Iaik.Tc.TPM.Subsystems.TPMClient
 				return;
 			}
 
-			
+			_logger.Debug("2");
 			HMACProvider hmacProvider = new HMACProvider(pw);
+			_logger.Debug("3");
 			response.Succeeded = true;
+			_logger.Debug("4");
         	response.TpmAuthData = hmacProvider.Hash(requestContext.Request.HMACDataProviders);
+        	_logger.Debug("5");
 //			    new HashByteDataProvider(requestContext.Request.Digest),
 //			    new HashByteDataProvider(requestContext.Request.AuthHandle.NonceEven),
 //			    new HashByteDataProvider(requestContext.Request.AuthHandle.NonceOdd),
 //			    new HashPrimitiveDataProvider(requestContext.Request.ContinueAuthSession));
 			
-        	
+        	_logger.Debug("Executing response");
         	response.Execute();
 		}
 		

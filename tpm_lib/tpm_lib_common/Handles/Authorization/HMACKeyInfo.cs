@@ -32,7 +32,12 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 			/// <summary>
 			/// The secret of the specified key is used as hmac key
 			/// </summary>
-			KeyUsageSecret
+			KeyUsageSecret,
+			
+			/// <summary>
+			/// The secret used to migrate a key from one tpm to another
+			/// </summary>
+			KeyMigrationSecret
 		}
 		
 		[SerializeMe(0)]
@@ -59,7 +64,7 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		
 		public HMACKeyInfo (HMACKeyType keyType, Parameters parameters)
 		{
-			_keyType = KeyType;
+			_keyType = keyType;
 			_parameters = parameters;
 		}
 		
@@ -67,5 +72,11 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		{
 			Read(src);
 		}
+		
+		public override string ToString ()
+		{
+			return string.Format("[HMACKeyInfo: KeyType={0}, Parameters={1}]", KeyType, Parameters);
+		}
+
 	}
 }

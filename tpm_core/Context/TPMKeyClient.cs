@@ -10,6 +10,7 @@ using Iaik.Utils.Hash;
 using System.Security.Cryptography;
 using Org.BouncyCastle.Crypto;
 using Iaik.Tc.TPM.Library.Common.KeyData;
+using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 
 namespace Iaik.Tc.TPM.Context
 {
@@ -150,19 +151,45 @@ namespace Iaik.Tc.TPM.Context
 			paramsCreateWrapKey.AddPrimitiveType("exponent", new byte[0]);
 			paramsCreateWrapKey.AddPrimitiveType("num_primes", (uint)0);
 			
+			Parameters parameters = new Parameters();
+			parameters.AddPrimitiveType("identifier", friendlyName);
 			
+			ProtectedPasswordStorage authUsage = _tpmSession.RequestSecret(
+				new HMACKeyInfo(HMACKeyInfo.HMACKeyType.KeyUsageSecret, parameters));
+			authUsage.DecryptHash();
+			paramsCreateWrapKey.AddPrimitiveType("usage_auth", authUsage.HashValue);
 			
-			TPMCommandResponse responseCreateWrapKey = 
-				BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_CreateWrapKey, paramsCreateWrapKey);
+			ProtectedPasswordStorage authMigration = null;				
 			
-			_tpmSession.Keystore.AddKey(
-			            friendlyName,
-			            responseCreateWrapKey.Parameters.GetValueOf<string>("key_identifier"),
-			            this.FriendlyName,
-			            responseCreateWrapKey.Parameters.GetValueOf<byte[]>("key_data"));
-			                            
+			if((keyFlags & TPMKeyFlags.Migratable) == TPMKeyFlags.Migratable)
+			{
+				authMigration = _tpmSession.RequestSecret(
+					new HMACKeyInfo(HMACKeyInfo.HMACKeyType.KeyMigrationSecret, parameters));
+				authMigration.DecryptHash();
+				paramsCreateWrapKey.AddPrimitiveType("migration_auth", authMigration.HashValue);
+			}	
+			else
+				paramsCreateWrapKey.AddPrimitiveType("migration_auth", new byte[20]);
 			
-			return new ClientKeyHandle(friendlyName, responseCreateWrapKey.Parameters.GetValueOf<string>("key_identifier"), _tpmSession);
+			try
+			{
+				TPMCommandResponse responseCreateWrapKey = 
+					BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_CreateWrapKey, paramsCreateWrapKey);
+				
+				_tpmSession.Keystore.AddKey(
+				            friendlyName,
+				            responseCreateWrapKey.Parameters.GetValueOf<string>("key_identifier"),
+				            this.FriendlyName,
+				            responseCreateWrapKey.Parameters.GetValueOf<byte[]>("key_data"));
+				                            
+				
+				return new ClientKeyHandle(friendlyName, responseCreateWrapKey.Parameters.GetValueOf<string>("key_identifier"), _tpmSession);
+			}
+			finally
+			{
+				authMigration.ClearHash();
+				authUsage.ClearHash();
+			}
 		}
 		
 		private TPMCommandResponse BuildDoVerifyRequest (string commandIdentifier, Parameters parameters)

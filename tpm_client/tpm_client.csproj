@@ -103,5 +103,6 @@
     <None Include="TestScripts\select_tpm.txt" />
     <None Include="TestScripts\tpm_session_ek.txt" />
     <None Include="TestScripts\tpm_session_admin.txt" />
+    <None Include="TestScripts\tpm_session_key.txt" />
   </ItemGroup>
 </Project>

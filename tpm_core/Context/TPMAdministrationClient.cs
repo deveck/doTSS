@@ -49,8 +49,8 @@ namespace Iaik.Tc.TPM.Context
 		
 		public void TakeOwnership (ProtectedPasswordStorage ownerSecret, ProtectedPasswordStorage srkSecret)
 		{
-			_tpmSession.SetValue (TPMSession.PARAM_AUTH_OWNER, ownerSecret);
-			_tpmSession.SetValue (TPMSession.PARAM_AUTH_SRK, srkSecret);
+			_tpmSession.SetValue ("secret_" + TPMSession.PARAM_AUTH_OWNER, ownerSecret);
+			_tpmSession.SetValue ("secret_" + TPMSession.PARAM_AUTH_SRK, srkSecret);
 			
 			
 			IAsymmetricBlockCipher ekEncryptor = _tpmSession.EndorsementKeyHandling.PublicKey.CreateRSAEncrypter ();

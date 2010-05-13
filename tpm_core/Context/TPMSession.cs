@@ -208,6 +208,16 @@ namespace Iaik.Tc.TPM.Context
 		{
 			_parameters.Remove (key);
 		}
+		
+		/// <summary>
+		/// Lists all added keys
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<string> ListValueKeys()
+		{
+			return _parameters.Keys;			
+		}
+		
 		#endregion
 		
 		/// <summary>
@@ -223,14 +233,18 @@ namespace Iaik.Tc.TPM.Context
 				dictKey = PARAM_AUTH_OWNER;
 			else if(keyInfo.KeyType == HMACKeyInfo.HMACKeyType.SrkSecret)
 				dictKey = PARAM_AUTH_SRK;
+			else if(keyInfo.KeyType == HMACKeyInfo.HMACKeyType.KeyUsageSecret)
+				dictKey = "usage_" + keyInfo.Parameters.GetValueOf<string>("identifier");
 			else
 				throw new NotSupportedException(string.Format("The key type '{0}' is not supported", keyInfo.KeyType));
 			
-			ProtectedPasswordStorage pw = GetValue<ProtectedPasswordStorage>(dictKey, null);
+			ProtectedPasswordStorage pw = GetValue<ProtectedPasswordStorage>("secret_" + dictKey, null);
 			if(pw == null)
 			{
 				_logger.DebugFormat("Secret for dictkey '{0}' was not found in cache, requesting from user", dictKey);
-				return RaiseRequestSecret(keyInfo);
+				ProtectedPasswordStorage password = RaiseRequestSecret(keyInfo);
+				SetValue("secret_" + dictKey, password);
+				return password;				
 			}
 			else
 			{

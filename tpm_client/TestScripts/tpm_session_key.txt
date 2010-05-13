@@ -7,4 +7,7 @@
 @include ./select_tpm.txt
 
 tpm_session_key tpm keystore_open SQLiteKeystore,file=keys.db
+
+secret_cache tpm add type=srk,secret=srk
+secret_cache tpm add type=key_usage,name=test,secret=my_secret
 tpm_session_key tpm create name=test,parent=srk,key_length=2048,key_usage=storage

@@ -87,7 +87,7 @@ namespace Iaik.Tc.TPM.Commands
 			{
         		List<string> toRemove = new List<string>();
         		
-        		foreach(string key in _console.ListValueKeys())
+        		foreach(string key in tpmSessions[localAlias].ListValueKeys())
         		{
         			if(key.StartsWith("secret_"))
         				toRemove.Add(key);
@@ -95,7 +95,7 @@ namespace Iaik.Tc.TPM.Commands
         		
         		foreach(string key in toRemove)
         		{
-        			_console.ClearValue(key);
+        			tpmSessions[localAlias].ClearValue(key);
         		}
     			
         	}
@@ -113,7 +113,7 @@ namespace Iaik.Tc.TPM.Commands
 					return;
 				}
 				
-				_console.ClearValue("secret_" + arguments["type"]);
+				tpmSessions[localAlias].ClearValue("secret_" + arguments["type"]);
 				
 			}
 			else if(keyCommand == "add")
@@ -171,14 +171,16 @@ namespace Iaik.Tc.TPM.Commands
 					pw = new ProtectedPasswordStorage();
 					foreach(char c in arguments["secret"])
 						pw.AppendPasswordChar(c);
+					
 				}
 				else
 				{
-					_console.ClearValue("secret_" + dictKey);
+					tpmSessions[localAlias].ClearValue("secret_" + dictKey);
 					pw = tpmSessions[localAlias].RequestSecret(keyInfo);
 				}	
 				
-				_console.SetValue("secret_" + dictKey, pw);
+				pw.Hash();
+				tpmSessions[localAlias].SetValue("secret_" + dictKey, pw);
 			}
 			else
         		_console.Out.WriteLine ("Error, unknown command '{0}'", commandline[2]);

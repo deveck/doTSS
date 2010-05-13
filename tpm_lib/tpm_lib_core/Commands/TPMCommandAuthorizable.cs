@@ -7,6 +7,7 @@ using Iaik.Tc.TPM.Lowlevel.Data;
 using Iaik.Tc.TPM.Library.HandlesCore.Authorization;
 using Iaik.Tc.TPM.Library.Common;
 using Iaik.Utils;
+using System.IO;
 
 namespace Iaik.Tc.TPM.Library.Commands
 {
@@ -150,6 +151,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 				//Make sure that all Authorization handles are loaded
 				_commandAuthHelper.LoadAuthorizationHandles(_currentAuthorizationInfos);
 				
+				requestBlob.Seek(0, SeekOrigin.End);
 				foreach(AuthorizationInfo authInfo in _currentAuthorizationInfos)			
 					WriteAuthorizationInfo (requestBlob, authInfo);
 					
