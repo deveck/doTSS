@@ -20,7 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>--script=/home/andi/Repos/IAIK_ITProject/TpmCSStack-impl/tpm_client/TestScripts/tpm_session_admin.txt</Commandlineparameters>
+    <Commandlineparameters>--script=/home/andi/Repos/TpmCSStack-impl/tpm_client/TestScripts/tpm_session_key.txt</Commandlineparameters>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -68,6 +68,7 @@
     <Compile Include="Utils.cs" />
     <Compile Include="SecretRequest.cs" />
     <Compile Include="Commands\TPMSessionKeyCommand.cs" />
+    <Compile Include="Commands\SecretCacheCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_core\tpm_core.csproj">

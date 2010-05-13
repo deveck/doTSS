@@ -112,6 +112,17 @@ namespace Iaik.Tc.TPM
                     throw new InvalidCastException(string.Format("Cannot cast from '{0}' to '{1}'", savedValue.GetType(), typeof(T)));
             }
         }
+        
+        /// <summary>
+        /// Lists all added keys 
+        /// </summary>
+        /// <returns>
+        /// A <see cref="IEnumerable<System.String>"/>
+        /// </returns>
+        public IEnumerable<string> ListValueKeys()
+        {
+        	return _values.Keys;
+        }
 
 		public void ClearValue(string name)
 		{
@@ -194,7 +205,10 @@ namespace Iaik.Tc.TPM
 					ConsoleKeyInfo keyInfo = Console.ReadKey();
 					
 					if(keyInfo.Key == ConsoleKey.Backspace)
-						currentCommandLine.Remove(currentCommandLine.Length - 1, 1);
+					{
+						if(currentCommandLine.Length > 0)
+							currentCommandLine.Remove(currentCommandLine.Length - 1, 1);
+					}
 					else if(keyInfo.Key == ConsoleKey.Enter)
 					{
 						_commandReady = false;
@@ -237,6 +251,9 @@ namespace Iaik.Tc.TPM
 				request.ProtectedPassword = Utils.ReadPassword("Server requests owner password:", this, false);
 			else if(request.KeyInfo.KeyType == HMACKeyInfo.HMACKeyType.SrkSecret)
 				request.ProtectedPassword = Utils.ReadPassword("Server requests srk password:", this, false);
+			else if(request.KeyInfo.KeyType == HMACKeyInfo.HMACKeyType.KeyUsageSecret)
+				request.ProtectedPassword = Utils.ReadPassword(string.Format("Server requests usage secret for key '{0}'",
+					request.KeyInfo.Parameters.GetValueOf<string>("identifier")), this, false);
 			else
 				throw new ArgumentException("Key type not supported by TPM console");
 			
@@ -425,7 +442,7 @@ namespace Iaik.Tc.TPM
 			Dictionary<string, string> arguments = new Dictionary<string, string>();
 			
 			string[] splittedArguments = sArguments.Split(',');
-			if(splittedArguments.Length > 1)
+			if(splittedArguments.Length > startIndex)
 			{
 				for(int i = startIndex; i<splittedArguments.Length; i++)
 				{
