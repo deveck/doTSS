@@ -182,13 +182,15 @@ namespace Iaik.Tc.TPM.Context
 				            this.FriendlyName,
 				            responseCreateWrapKey.Parameters.GetValueOf<byte[]>("key_data"));
 				                            
-				
 				return new ClientKeyHandle(friendlyName, responseCreateWrapKey.Parameters.GetValueOf<string>("key_identifier"), _tpmSession);
 			}
 			finally
 			{
-				authMigration.ClearHash();
-				authUsage.ClearHash();
+				if(authMigration != null)
+					authMigration.ClearHash();
+					
+				if(authUsage != null)
+					authUsage.ClearHash();
 			}
 		}
 		

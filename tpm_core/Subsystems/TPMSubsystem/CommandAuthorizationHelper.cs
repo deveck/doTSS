@@ -156,23 +156,30 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				{
 					AssureOSAPSharedSecret(cmd, authSessionNum);					
 					
-					GenerateHMACRequest request = GenerateHMACRequest.CreateGenerateHMACRequest
-						(_ctx,
-						 new HashByteDataProvider(cmd.Digest),
-						 new HashByteDataProvider(authHandle.NonceEven),
-						 new HashByteDataProvider(authHandle.NonceOdd),
-						 new HashPrimitiveDataProvider(false)
-						 );					 
-					                                                       
-					                                                      
-					request.TpmSessionIdentifier = _tpmSessionIdentifier;
-					request.KeyInfo = keyInfo;
-		
+										
+					byte[] hmac = new HMACProvider(authHandle.SharedSecret).Hash(
+						new HashByteDataProvider(cmd.Digest),
+						new HashByteDataProvider(authHandle.NonceEven),
+						new HashByteDataProvider(authHandle.NonceOdd),
+						new HashPrimitiveDataProvider(false));
 					
-					GenerateHMACResponse response = request.TypedExecute ();
-					response.AssertResponse();
-					
-					authorizationInfos.Add(new AuthorizationInfo(authHandle, false, response.TpmAuthData));
+//					GenerateHMACRequest request = GenerateHMACRequest.CreateGenerateHMACRequest
+//						(_ctx,
+//						 new HashByteDataProvider(cmd.Digest),
+//						 new HashByteDataProvider(authHandle.NonceEven),
+//						 new HashByteDataProvider(authHandle.NonceOdd),
+//						 new HashPrimitiveDataProvider(false)
+//						 );					 
+//					                                                       
+//					                                                      
+//					request.TpmSessionIdentifier = _tpmSessionIdentifier;
+//					request.KeyInfo = keyInfo;
+//		
+//					
+//					GenerateHMACResponse response = request.TypedExecute ();
+//					response.AssertResponse();
+//					
+					authorizationInfos.Add(new AuthorizationInfo(authHandle, false, hmac));
 					
 				}
 			}
@@ -204,26 +211,37 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				ResponseAuthHandleInfo currentResponseAuthHandleInfo = responseAuthHandles.Dequeue();
 				AuthorizationInfo currentAuthorizationInfo = authorizationInfoQueue.Dequeue();
 				
-				GenerateHMACRequest request = GenerateHMACRequest.CreateGenerateHMACRequest
-					(_ctx,
-					 new HashByteDataProvider(cmd.ResponseDigest),
-					 new HashByteDataProvider(currentResponseAuthHandleInfo.NonceEven),
-					 new HashByteDataProvider(currentAuthorizationInfo.Handle.NonceOdd),
-					 new HashPrimitiveDataProvider(currentResponseAuthHandleInfo.ContinueAuthSession)
-					 );					 
-				                                                       
-				                                                      
-				request.TpmSessionIdentifier = _tpmSessionIdentifier;
-				request.KeyInfo = keyInfo;
-//				request.AuthHandle = authHandle;
-//				request.Digest = cmd.Digest;
-//				request.ContinueAuthSession = true;
-//				
 				
-				GenerateHMACResponse response = request.TypedExecute ();
-				response.AssertResponse();
-				
-				authorizationInfos.Add(new AuthorizationInfo(null, currentResponseAuthHandleInfo.ContinueAuthSession, response.TpmAuthData));
+				if(currentAuthorizationInfo.Handle.HandleAuthType == AuthHandle.AuthType.OIAP)
+				{				
+					GenerateHMACRequest request = GenerateHMACRequest.CreateGenerateHMACRequest
+						(_ctx,
+						 new HashByteDataProvider(cmd.ResponseDigest),
+						 new HashByteDataProvider(currentResponseAuthHandleInfo.NonceEven),
+						 new HashByteDataProvider(currentAuthorizationInfo.Handle.NonceOdd),
+						 new HashPrimitiveDataProvider(currentResponseAuthHandleInfo.ContinueAuthSession)
+						 );					 
+					                                                       
+					                                                      
+					request.TpmSessionIdentifier = _tpmSessionIdentifier;
+					request.KeyInfo = keyInfo;
+		
+					
+					GenerateHMACResponse response = request.TypedExecute ();
+					response.AssertResponse();
+					
+					authorizationInfos.Add(new AuthorizationInfo(null, currentResponseAuthHandleInfo.ContinueAuthSession, response.TpmAuthData));
+				}
+				else if(currentAuthorizationInfo.Handle.HandleAuthType == AuthHandle.AuthType.OSAP)
+				{
+					byte[] tpmAuth = new HMACProvider(currentAuthorizationInfo.Handle.SharedSecret).Hash(
+						new HashByteDataProvider(cmd.ResponseDigest),
+						new HashByteDataProvider(currentResponseAuthHandleInfo.NonceEven),
+						new HashByteDataProvider(currentAuthorizationInfo.Handle.NonceOdd),
+						new HashPrimitiveDataProvider(currentResponseAuthHandleInfo.ContinueAuthSession));
+					
+					authorizationInfos.Add(new AuthorizationInfo(null, currentResponseAuthHandleInfo.ContinueAuthSession, tpmAuth));
+				}
 			}
 			
 			return authorizationInfos.ToArray();	

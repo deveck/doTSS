@@ -1,7 +1,8 @@
 # C# Bin directories
 bin
 obj
-
+keys.db
+libtddl*
 *~
 *.pidb
 *.suo

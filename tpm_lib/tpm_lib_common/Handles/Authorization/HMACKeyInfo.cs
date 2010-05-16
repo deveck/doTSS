@@ -37,7 +37,12 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 			/// <summary>
 			/// The secret used to migrate a key from one tpm to another
 			/// </summary>
-			KeyMigrationSecret
+			KeyMigrationSecret,
+			
+			/// <summary>
+			/// The shared secret established when using OSAP
+			/// </summary>
+			SharedOSAPSecret,
 		}
 		
 		[SerializeMe(0)]

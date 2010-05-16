@@ -80,7 +80,7 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 					      //1S
 					      new HashStreamDataProvider(_responseBlob, offset, 4, false),
 					      //2S
-					      new HashPrimitiveDataProvider(TPMOrdinals.TPM_ORD_TakeOwnership),
+					      new HashPrimitiveDataProvider(TPMOrdinals.TPM_ORD_CreateWrapKey),
 					      //3S
 					      new HashStreamDataProvider(_responseBlob, offset + 4, _responseBlob.Length - offset - 4 - authHandleSize, false));
 				}
@@ -189,6 +189,7 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 		{
 			if(authSessionNum != AuthSessionNum.Auth1)
 				return null;
+		
 		
 			string parentIdentifier = _params.GetValueOf<string>("parent");
 			
