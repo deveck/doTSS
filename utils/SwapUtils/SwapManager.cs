@@ -54,7 +54,7 @@ namespace Iaik.Utils.SwapUtils
 		{			
 			List<ulong> swapables = _replacementAlgorithm.Swapables;
 			
-			for(int i = 0; i<Math.Max(swapCount, swapables.Count); i++)
+			for(int i = 0; i<Math.Min(swapCount, swapables.Count); i++)
 			{
 				ulong swapCandidate = swapables[i];
 				

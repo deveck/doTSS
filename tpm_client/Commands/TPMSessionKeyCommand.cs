@@ -27,6 +27,8 @@ namespace Iaik.Tc.TPM.Commands
                          Opens a keystore with the specified parameters
     
     	keystore_close   closes an open keystore
+    	
+    	keystore_list    lists all keys saved in the keystore
 
         create           args: name=<name>,
                                parent=<parent friendly name>,
@@ -104,6 +106,31 @@ namespace Iaik.Tc.TPM.Commands
 					tpmSessions[localAlias].Keystore = keystore;
 				}
 				
+			}
+			else if(keyCommand == "keystore_list")
+			{
+				TPMKeystoreProvider keystore = tpmSessions[localAlias].Keystore;
+				
+				if(keystore == null)
+				{
+					_console.Out.WriteLine("Error: No keystore opened");
+					return;
+				}
+				
+				_console.Out.WriteLine("The keystore contains #{0} keys", keystore.EnumerateFriendlyNames().Length);
+				_console.Out.WriteLine();
+				foreach(string friendlyName in keystore.EnumerateFriendlyNames())
+				{
+					string parent = "<SRK>";
+					
+					KeyValuePair<string, string>? parentKey = keystore.FindParentKeyByFriendlyName(friendlyName);
+					if(parentKey != null)
+						parent = parentKey.Value.Key;
+					
+					_console.Out.WriteLine("{0}   ({1})   parent: {2}", friendlyName, 
+						keystore.FriendlyNameToIdentifier(friendlyName), parent);
+						
+				}
 			}
 			else if(keyCommand == "create")
 			{
@@ -198,6 +225,7 @@ namespace Iaik.Tc.TPM.Commands
 				
 				//Make sure that key usage auth and if required migration auth is in the secret cache
 				Parameters hmacParams = new Parameters();
+				hmacParams.AddPrimitiveType("identifierIsFriendlyName", true);
 				hmacParams.AddPrimitiveType("identifier", arguments["name"]);
 				ProtectedPasswordStorage usageAuth = tpmSessions[localAlias].RequestSecret(
 					new HMACKeyInfo(HMACKeyInfo.HMACKeyType.KeyUsageSecret, hmacParams));

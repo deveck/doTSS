@@ -120,10 +120,19 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			if(swapOutResponse.Status == false)
 				throw new TPMRequestException("Unknown error while swap out operation");
 			
+			//For key handles the tpm does not release the memory after save context
+			TPMCommandRequest flushRequest = new TPMCommandRequest(TPMCommandNames.TPM_CMD_FlushSpecific, swapOutParameters);
+			TPMCommandResponse flushResponse = _tpmContext.TPM.Process(flushRequest);
+			
+			if(flushResponse.Status == false)
+				throw new TPMRequestException("Unknown error while swap out (flush) operation");
+			
+			
 			
 			item.Status = KeyHandleItem.KeyHandleStatus.SwappedOut;
 			item.KeyHandle.ContextBlob = swapOutResponse.Parameters.GetValueOf<byte[]>("context_blob");
 		}
+
 
 		#endregion
 
@@ -228,10 +237,13 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			
 			//SRK
 			if(parentKey == null || parentKey == KeyHandle.KEY_SRK)
-				paramLoadKey.AddPrimitiveType("parent_handle", (uint)TPMKeyHandles.TPM_KH_SRK);
+			{
+				paramLoadKey.AddPrimitiveType("parent_key_srk", true);
+			}
 			else
 			{
-				paramLoadKey.AddPrimitiveType("parent_handle", IdentifierToHandle(parentKey, keyContext, keymanagerHelper));
+				paramLoadKey.AddPrimitiveType("parent_key_srk", false);
+				//paramLoadKey.AddPrimitiveType("parent_handle", IdentifierToHandle(parentKey, keyContext, keymanagerHelper));
 				paramLoadKey.AddPrimitiveType("parent_identifier", parentKey);
 			}
 				
@@ -262,8 +274,11 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 					_keyHandles.RemoveKeyHandle(keyHandleToRemove);
 				}
 							
-				_keyHandles.AddKeyHandle(new KeyHandleItem(responseLoadKey.Parameters.GetValueOf<KeyHandle>("handle"),
-					KeyHandleItem.KeyHandleStatus.SwappedIn, keyContext));
+				KeyHandleItem item = new KeyHandleItem(responseLoadKey.Parameters.GetValueOf<KeyHandle>("handle"),
+					KeyHandleItem.KeyHandleStatus.SwappedIn, keyContext);
+				_keyHandles.AddKeyHandle(item);
+					
+				AddNewItem(item);
 			}
 				
 												
@@ -299,6 +314,8 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 					SwapIn(keyHandleItem);
 				}
 				
+				_replacementAlgorithm.RegisterUsed(ItemToId(keyHandleItem).Value);
+				
 				return keyHandleItem.KeyHandle;
 				
 			}
@@ -312,6 +329,15 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		public LockContext AcquireLock()
 		{
 			return new LockContext(_lockTarget);
+		}
+		
+		/// <summary>
+		/// Ensures that a free key slot is available
+		/// </summary>
+		public void EnsureFreeSlot()
+		{
+			while(LoadedKeys >= AvailableKeySlots)
+				SwapOut();
 		}
 
 	}

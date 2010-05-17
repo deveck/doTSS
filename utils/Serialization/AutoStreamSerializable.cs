@@ -54,12 +54,10 @@ namespace Iaik.Utils.Serialization
 				
 				if (typeof(ITypedStreamSerializable).IsAssignableFrom (curType)) 
 				{
-					Console.WriteLine("{0} is ITyped", curType);
 					StreamHelper.WriteTypedStreamSerializable ((ITypedStreamSerializable)memberInfo.GetValue (this), sink);
 				}
 				else if (typeof(IStreamSerializable).IsAssignableFrom (curType))
 				{
-					Console.WriteLine("{0} is IStream", curType);
 					IStreamSerializable toSerialize = (IStreamSerializable)memberInfo.GetValue (this);
 					
 					if (toSerialize == null)
@@ -86,7 +84,7 @@ namespace Iaik.Utils.Serialization
 					throw new ArgumentException (string.Format ("Type '{0}' is not supported by AutoStreamSerializable", curType));
 			}
 		}
-
+		
 
 		public virtual void Read (Stream src)
 		{

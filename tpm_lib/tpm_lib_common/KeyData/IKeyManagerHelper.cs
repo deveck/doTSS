@@ -49,6 +49,11 @@ namespace Iaik.Tc.TPM.Library.Common.KeyData
 		KeyHandle IdentifierToHandle(string identifier);
 		
 		/// <summary>
+		/// Ensures that a free key slot is available
+		/// </summary>
+		void EnsureFreeSlot();
+		
+		/// <summary>
 		/// Returns the key data for the specified identifier
 		/// </summary>
 		/// <param name="identifier"></param>

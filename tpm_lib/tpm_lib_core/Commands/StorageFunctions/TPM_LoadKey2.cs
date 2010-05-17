@@ -91,7 +91,7 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 			requestBlob.WriteCmdHeader (TPMCmdTags.TPM_TAG_RQU_AUTH1_COMMAND, TPMOrdinals.TPM_ORD_LoadKey2);			
 			
 			//If not loaded load now
-			if(_params.GetValueOf<uint>("parent_handle") != (uint)TPMKeyHandles.TPM_KH_SRK)
+			if(_params.GetValueOf<bool>("parent_key_srk") == false)
 				_keyManager.LoadKey(_params.GetValueOf<string>("parent_identifier"));
 						
 			//To be inserted later
@@ -104,9 +104,11 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 
 			using(_keyManager.AcquireLock())
 			{
+				_keyManager.EnsureFreeSlot();
+			
 				uint tpmKeyHandle;
 				
-				if(_params.GetValueOf<uint>("parent_handle") == (uint)TPMKeyHandles.TPM_KH_SRK)
+				if(_params.GetValueOf<bool>("parent_key_srk"))
 					tpmKeyHandle = (uint)TPMKeyHandles.TPM_KH_SRK;
 				else
 					tpmKeyHandle = _keyManager.IdentifierToHandle(_params.GetValueOf<string>("parent_identifier")).Handle;
@@ -120,8 +122,14 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 
 			CheckResponseAuthInfo();			
 			
+			_responseBlob.SkipHeader();
+			uint loadedTpmHandle = _responseBlob.ReadUInt32();
+			KeyHandle loadedHandle = new KeyHandle(_params.GetValueOf<string>("key_identifier"), loadedTpmHandle);
 			
-			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_LoadKey2, new Parameters());
+			Parameters responseParams = new Parameters();
+			responseParams.AddPrimitiveType("handle", loadedHandle);
+			
+			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_LoadKey2, responseParams);
 		}
 		
 		
@@ -131,7 +139,7 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 				return null;
 		
 		
-			if(_params.GetValueOf<uint>("parent_handle") == (uint)TPMKeyHandles.TPM_KH_SRK)
+			if(_params.GetValueOf<bool>("parent_key_srk"))
 				return new HMACKeyInfo(HMACKeyInfo.HMACKeyType.SrkSecret, new Parameters());
 			else
 			{

@@ -34,6 +34,11 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			return _tpmContext.KeyManager.AcquireLock();
 		}
 		
+		public void EnsureFreeSlot()
+		{
+			_tpmContext.KeyManager.EnsureFreeSlot();
+		}
+		
 		public bool ContainsIdentifier (string identifier)
 		{
 			ContainsKeyRequest requestContainsKey = new ContainsKeyRequest(_ctx);

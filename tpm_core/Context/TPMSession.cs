@@ -234,9 +234,26 @@ namespace Iaik.Tc.TPM.Context
 			else if(keyInfo.KeyType == HMACKeyInfo.HMACKeyType.SrkSecret)
 				dictKey = PARAM_AUTH_SRK;
 			else if(keyInfo.KeyType == HMACKeyInfo.HMACKeyType.KeyUsageSecret)
-				dictKey = "usage_" + keyInfo.Parameters.GetValueOf<string>("identifier");
+			{
+				string friendlyName = keyInfo.Parameters.GetValueOf<string>("identifier");
+				bool identifierIsFriendlyName = keyInfo.Parameters.GetValueOf<bool>("identifierIsFriendlyName", false);
+				
+				if(!identifierIsFriendlyName)
+				{
+					if(_keystore.ContainsIdentifier(friendlyName) == false)
+						throw new ArgumentException(string.Format("Requests for secret for key not in keystore! identifier: {0}", 
+							friendlyName));
+
+					friendlyName = _keystore.IdentifierToFriendlyName(friendlyName);
+				}			
+			
+				dictKey = "usage_" + friendlyName;
+			}
 			else
 				throw new NotSupportedException(string.Format("The key type '{0}' is not supported", keyInfo.KeyType));
+			
+			
+			
 			
 			ProtectedPasswordStorage pw = GetValue<ProtectedPasswordStorage>("secret_" + dictKey, null);
 			if(pw == null)

@@ -101,5 +101,19 @@ namespace Iaik.Tc.TPM.Context
 			return this.BuildDoVerifyRequest (TPMCommandNames.TPM_CMD_GetCapability, parameters).Parameters.GetValueOf<uint> (CapabilityData.PARAM_PROP_MAX_SESSIONS);
 
 		}
+		
+		/// <summary>
+		/// The maximum number of keys the tpm can load at once
+		/// </summary>
+		/// <returns></returns>
+		public uint GetMaxKeys ()
+		{
+			Parameters parameters = new Parameters ();
+			parameters.AddPrimitiveType ("capArea", CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY);
+			parameters.AddPrimitiveType ("subCap", CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_KEYS);
+			
+			return this.BuildDoVerifyRequest (TPMCommandNames.TPM_CMD_GetCapability, parameters).Parameters.GetValueOf<uint> (CapabilityData.PARAM_PROP_MAX_KEYS);
+
+		}
 	}
 }

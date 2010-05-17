@@ -11,3 +11,41 @@ tpm_session_key tpm keystore_open SQLiteKeystore,file=keys.db
 secret_cache tpm add type=srk,secret=srk
 secret_cache tpm add type=key_usage,name=test,secret=my_secret
 tpm_session_key tpm create name=test,parent=srk,key_length=2048,key_usage=storage
+
+secret_cache tpm add type=key_usage,name=test2,secret=test2
+tpm_session_key tpm create name=test2,parent=test,key_length=2048,key_usage=storage
+
+secret_cache tpm add type=key_usage,name=test3,secret=test3
+tpm_session_key tpm create name=test3,parent=test2,key_length=2048,key_usage=storage
+
+secret_cache tpm add type=key_usage,name=test4,secret=test4
+tpm_session_key tpm create name=test4,parent=test3,key_length=2048,key_usage=storage
+
+secret_cache tpm add type=key_usage,name=test5,secret=test5
+tpm_session_key tpm create name=test5,parent=test4,key_length=2048,key_usage=storage
+
+secret_cache tpm add type=key_usage,name=test6,secret=test6
+tpm_session_key tpm create name=test6,parent=test5,key_length=2048,key_usage=storage
+
+secret_cache tpm add type=key_usage,name=test7,secret=test7
+tpm_session_key tpm create name=test7,parent=test6,key_length=2048,key_usage=storage
+
+secret_cache tpm add type=key_usage,name=test8,secret=test8
+tpm_session_key tpm create name=test8,parent=test7,key_length=2048,key_usage=storage
+
+secret_cache tpm add type=key_usage,name=test9,secret=test9
+tpm_session_key tpm create name=test9,parent=test8,key_length=2048,key_usage=storage
+
+secret_cache tpm add type=key_usage,name=test10,secret=test10
+tpm_session_key tpm create name=test10,parent=test9,key_length=2048,key_usage=storage
+
+secret_cache tpm add type=key_usage,name=test11,secret=test11
+tpm_session_key tpm create name=test11,parent=test10,key_length=2048,key_usage=storage
+
+secret_cache tpm add type=key_usage,name=test12,secret=test12
+tpm_session_key tpm create name=test12,parent=test11,key_length=2048,key_usage=storage
+
+secret_cache tpm add type=key_usage,name=test13,secret=test13
+tpm_session_key tpm create name=test13,parent=test12,key_length=2048,key_usage=storage
+
+tpm_session_key tpm keystore_list

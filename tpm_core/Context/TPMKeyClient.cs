@@ -152,6 +152,7 @@ namespace Iaik.Tc.TPM.Context
 			paramsCreateWrapKey.AddPrimitiveType("num_primes", (uint)0);
 			
 			Parameters parameters = new Parameters();
+			parameters.AddPrimitiveType("identifierIsFriendlyName", true);
 			parameters.AddPrimitiveType("identifier", friendlyName);
 			
 			ProtectedPasswordStorage authUsage = _tpmSession.RequestSecret(

@@ -14,9 +14,7 @@ namespace Iaik.Tc.TPM.Library.Common.KeyData
 	/// and load a given key hierachy
 	/// </summary>
 	public interface IKeyManager
-	{
-
-		
+	{	
 		
 		/// <summary>
 		/// Checks if the specified key is loaded, if not 
@@ -44,5 +42,10 @@ namespace Iaik.Tc.TPM.Library.Common.KeyData
 		/// </summary>
 		/// <returns></returns>
 		LockContext AcquireLock();
+		
+		/// <summary>
+		/// Ensures that a free key slot is available
+		/// </summary>
+		void EnsureFreeSlot();
 	}
 }

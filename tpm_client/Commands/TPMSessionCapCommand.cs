@@ -17,7 +17,7 @@ namespace Iaik.Tc.TPM.Commands
             {
                 return @"tpm_session_cap Args: [local_alias] [cap_type]
     Specify the tpm to use by [local_alias]. These aliases can be defined using the tpm_select command
-    Returns the capability specified by cap_type by one of these values: tpm_version, pcr_count, max_authsess, max_transess, max_sessions";
+    Returns the capability specified by cap_type by one of these values: tpm_version, pcr_count, max_authsess, max_transess, max_sessions, max_keys";
             }
         }
 
@@ -81,6 +81,11 @@ namespace Iaik.Tc.TPM.Commands
 			{
         		uint maxSessions = tpmSessions[localAlias].CapabilityClient.GetMaxSessions ();
         		_console.Out.WriteLine ("TPM '{0}' supports #{1} sessions", localAlias, maxSessions);
+			}
+			else if (capCommand == "max_keys")
+			{
+        		uint maxKeys = tpmSessions[localAlias].CapabilityClient.GetMaxKeys();
+        		_console.Out.WriteLine ("TPM '{0}' supports #{1} keys", localAlias, maxKeys);
 			}
 			else
         		_console.Out.WriteLine ("Error, unknown cap_type '{0}'", commandline[1]);
