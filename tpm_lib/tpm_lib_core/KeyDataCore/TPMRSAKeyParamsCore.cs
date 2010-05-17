@@ -36,14 +36,21 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 			return rsaKeyParams;
 		}
 		
+		public static TPMRSAKeyParamsCore CreateFromTPMBlob(TPMBlob blob)
+		{
+			TPMRSAKeyParamsCore keyParams = new TPMRSAKeyParamsCore();
+			keyParams.ReadFromTpmBlob(blob);
+			return keyParams;
+		}
+		
 		private TPMRSAKeyParamsCore()
 		{
 		}
 		
 			
-		public TPMRSAKeyParamsCore (TPMBlob src)
+		public TPMRSAKeyParamsCore (Stream src)
 		{
-			ReadFromTpmBlob (src);
+			Read(src);
 		}
 		
 		#region ITPMBlobReadable implementation

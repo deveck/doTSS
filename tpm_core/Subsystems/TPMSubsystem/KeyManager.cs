@@ -258,7 +258,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				KeyHandleItem keyHandleToRemove = _keyHandles.FindKeyHandleItem(identifier, keyContext);
 				if(keyHandleToRemove != null)
 				{
-					keyHandleItem.LoadedEvt.Set();
+					keyHandleToRemove.LoadedEvt.Set();
 					_keyHandles.RemoveKeyHandle(keyHandleToRemove);
 				}
 							

@@ -120,6 +120,7 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 
 			CheckResponseAuthInfo();			
 			
+			
 			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_LoadKey2, new Parameters());
 		}
 		

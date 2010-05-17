@@ -32,7 +32,7 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 		#region ITPMBlobReadable implementation
 		public void ReadFromTpmBlob (TPMBlob blob)
 		{
-			_keyParams = new TPMKeyParamsCore (blob);
+			_keyParams = TPMKeyParamsCore.CreateFromTPMBlob(blob);
 			_publicKey = TPMStorePubkeyCore.CreateFromTpmBlob (blob);
 		}
 		

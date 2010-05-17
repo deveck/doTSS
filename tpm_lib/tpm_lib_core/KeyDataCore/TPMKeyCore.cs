@@ -68,7 +68,7 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 			_keyUsage = (TPMKeyUsage)blob.ReadUInt16 ();
 			_keyFlags = (TPMKeyFlags)blob.ReadUInt32 ();
 			_authDataUsage = (TPMAuthDataUsage)blob.ReadByte ();
-			_algorithmParams = new TPMKeyParamsCore (blob);
+			_algorithmParams = TPMKeyParamsCore.CreateFromTPMBlob (blob);
 			
 			uint pcrInfoSize = blob.ReadUInt32 ();
 			/*byte[] pcrInfo =*/ blob.ReadBytes ((int)pcrInfoSize);

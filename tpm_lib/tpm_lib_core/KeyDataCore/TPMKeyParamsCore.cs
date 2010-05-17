@@ -29,13 +29,20 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 			return keyParamsCore;
 		}
 		
+		public static TPMKeyParamsCore CreateFromTPMBlob ( TPMBlob blob)
+		{
+			TPMKeyParamsCore keyParams = new TPMKeyParamsCore();
+			keyParams.ReadFromTpmBlob(blob);
+			return keyParams;
+		}
+		
 		private TPMKeyParamsCore ()
 		{
 		}
 		
-		public TPMKeyParamsCore (TPMBlob src)
+		public TPMKeyParamsCore (Stream src)
 		{
-			ReadFromTpmBlob (src);
+			Read(src);
 		}
 		
 		#region ITPMBlobReadable implementation
@@ -53,7 +60,7 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 			using (TPMBlob paramSrc = new TPMBlob (paramsData))
 			{
 				if (_algorithmId == TPMAlgorithmId.TPM_ALG_RSA)
-					_params = new TPMRSAKeyParamsCore (paramSrc);
+					_params = TPMRSAKeyParamsCore.CreateFromTPMBlob(paramSrc);
 				else if (_algorithmId == TPMAlgorithmId.TPM_ALG_AES128 ||
 					_algorithmId == TPMAlgorithmId.TPM_ALG_AES192 ||
 					_algorithmId == TPMAlgorithmId.TPM_ALG_AES256)
