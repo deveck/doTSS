@@ -8,8 +8,8 @@ namespace Iaik.Tc.TPM.Library.Common.KeyData
 {
 	
 	
-
-	public class TPMKeyParams : AutoStreamSerializable
+	[TypedStreamSerializable("TPMKeyParams")]
+	public class TPMKeyParams : AutoStreamSerializable, ITypedParameter
 	{
 
 		[SerializeMe(0)]

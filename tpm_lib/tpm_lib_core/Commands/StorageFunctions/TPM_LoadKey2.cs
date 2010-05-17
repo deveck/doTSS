@@ -91,7 +91,8 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 			requestBlob.WriteCmdHeader (TPMCmdTags.TPM_TAG_RQU_AUTH1_COMMAND, TPMOrdinals.TPM_ORD_LoadKey2);			
 			
 			//If not loaded load now
-			_keyManager.LoadKey(_params.GetValueOf<string>("parent_identifier"));
+			if(_params.GetValueOf<uint>("parent_handle") != (uint)TPMKeyHandles.TPM_KH_SRK)
+				_keyManager.LoadKey(_params.GetValueOf<string>("parent_identifier"));
 						
 			//To be inserted later
 			requestBlob.WriteUInt32 (0);
@@ -103,7 +104,12 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 
 			using(_keyManager.AcquireLock())
 			{
-				uint tpmKeyHandle = _keyManager.IdentifierToHandle(_params.GetValueOf<string>("key_identifier")).Handle;
+				uint tpmKeyHandle;
+				
+				if(_params.GetValueOf<uint>("parent_handle") == (uint)TPMKeyHandles.TPM_KH_SRK)
+					tpmKeyHandle = (uint)TPMKeyHandles.TPM_KH_SRK;
+				else
+					tpmKeyHandle = _keyManager.IdentifierToHandle(_params.GetValueOf<string>("parent_identifier")).Handle;
 				
 				//Write key handle to the first position after the header
 				requestBlob.SkipHeader();
@@ -114,7 +120,7 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 
 			CheckResponseAuthInfo();			
 			
-			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_TakeOwnership, new Parameters());
+			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_LoadKey2, new Parameters());
 		}
 		
 		

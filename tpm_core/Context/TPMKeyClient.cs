@@ -156,6 +156,10 @@ namespace Iaik.Tc.TPM.Context
 			
 			ProtectedPasswordStorage authUsage = _tpmSession.RequestSecret(
 				new HMACKeyInfo(HMACKeyInfo.HMACKeyType.KeyUsageSecret, parameters));
+			
+			if(authUsage.Hashed == false)
+				authUsage.Hash();
+				
 			authUsage.DecryptHash();
 			paramsCreateWrapKey.AddPrimitiveType("usage_auth", authUsage.HashValue);
 			

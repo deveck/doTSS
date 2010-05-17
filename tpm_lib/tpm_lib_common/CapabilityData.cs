@@ -172,7 +172,8 @@ namespace Iaik.Tc.TPM.Library.Common
 			
 		}
 		
-		public class TPMVersion : AutoStreamSerializable
+		[TypedStreamSerializable("TPMVersion")]
+		public class TPMVersion : AutoStreamSerializable, ITypedParameter
 		{
 			[SerializeMe(0)]
 			protected byte _major;
@@ -209,6 +210,12 @@ namespace Iaik.Tc.TPM.Library.Common
 			public TPMVersion ()
 			{
 			}
+			
+			public override void Write (Stream sink)
+			{
+				base.Write (sink);
+			}
+
 		}
 	}
 }

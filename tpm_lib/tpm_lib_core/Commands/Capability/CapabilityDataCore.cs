@@ -4,6 +4,7 @@ using Iaik.Tc.TPM.Library.Common;
 using Iaik.Tc.TPM.Lowlevel.Data;
 using Iaik.Utils;
 using Iaik.Utils.Serialization;
+using System.IO;
 
 namespace Iaik.Tc.TPM.Library.Commands
 {
@@ -41,6 +42,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 			
 		}
 		
+		[TypedStreamSerializable("TPMVersion")]
 		public class TPMVersionCore : CapabilityData.TPMVersion, ITPMBlobReadable, ITPMBlobWritable
 		{
 			/// <summary>
@@ -69,13 +71,20 @@ namespace Iaik.Tc.TPM.Library.Commands
 				return version;
 			}
 			
+			public static TPMVersionCore CreateFromTPMBlob(TPMBlob blob)
+			{
+				TPMVersionCore version = new TPMVersionCore();
+				version.ReadFromTpmBlob(blob);
+				return version;
+			}
+			
 			private TPMVersionCore ()
 			{
 			}
 			
-			internal TPMVersionCore (TPMBlob blob)
+			public TPMVersionCore (Stream src)
 			{
-				ReadFromTpmBlob(blob);
+				Read(src);
 			}
 			
 			#region ITpmBlobReadable implementation

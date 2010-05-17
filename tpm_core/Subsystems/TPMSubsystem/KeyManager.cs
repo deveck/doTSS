@@ -12,6 +12,7 @@ using Iaik.Tc.TPM.Keystore;
 using Iaik.Tc.TPM.Library.Common;
 using Iaik.Tc.TPM.Library.Common.Handles;
 using System.Threading;
+using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 
 
 namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
@@ -135,7 +136,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		/// <param name="identifier"></param>
 		/// <param name="keyContext">Specifies the context in which an already loaded key can be used.
 		/// If a key has already been loaded in another context it is not allowed to use this key</param>
-		public void LoadKey(string identifier, object keyContext, IKeyManagerHelper keymanagerHelper)
+		public void LoadKey(string identifier, object keyContext, IKeyManagerHelper keymanagerHelper, ICommandAuthorizationHelper commandAuthHelper)
 		{
 			KeyHandleItem keyHandleItem;
 			
@@ -146,7 +147,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			
 			if(keyHandleItem == null)
 			{
-				InternalLoadKey(identifier, keyContext, keymanagerHelper);
+				InternalLoadKey(identifier, keyContext, keymanagerHelper, commandAuthHelper);
 			}
 			else
 			{
@@ -167,7 +168,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		/// <param name="keyContext"></param>
 		/// <param name="keystore"></param>
 		/// <returns></returns>
-		private string InternalLoadKey(string identifier, object keyContext, IKeyManagerHelper keymanagerHelper)
+		private string InternalLoadKey(string identifier, object keyContext, IKeyManagerHelper keymanagerHelper, ICommandAuthorizationHelper commandAuthHelper)
 		{
 			if(identifier == KeyHandle.KEY_SRK)
 				return null;			   
@@ -219,14 +220,14 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		
 		
 			string parentKey = keymanagerHelper.FindParentKey(identifier);
-			InternalLoadKey(parentKey, keyContext, keymanagerHelper);
+			InternalLoadKey(parentKey, keyContext, keymanagerHelper, commandAuthHelper);
 			
 			Parameters paramLoadKey = new Parameters();
 			
 			// Load the key
 			
 			//SRK
-			if(parentKey == null)
+			if(parentKey == null || parentKey == KeyHandle.KEY_SRK)
 				paramLoadKey.AddPrimitiveType("parent_handle", (uint)TPMKeyHandles.TPM_KH_SRK);
 			else
 			{
@@ -238,7 +239,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			paramLoadKey.AddPrimitiveType("key_blob", keymanagerHelper.GetKeyBlob(identifier));
 				
 			TPMCommandRequest requestLoadKey = new TPMCommandRequest(TPMCommandNames.TPM_CMD_LoadKey2, paramLoadKey);
-			TPMCommandResponse responseLoadKey = _tpmContext.TPM.Process(requestLoadKey);
+			TPMCommandResponse responseLoadKey = _tpmContext.TPM.Process(requestLoadKey, commandAuthHelper, keymanagerHelper);
 			
 			if(responseLoadKey.Status == false)
 			{

@@ -64,7 +64,7 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 		#region ITPMBlobReadable implementation
 		public void ReadFromTpmBlob (TPMBlob blob)
 		{
-			_version = new CapabilityDataCore.TPMVersionCore (blob);
+			_version = CapabilityDataCore.TPMVersionCore.CreateFromTPMBlob (blob);
 			_keyUsage = (TPMKeyUsage)blob.ReadUInt16 ();
 			_keyFlags = (TPMKeyFlags)blob.ReadUInt32 ();
 			_authDataUsage = (TPMAuthDataUsage)blob.ReadByte ();
@@ -73,7 +73,7 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 			uint pcrInfoSize = blob.ReadUInt32 ();
 			/*byte[] pcrInfo =*/ blob.ReadBytes ((int)pcrInfoSize);
 			
-			_pubKey = new TPMStorePubkeyCore (blob);
+			_pubKey = TPMStorePubkeyCore.CreateFromTpmBlob (blob);
 			
 			uint encDataSize = blob.ReadUInt32 ();
 			_encData = blob.ReadBytes ((int)encDataSize);

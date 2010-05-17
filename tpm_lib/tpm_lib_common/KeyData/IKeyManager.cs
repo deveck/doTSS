@@ -4,6 +4,7 @@
 using System;
 using Iaik.Utils.Locking;
 using Iaik.Tc.TPM.Keystore;
+using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 
 namespace Iaik.Tc.TPM.Library.Common.KeyData
 {
@@ -24,7 +25,7 @@ namespace Iaik.Tc.TPM.Library.Common.KeyData
 		/// <param name="identifier"></param>
 		/// <param name="keyContext">Specifies the context in which an already loaded key can be used.
 		/// If a key has already been loaded in another context it is not allowed to use this key</param>
-		void LoadKey(string identifier, object keyContext, IKeyManagerHelper keymanagerHelper);
+		void LoadKey(string identifier, object keyContext, IKeyManagerHelper keymanagerHelper, ICommandAuthorizationHelper commandAuthHelper);
 		
 		/// <summary>
 		/// Returns the tpm handle of the given key identifier,

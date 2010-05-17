@@ -8,6 +8,7 @@ using Iaik.Tc.TPM.Library.Common.KeyData;
 using Iaik.Tc.TPM.Context;
 using Iaik.Utils.Locking;
 using Iaik.Tc.TPM.Subsystems.TPMClient;
+using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 
 namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {
@@ -18,7 +19,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		#region IKeyManagerHelper implementation
 		public void LoadKey (string identifier)
 		{
-			_tpmContext.KeyManager.LoadKey(identifier, _tpmContext, this);
+			_tpmContext.KeyManager.LoadKey(identifier, _tpmContext, this, _commandAuthHelper);
 		}
 		
 		
@@ -84,11 +85,14 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		/// </summary>
 		private int _tpmSessionIdentifier;
 		
-		public KeyManagerHelper (ServerContext ctx, TPMContext tpmContext, int tpmSessionIdentifier)
+		private ICommandAuthorizationHelper _commandAuthHelper;
+		
+		public KeyManagerHelper (ServerContext ctx, TPMContext tpmContext, int tpmSessionIdentifier, ICommandAuthorizationHelper commandAuthHelper)
 		{
 			_ctx = ctx;
 			_tpmContext = tpmContext;
 			_tpmSessionIdentifier = tpmSessionIdentifier;
+			_commandAuthHelper = commandAuthHelper;
 		}
 
 	}

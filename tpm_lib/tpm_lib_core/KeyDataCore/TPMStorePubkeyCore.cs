@@ -3,6 +3,7 @@ using System;
 using Iaik.Tc.TPM.Library.Common.KeyData;
 using Iaik.Utils.Serialization;
 using Iaik.Tc.TPM.Lowlevel.Data;
+using System.IO;
 
 namespace Iaik.Tc.TPM.Library.KeyDataCore
 {
@@ -21,13 +22,20 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 			return pubkey;
 		}
 		
+		public static TPMStorePubkeyCore CreateFromTpmBlob(TPMBlob blob)
+		{
+			TPMStorePubkeyCore pubkey = new TPMStorePubkeyCore();
+			pubkey.ReadFromTpmBlob(blob);
+			return pubkey;
+		}
+		
 		private TPMStorePubkeyCore()
 		{
 		}
 		
-		public TPMStorePubkeyCore (TPMBlob blob)
+		public TPMStorePubkeyCore (Stream src)
 		{
-			ReadFromTpmBlob (blob);
+			Read(src);
 		}
 		
 		#region ITPMBlobReadable implementation

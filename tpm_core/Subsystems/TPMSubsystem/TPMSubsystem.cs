@@ -126,9 +126,10 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				//because the user might be asked to authenticate several commands
 				//lock (tpmContext)
 				//{
+					ICommandAuthorizationHelper commandAuthHelper = new CommandAuthorizationHelper(ServerContext, requestContext.Request.TPMIdentifier, tpmContext);
 					commandResponse = tpmContext.TPM.Process (requestContext.Request.CommandRequest, 
-						new CommandAuthorizationHelper(ServerContext, requestContext.Request.TPMIdentifier, tpmContext),
-						new KeyManagerHelper(ServerContext, tpmContext, requestContext.Request.TPMIdentifier));
+						commandAuthHelper,
+						new KeyManagerHelper(ServerContext, tpmContext, requestContext.Request.TPMIdentifier, commandAuthHelper));
 				//}
 			
 				response.CommandResponse = commandResponse;

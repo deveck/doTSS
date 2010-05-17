@@ -56,6 +56,11 @@ namespace Iaik.Utils.Hash
 			get { return _hash; }	
 		}
 		
+		public bool Hashed
+		{
+			get{ return _protectedHash != null; }
+		}
+		
 		public ProtectedPasswordStorage ()
 			: this("SHA1")
 		{

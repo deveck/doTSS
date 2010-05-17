@@ -10,7 +10,7 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 {
 	
 	
-	
+	[TypedStreamSerializable("TPMKeyParams")]
 	public class TPMKeyParamsCore : TPMKeyParams, ITPMBlobReadable, ITPMBlobWritable
 	{
 		

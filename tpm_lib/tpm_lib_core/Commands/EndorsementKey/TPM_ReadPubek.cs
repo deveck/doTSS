@@ -38,7 +38,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 			responseBlob.SkipHeader ();
 			
 			long posStart = responseBlob.Position;
-			TPMPubkeyCore pubkey = new TPMPubkeyCore (responseBlob);
+			TPMPubkeyCore pubkey = TPMPubkeyCore.CreateFromTPMBlob(responseBlob);
 			long posEnd = responseBlob.Position;
 			
 			Digest digest = new Digest (responseBlob, 20);

@@ -100,7 +100,7 @@ Global
 		{09F3F97D-CCE4-473E-AAED-21E80C9DBA54} = {B733EB5C-A476-49DE-9173-4EE283EBC071}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = tpm_client\tpm_client.csproj
+		StartupItem = tpm_server\tpm_server.csproj
 		Policies = $0
 		$0.StandardHeader = $1
 		$1.Text = @Author: Andreas Reiter <andreas.reiter@student.tugraz.at>\nAuthor: Georg Neubauer <georg.neubauer@student.tugraz.at>
