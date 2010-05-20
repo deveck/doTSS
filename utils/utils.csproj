@@ -91,6 +91,7 @@
     <Compile Include="Locking\LockContext.cs" />
     <Compile Include="Locking\LockProvider.cs" />
     <Compile Include="Hash\HMACProvider.cs" />
+    <Compile Include="BitMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
