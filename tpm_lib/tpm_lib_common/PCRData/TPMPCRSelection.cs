@@ -16,9 +16,8 @@ namespace Iaik.Tc.TPM.Library.Common.PCRData
 		[SerializeMe(0)]
 		protected BitMap _pcrSelection;
 		
-		public TPMPCRSelection (BitMap pcrSelection)
+		protected TPMPCRSelection ()
 		{
-			_pcrSelection = pcrSelection;
 		}
 		
 		public TPMPCRSelection(Stream src)

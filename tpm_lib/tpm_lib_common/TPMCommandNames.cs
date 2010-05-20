@@ -42,12 +42,8 @@ namespace Iaik.Tc.TPM.Library.Common
 		#region StorageFunctions
 		public const string TPM_CMD_CreateWrapKey = "TPM_CMD_CreateWrapKey";
 		public const string TPM_CMD_LoadKey2 = "TPM_CMD_LoadKey2";
+		public const string TPM_CMD_Seal = "TPM_CMD_Seal";
 		#endregion
-		
-		// TODO: tbd. DELETE!!!
-#region balbla
-		public const String r ="t";
-#endregion	
-		
+				
 	}
 }

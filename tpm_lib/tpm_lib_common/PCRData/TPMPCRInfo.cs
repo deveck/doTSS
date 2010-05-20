@@ -15,9 +15,8 @@ namespace Iaik.Tc.TPM.Library.Common.PCRData
 		protected TPMPCRSelection _pcrSelection;
 		
 
-		protected TPMPCRInfo (TPMPCRSelection pcrSelection)
+		protected TPMPCRInfo ()
 		{
-			_pcrSelection = pcrSelection;
 		}
 		
 		public TPMPCRInfo(Stream src)

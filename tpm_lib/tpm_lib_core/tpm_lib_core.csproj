@@ -66,6 +66,7 @@
     <Compile Include="Commands\StorageFunctions\TPM_CreateWrapKey.cs" />
     <Compile Include="Commands\Authorization\TPM_OSAP.cs" />
     <Compile Include="Commands\StorageFunctions\TPM_LoadKey2.cs" />
+    <Compile Include="Commands\StorageFunctions\TPM_Seal.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />

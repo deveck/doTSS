@@ -65,11 +65,14 @@
     <Compile Include="KeyData\KeyHandle.cs" />
     <Compile Include="KeyData\IKeyManagerHelper.cs" />
     <Compile Include="KeyData\IKeyManager.cs" />
+    <Compile Include="PCRData\TPMPCRInfo.cs" />
+    <Compile Include="PCRData\TPMPCRSelection.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="interface\" />
     <Folder Include="KeyData\" />
     <Folder Include="Handles\" />
+    <Folder Include="PCRData\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
