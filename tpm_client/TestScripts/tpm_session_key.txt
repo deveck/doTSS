@@ -5,8 +5,8 @@
 
 @include ./authenticated_environment.txt
 @include ./select_tpm.txt
+@include ./keystore.txt
 
-tpm_session_key tpm keystore_open SQLiteKeystore,file=keys.db
 
 secret_cache tpm add type=srk,secret=srk
 secret_cache tpm add type=key_usage,name=test,secret=my_secret
@@ -49,3 +49,8 @@ secret_cache tpm add type=key_usage,name=test13,secret=test13
 tpm_session_key tpm create name=test13,parent=test12,key_length=2048,key_usage=storage
 
 tpm_session_key tpm keystore_list
+
+secret_cache tpm add type=seal,name=test13,secret=bubu
+tpm_session_seal tpm name=test13,pcr=1|2|5,data_input=embedded,data_output=console string1 string2 string3  string4
+tpm_session_seal tpm name=test13,pcr=1|2|5,data_input=embedded,data_output=file,output_file=test.txt string1 string2 string3  string4
+tpm_session_seal tpm name=test13,pcr=1|2|5,data_input=embedded,data_output=file,output_data_format=hex,output_file=test2.txt string1 string2 string3  string4

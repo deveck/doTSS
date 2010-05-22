@@ -12,7 +12,7 @@ namespace Iaik.Tc.TPM.Library.Common.KeyData
 	/// Describes the parameters of an RSA key
 	/// </summary>
 	[TypedStreamSerializable("TPMRSAKeyParams")]
-	public class TPMRSAKeyParams : AutoStreamSerializable, ITypedStreamSerializable
+	public class TPMRSAKeyParams : AutoStreamSerializable, ITypedStreamSerializable, ITPMAlgorithmSpecificKeyParams
 	{
 		[SerializeMe(0)]
 		protected uint _keyLength;
@@ -23,6 +23,16 @@ namespace Iaik.Tc.TPM.Library.Common.KeyData
 		public uint KeyLength
 		{
 			get { return _keyLength; }
+		}
+		
+		public uint InputBlockSize
+		{
+			get{ return _keyLength / 8; }
+		}
+		
+		public uint OutputBlockSize
+		{
+			get{ return InputBlockSize; }
 		}
 		
 		[SerializeMe(1)]

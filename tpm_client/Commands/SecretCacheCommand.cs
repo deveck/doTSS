@@ -31,6 +31,8 @@ namespace Iaik.Tc.TPM.Commands
                                Adds or changes the cached SRK secret
                                
                                type=key_usage,name=<friendly name>[,secret=<secret>]
+                               
+                               type=seal,name=<friendly name>[,secret=<secret>]
                                Adds or changes the usage secret for the key with the supplied friendly name
                                
                          If no secret argument is supplied, the secret is requested from the user (recommended method)
@@ -156,6 +158,18 @@ namespace Iaik.Tc.TPM.Commands
 					dictKey = "usage_" + arguments["name"];
 					hmacKeyInfoParams.AddPrimitiveType("identifier", arguments["name"]);
 					keyInfo = new HMACKeyInfo(HMACKeyInfo.HMACKeyType.KeyUsageSecret, hmacKeyInfoParams);
+				}
+				else if(dictKey == "seal")
+				{
+					if(arguments.ContainsKey("name") == false)
+					{
+						_console.Out.WriteLine("Error: seal requires name of key");
+						return;
+					}
+					
+					dictKey = "seal_" + arguments["name"];
+					hmacKeyInfoParams.AddPrimitiveType("identifier", arguments["name"]);
+					keyInfo = new HMACKeyInfo(HMACKeyInfo.HMACKeyType.SealAuth, hmacKeyInfoParams);
 				}
 				else
 				{

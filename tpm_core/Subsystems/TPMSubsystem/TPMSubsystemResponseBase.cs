@@ -23,7 +23,12 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			/// <summary>
 			/// The last request wanted to use a tpm identifier which was not valid (not selected) 
 			/// </summary>
-			TPMIdentifierNotValid
+			TPMIdentifierNotValid,
+			
+			/// <summary>
+			///The transmitted key identifier is not valid and can not be used
+			/// </summary>
+			NotAValidKeyIdentifier
         }
 
 		protected override string InternalErrorText 
@@ -34,6 +39,8 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 					return "The specified TPM device could not be found";
 				else if (_errorCode.Value == (int)ErrorCodeEnum.TPMIdentifierNotValid)
 					return "The specified TPM identifier is not valid";
+				else if(_errorCode.Value == (int)ErrorCodeEnum.NotAValidKeyIdentifier)
+					return "The specified key identifier is not valid and can not be used";
 				else
 					return null;
 			}

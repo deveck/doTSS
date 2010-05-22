@@ -67,6 +67,9 @@
     <Compile Include="Commands\Authorization\TPM_OSAP.cs" />
     <Compile Include="Commands\StorageFunctions\TPM_LoadKey2.cs" />
     <Compile Include="Commands\StorageFunctions\TPM_Seal.cs" />
+    <Compile Include="PCRDataCore\TPMPCRInfoCore.cs" />
+    <Compile Include="PCRDataCore\TPMPCRSelectionCore.cs" />
+    <Compile Include="Storage\TPMStoredDataCore.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />
@@ -85,6 +88,8 @@
     <Folder Include="Hash\" />
     <Folder Include="Commands\SessionManagement\" />
     <Folder Include="Commands\StorageFunctions\" />
+    <Folder Include="PCRDataCore\" />
+    <Folder Include="Storage\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_lowlvl\tpm_lowlvl.csproj">

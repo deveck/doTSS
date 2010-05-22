@@ -76,12 +76,8 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 		{
 			base.Init (param, tpmProvider);
 			
-			_digest = null;
-			
-			using(MemoryStream src = new MemoryStream(param.GetValueOf<byte[]>("key_blob")))
-			{
-				_tpmKey =  TPMKeyCore.CreateFromStream(src);
-			}
+			_digest = null;			
+			_tpmKey =  TPMKeyCore.CreateFromBytes(param.GetValueOf<byte[]>("key_blob"));
 		}
 
 

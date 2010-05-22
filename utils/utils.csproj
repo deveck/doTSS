@@ -92,6 +92,9 @@
     <Compile Include="Locking\LockProvider.cs" />
     <Compile Include="Hash\HMACProvider.cs" />
     <Compile Include="BitMap.cs" />
+    <Compile Include="IO\TextReaderStream.cs" />
+    <Compile Include="IO\TextWriterStream.cs" />
+    <Compile Include="IO\HexFilterStream.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -131,5 +134,6 @@
     <Folder Include="Hash\" />
     <Folder Include="SwapUtils\" />
     <Folder Include="Locking\" />
+    <Folder Include="IO\" />
   </ItemGroup>
 </Project>

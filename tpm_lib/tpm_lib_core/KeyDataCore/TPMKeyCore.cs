@@ -21,6 +21,15 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 			return tpmKey;
 		}
 	
+	
+		public static TPMKeyCore CreateFromBytes(byte[] data)
+		{
+			using(MemoryStream src = new MemoryStream(data))
+			{
+				return TPMKeyCore.CreateFromStream(src);
+			}
+		}
+	
 		public static TPMKeyCore Create (CapabilityDataCore.TPMVersionCore version, TPMKeyUsage keyUsage, TPMKeyFlags keyFlags, 
 			TPMAuthDataUsage authDataUsage, TPMKeyParamsCore algorithmParams, TPMStorePubkeyCore pubkey, byte[] encdata)
 		{

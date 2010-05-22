@@ -15,7 +15,7 @@ namespace Iaik.Tc.TPM.Library.KeyDataCore
 	{
 		
 		public static TPMKeyParamsCore Create (TPMAlgorithmId algorithmId, TPMEncScheme encScheme, TPMSigScheme sigScheme,
-			ITypedStreamSerializable algorithmKeyParams)
+			ITPMAlgorithmSpecificKeyParams algorithmKeyParams)
 		{
 			if (algorithmId == TPMAlgorithmId.TPM_ALG_RSA && !(algorithmKeyParams is TPMRSAKeyParamsCore))
 				throw new ArgumentException (string.Format ("algorithm: {0} required TPMRSAKeyParamsCore", algorithmId));

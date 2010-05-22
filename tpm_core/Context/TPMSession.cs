@@ -11,6 +11,7 @@ using Iaik.Utils.Hash;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 using log4net;
 using Iaik.Tc.TPM.Keystore;
+using Iaik.Tc.TPM.Library.Common.PCRData;
 
 namespace Iaik.Tc.TPM.Context
 {
@@ -52,6 +53,13 @@ namespace Iaik.Tc.TPM.Context
 		/// Transmits the packets to the server
 		/// </summary>
 		private EndpointContext _ctx;
+
+		public EndpointContext EndpointCtx
+		{
+			get{ return _ctx; }
+		}
+
+
 
 		/// <summary>
 		/// Contains various parameters for this session (e.g. auth data)
@@ -141,6 +149,13 @@ namespace Iaik.Tc.TPM.Context
 			get{ return _keyClient; }
 		}
 		
+		/// <summary>
+		/// Provides a simple way of geting session-unique ids for general purpose
+		/// </summary>
+		private uint _currentHighestId = 0;
+		
+		private object _idLock = new object();
+		
 		public TPMSession (EndpointContext ctx, int sessionIdentifier, TPMClient tpmClient)
 		{
 			_ctx = ctx;
@@ -161,6 +176,24 @@ namespace Iaik.Tc.TPM.Context
 			TPMResponse response = request.TypedExecute ();
 			response.AssertTPMSuccess ();
 			return response.CommandResponse;
+		}
+
+		public TPMPCRSelection CreateEmptyPCRSelection()
+		{
+			return TPMPCRSelection.CreatePCRSelection(CapabilityClient.GetPCRCount());
+		}
+		
+		/// <summary>
+		/// Gets a session unique id. Once an id is taken for a session it will not appear twice in the same session
+		/// </summary>
+		/// <returns></returns>
+		public uint GetFreeId()
+		{
+			lock(_idLock)
+			{
+				_currentHighestId ++;
+				return _currentHighestId;
+			}
 		}
 
 		#region IDisposable implementation
@@ -248,6 +281,11 @@ namespace Iaik.Tc.TPM.Context
 				}			
 			
 				dictKey = "usage_" + friendlyName;
+			}
+			else if(keyInfo.KeyType == HMACKeyInfo.HMACKeyType.SealAuth)
+			{
+				string identifier = keyInfo.Parameters.GetValueOf<string>("identifier");
+				dictKey = "seal_" + identifier;
 			}
 			else
 				throw new NotSupportedException(string.Format("The key type '{0}' is not supported", keyInfo.KeyType));

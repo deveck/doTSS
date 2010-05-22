@@ -50,7 +50,19 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		{
 			get
 			{
-				return (uint)_keyHandles.FindKeyHandles(KeyHandleItem.KeyHandleStatus.SwappedIn).Count;
+				//return (uint)_keyHandles.FindKeyHandles(KeyHandleItem.KeyHandleStatus.SwappedIn).Count;
+				
+				Parameters listLoadedHandlesParameters = new Parameters ();
+				listLoadedHandlesParameters.AddPrimitiveType ("capArea", CapabilityData.TPMCapabilityArea.TPM_CAP_HANDLE);
+				listLoadedHandlesParameters.AddPrimitiveType ("handle_type", TPMResourceType.TPM_RT_KEY);
+				TPMCommandRequest listLoadedHandlesRequest = new TPMCommandRequest (TPMCommandNames.TPM_CMD_GetCapability, 
+					listLoadedHandlesParameters);
+				TPMCommandResponse response = _tpmContext.TPM.Process (listLoadedHandlesRequest);
+				
+				if (response.Status == false)
+					throw new Exception ("An unknown tpm exception while listing key handles");
+				return (uint)response.Parameters.GetValueOf<HandleList> ("handles").HandleCount;
+						
 			}
 		}
 		

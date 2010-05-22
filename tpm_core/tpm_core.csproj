@@ -134,6 +134,8 @@
     <Compile Include="Subsystems\TPMSubsystem\KeyManager.cs" />
     <Compile Include="Subsystems\TPMSubsystem\KeyManagerHelper.cs" />
     <Compile Include="Subsystems\TPMClient\ContainsKey.cs" />
+    <Compile Include="Context\SealBlockCipher.cs" />
+    <Compile Include="Subsystems\TPMSubsystem\KeyInfoRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">

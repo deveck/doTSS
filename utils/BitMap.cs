@@ -20,10 +20,20 @@ namespace Iaik.Utils
 		[SerializeMe(0)]
 		private byte[] _data;
 
-		
+		/// <summary>
+		/// Returns the raw data
+		/// </summary>
 		public byte[] Data
 		{
 			get{ return _data; }
+		}
+		
+		/// <summary>
+		/// Returns the number of usable bits in this bit map
+		/// </summary>
+		public int BitCount
+		{
+			get{ return _data.Length * 8;}
 		}
 		
 		/// <summary>
@@ -51,7 +61,7 @@ namespace Iaik.Utils
 		public void SetBitmap(bool value)
 		{
 			for(int i = 0; i<_data.Length; i++)
-				_data[i] = value?0xff:0;
+				_data[i] = value?(byte)0xff:(byte)0;
 		}
 		
 		/// <summary>
@@ -67,9 +77,9 @@ namespace Iaik.Utils
 			byte myVal;
 			
 			if(value)
-				_data[byteIndex] = (byte)(_data[byteIndex] | (1<<index));
+				_data[byteIndex] = (byte)(_data[byteIndex] | (1<<bitIndex));
 			else
-				_data[byteIndex] = (byte)(_data[byteIndex] & (0xfe<<index));
+				_data[byteIndex] = (byte)(_data[byteIndex] & (0xfe<<bitIndex));
 		}
 	}
 }

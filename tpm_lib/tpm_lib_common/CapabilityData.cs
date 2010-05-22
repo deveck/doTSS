@@ -211,6 +211,11 @@ namespace Iaik.Tc.TPM.Library.Common
 			{
 			}
 			
+			public TPMVersion(Stream src)
+			{
+				Read(src);
+			}
+			
 			public override void Write (Stream sink)
 			{
 				base.Write (sink);

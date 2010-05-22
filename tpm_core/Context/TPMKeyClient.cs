@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using Org.BouncyCastle.Crypto;
 using Iaik.Tc.TPM.Library.Common.KeyData;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
+using Iaik.Tc.TPM.Library.Common.PCRData;
 
 namespace Iaik.Tc.TPM.Context
 {
@@ -112,6 +113,23 @@ namespace Iaik.Tc.TPM.Context
 			get{ return _friendlyName; }
 		}
 		
+		/// <summary>
+		/// Retrieves all available informations about this key
+		/// </summary>
+		public TPMKey KeyInfo
+		{
+			get
+			{
+				KeyInfoRequest request = new KeyInfoRequest(_tpmSession.EndpointCtx);
+				request.TPMIdentifier = _tpmSession.SessionIdentifier;
+				request.KeyIdentifier = _keyIdentifier;
+				
+				KeyInfoResponse response = request.TypedExecute();
+				response.AssertResponse();
+				return response.TPMKey;
+			}
+		}
+		
 		public ClientKeyHandle(string friendlyName, string identifier, TPMSession tpmSession)
 		{
 			_friendlyName = friendlyName;
@@ -196,6 +214,63 @@ namespace Iaik.Tc.TPM.Context
 					
 				if(authUsage != null)
 					authUsage.ClearHash();
+			}
+		}
+		
+		
+		/// <summary>
+		/// Creates an IAsymmetricBlockCipher for sealing for this key. This is only valid for storage keys
+		/// </summary>
+		/// <param name="pcrSelection"> </param>
+		/// <returns></returns>
+		public IAsymmetricBlockCipher CreateSealBlockCipher(TPMPCRSelection pcrSelection)
+		{
+			return new SealBlockCipher(this, _tpmSession, pcrSelection);
+		}
+		
+		/// <summary>
+		/// Creates an IAsymmetricBlockCipher for sealing for this key. This is only valid for storage keys
+		/// </summary>
+		/// <param name="pcrSelection"> </param>
+		/// <returns></returns>
+		public IAsymmetricBlockCipher CreateSealBlockCipher(TPMPCRSelection pcrSelection, ProtectedPasswordStorage sealAuth)
+		{
+			return new SealBlockCipher(this, _tpmSession, pcrSelection, sealAuth);
+		}
+		
+		/// <summary>
+		/// Seals data to the specified pcr selection,
+		/// create a valid pcr selection with session.CreateEmptyPCRSelection
+		/// </summary>
+		/// <param name="pcrSelection"></param>
+		/// <param name="data">Data to seal</param>
+		/// <returns></returns>
+		public byte[] Seal(TPMPCRSelection pcrSelection, byte[] data)
+		{
+			Parameters paramsSeal = new Parameters();
+			paramsSeal.AddPrimitiveType("in_data", data);
+			paramsSeal.AddPrimitiveType("key", _keyIdentifier);
+			paramsSeal.AddValue("pcr_selection", pcrSelection);
+			
+			Parameters paramsSecret = new Parameters();
+			paramsSecret.AddPrimitiveType("identifier", FriendlyName);
+			ProtectedPasswordStorage authSeal = _tpmSession.RequestSecret(new HMACKeyInfo(HMACKeyInfo.HMACKeyType.SealAuth, paramsSecret));
+			
+			if(authSeal.Hashed == false)
+				authSeal.Hash();
+				
+			authSeal.DecryptHash();
+			paramsSeal.AddPrimitiveType("data_auth", authSeal.HashValue);
+			
+			try
+			{			
+				TPMCommandResponse sealResponse = BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_Seal, paramsSeal);
+				return sealResponse.Parameters.GetValueOf<byte[]>("data");
+			}
+			finally
+			{
+				if(authSeal != null)
+					authSeal.ClearHash();
 			}
 		}
 		

@@ -8,6 +8,7 @@ using Iaik.Utils;
 using Iaik.Tc.TPM.Keystore;
 using Iaik.Utils.Hash;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
+using Iaik.Tc.TPM.Library.Common.PCRData;
 
 namespace Iaik.Tc.TPM.Commands
 {
@@ -35,7 +36,7 @@ namespace Iaik.Tc.TPM.Commands
                                key_length={...,512,1024,2048,...},
                                key_usage={signing,storage,bind},
                                [key_flags={none,migratable}]
-                            
+                               
     	";    	
     
     
@@ -248,5 +249,6 @@ namespace Iaik.Tc.TPM.Commands
 			else
         		_console.Out.WriteLine ("Error, unknown command '{0}'", commandline[2]);
         }
+        
     }
 }

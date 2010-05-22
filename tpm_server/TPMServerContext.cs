@@ -98,7 +98,7 @@ namespace Iaik.Tc.TPM
 					
 					_logger.InfoFormat ("Flushing device '{0}'", device.TPMName);
 					foreach (TPMResourceType resourceType in new TPMResourceType[] {
-						TPMResourceType.TPM_RT_AUTH, TPMResourceType.TPM_RT_KEY, TPMResourceType.TPM_RT_TRANS })
+						TPMResourceType.TPM_RT_AUTH, TPMResourceType.TPM_RT_KEY})
 					{
 						Parameters listLoadedHandlesParameters = new Parameters ();
 						listLoadedHandlesParameters.AddPrimitiveType ("capArea", CapabilityData.TPMCapabilityArea.TPM_CAP_HANDLE);

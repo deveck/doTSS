@@ -67,12 +67,15 @@
     <Compile Include="KeyData\IKeyManager.cs" />
     <Compile Include="PCRData\TPMPCRInfo.cs" />
     <Compile Include="PCRData\TPMPCRSelection.cs" />
+    <Compile Include="Storage\TPMStoredData.cs" />
+    <Compile Include="KeyData\ITPMAlgorithmSpecificKeyParams.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="interface\" />
     <Folder Include="KeyData\" />
     <Folder Include="Handles\" />
     <Folder Include="PCRData\" />
+    <Folder Include="Storage\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

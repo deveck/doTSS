@@ -41,6 +41,10 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Mono.Security" />
+    <Reference Include="BouncyCastle.Crypto, Version=1.6.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\AuthenticationListCommand.cs" />
@@ -69,6 +73,7 @@
     <Compile Include="SecretRequest.cs" />
     <Compile Include="Commands\TPMSessionKeyCommand.cs" />
     <Compile Include="Commands\SecretCacheCommand.cs" />
+    <Compile Include="Commands\TPMSessionSealCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_core\tpm_core.csproj">

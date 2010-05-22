@@ -27,6 +27,11 @@ namespace Iaik.Tc.TPM.Library.Common.Handles
 			Read (src);
 		}
 		
+		public int HandleCount
+		{
+			get{ return _handles.Count;}
+		}
+		
 		#region IEnumerable implementation
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
 		{

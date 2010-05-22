@@ -43,6 +43,11 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 			/// The shared secret established when using OSAP
 			/// </summary>
 			SharedOSAPSecret,
+			
+			/// <summary>
+			/// Enc Auth value for sealed data
+			/// </summary>
+			SealAuth,
 		}
 		
 		[SerializeMe(0)]

@@ -46,12 +46,12 @@ namespace Iaik.Tc.TPM.Library.Common.KeyData
 		}
 		
 		[SerializeMe(3)]
-		protected ITypedStreamSerializable _params;
+		protected ITPMAlgorithmSpecificKeyParams _params;
 		
 		/// <summary>
 		/// Parameter information dependant upon the key algorithm
 		/// </summary>
-		public ITypedStreamSerializable Params
+		public ITPMAlgorithmSpecificKeyParams Params
 		{
 			get { return _params;}
 		}

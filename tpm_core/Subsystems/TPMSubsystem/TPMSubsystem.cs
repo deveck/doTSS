@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using Iaik.Tc.TPM.Library;
 using Iaik.Tc.TPM.Library.Common;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
+using Iaik.Tc.TPM.Library.KeyDataCore;
 
 namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {
@@ -65,7 +66,12 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			/// <summary>
 			/// Invalidates the passed tpm device identifier
 			/// </summary>
-			CloseTPMDevice
+			CloseTPMDevice,
+			
+			/// <summary>
+			/// Requests informations about a tpm key
+			/// </summary>
+			KeyInfo
 		}		
 		
 		public TPMSubsystem (EndpointContext context, IConnectionsConfiguration config)
@@ -82,6 +88,9 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			
 			_requestExecutionInfos.Add (TPMRequestEnum.SelectTPMDevice,
 				BuildRequestExecutionInfo<TPMSubsystem, SelectTPMRequest, SelectTPMResponse> (HandleSelectTPMRequest));
+				
+			_requestExecutionInfos.Add (TPMRequestEnum.KeyInfo,
+				BuildRequestExecutionInfo<TPMSubsystem, KeyInfoRequest, KeyInfoResponse> (HandleKeyInfoRequest));
 				
 		}
 		
@@ -200,6 +209,55 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			response.Execute ();
 		}
 		
+		/// <summary>
+		/// Retrieves informations about keys 
+		/// </summary>
+		/// <param name="subsystem"></param>
+		/// <param name="requestContext"></param>
+		private void HandleKeyInfoRequest (TPMSubsystem subsystem, RequestContext<KeyInfoRequest, KeyInfoResponse> requestContext)
+		{
+			
+				
+			TPMContext tpmContext;
+			KeyInfoResponse response;
+			
+			lock (_selectedTPMs)
+			{
+				if (_selectedTPMs.ContainsKey (requestContext.Request.TPMIdentifier) == false)
+				{
+					response = requestContext.CreateResponse ();
+					response.Succeeded = false;
+					response.SetKnownErrorCode (TPMSubsystemResponseBase.ErrorCodeEnum.TPMIdentifierNotValid);
+					response.Execute ();
+					return;
+				}
+				
+				tpmContext = _selectedTPMs[requestContext.Request.TPMIdentifier];
+			}
+			
+			if (!AssertUserAuthentication ("key_info_" + _selectedTPMs[requestContext.Request.TPMIdentifier].DeviceName, requestContext.CreateResponse ()))
+				return;
+			
+			KeyManagerHelper keyManagerHelper = new KeyManagerHelper(ServerContext, tpmContext, requestContext.Request.TPMIdentifier,
+				new CommandAuthorizationHelper(ServerContext, requestContext.Request.TPMIdentifier, tpmContext));
+			
+			if(keyManagerHelper.ContainsIdentifier(requestContext.Request.KeyIdentifier) == false)
+			{
+				response = requestContext.CreateResponse();
+				response.Succeeded = false;
+				response.SetKnownErrorCode(TPMSubsystemResponseBase.ErrorCodeEnum.NotAValidKeyIdentifier);
+				response.Execute();
+				return;
+			}
+			
+			byte[] keyBlob = keyManagerHelper.GetKeyBlob(requestContext.Request.KeyIdentifier);
+			response = requestContext.CreateResponse();
+			response.Succeeded = true;
+			response.TPMKey = TPMKeyCore.CreateFromBytes(keyBlob);
+			response.Execute();
+		}
+
+
 		/// <summary>
 		/// Checks for an authenticated user, and for the specified permission entry for that user
 		/// </summary>
