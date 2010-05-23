@@ -198,8 +198,8 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			List<AuthorizationInfo> localAuthorizationInfos = new List<AuthorizationInfo>(cmd.AuthorizationInfos);
 			localAuthorizationInfos.Reverse();
 				
-			Queue<ResponseAuthHandleInfo> responseAuthHandles = new Queue<ResponseAuthHandleInfo>(responseAuthHandleInfos);
-			Queue<AuthorizationInfo> authorizationInfoQueue = new Queue<AuthorizationInfo>(localAuthorizationInfos);
+			Stack<ResponseAuthHandleInfo> responseAuthHandles = new Stack<ResponseAuthHandleInfo>(responseAuthHandleInfos);
+			Stack<AuthorizationInfo> authorizationInfoQueue = new Stack<AuthorizationInfo>(localAuthorizationInfos);
 			
 			foreach(AuthSessionNum authSessionNum in new AuthSessionNum[]{AuthSessionNum.Auth1, AuthSessionNum.Auth2})
 			{
@@ -208,8 +208,8 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				if(keyInfo == null)
 					continue;
 				
-				ResponseAuthHandleInfo currentResponseAuthHandleInfo = responseAuthHandles.Dequeue();
-				AuthorizationInfo currentAuthorizationInfo = authorizationInfoQueue.Dequeue();
+				ResponseAuthHandleInfo currentResponseAuthHandleInfo = responseAuthHandles.Pop();
+				AuthorizationInfo currentAuthorizationInfo = authorizationInfoQueue.Pop();
 				
 				
 				if(currentAuthorizationInfo.Handle.HandleAuthType == AuthHandle.AuthType.OIAP)
