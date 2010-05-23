@@ -126,6 +126,16 @@ namespace Iaik.Tc.TPM.Context
 		{
 			get { return _endorsementKeyHandling; }
 		}
+		
+		private TPMIntegrityClient _integrityClient;
+		
+		/// <summary>
+		/// Returns the integrity client (pcr, ...) for this session
+		/// </summary>
+		public TPMIntegrityClient IntegrityClient
+		{
+			get { return _integrityClient; }
+		}
 			
 		private TPMAdministrationClient _administrationClient;
 		
@@ -165,6 +175,7 @@ namespace Iaik.Tc.TPM.Context
 			_endorsementKeyHandling = new TPMEndorsementKeyHandlingClient (this);
 			_administrationClient = new TPMAdministrationClient (this);
 			_keyClient = new TPMKeyClient(this);
+			_integrityClient = new TPMIntegrityClient(this);
 		}
 		
 		internal TPMCommandResponse DoTPMCommandRequest (TPMCommandRequest commandRequest)
@@ -284,8 +295,20 @@ namespace Iaik.Tc.TPM.Context
 			}
 			else if(keyInfo.KeyType == HMACKeyInfo.HMACKeyType.SealAuth)
 			{
-				string identifier = keyInfo.Parameters.GetValueOf<string>("identifier");
-				dictKey = "seal_" + identifier;
+				string friendlyName = keyInfo.Parameters.GetValueOf<string>("identifier");
+				
+				bool identifierIsFriendlyName = keyInfo.Parameters.GetValueOf<bool>("identifierIsFriendlyName", false);
+				
+				if(!identifierIsFriendlyName)
+				{
+					if(_keystore.ContainsIdentifier(friendlyName) == false)
+						throw new ArgumentException(string.Format("Requests for secret for key not in keystore! identifier: {0}", 
+							friendlyName));
+
+					friendlyName = _keystore.IdentifierToFriendlyName(friendlyName);
+				}			
+				
+				dictKey = "seal_" + friendlyName;
 			}
 			else
 				throw new NotSupportedException(string.Format("The key type '{0}' is not supported", keyInfo.KeyType));
