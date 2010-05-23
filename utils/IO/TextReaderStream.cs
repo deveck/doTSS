@@ -21,7 +21,6 @@ namespace Iaik.Utils.IO
 		public TextReaderStream (TextReader textReader)
 		{
 			string text = textReader.ReadToEnd();
-			Console.WriteLine("Text: {0}", text);
 			_textStream = new MemoryStream(Encoding.UTF8.GetBytes(text));		
 			
 		}

@@ -79,10 +79,7 @@ namespace Iaik.Utils.IO
 					break;
 				
 				completeRead += read;
-				
-				Console.WriteLine();
-				Console.WriteLine("{0} {1}", chars[0], chars[1]);
-				Console.WriteLine();
+
 				buffer[i + offset] = byte.Parse(chars[0].ToString() + chars[1].ToString(), NumberStyles.AllowHexSpecifier);
 			}
 			

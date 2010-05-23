@@ -133,6 +133,19 @@ namespace Iaik.Tc.TPM.Context
 			}
 		}
 		
+		public TPMPubkey PublicKey
+		{
+			get
+			{
+				Parameters paramsGetPubKey = new Parameters ();
+				paramsGetPubKey.AddPrimitiveType("key", _keyIdentifier);
+				
+				TPMCommandResponse response = BuildDoVerifyRequest (TPMCommandNames.TPM_CMD_GetPubKey, paramsGetPubKey);
+				
+				return response.Parameters.GetValueOf<TPMPubkey> ("pubkey");
+			}
+		}
+		
 		public ClientKeyHandle(string friendlyName, string identifier, TPMSession tpmSession)
 		{
 			_friendlyName = friendlyName;
@@ -239,6 +252,16 @@ namespace Iaik.Tc.TPM.Context
 		public IAsymmetricBlockCipher CreateSealBlockCipher(TPMPCRSelection pcrSelection, ProtectedPasswordStorage sealAuth)
 		{
 			return new SealBlockCipher(this, _tpmSession, pcrSelection, sealAuth);
+		}
+		
+		/// <summary>
+		/// Creates a block cipher for binding and unbinding
+		/// </summary>
+		/// <returns>
+		/// </returns>
+		public IAsymmetricBlockCipher CreateBindBlockCipher()
+		{
+			return new BindBlockCipher(this, _tpmSession);
 		}
 		
 		/// <summary>

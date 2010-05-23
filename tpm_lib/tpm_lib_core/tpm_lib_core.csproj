@@ -72,6 +72,7 @@
     <Compile Include="Storage\TPMStoredDataCore.cs" />
     <Compile Include="Commands\StorageFunctions\TPM_Unseal.cs" />
     <Compile Include="PCRDataCore\TPMPCRCompositeCore.cs" />
+    <Compile Include="Commands\StorageFunctions\TPM_GetPubKey.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />

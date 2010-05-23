@@ -368,7 +368,8 @@ namespace Iaik.Tc.TPM
 		    			}
 		                else
 						{
-		    				Out.WriteLine ("Unknown command...");
+							if(commandParts.Length > 0 && commandParts[0] != "")
+		    					Out.WriteLine ("Unknown command...");
 							_commandReady = true;
 						}
 						

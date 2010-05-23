@@ -62,7 +62,7 @@ namespace Iaik.Tc.TPM.Library.Common
 		/// <returns></returns>
 		public IAsymmetricBlockCipher CreateRSAEncrypter ()
 		{
-			if (_keyParams.AlgorithmId == TPMAlgorithmId.TPM_ALG_RSA) 
+			if (_keyParams.AlgorithmId == TPMAlgorithmId.TPM_ALG_RSA && _keyParams.EncScheme == TPMEncScheme.TPM_ES_RSAESOAEP_SHA1_MGF1) 
 			{
 				IAsymmetricBlockCipher cipher = new OaepEncoding(new RsaEngine(), new Sha1Digest(), Encoding.ASCII.GetBytes("TCPA"));
 				
@@ -74,25 +74,20 @@ namespace Iaik.Tc.TPM.Library.Common
 				cipher.Init(true, parameters);
 				
 				return cipher;                                       
-//				RSACryptoServiceProvider rsaInstance = new RSACryptoServiceProvider ();
-//				RSAParameters parameters = new RSAParameters ();
-//				parameters.Modulus = _publicKey.Pubkey;
-//				parameters.Exponent = ((TPMRSAKeyParams)_keyParams.Params).GetExponent();
-				
-				
-//				Console.WriteLine ("P: {0}\nQ: {1}\nD: {2}\nDP: {3}\nDQ: {4}\nExpo: {5}\nInvQ: {6}\nMod: {7}", 
-//				ByteHelper.ByteArrayToHexString (parameters.P), 
-//				ByteHelper.ByteArrayToHexString (parameters.Q), 
-//				ByteHelper.ByteArrayToHexString (parameters.D), 
-//				ByteHelper.ByteArrayToHexString (parameters.DP), 
-//				ByteHelper.ByteArrayToHexString (parameters.DQ), 
-//				ByteHelper.ByteArrayToHexString (parameters.Exponent), 
-//				ByteHelper.ByteArrayToHexString (parameters.InverseQ), 
-//				ByteHelper.ByteArrayToHexString (parameters.Modulus));
-				
-//				rsaInstance.ImportParameters (parameters);
-//				return rsaInstance;
 			} 
+			else if (_keyParams.AlgorithmId == TPMAlgorithmId.TPM_ALG_RSA && _keyParams.EncScheme == TPMEncScheme.TPM_ES_RSAESPKCSv15) 
+			{
+				IAsymmetricBlockCipher cipher = new Pkcs1Encoding(new RsaEngine());
+				
+				RsaKeyParameters parameters = 
+					new RsaKeyParameters( false,
+					                     new BigInteger(1, _publicKey.Pubkey),
+					                     new BigInteger(1, ((TPMRSAKeyParams)_keyParams.Params).GetExponent()));
+				                                             
+				cipher.Init(true, parameters);
+				
+				return cipher;       
+			}
 			else
 			 throw new NotSupportedException (string.Format ("Algorithm '{0}' is not supported", _keyParams.AlgorithmId));
 		}
