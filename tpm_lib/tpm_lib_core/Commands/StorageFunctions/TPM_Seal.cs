@@ -98,9 +98,9 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 		}
 
 
-		public override void Init (Parameters param, TPMProvider tpmProvider)
+		public override void Init (Parameters param, TPMProvider tpmProvider, TPMWrapper tpmWrapper)
 		{
-			base.Init (param, tpmProvider);
+			base.Init (param, tpmProvider, tpmWrapper);
 			
 			
 			_digest = null;
@@ -108,7 +108,15 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 			_inData = param.GetValueOf<byte[]>("in_data");
 			_pcrInfo = new TPMPCRInfoCore(new TPMPCRSelectionCore(param.GetValueOf<TPMPCRSelection>("pcr_selection")));
 			
-			
+			_pcrInfo.CalculateDigests((TPMPCRInfoCore.GetPCRValueDelegate)delegate(uint pcrNum)
+			{
+				Parameters pcrParams = new Parameters();
+				pcrParams.AddPrimitiveType("pcrnum", pcrNum);
+				TPMCommandResponse pcrResponse = _tpmWrapper.Process(new TPMCommandRequest(TPMCommandNames.TPM_CMD_PCRRead, pcrParams));
+				if(!pcrResponse.Status)
+					throw new TPMResponseException("An unknown error occured on performing pcrread");
+				return pcrResponse.Parameters.GetValueOf<byte[]>("value");
+			});
 			
 		}
 

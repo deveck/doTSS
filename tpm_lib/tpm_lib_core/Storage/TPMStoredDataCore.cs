@@ -22,6 +22,14 @@ namespace Iaik.Tc.TPM.Library.Storage
 			storedData.ReadFromTpmBlob(blob);
 			return storedData;
 		}
+		
+		public static TPMStoredDataCore CreateFromBytes(byte[] data)
+		{
+			using(MemoryStream src = new MemoryStream(data))
+			{
+				return new TPMStoredDataCore(src);
+			}		
+		}
 				
 
 		private TPMStoredDataCore ()
