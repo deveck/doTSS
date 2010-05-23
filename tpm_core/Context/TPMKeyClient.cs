@@ -12,6 +12,9 @@ using Org.BouncyCastle.Crypto;
 using Iaik.Tc.TPM.Library.Common.KeyData;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 using Iaik.Tc.TPM.Library.Common.PCRData;
+using System.IO;
+using Iaik.Tc.TPM.Library.Common.Storage;
+using Iaik.Utils;
 
 namespace Iaik.Tc.TPM.Context
 {
@@ -239,6 +242,18 @@ namespace Iaik.Tc.TPM.Context
 		}
 		
 		/// <summary>
+		/// Reads an encrypted block from the stream.
+		/// <see cref="SealBlockCipher"/> for details
+		/// </summary>
+		/// <param name="encryptedStream"></param>
+		/// <returns></returns>
+		public byte[] ReadEncryptedBlock(Stream encryptedStream)
+		{
+			TPMStoredData block = new TPMStoredData(encryptedStream);
+			return ByteHelper.SerializeToBytes(block);
+		}
+		
+		/// <summary>
 		/// Seals data to the specified pcr selection,
 		/// create a valid pcr selection with session.CreateEmptyPCRSelection
 		/// </summary>
@@ -253,7 +268,7 @@ namespace Iaik.Tc.TPM.Context
 			paramsSeal.AddValue("pcr_selection", pcrSelection);
 			
 			Parameters paramsSecret = new Parameters();
-			paramsSecret.AddPrimitiveType("identifier", FriendlyName);
+			paramsSecret.AddPrimitiveType("identifier", KeyIdentifier);
 			ProtectedPasswordStorage authSeal = _tpmSession.RequestSecret(new HMACKeyInfo(HMACKeyInfo.HMACKeyType.SealAuth, paramsSecret));
 			
 			if(authSeal.Hashed == false)
@@ -274,6 +289,27 @@ namespace Iaik.Tc.TPM.Context
 			}
 		}
 		
+		/// <summary>
+		/// Seals data to the specified pcr selection,
+		/// create a valid pcr selection with session.CreateEmptyPCRSelection
+		/// </summary>
+		/// <param name="pcrSelection"></param>
+		/// <param name="data">Data to seal</param>
+		/// <returns></returns>
+		public byte[] Unseal(byte[] data)
+		{
+			Parameters paramsSeal = new Parameters();
+			paramsSeal.AddPrimitiveType("in_data", data);
+			paramsSeal.AddPrimitiveType("key", _keyIdentifier);
+			
+			Parameters paramsSecret = new Parameters();
+			paramsSecret.AddPrimitiveType("identifier", KeyIdentifier);
+
+			
+			TPMCommandResponse unsealResponse = BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_Unseal, paramsSeal);
+			return unsealResponse.Parameters.GetValueOf<byte[]>("data");
+			
+		}
 		private TPMCommandResponse BuildDoVerifyRequest (string commandIdentifier, Parameters parameters)
 		{
 			TPMCommandRequest versionRequest = new TPMCommandRequest (commandIdentifier, parameters);

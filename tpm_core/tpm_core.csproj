@@ -136,6 +136,7 @@
     <Compile Include="Subsystems\TPMClient\ContainsKey.cs" />
     <Compile Include="Context\SealBlockCipher.cs" />
     <Compile Include="Subsystems\TPMSubsystem\KeyInfoRequest.cs" />
+    <Compile Include="Context\TPMIntegrityClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">

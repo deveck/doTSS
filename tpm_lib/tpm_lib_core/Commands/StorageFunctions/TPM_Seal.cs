@@ -110,6 +110,8 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 			
 			_pcrInfo.CalculateDigests((TPMPCRInfoCore.GetPCRValueDelegate)delegate(uint pcrNum)
 			{
+				//TODO: Use TPM_Quote to determine pcr values once it's available
+				
 				Parameters pcrParams = new Parameters();
 				pcrParams.AddPrimitiveType("pcrnum", pcrNum);
 				TPMCommandResponse pcrResponse = _tpmWrapper.Process(new TPMCommandRequest(TPMCommandNames.TPM_CMD_PCRRead, pcrParams));

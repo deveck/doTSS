@@ -49,6 +49,11 @@ namespace Iaik.Utils
 			_data = new byte[bitsize / 8];			
 		}
 		
+		public BitMap (byte[] selectionBits)
+		{
+			_data = selectionBits;
+		}
+		
 		public BitMap(Stream src)
 		{
 			Read(src);
@@ -80,6 +85,22 @@ namespace Iaik.Utils
 				_data[byteIndex] = (byte)(_data[byteIndex] | (1<<bitIndex));
 			else
 				_data[byteIndex] = (byte)(_data[byteIndex] & (0xfe<<bitIndex));
+		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="index"></param>
+		/// <returns></returns>
+		public bool GetBit(int index)
+		{
+			int byteIndex = index / 8;
+			int bitIndex = index % 8;
+			
+			if(((_data[byteIndex] >> bitIndex) & 0x01) != 0)
+				return true;
+			else
+				return false;
 		}
 	}
 }

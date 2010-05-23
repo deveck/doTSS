@@ -70,6 +70,8 @@
     <Compile Include="PCRDataCore\TPMPCRInfoCore.cs" />
     <Compile Include="PCRDataCore\TPMPCRSelectionCore.cs" />
     <Compile Include="Storage\TPMStoredDataCore.cs" />
+    <Compile Include="Commands\StorageFunctions\TPM_Unseal.cs" />
+    <Compile Include="PCRDataCore\TPMPCRCompositeCore.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />

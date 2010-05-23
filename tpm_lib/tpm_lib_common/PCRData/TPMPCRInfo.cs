@@ -20,21 +20,21 @@ namespace Iaik.Tc.TPM.Library.Common.PCRData
 		protected TPMPCRSelection _pcrSelection;
 		
 		
-		protected byte[] DigestAtRelease
-		{
-			get
-			{
-				return new HashProvider().Hash(new HashByteDataProvider(_pcrSelection.PcrSelection.Data));
-			}
-		}
-		
-		protected byte[] DigestAtCreation
-		{
-			get
-			{
-				return DigestAtRelease;
-			}
-		}
+//		protected byte[] DigestAtRelease
+//		{
+//			get
+//			{
+//				return new HashProvider().Hash(new HashByteDataProvider(_pcrSelection.PcrSelection.Data));
+//			}
+//		}
+//		
+//		protected byte[] DigestAtCreation
+//		{
+//			get
+//			{
+//				return DigestAtRelease;
+//			}
+//		}
 
 		protected TPMPCRInfo ()
 		{

@@ -74,6 +74,8 @@
     <Compile Include="Commands\TPMSessionKeyCommand.cs" />
     <Compile Include="Commands\SecretCacheCommand.cs" />
     <Compile Include="Commands\TPMSessionSealCommand.cs" />
+    <Compile Include="Commands\TPMSessionUnsealCommand.cs" />
+    <Compile Include="Commands\TPMSessionPCRCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_core\tpm_core.csproj">

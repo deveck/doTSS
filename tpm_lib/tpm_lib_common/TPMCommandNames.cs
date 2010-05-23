@@ -43,6 +43,7 @@ namespace Iaik.Tc.TPM.Library.Common
 		public const string TPM_CMD_CreateWrapKey = "TPM_CMD_CreateWrapKey";
 		public const string TPM_CMD_LoadKey2 = "TPM_CMD_LoadKey2";
 		public const string TPM_CMD_Seal = "TPM_CMD_Seal";
+		public const string TPM_CMD_Unseal = "TPM_CMD_Unseal";
 		#endregion
 				
 	}

@@ -18,11 +18,17 @@ namespace Iaik.Tc.TPM.Library.Common.Storage
 		[SerializeMe(0)]
 		protected CapabilityData.TPMVersion _versionStruct;
 			
+		
+		[SerializeMe(1)]
+		protected byte[] _sealInfo;	
+		
 		/// <summary>
 		/// Contains pcr information to which the data is bound to
 		/// </summary>
-		[SerializeMe(1)]
-		protected byte[] _sealInfo;	
+		public byte[] SealInfo
+		{
+			get{ return _sealInfo; }
+		}
 		
 		/// <summary>
 		/// Contains the confidential part of the data

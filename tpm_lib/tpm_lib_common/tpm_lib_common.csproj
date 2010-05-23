@@ -69,6 +69,7 @@
     <Compile Include="PCRData\TPMPCRSelection.cs" />
     <Compile Include="Storage\TPMStoredData.cs" />
     <Compile Include="KeyData\ITPMAlgorithmSpecificKeyParams.cs" />
+    <Compile Include="PCRData\TPMPCRComposite.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="interface\" />

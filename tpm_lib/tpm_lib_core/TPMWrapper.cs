@@ -155,7 +155,7 @@ namespace Iaik.Tc.TPM.Library
 				command.SetCommandLockProvider(_commandLockProvider);
 				command.SetKeyManager(keyManager);
 				command.SetCommandAuthorizationHelper(commandAuthorizationHelper);
-				command.Init (request.Parameters, _backend);
+				command.Init (request.Parameters, _backend, this);
 				return command.Process ();
 			}
 			finally

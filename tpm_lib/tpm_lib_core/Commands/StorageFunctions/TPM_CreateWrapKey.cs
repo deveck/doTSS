@@ -90,9 +90,9 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 		}
 
 
-		public override void Init (Parameters param, TPMProvider tpmProvider)
+		public override void Init (Parameters param, TPMProvider tpmProvider, TPMWrapper tpmWrapper)
 		{
-			base.Init (param, tpmProvider);
+			base.Init (param, tpmProvider, tpmWrapper);
 			
 			
 			_digest = null;

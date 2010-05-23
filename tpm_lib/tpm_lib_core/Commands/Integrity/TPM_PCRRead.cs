@@ -31,9 +31,9 @@ namespace Iaik.Tc.TPM.Library.Commands
 		{	
 		}
 	
-		public override void Init (Parameters param, TPMProvider provider)
+		public override void Init (Parameters param, TPMProvider provider, TPMWrapper tpmWrapper)
 		{
-			base.Init(param, provider);
+			base.Init(param, provider, tpmWrapper);
 			_register = param.GetValueOf<UInt32>("pcrnum");
 		}
 

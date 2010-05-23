@@ -13,6 +13,16 @@ namespace Iaik.Tc.TPM.Context
 {
 
 
+	/// <summary>
+	/// Provides a .net integrated block cipher for sealing and unsealing
+	/// </summary>
+	/// <remarks>
+	/// There is a problem on unsealing because the returned block size is not fixed and is larger
+	/// than the expected block size because generally a TPM_STORED_DATA structure is returned which also
+	/// contains the pcr values to which the encrypted value is bound.
+	/// Thus when Unsealing/Unbinding use KeyHandle.ReadEncryptedBlock to get a whole encrypted block,
+	/// currently there is no other workaround available
+	/// </remarks>
 	public class SealBlockCipher : IAsymmetricBlockCipher
 	{
 		
@@ -108,7 +118,10 @@ namespace Iaik.Tc.TPM.Context
 				return _keyHandle.Seal(_pcrSelection, myBuf);
 			}
 			else
-				throw new NotImplementedException("Unseal not implemented");
+			{
+				return _keyHandle.Unseal(myBuf);
+			}
+				
 		}
 		
 		

@@ -17,7 +17,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 	public abstract class TPMCommand //: IDisposable
 	{
 		protected TPMProvider _tpmProvider = null;
-		
+		protected TPMWrapper _tpmWrapper = null;
 		protected readonly UInt32 commandOrdinal_;
 		protected readonly UInt32 commandTag_;
 		protected  Parameters _params;
@@ -127,10 +127,11 @@ namespace Iaik.Tc.TPM.Library.Commands
 //			_params = param;
 //		}
 //		
-		public virtual void Init (Parameters param, TPMProvider tpmProvider)
+		public virtual void Init (Parameters param, TPMProvider tpmProvider, TPMWrapper tpmWrapper)
 		{
 			_tpmProvider = tpmProvider;
 			_params = param;
+			_tpmWrapper = tpmWrapper;
 		}
 		
 		
