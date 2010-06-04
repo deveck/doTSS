@@ -366,4 +366,50 @@ namespace Iaik.Tc.TPM.Library.Common
 		/// </summary>
 		TPM_KH_EK = 0x40000006
 	}
+	
+	/// <summary>
+	/// This structure specifies the type of payload in various messages.
+	/// </summary>
+	public enum TPMPayloadType : byte
+	{
+		/// <summary>
+		/// The entity is an asymmetric key
+		/// </summary>
+		TPM_PT_ASYM = 0x01,
+		
+		/// <summary>
+		/// The entity is bound data
+		/// </summary>
+		TPM_PT_BIND = 0x02,
+		
+		/// <summary>
+		/// The entity is a migration blob
+		/// </summary>
+		TPM_PT_MIGRATE = 0x03,
+		
+		/// <summary>
+		/// The entity is a maintenance blob
+		/// </summary>
+		TPM_PT_MAINT = 0x04,
+		
+		/// <summary>
+		/// The entity is sealed data
+		/// </summary>
+		TPM_PT_SEAL = 0x05,
+		
+		/// <summary>
+		/// The entity is a restricted-migration asymmetric key
+		/// </summary>
+		TPM_PT_MIGRATE_RESTRICTED = 0x06,
+		
+		/// <summary>
+		/// The entity is a external migratable key
+		/// </summary>
+		TPM_PT_MIGRATE_EXTERNAL = 0x07,
+		
+		/// <summary>
+		/// The entity is a CMK migratable blo
+		/// </summary>
+		TPM_PT_CMK_MIGRATE = 0x08
+	}
 }

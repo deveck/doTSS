@@ -13,7 +13,7 @@ namespace Iaik.Tc.TPM.Library.Common
 	/// Represents the command request for a specific TPM command, that should
 	/// be processed by the TPM library.
 	/// </summary>
-	public sealed class TPMCommandRequest : ATPMCommandQuery
+	public class TPMCommandRequest : ATPMCommandQuery
 	{
 
 		private TPMCommandRequest () : base()
@@ -28,6 +28,12 @@ namespace Iaik.Tc.TPM.Library.Common
 		public TPMCommandRequest(String commandIdentifier, Parameters param) : base (commandIdentifier, param)
 		{
 		}
-	
+
+		public override string ToString ()
+		{
+			return string.Format("[TPMCommandRequest cmd={0} id={1}]", CommandIdentifier, GetHashCode());
+		}
+
+		
 	}
 }

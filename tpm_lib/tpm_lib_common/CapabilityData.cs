@@ -18,7 +18,7 @@ namespace Iaik.Tc.TPM.Library.Common
 		public const string PARAM_PROP_MAX_TRANSESS = "max_transess";
 		public const string PARAM_PROP_MAX_KEYS = "max_keys";
 		public const string PARAM_PROP_MAX_SESSIONS = "max_sessions";
-		
+		public const string PARAM_PROP_SELECT_SIZE = "select_size";
 		
 		public enum TPMCapabilityArea : uint
 		{
@@ -32,6 +32,11 @@ namespace Iaik.Tc.TPM.Library.Common
 			/// Enumerates all handles of the specified type currently loaded in the tpm
 			/// </summary>
 			TPM_CAP_HANDLE = 0x00000014,
+			
+			/// <summary>
+			/// Checks if the supplied TPM_SELECT_SIZE is compatible with this tpm in sizeOfSelect
+			/// </summary>
+			TPM_CAP_SELECT_SIZE = 0x00000018,
 			
 			/// <summary>
 			/// Returns what the TPM currently supports
@@ -86,6 +91,43 @@ namespace Iaik.Tc.TPM.Library.Common
 			TPM_CAP_PROP_MAX_SESSIONS = 0x00000011E
 		}
 
+		
+		[TypedStreamSerializableAttribute("TPMSelectSize")]
+		public class TPMSelectSize : AutoStreamSerializable, ITypedParameter
+		{
+			[SerializeMe(0)]
+			protected byte _major;
+			
+			public byte Major
+			{
+				get { return _major;}
+			}
+			
+			[SerializeMe(1)]
+			protected byte _minor;
+			
+			public byte Minor
+			{
+				get { return _minor;}
+			}
+			
+			[SerializeMe(2)]
+			protected ushort _reqSize;
+			
+			public ushort ReqSize
+			{
+				get{ return _reqSize; }
+			}
+			
+			public TPMSelectSize ()
+			{
+			}
+			
+			public TPMSelectSize(Stream src)
+			{
+				Read(src);
+			}
+		}
 		
 		[TypedStreamSerializable(CapabilityData.PARAM_TPM_VERSION_INFO)]
 		public class TPMCapVersionInfo : AutoStreamSerializable, ITypedParameter
@@ -175,6 +217,8 @@ namespace Iaik.Tc.TPM.Library.Common
 		[TypedStreamSerializable("TPMVersion")]
 		public class TPMVersion : AutoStreamSerializable, ITypedParameter
 		{
+			
+			
 			[SerializeMe(0)]
 			protected byte _major;
 			

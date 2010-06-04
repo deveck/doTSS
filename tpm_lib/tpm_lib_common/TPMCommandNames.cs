@@ -45,6 +45,13 @@ namespace Iaik.Tc.TPM.Library.Common
 		public const string TPM_CMD_Seal = "TPM_CMD_Seal";
 		public const string TPM_CMD_Unseal = "TPM_CMD_Unseal";
 		public const string TPM_CMD_GetPubKey = "TPM_CMD_GetPubKey";
+		public const string TPM_CMD_Unbind = "TPM_CMD_Unbind";
+		
+		/// <summary>
+		/// This is only a 'dummy' command where the bind prefix is 
+		/// retrieved from the server
+		/// </summary>
+		public const string TPM_CMD_Bind = "TPM_CMD_Bind";
 		#endregion
 				
 	}

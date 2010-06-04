@@ -63,6 +63,27 @@ namespace Iaik.Tc.TPM.Context
 		}
 		
 		/// <summary>
+		/// Returns if the specified sizeIfSelect (= pcrcount / 8) is supported.
+		/// This is used to create valid PCRSelection objects for this tpm
+		/// </summary>
+		/// <param name="size">
+		/// A <see cref="System.UInt16"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Boolean"/>
+		/// </returns>
+		public bool SupportsSizeOfPcr(ushort size)
+		{
+			Parameters parameters = new Parameters ();
+			parameters.AddPrimitiveType ("capArea", CapabilityData.TPMCapabilityArea.TPM_CAP_SELECT_SIZE);
+			parameters.AddPrimitiveType(CapabilityData.PARAM_PROP_SELECT_SIZE, size);
+			
+			return this.BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_GetCapability, parameters)
+				.Parameters.GetValueOf<bool>(CapabilityData.PARAM_PROP_SELECT_SIZE);
+			
+		}
+		
+		/// <summary>
 		/// Returns the maximum number of authorization session the tpm supports, varies with time
 		/// </summary>
 		/// <returns></returns>

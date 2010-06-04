@@ -77,6 +77,7 @@
     <Compile Include="Commands\TPMSessionUnsealCommand.cs" />
     <Compile Include="Commands\TPMSessionPCRCommand.cs" />
     <Compile Include="Commands\TPMSessionBindCommand.cs" />
+    <Compile Include="Commands\TPMSessionUnBindCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_core\tpm_core.csproj">

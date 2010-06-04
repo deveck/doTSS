@@ -191,7 +191,20 @@ namespace Iaik.Tc.TPM.Context
 
 		public TPMPCRSelection CreateEmptyPCRSelection()
 		{
-			return TPMPCRSelection.CreatePCRSelection(CapabilityClient.GetPCRCount());
+			uint pcrCount = CapabilityClient.GetPCRCount();
+			
+			for(ushort i = (ushort)(pcrCount/8); i>0; i--)
+			{
+				if(CapabilityClient.SupportsSizeOfPcr(i))
+					return TPMPCRSelection.CreatePCRSelection((uint)(i * 8));
+			}
+			
+			//Normally v1.2 TPMs should support at least selectSize == 3 and
+			//v1.1 TPMS should support at least selectSize == 2
+			//For any reason this method here does not work on all TPMs (maybe a bug??)
+			//so we fall back to selectSize == 2 which should be supported on both versions
+			return TPMPCRSelection.CreatePCRSelection(16);
+			//throw new NotSupportedException("Could not find a valid selectSize parameter for this tpm");
 		}
 		
 		/// <summary>

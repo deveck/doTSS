@@ -313,10 +313,8 @@ namespace Iaik.Tc.TPM.Context
 		}
 		
 		/// <summary>
-		/// Seals data to the specified pcr selection,
-		/// create a valid pcr selection with session.CreateEmptyPCRSelection
+		/// Unseals the specified data
 		/// </summary>
-		/// <param name="pcrSelection"></param>
 		/// <param name="data">Data to seal</param>
 		/// <returns></returns>
 		public byte[] Unseal(byte[] data)
@@ -333,6 +331,23 @@ namespace Iaik.Tc.TPM.Context
 			return unsealResponse.Parameters.GetValueOf<byte[]>("data");
 			
 		}
+		
+		/// <summary>
+		/// Unbinds the specified data, the encrypted data needs to be
+		/// of type TPMBoundData
+		/// </summary>
+		/// <param name="data"></param>
+		/// <returns>Returns the decrypted data</returns>
+		public byte[] Unbind(byte[] data)
+		{
+			Parameters paramsUnbind = new Parameters();
+			paramsUnbind.AddPrimitiveType("in_data", data);
+			paramsUnbind.AddPrimitiveType("key", _keyIdentifier);
+						
+			TPMCommandResponse unbindResponse = BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_Unbind, paramsUnbind);
+			return unbindResponse.Parameters.GetValueOf<byte[]>("data");
+		}
+		
 		private TPMCommandResponse BuildDoVerifyRequest (string commandIdentifier, Parameters parameters)
 		{
 			TPMCommandRequest versionRequest = new TPMCommandRequest (commandIdentifier, parameters);

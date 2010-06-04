@@ -172,7 +172,7 @@ namespace Iaik.Tc.TPM
 		{
 			log4net.Appender.ConsoleAppender appender = new log4net.Appender.ConsoleAppender();
 			appender.Name = "ConsoleAppender";
-			appender.Layout = new log4net.Layout.PatternLayout("[%date{dd.MM.yyyy HH:mm:ss,fff}]-%-5level-[%c]: %message%newline");
+			appender.Layout = new log4net.Layout.PatternLayout("[%date{dd.MM.yyyy HH:mm:ss,fff}]-%-5level-%t-[%c]: %message%newline");
 			log4net.Config.BasicConfigurator.Configure(appender);
 			
 			_logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);

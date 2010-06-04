@@ -52,15 +52,17 @@ tpm_session_key tpm create name=test13,parent=test12,key_length=2048,key_usage=s
 tpm_session_key tpm keystore_list
 
 secret_cache tpm add type=seal,name=test13,secret=bubu
+secret_cache tpm add type=seal,name=test,secret=bubu
 tpm_session_pcr tpm report
-tpm_session_seal tpm name=test13,pcr=1|2|5,data_input=embedded,data_output=console string1 string2 string3  string4
-tpm_session_seal tpm name=test13,pcr=1|2|5,data_input=embedded,data_output=file,output_file=test.txt string1 string2 string3  string4
-tpm_session_seal tpm name=test13,pcr=1|2|5,data_input=embedded,data_output=file,output_data_format=hex,output_file=test2.txt string1 string2 string3  string4
-tpm_session_pcr tpm report
-tpm_session_unseal tpm name=test13,data_input=file,file=test.txt,data_output=console
+tpm_session_seal tpm name=test,pcr=1|15,data_input=embedded,data_output=console string1 string2 string3  string4
+tpm_session_seal tpm name=test,pcr=1|2|5,data_input=embedded,data_output=file,output_file=test.txt string1 string2 string3  string4
+tpm_session_seal tpm name=test,pcr=1|2|5,data_input=embedded,data_output=file,output_data_format=hex,output_file=test2.txt string1 string2 string3  string4
+#tpm_session_pcr tpm report
+tpm_session_unseal tpm name=test,data_input=file,file=test.txt,data_output=console
 
 
 secret_cache tpm add type=key_usage,name=bind1,secret=bind1
-tpm_session_key tpm create name=bind1,parent=test13,key_length=1024,key_usage=bind
+tpm_session_key tpm create name=bind1,parent=test,key_length=1024,key_usage=bind
 
-tpm_session_bind tpm name=bind1,data_input=embedded,data_output=console string1 string2 string3  string4
+tpm_session_bind tpm name=bind1,data_input=embedded,data_output=file,output_file=bound_data.txt string1 string2 string3  string4
+tpm_session_unbind tpm name=bind1,data_input=file,file=bound_data.txt,data_output=console

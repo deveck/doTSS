@@ -44,16 +44,11 @@ namespace Iaik.Tc.TPM.Library.Commands
 			requestBlob.WriteUInt32 ((uint)_register);
 			requestBlob.WriteCmdSize ();
 			
-			TPMBlob responseBlob = _tpmProvider.TransmitAndCheck (requestBlob);
+			TPMBlob responseBlob = TransmitMe (requestBlob);
 			Parameters responseParam = new Parameters();
 			
-			// is done in transmit and check
-			//responseBlob.ReadUInt16();
-			//responseBlob.ReadUInt32();
-			//UInt32 i = responseBlob.ReadUInt32();
 			
 			byte[] val = responseBlob.ReadBytes(20);
-			
 			
 			responseParam.AddPrimitiveType("pcrnum", _register);
 			responseParam.AddPrimitiveType("value", val);

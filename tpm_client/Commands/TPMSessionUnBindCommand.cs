@@ -15,40 +15,20 @@ using Org.BouncyCastle.Crypto;
 
 namespace Iaik.Tc.TPM.Commands
 {
-    [TPMConsoleCommand("tpm_session_seal")]
-    public class TPMSessionSealCommand : ConsoleCommandBase
+    [TPMConsoleCommand("tpm_session_unbind")]
+    public class TPMSessionUnBindCommand : ConsoleCommandBase
     {
-    	public enum DataInputMode
-    	{
-    		Embedded,
-    		Console,
-    		File
-    	}
-    	
-    	public enum DataOutputMode
-    	{
-    		Console,
-    		File
-    	}
-    	
-    	public enum DataFormat
-    	{
-    		Raw,
-    		Hex
-    	}
     
         public override string HelpText
         {
             get
             {
-                return @"tpm_session_seal Args: [local_session_alias]  {args} [embedded data]
+                return @"tpm_session_unbind Args: [local_session_alias]  {args} [embedded data]
     Specify the tpm to use by [local_session_alias]. These aliases can be defined using the tpm_select command.
     Available arguments: Arguments are seperated by ',' with NO spaces
                                
         name=<key_name>                Specifies the friendly name of the storage key to use
-        
-        pcr={1|2|5|...}                Specifies the PCRs the sealed data should be bind to
-                               
+                                      
         data_input={embedded,console,file}  Specifies the data input mode for the seal operation
           If data_input is embedded all data following {args} is interpreted as embedded data
           
@@ -117,23 +97,17 @@ namespace Iaik.Tc.TPM.Commands
 				return;
 			}
 			
-//			if(arguments.ContainsKey("pcr") == false)
-//			{
-//				_console.Out.WriteLine("Error: no pcr values where specified");
-//				return;
-//			}
-			
 			if(arguments.ContainsKey("data_input") == false)
 			{
 				_console.Out.WriteLine("Error: no data input source specified");
 				return;
 			}
 			
-			DataInputMode dataInputMode;
+			TPMSessionSealCommand.DataInputMode dataInputMode;
 			
 			try
 			{
-				dataInputMode = (DataInputMode)Enum.Parse(typeof(DataInputMode), arguments["data_input"], true);
+				dataInputMode = (TPMSessionSealCommand.DataInputMode)Enum.Parse(typeof(TPMSessionSealCommand.DataInputMode), arguments["data_input"], true);
 			}
 			catch(Exception)
 			{
@@ -141,11 +115,11 @@ namespace Iaik.Tc.TPM.Commands
 				return;
 			}
 			
-			DataOutputMode dataOutputMode;
+			TPMSessionSealCommand.DataOutputMode dataOutputMode;
 			
 			try
 			{
-				dataOutputMode = (DataOutputMode)Enum.Parse(typeof(DataOutputMode), arguments["data_output"], true);
+				dataOutputMode = (TPMSessionSealCommand.DataOutputMode)Enum.Parse(typeof(TPMSessionSealCommand.DataOutputMode), arguments["data_output"], true);
 			}
 			catch(Exception)
 			{
@@ -153,13 +127,13 @@ namespace Iaik.Tc.TPM.Commands
 				return;
 			}
 			
-			DataFormat inputDataFormat = DataFormat.Raw;
+			TPMSessionSealCommand.DataFormat inputDataFormat = TPMSessionSealCommand.DataFormat.Raw;
 			
 			if(arguments.ContainsKey("input_data_format"))
 			{
 				try
 				{
-					inputDataFormat = (DataFormat)Enum.Parse(typeof(DataFormat), arguments["input_data_format"], true);
+					inputDataFormat = (TPMSessionSealCommand.DataFormat)Enum.Parse(typeof(TPMSessionSealCommand.DataFormat), arguments["input_data_format"], true);
 				}
 				catch(Exception)
 				{
@@ -168,13 +142,13 @@ namespace Iaik.Tc.TPM.Commands
 				}
 			}
 			
-			DataFormat outputDataFormat = DataFormat.Raw;
+			TPMSessionSealCommand.DataFormat outputDataFormat = TPMSessionSealCommand.DataFormat.Raw;
 			
 			if(arguments.ContainsKey("output_data_format"))
 			{
 				try
 				{
-					outputDataFormat = (DataFormat)Enum.Parse(typeof(DataFormat), arguments["output_data_format"], true);
+					outputDataFormat = (TPMSessionSealCommand.DataFormat)Enum.Parse(typeof(TPMSessionSealCommand.DataFormat), arguments["output_data_format"], true);
 				}
 				catch(Exception)
 				{
@@ -185,7 +159,7 @@ namespace Iaik.Tc.TPM.Commands
 			
 			string file = null;
 			
-			if(dataInputMode == DataInputMode.File && arguments.ContainsKey("file") == false)
+			if(dataInputMode == TPMSessionSealCommand.DataInputMode.File && arguments.ContainsKey("file") == false)
 			{
 				_console.Out.WriteLine("Error: data_input=file requires file argument!");
 				return;
@@ -193,22 +167,10 @@ namespace Iaik.Tc.TPM.Commands
 			
 			string outputFile = null;
 			
-			if(dataOutputMode == DataOutputMode.File && arguments.ContainsKey("output_file") == false)
+			if(dataOutputMode == TPMSessionSealCommand.DataOutputMode.File && arguments.ContainsKey("output_file") == false)
 			{
 				_console.Out.WriteLine("Error: data_output=file requires output_file argument!");
 				return;
-			}
-			
-			TPMPCRSelection pcrSelection = tpmSessions[localAlias].CreateEmptyPCRSelection();
-			
-			if(arguments.ContainsKey("pcr"))
-			{
-				foreach(string pcr in arguments["pcr"].Split('|'))
-				{
-					int pcrValue = int.Parse(pcr);				
-					
-					pcrSelection.PcrSelection.SetBit(pcrValue - 1, true);				
-				}
 			}
 			
 			ClientKeyHandle keyHandle = tpmSessions[localAlias].KeyClient.GetKeyHandleByFriendlyName(arguments["name"]);
@@ -216,9 +178,9 @@ namespace Iaik.Tc.TPM.Commands
 			
 			Stream inputStream = null;
 			
-			if(dataInputMode == DataInputMode.Console)
+			if(dataInputMode == TPMSessionSealCommand.DataInputMode.Console)
 				inputStream = new TextReaderStream(_console.In);
-			else if(dataInputMode == DataInputMode.Embedded)
+			else if(dataInputMode == TPMSessionSealCommand.DataInputMode.Embedded)
 			{
 				if(commandline.Length <= 3)
 				{
@@ -236,41 +198,38 @@ namespace Iaik.Tc.TPM.Commands
 				
 				inputStream = new TextReaderStream(new StringReader(embeddedData.ToString()));
 			}
-			else if(dataInputMode == DataInputMode.File)
+			else if(dataInputMode == TPMSessionSealCommand.DataInputMode.File)
 			{
 				inputStream = new FileStream(arguments["file"], FileMode.Open, FileAccess.Read);
 			}
 			
-			if(inputDataFormat == DataFormat.Hex)
+			if(inputDataFormat == TPMSessionSealCommand.DataFormat.Hex)
 			{
 				inputStream = new HexFilterStream(inputStream);
 			}
 			
 			Stream outputStream = null;
 			
-			if(dataOutputMode == DataOutputMode.Console)
-				outputStream = new HexFilterStream(new TextWriterStream(_console.Out));
-			else if(dataOutputMode == DataOutputMode.File)
-			{
-				if(outputDataFormat == DataFormat.Hex)
-					outputStream = new HexFilterStream(new FileStream(arguments["output_file"], FileMode.OpenOrCreate, FileAccess.Write));
-				else
-					outputStream = new FileStream(arguments["output_file"], FileMode.OpenOrCreate, FileAccess.Write);
-			}
+			if(dataOutputMode == TPMSessionSealCommand.DataOutputMode.Console)
+				outputStream = new TextWriterStream(_console.Out);
+			else if(dataOutputMode == TPMSessionSealCommand.DataOutputMode.File)
+				outputStream = new FileStream(arguments["output_file"], FileMode.OpenOrCreate, FileAccess.Write);
+				
+			if(outputDataFormat == TPMSessionSealCommand.DataFormat.Hex)
+				outputStream = new HexFilterStream(outputStream);
 			
-			
-			IAsymmetricBlockCipher sealCipher = keyHandle.CreateSealBlockCipher(pcrSelection);
-			sealCipher.Init(true, null);
+			IAsymmetricBlockCipher bindCipher = keyHandle.CreateBindBlockCipher();
+			bindCipher.Init(false, null);
 			
 			int read;
-			byte[] buffer = new byte[sealCipher.GetInputBlockSize()];
+			byte[] buffer = new byte[bindCipher.GetInputBlockSize()];
 			do
 			{
 				read = inputStream.Read(buffer, 0, buffer.Length);
 				
 				if(read > 0)
 				{
-					byte[] encrypted = sealCipher.ProcessBlock(buffer, 0, read);
+					byte[] encrypted = bindCipher.ProcessBlock(buffer, 0, read);
 					outputStream.Write(encrypted, 0, encrypted.Length);
 				}
 			}while(read>0);

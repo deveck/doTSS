@@ -46,6 +46,14 @@ namespace Iaik.Tc.TPM.Context
 		private IAsymmetricBlockCipher _encryptor = null;
 		
 		/// <summary>
+		/// The prefix contains TPMStructVersion and TPMPayloadType,
+		/// this is definitly the same for all processed blocks,
+		/// but the client has no chance to know how to write this,
+		/// so this is requested once from the server
+		/// </summary>
+		private byte[] _prefix = null;
+		
+		/// <summary>
 		/// Cosntructs a new BindBlockCipher with the specified arguments, the seal auth is requested from the user 
 		/// on first use
 		/// </summary>
@@ -70,6 +78,12 @@ namespace Iaik.Tc.TPM.Context
 			if(forEncryption)
 			{
 				_encryptor = _keyHandle.PublicKey.CreateRSAEncrypter();
+				
+				Parameters bindParameters = new Parameters();
+				bindParameters.AddPrimitiveType("type", "request_prefix");
+				TPMCommandRequest bindPrefixRequest = new TPMCommandRequest(
+					TPMCommandNames.TPM_CMD_Bind, bindParameters);				                                                            
+				_prefix = _session.DoTPMCommandRequest(bindPrefixRequest).Parameters.GetValueOf<byte[]>("prefix");
 			}
 		}		
 		
@@ -90,21 +104,25 @@ namespace Iaik.Tc.TPM.Context
 		
 			if(_forEncryption)
 			{
-				return _encryptor.ProcessBlock(inBuf, inOff, inLen);
+				byte[] realBlock = new byte[_prefix.Length + inLen];
+				Array.Copy(_prefix, 0, realBlock, 0, _prefix.Length);
+				Array.Copy(inBuf, inOff, realBlock, _prefix.Length, inLen);
+				
+				return _encryptor.ProcessBlock(realBlock, 0, realBlock.Length);
 			}
 			else
 			{
-//				byte[] myBuf;
-//				
-//				if(inOff != 0 || inLen != inBuf.Length)
-//				{
-//					myBuf = new byte[inLen];
-//					Array.Copy(inBuf, inOff, myBuf, 0, inLen);
-//				}
-//				else
-//					myBuf = inBuf;
-//				return _keyHandle.Unseal(myBuf);
-				throw new NotImplementedException("Unbinding is not implemented");
+				byte[] myBuf;
+				
+				if(inOff != 0 || inLen != inBuf.Length)
+				{
+					myBuf = new byte[inLen];
+					Array.Copy(inBuf, inOff, myBuf, 0, inLen);
+				}
+				else
+					myBuf = inBuf;
+				
+				return _keyHandle.Unbind(myBuf);
 			}
 				
 		}

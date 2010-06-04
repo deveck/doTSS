@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Iaik.Utils.Serialization;
 using System.IO;
 using Iaik.Utils;
+using System.Text;
 
 namespace Iaik.Tc.TPM.Library.Common
 {
@@ -127,5 +128,19 @@ namespace Iaik.Tc.TPM.Library.Common
 		}
 		
 		#endregion
+		
+		public override string ToString ()
+		{
+			StringBuilder returnStr = new StringBuilder();
+			returnStr.AppendFormat("Parameters: count=#{0}\n", this.encapsulated_.Count);
+			
+			foreach(KeyValuePair<string, ITypedParameter> param in encapsulated_)
+			{
+				returnStr.AppendFormat("\tname={0}, value={1} \n", param.Key, param.Value);
+			}
+			
+			return returnStr.ToString();
+		}
+
 	}
 }

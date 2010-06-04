@@ -36,6 +36,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\log4net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -70,6 +74,7 @@
     <Compile Include="Storage\TPMStoredData.cs" />
     <Compile Include="KeyData\ITPMAlgorithmSpecificKeyParams.cs" />
     <Compile Include="PCRData\TPMPCRComposite.cs" />
+    <Compile Include="Storage\TPMBoundData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="interface\" />

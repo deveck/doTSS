@@ -1,6 +1,7 @@
 # C# Bin directories
 bin
 obj
+tpm_multithreaded_test
 keys.db
 libtddl*
 *~

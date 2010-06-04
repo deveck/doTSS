@@ -55,6 +55,14 @@ namespace Iaik.Tc.TPM.Library.Commands
 				requestBlob.WriteUInt32 (4);
 				requestBlob.WriteUInt32 ((uint)subCap);
 				break;
+			case CapabilityData.TPMCapabilityArea.TPM_CAP_SELECT_SIZE:
+				
+				CapabilityDataCore.TPMSelectSizeCore tpmSelectSize = 
+					CapabilityDataCore.TPMSelectSizeCore.CreateVersion12(_param.GetValueOf<ushort>(CapabilityData.PARAM_PROP_SELECT_SIZE));
+				
+				TPMBlobWriteableHelper.WriteITPMBlobWritableWithUIntSize(requestBlob, tpmSelectSize);
+				break;
+				
 			default:
 				throw new NotSupportedException ("Defined cap or subcap are not supported");
 			}
@@ -84,7 +92,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 			
 			requestBlob.WriteCmdSize ();
 			
-			TPMBlob responseBlob = _tpmProvider.TransmitAndCheck (requestBlob);
+			TPMBlob responseBlob = TransmitMe(requestBlob);
 			responseBlob.SkipHeader ();
 			
 			Parameters parameters = new Parameters ();
@@ -136,6 +144,10 @@ namespace Iaik.Tc.TPM.Library.Commands
 				default:
 					throw new NotSupportedException("Defined cap or subcap are not supported");
 				}
+				break;
+				
+			case CapabilityData.TPMCapabilityArea.TPM_CAP_SELECT_SIZE:
+				parameters.AddPrimitiveType(CapabilityData.PARAM_PROP_SELECT_SIZE, ReadBoolResponse(responseBlob));
 				break;
 			}
 			
@@ -200,6 +212,15 @@ namespace Iaik.Tc.TPM.Library.Commands
 			return response.ReadUInt32 ();
 		}
 		
+		private bool ReadBoolResponse(TPMBlob response)
+		{
+			uint responseSize = response.ReadUInt32 ();
+			if (responseSize != 1)
+				throw new TPMResponseException (string.Format ("Capability response size mismatch (should be 1, and is {0})", responseSize));
+			
+			return response.ReadBool ();
+		}
+				
 		public override void Clear ()
 		{
 		}

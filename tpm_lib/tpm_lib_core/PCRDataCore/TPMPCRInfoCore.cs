@@ -34,7 +34,7 @@ namespace Iaik.Tc.TPM.Library.PCRDataCore
 		
 		public byte[] DigestAtCreation
 		{
-			get{ return _digest; }
+			get{ return new byte[20]; }
 		}
 		
 
