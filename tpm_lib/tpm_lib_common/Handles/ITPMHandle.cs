@@ -15,6 +15,11 @@ namespace Iaik.Tc.TPM.Library.Common.Handles
 		byte[] ContextBlob{get;}
 		
 		/// <summary>
+		/// Forces LoadContext to use Handle as new handle (OSAP)
+		/// </summary>
+		bool ForceHandle{ get; }
+		
+		/// <summary>
 		/// Gets the TPM handle identifier
 		/// </summary>
 		uint Handle { get; set;}

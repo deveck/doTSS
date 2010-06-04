@@ -59,7 +59,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 				requestBlob.Write(authHandle.NonceOddOSAP, 0, authHandle.NonceOddOSAP.Length);
 				requestBlob.WriteCmdSize();
 				
-				_responseBlob = _tpmProvider.TransmitAndCheck(requestBlob);
+				_responseBlob = TransmitMe(requestBlob);
 			}
 			
 			_responseBlob.SkipHeader();
@@ -67,15 +67,31 @@ namespace Iaik.Tc.TPM.Library.Commands
 			authHandle.UpdateFromOtherAuthHandle(receivedAuthHandle);			
 			
 			
-			Parameters parameters = new Parameters();
-			parameters.AddValue("auth_handle", authHandle);
-			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_OIAP, parameters);
+			_responseParameters = new Parameters();
+			_responseParameters.AddValue("auth_handle", authHandle);
+			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_OSAP, _responseParameters);
 		}
 
 		
 		public override void Clear ()
 		{
 		}
+		
+//		public override string GetCommandInternalsBeforeExecute ()
+//		{			
+//			return string.Format("entity_lsb={0}, entity_msb={1}, KeyIdentifier={2}", 			                     
+//			 _params.GetValueOf<TPMEntityTypeLSB>("entity_lsb"),
+//			 _params.GetValueOf<TPMEntityTypeMSB>("entity_msb"),
+//			 _params.GetValueOf<string>("entity_value"));
+//		}
+//		
+//		public override string GetCommandInternalsAfterExecute ()
+//		{
+//			return _responseParameters.ToString();
+//		}
+
+
+
 
 	}
 }

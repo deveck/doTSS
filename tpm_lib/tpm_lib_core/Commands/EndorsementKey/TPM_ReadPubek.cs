@@ -34,7 +34,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 			requestBlob.Write (nonce, 0, nonce.Length);
 			requestBlob.WriteCmdSize ();
 			
-			TPMBlob responseBlob = _tpmProvider.TransmitAndCheck (requestBlob);
+			TPMBlob responseBlob = TransmitMe(requestBlob);
 			responseBlob.SkipHeader ();
 			
 			long posStart = responseBlob.Position;

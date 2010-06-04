@@ -8,6 +8,8 @@ using Iaik.Tc.TPM.Library.HandlesCore.Authorization;
 using Iaik.Tc.TPM.Library.Common;
 using Iaik.Utils;
 using System.IO;
+using log4net;
+using System.Threading;
 
 namespace Iaik.Tc.TPM.Library.Commands
 {
@@ -15,6 +17,8 @@ namespace Iaik.Tc.TPM.Library.Commands
 
 	public abstract class TPMCommandAuthorizable : TPMCommand, IAuthorizableCommand
 	{
+		
+		
 		
 		/// <summary>
 		/// Saves the assigned authorization infos of the current command
@@ -68,6 +72,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 		{
 			try
 			{
+				_log.DebugFormat("Running command '{0}'", this);
 				return InternalProcess();
 			}
 			catch(Exception)
@@ -76,7 +81,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 				//so we need to remove them from our local cache
 				if(typeof(IAuthorizableCommand).IsAssignableFrom(this.GetType()))
 				{
-					_commandAuthHelper.RemoveAuthorizationHandle((IAuthorizableCommand)this);
+					_commandAuthHelper.DestroyAuthorizationHandles((IAuthorizableCommand)this);
 				}
 				throw;
 			}
@@ -87,6 +92,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 					_commandAuthHelper.ReleaseAuthorizationHandles((IAuthorizableCommand)this);
 				}
 			}
+			_log.DebugFormat("Finished command '{0}'", this);
 		}
 		
 		protected virtual TPMCommandResponse InternalProcess()
@@ -125,12 +131,15 @@ namespace Iaik.Tc.TPM.Library.Commands
 				}
 			}
 			
+			
+
 			for(int i = 0; i<_currentAuthorizationInfos.Length; i++)
 			{
 				ResponseAuthHandleInfo current = responseAuthHandles[i];
-			
+
+				
 				if(current.ContinueAuthSession == false)
-					_commandAuthHelper.DestroyAuthorizationHandle(_currentAuthorizationInfos[i].Handle);
+					_commandAuthHelper.DestroyAuthorizationHandle(this, _currentAuthorizationInfos[i].Handle);
 				else 
 				{
 					_currentAuthorizationInfos[i].Handle.UpdateNonceEven(current.NonceEven);
@@ -144,19 +153,82 @@ namespace Iaik.Tc.TPM.Library.Commands
 			_currentAuthorizationInfos = _commandAuthHelper.AuthorizeCommand(this);
 		}
 		
-		protected TPMBlob TransmitMe(TPMBlob requestBlob)
+		protected override TPMBlob TransmitMe(TPMBlob requestBlob)
 		{
-			using(_commandLockProvider.AcquireLock())
+			using(_commandAuthHelper.AcquireLock())
 			{
-				//Make sure that all Authorization handles are loaded
-				_commandAuthHelper.LoadAuthorizationHandles(_currentAuthorizationInfos);
-				
-				requestBlob.Seek(0, SeekOrigin.End);
-				foreach(AuthorizationInfo authInfo in _currentAuthorizationInfos)			
-					WriteAuthorizationInfo (requestBlob, authInfo);
+				try
+				{
+					TPMBlob responseBlob;
+					//Make sure that all Authorization handles are loaded
+					_commandAuthHelper.LoadAuthorizationHandles(_currentAuthorizationInfos);
 					
-				return _tpmProvider.TransmitAndCheck(requestBlob);
+					requestBlob.Seek(0, SeekOrigin.End);
+					foreach(AuthorizationInfo authInfo in _currentAuthorizationInfos)			
+						WriteAuthorizationInfo (requestBlob, authInfo);
+						
+					lock(_tpmProvider)
+					{
+						
+						try
+						{
+							_log.DebugFormat("Processing {0}", this);
+							_log.DebugFormat("AuthHandles: ");
+							foreach(AuthorizationInfo authInfo in _currentAuthorizationInfos)
+								_log.DebugFormat(authInfo.Handle.ToString());
+							_log.DebugFormat("Before execution: {0}", GetCommandInternalsBeforeExecute());
+		
+							responseBlob = _tpmProvider.TransmitAndCheck(requestBlob);
+						}
+						catch(Exception)
+						{
+							_log.DebugFormat("{0} FAILED", this);
+							throw;
+						}
+						finally
+						{
+							_log.DebugFormat("Processed {0}", this);
+						}
+					}
+					
+					ReleaseAuthHandles(false, responseBlob);
+					return responseBlob;
+				}
+				catch(Exception)
+				{
+					ReleaseAuthHandles(true, null);
+					throw;
+				}
 			}
+		}
+		
+		/// <summary>
+		/// Checks all used authorization handles if they should be localy destroyed or not
+		/// </summary>
+		/// <param name="forceRelease">true to force the deletion (on error)
+		/// </param>
+		protected void ReleaseAuthHandles(bool forceRelease, TPMBlob responseBlob)
+		{
+			if(forceRelease)
+			{
+				_commandAuthHelper.DestroyAuthorizationHandles(this);
+			}
+			else
+			{
+				ResponseAuthHandleInfo[] responseAuthHandles = ResponseAuthHandleInfoCore.ReadAuthHandleInfos(this, responseBlob);
+				
+				
+				for(int i = 0; i< responseAuthHandles.Length; i++)
+				{
+					if(responseAuthHandles[i].ContinueAuthSession)
+					{
+						_currentAuthorizationInfos[i].Handle.UpdateNonceEven(responseAuthHandles[i].NonceEven);
+					}
+					else
+						_commandAuthHelper.DestroyAuthorizationHandle(this, _currentAuthorizationInfos[i].Handle);
+				}
+			}	
+			
 		}
 
 		protected TPMBlob AuthorizeMeAndTransmit(TPMBlob requestBlob)
@@ -164,6 +236,8 @@ namespace Iaik.Tc.TPM.Library.Commands
 			AuthorizeMe(requestBlob);
 			return TransmitMe(requestBlob);
 		}
+				
+                                               
 		
 	}
 }

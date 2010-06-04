@@ -169,7 +169,9 @@ namespace Iaik.Connection.Packets
 					{
 						DataPacket packet = new DataPacket(_connection);
 						
+#if DEBUG_PACKETTRANSMITTER
 						_logger.DebugFormat("Received DataPacket: {0}", packet);
+#endif
 						if(packet.IsResponse)
 							HandleResponsePackets(packet);
 						else
@@ -262,7 +264,9 @@ namespace Iaik.Connection.Packets
 		{
 			if(packetInfo.AwaitsResponse)
 			{
+#if DEBUG_PACKETTRANSMITTER
 				_logger.DebugFormat("Transmitting packet with response {0}", packetInfo);
+#endif
 				lock(_packetsWaitingForResponse)
 				{
 					byte? packetNr = FindFreePacketNr();
@@ -276,7 +280,9 @@ namespace Iaik.Connection.Packets
 			}
 			else
 			{
+#if DEBUG_PACKETTRANSMITTER
 				_logger.DebugFormat("Transmitting packet without response {0}", packetInfo);
+#endif
 				//packetInfo.PacketToTransmit.PacketNr = 0;
 			}
 			
@@ -332,7 +338,9 @@ namespace Iaik.Connection.Packets
 		public void Dispose ()
 		{
 			//TODO: Insert real identifier (from authentication subsystem) here
+#if DEBUG_PACKETTRANSMITTER
 			_logger.DebugFormat("Disposing packettransmitter for {0}", _connection);
+#endif
 			_disposed = true;
 		}
 		

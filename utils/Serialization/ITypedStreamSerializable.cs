@@ -67,21 +67,24 @@ namespace Iaik.Utils.Serialization
 		/// <returns></returns>
 		public static Type FindTypedStreamSerializableType (string identifier, Assembly asm)
 		{
-			if (_cachedTypes.ContainsKey (asm) == false)
-				_cachedTypes.Add (asm, new Dictionary<string, Type> ());
-			
-			if (_cachedTypes[asm].ContainsKey (identifier) == false)
+			lock(_cachedTypes)
 			{
-				Type t = GenericClassIdentifierFactory.FindTypeForIdentifier<ITypedStreamSerializable> (identifier, asm);
+				if (_cachedTypes.ContainsKey (asm) == false)
+					_cachedTypes.Add (asm, new Dictionary<string, Type> ());
 				
-				if (t == null)
-					return null;
+				if (_cachedTypes[asm].ContainsKey (identifier) == false)
+				{
+					Type t = GenericClassIdentifierFactory.FindTypeForIdentifier<ITypedStreamSerializable> (identifier, asm);
+					
+					if (t == null)
+						return null;
+					
+					_cachedTypes[asm].Add (identifier, t);
+				}
 				
-				_cachedTypes[asm].Add (identifier, t);
+				
+				return _cachedTypes[asm][identifier];
 			}
-			
-			
-			return _cachedTypes[asm][identifier];
 		}
 		
 		public static Type FindTypedStreamSerializableTypeWithException (string identifier, Assembly asm)

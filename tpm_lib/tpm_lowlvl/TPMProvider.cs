@@ -174,22 +174,13 @@ namespace Iaik.Tc.TPM.Lowlevel
 
             byte[] inblob = instm.GetBuffer();
 			
-			if(_debug){
-				StringBuilder debugStr = new StringBuilder();
-				debugStr.Append("send --> 0x");
-
-				// we don't use foreach 'cause datasize << buffersize ;)
-					for(int i = 0; i<instm.Length; ++i)
-						debugStr.AppendFormat("{0:X2}", inblob[i]);
-						
-				_logger.Debug(debugStr.ToString());
-				}
+			if(_debug)
+				_logger.DebugFormat("send --> 0x{0}", ByteHelper.ByteArrayToHexString(instm.ToArray(), " "));
 			
             byte[] outblob = Transmit(inblob, (int)instm.Length);
 			
-			if(_debug){
-					_logger.DebugFormat("received --> 0x{0}", ByteHelper.ByteArrayToHexString(outblob));
-				}
+			if(_debug)
+				_logger.DebugFormat("received --> 0x{0}", ByteHelper.ByteArrayToHexString(outblob, " "));
 			
             return new TPMBlob(outblob);
         }

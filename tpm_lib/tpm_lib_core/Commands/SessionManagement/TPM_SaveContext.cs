@@ -5,6 +5,7 @@ using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 using Iaik.Tc.TPM.Lowlevel.Data;
 using Iaik.Tc.TPM.Lowlevel;
 using Iaik.Tc.TPM.Library.Common.Handles;
+using System.Text;
 
 namespace Iaik.Tc.TPM.Library.Commands.SessionManagement
 {
@@ -37,7 +38,7 @@ namespace Iaik.Tc.TPM.Library.Commands.SessionManagement
 			requestBlob.WriteUInt32((uint)handle.ResourceType);
 			requestBlob.Write(labelData, 0, labelData.Length);
 			
-			TPMBlob responseBlob =_tpmProvider.TransmitAndCheck(requestBlob);
+			TPMBlob responseBlob = TransmitMe(requestBlob);
 			responseBlob.SkipHeader();
 			
 			uint blobSize = responseBlob.ReadUInt32();
@@ -47,6 +48,13 @@ namespace Iaik.Tc.TPM.Library.Commands.SessionManagement
 			responseParams.AddPrimitiveType("context_blob", contextBlob);
 			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_SaveContext, responseParams);
 			
+		}
+
+		public override string GetCommandInternalsBeforeExecute ()
+		{
+			StringBuilder internals = new StringBuilder();
+			internals.AppendLine(_params.GetValueOf<ITPMHandle>("handle").ToString());
+			return internals.ToString();
 		}
 
 	

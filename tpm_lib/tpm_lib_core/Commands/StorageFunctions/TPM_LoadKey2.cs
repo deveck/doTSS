@@ -101,7 +101,6 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 			using(_keyManager.AcquireLock())
 			{
 				_keyManager.EnsureFreeSlot();
-			
 				uint tpmKeyHandle;
 				
 				if(_params.GetValueOf<bool>("parent_key_srk"))
@@ -122,10 +121,9 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 			uint loadedTpmHandle = _responseBlob.ReadUInt32();
 			KeyHandle loadedHandle = new KeyHandle(_params.GetValueOf<string>("key_identifier"), loadedTpmHandle);
 			
-			Parameters responseParams = new Parameters();
-			responseParams.AddPrimitiveType("handle", loadedHandle);
-			
-			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_LoadKey2, responseParams);
+			_responseParameters = new Parameters();
+			_responseParameters.AddPrimitiveType("handle", loadedHandle);
+			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_LoadKey2, _responseParameters);
 		}
 		
 		
@@ -151,9 +149,19 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 		{
 			return authType == AuthHandle.AuthType.OIAP;
 		}
-
-
 		
-	
+		public override string GetCommandInternalsBeforeExecute ()
+		{
+			uint tpmKeyHandle;
+			if(_params.GetValueOf<bool>("parent_key_srk"))
+				tpmKeyHandle = (uint)TPMKeyHandles.TPM_KH_SRK;
+			else
+				tpmKeyHandle = _keyManager.IdentifierToHandle(_params.GetValueOf<string>("parent_identifier")).Handle;
+
+			
+			return string.Format("{0}\tparent_handle=0x{1:X}",base.GetCommandInternalsBeforeExecute (),tpmKeyHandle);
+				
+		}
+
 	}
 }

@@ -12,6 +12,7 @@ using Iaik.Utils.Hash;
 using Iaik.Tc.TPM.Library.HandlesCore.Authorization;
 using Iaik.Tc.TPM.Library.Common;
 using Iaik.Tc.TPM.Library.Common.KeyData;
+using Iaik.Utils.Locking;
 
 namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {
@@ -41,6 +42,14 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		
 		#region ICommandAuthorizationHelper implementation
 		
+		public ILockContext AcquireLock()
+		{
+			ILockContext keyManager =  _tpmContext.KeyManager.AcquireLock();
+			ILockContext authHandleManager = _tpmContext.AuthHandleManager.AcquireLock();
+			return new CombinedLockContext(keyManager, authHandleManager);
+			//return _tpmContext.AuthHandleManager.AcquireLock();
+		}
+		
 		/// <summary>
 		/// Assures that the shared secret for the specified authorization handle has been
 		/// calculated, if not it gets calculated. If no OSAP session exists, create it
@@ -51,12 +60,13 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		public AuthHandle AssureOSAPSharedSecret(IAuthorizableCommand cmd, AuthSessionNum authSessionNum)
 		{
 		
-			lock(_tpmContext.AuthHandleManager)
-			{
-				//Must not be called for OSAP at the moment because OSAP session are not cached
-				_tpmContext.AuthHandleManager.ReserveAuthHandleSlots(cmd);
-			}
 			
+//			using(AcquireLock())
+//			{
+//				//Must not be called for OSAP at the moment because OSAP session are not cached
+//				_tpmContext.AuthHandleManager.ReserveAuthHandleSlots(cmd);
+//			}
+//			
 			HMACKeyInfo keyInfo = cmd.GetKeyInfo(authSessionNum);
 			
 			if(keyInfo == null)
@@ -64,7 +74,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 
 			AuthHandle authHandle; 
 				
-			lock(_tpmContext.AuthHandleManager)
+			using(AcquireLock())
 			{					
 				authHandle = _tpmContext.AuthHandleManager.GetAuthHandle(cmd, authSessionNum);
 			}
@@ -110,7 +120,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		{
 			List<AuthorizationInfo> authorizationInfos = new List<AuthorizationInfo>();
 			
-			lock(_tpmContext.AuthHandleManager)
+			using(AcquireLock())
 			{
 				_tpmContext.AuthHandleManager.ReserveAuthHandleSlots(cmd);
 			}
@@ -124,7 +134,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 
 				AuthHandle authHandle; 
 					
-				lock(_tpmContext.AuthHandleManager)
+				using(AcquireLock())
 				{					
 					authHandle = _tpmContext.AuthHandleManager.GetAuthHandle(cmd, authSessionNum);
 				}
@@ -265,6 +275,9 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		/// </param>
 		public void LoadAuthorizationHandles(params AuthHandle[] authHandles)
 		{
+			//First Update all Authorization handles to be actual so they do not get swapped out
+			_tpmContext.AuthHandleManager.MarkAsUsed(authHandles);
+			
 			foreach(AuthHandle authHandle in authHandles)
 				_tpmContext.AuthHandleManager.LoadAuthHandle(authHandle);
 		}
@@ -280,9 +293,9 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			_tpmContext.AuthHandleManager.ReleaseAuthHandles(cmd);
 		}
 		
-		public void DestroyAuthorizationHandle (AuthHandle handle)
+		public void DestroyAuthorizationHandle (IAuthorizableCommand cmd, AuthHandle handle)
 		{
-			_tpmContext.AuthHandleManager.DestroyAuthHandles(handle);
+			_tpmContext.AuthHandleManager.DestroyAuthHandles(cmd, handle);
 		}
 		
 		

@@ -10,6 +10,7 @@ using System.IO;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 using Iaik.Utils.Locking;
 using Iaik.Tc.TPM.Library.Common.KeyData;
+using log4net;
 
 namespace Iaik.Tc.TPM.Library
 {
@@ -17,6 +18,8 @@ namespace Iaik.Tc.TPM.Library
 
 	public class TPMWrapper : IDisposable
 	{
+		private ILog _log = LogManager.GetLogger("TPMWrapper");
+		
 		#region Backend status
 		/// <summary>
 		/// Disposed status of the Object
@@ -65,7 +68,7 @@ namespace Iaik.Tc.TPM.Library
 		/// Provides the ability to acquire exclusive locks for command execution
 		/// for critical sections
 		/// </summary>
-		private LockProvider _commandLockProvider  = new LockProvider(new object());
+		private LockProvider _commandLockProvider  = new LockProvider(new object(), "TPM");
 		
 		public LockProvider CommandLockProvider
 		{
@@ -147,21 +150,13 @@ namespace Iaik.Tc.TPM.Library
 		public TPMCommandResponse Process (TPMCommandRequest request, ICommandAuthorizationHelper commandAuthorizationHelper, 
 			IKeyManagerHelper keyManager)
 		{
-			try
-			{
-				//Opening is done automatically
-				//_backend.Open ();
+			
 				TPMCommand command = TPMCommandFactory.Create (request.CommandIdentifier);
 				command.SetCommandLockProvider(_commandLockProvider);
 				command.SetKeyManager(keyManager);
 				command.SetCommandAuthorizationHelper(commandAuthorizationHelper);
 				command.Init (request.Parameters, _backend, this);
 				return command.Process ();
-			}
-			finally
-			{
-				_backend.Close ();
-			}
 		}
 		
 	}

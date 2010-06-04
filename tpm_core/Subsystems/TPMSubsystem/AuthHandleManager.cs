@@ -10,6 +10,9 @@ using System.Collections.Generic;
 using Iaik.Utils.SwapUtils;
 using Iaik.Tc.TPM.Library.Common.Handles;
 using log4net;
+using System.Text;
+using System.Threading;
+using Iaik.Utils.Locking;
 
 namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {
@@ -70,6 +73,16 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		}
 		
 		#region IAuthHandleManager implementation
+		
+		/// <summary>
+		/// Acquires an exclusive AuthHandle lock
+		/// </summary>
+		/// <returns></returns>
+		public LockContext AcquireLock()
+		{
+			return new LockContext(_authHandles, "AuthHandleManager");
+		}
+		
 		/// <summary>
 		/// Reserves the number of session slots the given command requires on the tpm.
 		/// </summary>
@@ -85,7 +98,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		public void ReserveAuthHandleSlots(IAuthorizableCommand cmd)
 		{
 			
-			lock(_authHandles)
+			using(new LockContext(_authHandles, string.Format("AuthHandleManager::ReserveAuthHandleSlots {0}", cmd)))
 			{
 				foreach(AuthSessionNum authSession in new AuthSessionNum[]{AuthSessionNum.Auth1, AuthSessionNum.Auth2})
 				{
@@ -113,39 +126,35 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 						if(handle == null)
 						{
 							handle = FindFreeAuthHandle(AuthHandleItem.AuthHandleStatus.SwappedOut);
-							if(handle != null)
-								_logger.DebugFormat("{0}: Found free swapped out OIAP handle ({1})", _tpmContext.DeviceName, handle.AuthHandle.Handle);
 						}
-						else
-							_logger.DebugFormat("{0}: Found free swapped in OIAP handle ({1})", _tpmContext.DeviceName, handle.AuthHandle.Handle);
 						
 
 						if(handle != null)
 						{
 							handle.AssociatedCommand = new KeyValuePair<AuthSessionNum, IAuthorizableCommand>(authSession, cmd);							
-							_logger.DebugFormat("{0}: Reserved auth handle ({1}) for '{2}'", _tpmContext.DeviceName, handle.AuthHandle.Handle, cmd.GetType());
 						}
 					}
 				}
 			}
 			
-			
 		}
 		
 		public AuthHandle GetAuthHandle (IAuthorizableCommand cmd, AuthSessionNum authSession)
 		{
-			lock(_authHandles)
+			AuthHandleItem reservedHandle = null;
+			using(new LockContext(_authHandles, string.Format("AuthHandleManager::GetAuthHandle {0}", cmd)))
 			{
-				AuthHandleItem reservedHandle = FindReservedHandle(cmd, authSession);
+				reservedHandle = FindReservedHandle(cmd, authSession);
+				
 				
 				// No reserved auth handle was found, create a new one
 				if(reservedHandle == null)
+				{
 					reservedHandle = CreateAuthHandle(cmd, authSession);
-
-
-				_logger.DebugFormat("{0}: Returning auth handle ({1}) for command '{2}'", _tpmContext.DeviceName, reservedHandle.AuthHandle.Handle, cmd.GetType());
-				return reservedHandle.AuthHandle;				
+				}
 			}
+			
+			return reservedHandle.AuthHandle;
 		}
 		
 		
@@ -165,10 +174,13 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				AuthHandle newAuthHandle = oiapResponse.Parameters.GetValueOf<AuthHandle>("auth_handle");
 				AuthHandleItem authHandleItem = new AuthHandleItem(newAuthHandle, AuthHandleItem.AuthHandleStatus.SwappedIn);
 				authHandleItem.AssociatedCommand = new KeyValuePair<AuthSessionNum, IAuthorizableCommand>(authSession, cmd);
-				_authHandles.AddAuthHandle(authHandleItem);
-				AddNewItem(authHandleItem);
 				
-				_logger.DebugFormat("{0}: Created OIAP auth handle ({1})", _tpmContext.DeviceName, newAuthHandle.Handle);
+				using(new LockContext(_authHandles, "CreateAuthHandle OIAP"))
+				{
+					_authHandles.AddAuthHandle(authHandleItem);
+					AddNewItem(authHandleItem);
+				}
+				
 				return authHandleItem;
 			}
 			else if(cmd.SupportsAuthType(AuthHandle.AuthType.OSAP))
@@ -192,10 +204,13 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				AuthHandle newAuthHandle = osapResponse.Parameters.GetValueOf<AuthHandle>("auth_handle");
 				AuthHandleItem authHandleItem = new AuthHandleItem(newAuthHandle, AuthHandleItem.AuthHandleStatus.SwappedIn);
 				authHandleItem.AssociatedCommand = new KeyValuePair<AuthSessionNum, IAuthorizableCommand>(authSession, cmd);
-				_authHandles.AddAuthHandle(authHandleItem);
-				AddNewItem(authHandleItem);
 				
-				_logger.DebugFormat("{0}: Created OSAP auth handle ({1})", _tpmContext.DeviceName, newAuthHandle.Handle);
+				using(new LockContext(_authHandles, "CreateAuthHandle OSAP"))
+				{
+					_authHandles.AddAuthHandle(authHandleItem);
+					AddNewItem(authHandleItem);
+				}
+				
 				return authHandleItem;
 			}
 			else 
@@ -204,27 +219,44 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		
 		public void ReleaseAuthHandles (IAuthorizableCommand cmd)
 		{
-			lock(_authHandles)
+			using(new LockContext(_authHandles, "AuthHandleManager::ReleaseAuthHandles"))
 			{
 				foreach(AuthHandleItem handle in FindReservedHandles(cmd))
 				{
-					_logger.DebugFormat("{0}: Releasing authhandle ({1}) for command '{2}'", _tpmContext.DeviceName, handle.AuthHandle.Handle, cmd.GetType());
 					handle.AssociatedCommand = null;
 				}
 			}
 		}
 		
+		public void MarkAsUsed(IEnumerable<AuthHandle> authHandles)
+		{
+			using(new LockContext(_authHandles, "AuthHandleManager::LoadAuthHandle"))
+			{
+				List<UInt64> ids = new List<UInt64>();
+				foreach(AuthHandle authHandle in authHandles)
+					ids.Add(ItemToId(FindAuthHandleItem(authHandle)).Value);
+				_replacementAlgorithm.RegisterUsed(ids);
+				_replacementAlgorithm.Update();
+				
+			}
+		}
+		
 		public void LoadAuthHandle(AuthHandle authHandle)
 		{
-			lock(_authHandles)
+			using(new LockContext(_authHandles, "AuthHandleManager::LoadAuthHandle"))
 			{
-				foreach(AuthHandleItem handleItem in _authHandles.FindAuthHandles(AuthHandleItem.AuthHandleStatus.SwappedOut))
+				List<AuthHandleItem> myAuthHandles =_authHandles.FindAuthHandles(AuthHandleItem.AuthHandleStatus.SwappedOut);
+				_logger.DebugFormat("LoadAuthHandle: #{0}", myAuthHandles.Count);
+				
+				foreach(AuthHandleItem handleItem in myAuthHandles)
 				{
+					_logger.DebugFormat("LoadAuthHandles: Found auth handle {0} with status {1}", handleItem.AuthHandle, handleItem.Status);
 					if(handleItem.AuthHandle == authHandle &&
 					   handleItem.Status != AuthHandleItem.AuthHandleStatus.SwappedIn)
 					{
+
 						SwapIn(handleItem);
-						return;
+						_logger.DebugFormat("LoadAuthHandles: Swapped in {0}", handleItem.AuthHandle);
 					}
 				}
 			}
@@ -232,19 +264,27 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		
 		public void DestroyAuthHandles (IAuthorizableCommand cmd)
 		{
-			lock(_authHandles)
+			try
 			{
-				foreach(AuthHandleItem item in FindReservedHandles(cmd))
+				using(new LockContext(_authHandles, "AuthHandleManager::DestroyAuthHandles"))
 				{
-					_logger.DebugFormat("{0}: Destroy authhandle ({1}) for command '{2}'", _tpmContext.DeviceName, item.AuthHandle.Handle, cmd.GetType());
-					InternalDestroyHandle(item);
+					foreach(AuthHandleItem item in FindReservedHandles(cmd))
+					{
+						InternalDestroyHandle(item);
+					}
 				}
+			}
+			catch(Exception ex)
+			{
+				_logger.FatalFormat("ERROR: destroyAuthHandles {0}", ex);
+				throw;
 			}
 		}
 		
-		public void DestroyAuthHandles (params AuthHandle[] authHandles)
+		public void DestroyAuthHandles (IAuthorizableCommand cmd, params AuthHandle[] authHandles)
 		{
-			lock(_authHandles)
+		
+			using(new LockContext(_authHandles, "AuthHandleManager::DestroyAuthHandles2"))
 			{
 				foreach(AuthHandle authHandle in authHandles)
 				{
@@ -253,10 +293,11 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 					if(item == null)
 						continue;
 					
-					_logger.DebugFormat("{0}: Destroy authhandle ({1})", _tpmContext.DeviceName, item.AuthHandle.Handle);
-					InternalDestroyHandle(item);
+					if(item.AssociatedCommand != null && item.AssociatedCommand.Value.Value == cmd)
+					{
+						InternalDestroyHandle(item);
+					}
 				}			
-				
 			}
 		}
 		
@@ -270,6 +311,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		{
 			Parameters parameters = new Parameters();
 			parameters.AddValue("handle", item.AuthHandle);
+			parameters.AddPrimitiveType("ignore_tpm_error", true);
 			TPMCommandRequest destroyHandleRequest = new TPMCommandRequest(TPMCommandNames.TPM_CMD_FlushSpecific, parameters);
 			
 			TPMCommandResponse destroyHandleResponse = _tpmContext.TPM.Process(destroyHandleRequest);
@@ -277,18 +319,19 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			if(!destroyHandleResponse.Status)
 				throw new TPMRequestException("Error on flushing auth handle context, aborting");
 			
-			RemoveAuthHandle(item);
+			_logger.DebugFormat("Authhandles before remove: {0}", _authHandles);
+			InternalRemoveAuthHandle(item);
+			_logger.DebugFormat("Authhandles after remove: {0}", _authHandles);
 			
 		}
 		
 		
 		public void RemoveAuthHandles (IAuthorizableCommand cmd)
 		{
-			lock(_authHandles)
+			using(new LockContext(_authHandles, "AuthHandleManager::RemoveAuthHandles"))
 			{
 				foreach(AuthHandleItem handle in FindReservedHandles(cmd))
 				{
-					_logger.DebugFormat("{0}: Removing auth handle ({1}) for command '{2}'", _tpmContext.DeviceName, handle.AuthHandle.Handle, cmd.GetType());
 					_authHandles.RemoveAuthHandle(handle);
 				}
 			}
@@ -296,11 +339,15 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		
 		private void RemoveAuthHandle(AuthHandleItem item)
 		{
-			lock(_authHandles)
+			using(new LockContext(_authHandles, "AuthHandleManager::RemoveAuthHandles2"))
 			{
-				_logger.DebugFormat("{0}: Removing auth handle ({1})", _tpmContext.DeviceName, item.AuthHandle.Handle);
-				_authHandles.RemoveAuthHandle(item);
+				InternalRemoveAuthHandle(item);
 			}
+		}
+
+		private void InternalRemoveAuthHandle(AuthHandleItem item)
+		{
+			_authHandles.RemoveAuthHandle(item);
 		}
 		
 		#endregion
@@ -313,27 +360,29 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		/// <param name="item"></param>
 		protected override void SwappedIn (AuthHandleItem item)
 		{
-			_logger.DebugFormat("{0}: Swapping in authhandle ({1})", _tpmContext.DeviceName, item.AuthHandle.Handle);
 			uint oldHandle = item.AuthHandle.Handle;
 			if(item.Status != AuthHandleItem.AuthHandleStatus.SwappedOut)
 				throw new ArgumentException("Invalid auth handle state for swap in operation");
 			
-			if(AvailableSessionSlots <= LoadedSessions)
-				SwapOut();
-			
-			
-			Parameters swapInParameters = new Parameters();
-			swapInParameters.AddValue("handle", item.AuthHandle);
-			
-			TPMCommandRequest swapInRequest = new TPMCommandRequest(TPMCommandNames.TPM_CMD_LoadContext, swapInParameters);
-			
-			TPMCommandResponse swapInResponse =_tpmContext.TPM.Process(swapInRequest);
-			if(swapInResponse.Status == false)
-				throw new TPMRequestException("Unknown error while swap in operation");
-			
-			item.AuthHandle.Handle = swapInResponse.Parameters.GetValueOf<ITPMHandle>("handle").Handle;
-			item.Status = AuthHandleItem.AuthHandleStatus.SwappedIn;
-			_logger.DebugFormat("{0}: New handle id for '{0}' is '{1}'", _tpmContext.DeviceName, oldHandle, item.AuthHandle.Handle);
+			using(new LockContext(_authHandles, "AuthHandleManager::SwappedIn"))
+			{
+				if(AvailableSessionSlots <= LoadedSessions)
+					SwapOut();
+				
+				
+				Parameters swapInParameters = new Parameters();
+				swapInParameters.AddValue("handle", item.AuthHandle);
+				swapInParameters.AddPrimitiveType("context_blob", item.AuthHandle.ContextBlob);
+				
+				TPMCommandRequest swapInRequest = new TPMCommandRequest(TPMCommandNames.TPM_CMD_LoadContext, swapInParameters);
+				
+				TPMCommandResponse swapInResponse =_tpmContext.TPM.Process(swapInRequest);
+				if(swapInResponse.Status == false)
+					throw new TPMRequestException("Unknown error while swap in operation");
+				
+				item.AuthHandle.Handle = swapInResponse.Parameters.GetValueOf<ITPMHandle>("handle").Handle;
+				item.Status = AuthHandleItem.AuthHandleStatus.SwappedIn;
+			}
 		}
 
 		/// <summary>
@@ -342,22 +391,24 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		/// <param name="item"></param>
 		protected override void SwappedOut (AuthHandleItem item)
 		{
-			_logger.DebugFormat("{0}: Swapping out authhandle ({1})", _tpmContext.DeviceName, item.AuthHandle.Handle);
 			if(item.Status != AuthHandleItem.AuthHandleStatus.SwappedIn)
 				throw new ArgumentException("Invalid auth handle state for swap out operation");
 			
-			Parameters swapOutParameters = new Parameters();
-			swapOutParameters.AddValue("handle", item.AuthHandle);
-			TPMCommandRequest swapOutRequest = new TPMCommandRequest(TPMCommandNames.TPM_CMD_SaveContext, swapOutParameters);
-			
-			TPMCommandResponse swapOutResponse =_tpmContext.TPM.Process(swapOutRequest);
-
-			if(swapOutResponse.Status == false)
-				throw new TPMRequestException("Unknown error while swap out operation");
-			
-			
-			item.Status = AuthHandleItem.AuthHandleStatus.SwappedOut;
-			item.AuthHandle.ContextBlob = swapOutResponse.Parameters.GetValueOf<byte[]>("context_blob");
+			using(new LockContext(_authHandles, "AuthHandleManager::SwappedOut"))
+			{
+				Parameters swapOutParameters = new Parameters();
+				swapOutParameters.AddValue("handle", item.AuthHandle);
+				TPMCommandRequest swapOutRequest = new TPMCommandRequest(TPMCommandNames.TPM_CMD_SaveContext, swapOutParameters);
+				
+				TPMCommandResponse swapOutResponse =_tpmContext.TPM.Process(swapOutRequest);
+	
+				if(swapOutResponse.Status == false)
+					throw new TPMRequestException("Unknown error while swap out operation");
+				
+				
+				item.Status = AuthHandleItem.AuthHandleStatus.SwappedOut;
+				item.AuthHandle.ContextBlob = swapOutResponse.Parameters.GetValueOf<byte[]>("context_blob");
+			}
 		}
 
 		#endregion
@@ -411,7 +462,6 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 					
 				if(handle.AssociatedCommand.Value.Value == cmd)
 				{
-					_logger.DebugFormat("{0}: Found reserved swapped in auth handle ({1}) for '{2}'", _tpmContext.DeviceName, handle.AuthHandle.Handle, cmd.GetType());
 					returnValues.Add(handle);
 				}
 			}
@@ -423,7 +473,6 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				
 				if(handle.AssociatedCommand.Value.Value == cmd)
 				{
-					_logger.DebugFormat("{0}: Found reserved swapped out auth handle ({1}) for '{2}'", _tpmContext.DeviceName, handle.AuthHandle.Handle, cmd.GetType());
 					returnValues.Add(handle);
 				}
 			}
@@ -451,6 +500,11 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		/// @key tpmSessionIdentifier
 		/// </summary>
 		List<AuthHandleItem> _authHandles = new List<AuthHandleItem>();
+	
+		public int Count
+		{
+			get{ return _authHandles.Count; }
+		}
 		
 		/// <summary>
 		/// Adds the specified auth handle item to the list
@@ -458,6 +512,16 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		/// <param name="authHandleItem"></param>
 		public void AddAuthHandle(AuthHandleItem authHandleItem)
 		{
+			//Check if there is an old obsolete authhandle with the same id
+			foreach(AuthHandleItem item in _authHandles)
+			{
+				if(item.AuthHandle.Handle == authHandleItem.AuthHandle.Handle)
+				{
+					_authHandles.Remove(item);
+					break;
+				}
+			}
+			
 			_authHandles.Add(authHandleItem);
 		}
 		
@@ -512,6 +576,21 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		}
 		
 		#endregion
+		
+		public override string ToString ()
+		{
+			StringBuilder str = new StringBuilder();
+			str.AppendFormat("[AuthHandleCollection: Count={0}\n", Count);
+			
+			for(int i = 0; i<_authHandles.Count; i++)
+			{
+				str.AppendFormat("#{0}: {1} 0x{2:X}\n", i, _authHandles[i].Status, _authHandles[i].AuthHandle.Handle);
+			}
+			str.Append("\n");
+			
+			return str.ToString();
+		}
+
 	}
 	
 	public class AuthHandleItem

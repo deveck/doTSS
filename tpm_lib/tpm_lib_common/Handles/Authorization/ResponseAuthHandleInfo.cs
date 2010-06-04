@@ -5,6 +5,7 @@ using System;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 using System.Collections.Generic;
 using System.IO;
+using Iaik.Utils;
 
 namespace Iaik.Tc.TPM.Library.HandlesCore.Authorization
 {
@@ -41,5 +42,11 @@ namespace Iaik.Tc.TPM.Library.HandlesCore.Authorization
 		protected ResponseAuthHandleInfo ()
 		{
 		}
+		
+		public override string ToString ()
+		{
+			return string.Format("[ResponseAuthHandleInfo: TpmAuthData={0}]", ByteHelper.ByteArrayToHexString(TpmAuthData));
+		}
+
 	}
 }

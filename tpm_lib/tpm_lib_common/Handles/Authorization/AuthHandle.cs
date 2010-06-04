@@ -174,11 +174,22 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 			set {_authHandle = value;}
 		}
 		
+		public bool ForceHandle
+		{
+			get{ return _authType == AuthHandle.AuthType.OSAP; }
+		}
+		
 		public TPMResourceType ResourceType 
 		{
 			get { return TPMResourceType.TPM_RT_AUTH; }
 		}
 		
 		#endregion
+		
+		public override string ToString ()
+		{
+			return string.Format("[AuthHandle: HandleAuthType={0}, Handle=0x{1:X}, ForceHandle={2}, ResourceType={3}]", HandleAuthType, Handle, ForceHandle, ResourceType);
+		}
+
 	}
 }

@@ -34,6 +34,11 @@ namespace Iaik.Tc.TPM.Library.Common.KeyData
 			set { _handle = value; }
 		}
 		
+		public bool ForceHandle
+		{
+			get{ return false; }
+		}
+		
 		
 		public TPMResourceType ResourceType 
 		{
@@ -61,5 +66,11 @@ namespace Iaik.Tc.TPM.Library.Common.KeyData
 			_identifier = identifier;
 			_handle = keyHandle;
 		}
+		
+		public override string ToString ()
+		{
+			return string.Format("[KeyHandle: Handle=0x{0:X}, ForceHandle={1}, ResourceType={2}, Identifier={3}]", Handle, ForceHandle, ResourceType, Identifier);
+		}
+
 	}
 }

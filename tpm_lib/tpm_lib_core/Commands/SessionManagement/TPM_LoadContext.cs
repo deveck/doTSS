@@ -4,6 +4,7 @@ using Iaik.Tc.TPM.Library.Common;
 using Iaik.Tc.TPM.Library.Common.Handles;
 using Iaik.Tc.TPM.Lowlevel.Data;
 using Iaik.Tc.TPM.Lowlevel;
+using System.Text;
 
 namespace Iaik.Tc.TPM.Library.Commands.SessionManagement
 {
@@ -19,30 +20,36 @@ namespace Iaik.Tc.TPM.Library.Commands.SessionManagement
 		public override TPMCommandResponse Process ()
 		{
 			if(_params.IsDefined<ITPMHandle>("handle") == false ||
-			   _params.IsDefined<bool>("keep_handle") == false ||
 			   _params.IsDefined<byte[]>("context_blob") == false)
 				return new TPMCommandResponse(false, TPMCommandNames.TPM_CMD_LoadContext, new Parameters());
 			
 			ITPMHandle handle = _params.GetValueOf<ITPMHandle>("handle");
-			bool keepHandle = _params.GetValueOf<bool>("keep_handle");
+			//bool keepHandle = _params.GetValueOf<bool>("keep_handle");
 			
 			TPMBlob blob = new TPMBlob();
 			blob.WriteCmdHeader(TPMCmdTags.TPM_TAG_RQU_COMMAND, TPMOrdinals.TPM_ORD_LoadContext);
 			blob.WriteUInt32(handle.Handle);
-			blob.WriteBool(keepHandle);
+			blob.WriteBool(handle.ForceHandle);
 			blob.WriteUInt32((uint)handle.ContextBlob.Length);
 			blob.Write(handle.ContextBlob, 0, handle.ContextBlob.Length);
 			
-			TPMBlob responseBlob = _tpmProvider.TransmitAndCheck(blob);
+			TPMBlob responseBlob = TransmitMe(blob);
 			responseBlob.SkipHeader();
 			handle.Handle = responseBlob.ReadUInt32();
 			
 			Parameters responseParameters = new Parameters();
 			responseParameters.AddValue("handle", handle);
 			
-			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_LoadContext, responseParameters);
-			
+			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_LoadContext, responseParameters);			
 		}
+		
+		public override string GetCommandInternalsBeforeExecute ()
+		{
+			StringBuilder internals = new StringBuilder();
+			internals.AppendLine(_params.GetValueOf<ITPMHandle>("handle").ToString());
+			return internals.ToString();
+		}
+
 
 	}
 }

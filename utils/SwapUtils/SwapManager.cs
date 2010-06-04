@@ -34,8 +34,11 @@ namespace Iaik.Utils.SwapUtils
 		/// <param name="item"></param>
 		protected void AddNewItem(T item)
 		{
-			UInt64 newId = _replacementAlgorithm.RegisterNew();
-			_items.Add(newId, item);
+			lock(_items)
+			{
+				UInt64 newId = _replacementAlgorithm.RegisterNew();
+				_items.Add(newId, item);
+			}
 		}
 		                          
 		
@@ -48,18 +51,21 @@ namespace Iaik.Utils.SwapUtils
 		}
 		
 		/// <summary>
-		/// Looks for a andidate to swap out and performs the swap operation
+		/// Looks for a candidate to swap out and performs the swap operation
 		/// </summary>
 		protected virtual void SwapOut(int swapCount)
 		{			
-			List<ulong> swapables = _replacementAlgorithm.Swapables;
-			
-			for(int i = 0; i<Math.Min(swapCount, swapables.Count); i++)
+			lock(_items)
 			{
-				ulong swapCandidate = swapables[i];
+				List<ulong> swapables = _replacementAlgorithm.Swapables;
 				
-				_replacementAlgorithm.SwapOut(swapCandidate);
-				SwappedOut(IdToItem(swapCandidate));				
+				for(int i = 0; i<Math.Min(swapCount, swapables.Count); i++)
+				{
+					ulong swapCandidate = swapables[i];
+					
+					_replacementAlgorithm.SwapOut(swapCandidate);
+					SwappedOut(IdToItem(swapCandidate));				
+				}
 			}
 		}
 		
@@ -69,15 +75,18 @@ namespace Iaik.Utils.SwapUtils
 		/// <param name="item"></param>
 		protected virtual void SwapIn(T item)
 		{
-			UInt64? id = ItemToId(item);
-			
-			if(id == null)
-				return;
-			
-			_replacementAlgorithm.SwapIn(id.Value);
-			_replacementAlgorithm.RegisterUsed(id.Value);
-			_replacementAlgorithm.Update();
-			SwappedIn(item);
+			lock(_items)
+			{
+				UInt64? id = ItemToId(item);
+				
+				if(id == null)
+					return;
+				
+				_replacementAlgorithm.SwapIn(id.Value);
+				_replacementAlgorithm.RegisterUsed(id.Value);
+				_replacementAlgorithm.Update();
+				SwappedIn(item);
+			}
 		}
 		
 		/// <summary>

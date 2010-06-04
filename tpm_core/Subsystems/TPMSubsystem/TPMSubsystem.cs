@@ -124,6 +124,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				tpmContext = _selectedTPMs[requestContext.Request.TPMIdentifier];
 			}
 			
+			_logger.DebugFormat("Executing {0}", requestContext.Request.CommandRequest.CommandIdentifier);
 			
 			response = requestContext.CreateResponse ();
 			try

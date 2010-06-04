@@ -4,6 +4,7 @@ using Iaik.Tc.TPM.Library.Common;
 using Iaik.Tc.TPM.Library.Common.Handles;
 using Iaik.Tc.TPM.Lowlevel.Data;
 using Iaik.Tc.TPM.Lowlevel;
+using System.Text;
 
 namespace Iaik.Tc.TPM.Library.Commands.Eviction
 {
@@ -27,7 +28,15 @@ namespace Iaik.Tc.TPM.Library.Commands.Eviction
 			
 			requestBlob.WriteCmdSize ();
 			
-			/*TPMBlob responseBlob =*/ _tpmProvider.TransmitAndCheck (requestBlob);
+			try
+			{
+				TransmitMe(requestBlob);
+			}
+			catch(Exception)
+			{
+				if(!_params.GetValueOf<bool>("ignore_tpm_error", false))
+					throw;
+			}
 			
 			return new TPMCommandResponse (true, TPMCommandNames.TPM_CMD_FlushSpecific, new Parameters ());
 		}
@@ -36,6 +45,14 @@ namespace Iaik.Tc.TPM.Library.Commands.Eviction
 		
 		public override void Clear ()
 		{
+		}
+
+		
+		public override string GetCommandInternalsAfterExecute ()
+		{
+			StringBuilder internals = new StringBuilder();
+			internals.AppendLine(_params.GetValueOf<ITPMHandle>("handle").ToString());
+			return internals.ToString();
 		}
 
 	}

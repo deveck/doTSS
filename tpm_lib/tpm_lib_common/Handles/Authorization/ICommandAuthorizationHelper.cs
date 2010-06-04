@@ -1,5 +1,6 @@
 
 using System;
+using Iaik.Utils.Locking;
 
 namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 {
@@ -10,7 +11,14 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 	public interface ICommandAuthorizationHelper
 	{
 	
-	
+		/// <summary>
+		/// Acquires an exclusive lock
+		/// </summary>
+		/// <returns>
+		/// A <see cref="LockContext"/>
+		/// </returns>
+		ILockContext AcquireLock();
+		
 		/// <summary>
 		/// Assures that the shared secret for the specified authorization handle has been
 		/// calculated, if not it gets calculated
@@ -67,7 +75,7 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		/// <param name="handle">
 		/// A <see cref="AuthHandle"/>
 		/// </param>
-		void DestroyAuthorizationHandle(AuthHandle handle);
+		void DestroyAuthorizationHandle(IAuthorizableCommand cmd, AuthHandle handle);
 		
 		/// <summary>
 		/// Extracts the AuthHandles and releases them

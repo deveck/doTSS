@@ -11,11 +11,22 @@ using Iaik.Utils.Locking;
 using Iaik.Tc.TPM.Library.HandlesCore.Authorization;
 using Iaik.Utils.Hash;
 using Iaik.Tc.TPM.Library.Common.KeyData;
+using log4net;
 
 namespace Iaik.Tc.TPM.Library.Commands
 {
 	public abstract class TPMCommand //: IDisposable
 	{
+		/// <summary>
+		/// Logger for debuggins purpose
+		/// </summary>
+		protected ILog _log = LogManager.GetLogger("TPMCommand");
+		
+		/// <summary>
+		/// Response paramters only used for debugging purpose, do not need to be used
+		/// </summary>
+		protected Parameters _responseParameters = null;
+		
 		protected TPMProvider _tpmProvider = null;
 		protected TPMWrapper _tpmWrapper = null;
 		protected readonly UInt32 commandOrdinal_;
@@ -138,13 +149,68 @@ namespace Iaik.Tc.TPM.Library.Commands
 		//public abstract void Process(Parameters param);
 		//public abstract void Process();
 		public abstract TPMCommandResponse Process();
-		
+
+		/// <summary>
+		/// Transmits the specified request blob
+		/// </summary>
+		/// <param name="requestBlob"></param>
+		/// <returns></returns>
+		protected virtual TPMBlob TransmitMe(TPMBlob requestBlob)
+		{
+			lock(_tpmProvider)
+			{
+				try
+				{
+					_log.DebugFormat("Processing {0}", this);
+					_log.DebugFormat("BeforeExecution: {0}", GetCommandInternalsBeforeExecute());
+					return _tpmProvider.TransmitAndCheck(requestBlob);					
+				}
+				catch(Exception)
+				{
+					//If the request was not successful destroy all auth handles,
+					//before releasing the tpmProvider lock
+					throw;
+				}
+				finally
+				{
+					_log.DebugFormat("Processed {0}", this);
+				}
+			}
+		}
 		
 		public virtual void Clear ()
 		{
 		}
 		
+
+		/// <summary>
+		/// Gets a string representation of the internal command parameters for debugging purpose
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String"/>
+		/// </returns>
+		public virtual string GetCommandInternalsBeforeExecute()
+		{
+			if(_params == null)
+				return "<null>";
+			else
+				return _params.ToString();
+		}
 		
+		/// <summary>
+		/// Gets a string representation of the internal command parameters for debugging purpose
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String"/>
+		/// </returns>
+		public virtual string GetCommandInternalsAfterExecute()
+		{
+			if(_responseParameters == null)
+				return "<null>";
+			else
+				return _responseParameters.ToString();
+		}
+
 	}
 		
 }

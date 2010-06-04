@@ -13,6 +13,7 @@ using Iaik.Tc.TPM.Library.Common;
 using Iaik.Tc.TPM.Library.Common.Handles;
 using System.Threading;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
+using log4net;
 
 
 namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
@@ -23,6 +24,8 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 	/// </summary>
 	public class KeyManager : SwapManager<KeyHandleItem>, IKeyManager
 	{
+		private ILog _log = LogManager.GetLogger("KeyManager");
+		
 		/// <summary>
 		/// Contains all auth handle items
 		/// </summary>
@@ -50,8 +53,6 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		{
 			get
 			{
-				//return (uint)_keyHandles.FindKeyHandles(KeyHandleItem.KeyHandleStatus.SwappedIn).Count;
-				
 				Parameters listLoadedHandlesParameters = new Parameters ();
 				listLoadedHandlesParameters.AddPrimitiveType ("capArea", CapabilityData.TPMCapabilityArea.TPM_CAP_HANDLE);
 				listLoadedHandlesParameters.AddPrimitiveType ("handle_type", TPMResourceType.TPM_RT_KEY);
@@ -61,6 +62,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				
 				if (response.Status == false)
 					throw new Exception ("An unknown tpm exception while listing key handles");
+				
 				return (uint)response.Parameters.GetValueOf<HandleList> ("handles").HandleCount;
 						
 			}
@@ -104,12 +106,13 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			
 			Parameters swapInParameters = new Parameters();
 			swapInParameters.AddValue("handle", item.KeyHandle);
+			swapInParameters.AddPrimitiveType("context_blob", item.KeyHandle.ContextBlob);
 			
 			TPMCommandRequest swapInRequest = new TPMCommandRequest(TPMCommandNames.TPM_CMD_LoadContext, swapInParameters);
 			
 			TPMCommandResponse swapInResponse =_tpmContext.TPM.Process(swapInRequest);
 			if(swapInResponse.Status == false)
-				throw new TPMRequestException("Unknown error while swap in operation");
+				throw new TPMRequestException("^Keymanager: Unknown error while swap in operation");
 			
 			item.KeyHandle.Handle = swapInResponse.Parameters.GetValueOf<ITPMHandle>("handle").Handle;
 		}
@@ -161,10 +164,11 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		{
 			KeyHandleItem keyHandleItem;
 			
-			lock(_keyHandles)
+			using(AcquireLock())
 			{
 				keyHandleItem = _keyHandles.FindKeyHandleItem(identifier, keyContext);
 			}
+			
 			
 			if(keyHandleItem == null)
 			{
@@ -207,7 +211,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			
 			while(reloadKey)
 			{
-				lock(_keyHandles)
+				using(AcquireLock())
 				{
 					keyHandleItem = _keyHandles.FindKeyHandleItem(identifier, keyContext);
 				
@@ -221,7 +225,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 					}
 					
 				}
-			
+				
 				reloadKey = false;
 				//The key is currently being loaded, wait till the loading process has finished/or failed
 				if(keyHandleItem != null && keyHandleItem.Status == KeyHandleItem.KeyHandleStatus.NotLoaded)
@@ -276,8 +280,9 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				throw new TPMRequestException("Unknown error on running TPM_LoadKey2");
 			}
 			
-			lock(_keyHandles)
+			using(AcquireLock())
 			{		
+				
 				//Make sure that a dummy (not loaded) keyhandleitem get removed
 				KeyHandleItem keyHandleToRemove = _keyHandles.FindKeyHandleItem(identifier, keyContext);
 				if(keyHandleToRemove != null)
@@ -291,9 +296,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				_keyHandles.AddKeyHandle(item);
 					
 				AddNewItem(item);
-			}
-				
-												
+			}												
 				
 			return parentKey;
 		}
@@ -310,7 +313,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		/// <returns></returns>
 		public KeyHandle IdentifierToHandle(string identifier, object keyContext, IKeyManagerHelper keymanagerHelper)
 		{
-			lock(_keyHandles)
+			using(AcquireLock())
 			{
 				KeyHandleItem keyHandleItem = _keyHandles.FindKeyHandleItem(identifier, keyContext);
 			
@@ -327,10 +330,10 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				}
 				
 				_replacementAlgorithm.RegisterUsed(ItemToId(keyHandleItem).Value);
-				
+				_replacementAlgorithm.Update();
 				return keyHandleItem.KeyHandle;
 				
-			}
+			} 
 		}
 		
 		
@@ -340,7 +343,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		/// <returns></returns>
 		public LockContext AcquireLock()
 		{
-			return new LockContext(_lockTarget);
+			return new LockContext(_lockTarget, "KeyManager");
 		}
 		
 		/// <summary>
@@ -350,6 +353,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		{
 			while(LoadedKeys >= AvailableKeySlots)
 				SwapOut();
+			
 		}
 
 	}

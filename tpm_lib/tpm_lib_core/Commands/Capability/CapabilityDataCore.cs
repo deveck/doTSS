@@ -12,7 +12,39 @@ namespace Iaik.Tc.TPM.Library.Commands
 
 	public static class CapabilityDataCore
 	{
-	
+		[TypedStreamSerializable("TPMSelectSize")]
+		public class TPMSelectSizeCore : CapabilityData.TPMSelectSize, ITPMBlobWritable
+		{
+			public static TPMSelectSizeCore CreateVersion12(ushort size)
+			{
+				TPMSelectSizeCore selectSize = new TPMSelectSizeCore();
+				selectSize._major = 1;
+				selectSize._minor = 2;
+				selectSize._reqSize = size;
+				return selectSize;
+			}
+			
+			private TPMSelectSizeCore()
+			{
+			}
+			
+			public TPMSelectSizeCore(Stream src)
+				:base(src)
+			{
+			}
+			
+			#region ITPMBlobWritable implementation
+			public void WriteToTpmBlob (TPMBlob blob)
+			{
+				blob.WriteByte(_major);
+				blob.WriteByte(_minor);
+				blob.WriteUInt16(_reqSize);
+			}
+			
+			#endregion
+			
+		}
+		
 		[TypedStreamSerializable(CapabilityData.PARAM_TPM_VERSION_INFO)]
 		public class TPMCapVersionInfoCore : CapabilityData.TPMCapVersionInfo, ITPMBlobReadable
 		{

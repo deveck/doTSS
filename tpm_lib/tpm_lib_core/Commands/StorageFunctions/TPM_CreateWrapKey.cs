@@ -148,10 +148,11 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 			requestBlob.Write(_migrationAuth, 0, 20);
 			_tpmKey.WriteToTpmBlob(requestBlob);
 			
-			AuthorizeMe(requestBlob);
+			
 			
 			using(_keyManager.AcquireLock())
 			{
+				AuthorizeMe(requestBlob);
 				requestBlob.SkipHeader();
 				
 				if(_params.GetValueOf<string>("parent") == KeyHandle.KEY_SRK)
@@ -166,11 +167,11 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 		
 			_responseBlob.SkipHeader();
 			TPMKeyCore newKey = new TPMKeyCore(_responseBlob);
-			Parameters responseParams = new Parameters();
+			_responseParameters = new Parameters();
 			
 			//Build and save the key identifier
 			//The key identifier is the hex-string representation of the hash of the newly created key
-			responseParams.AddPrimitiveType("key_identifier", 
+			_responseParameters.AddPrimitiveType("key_identifier", 
 				ByteHelper.ByteArrayToHexString(
 					new HashProvider().Hash(
 							new HashByteDataProvider(
@@ -179,9 +180,9 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 						),
 					""));
 					
-			responseParams.AddPrimitiveType("key_data", ByteHelper.SerializeToBytes(newKey));
+			_responseParameters.AddPrimitiveType("key_data", ByteHelper.SerializeToBytes(newKey));
 		
-			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_CreateWrapKey, responseParams);
+			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_CreateWrapKey, _responseParameters);
 		}
 		
 		
@@ -222,5 +223,10 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 		}
 
 	
+		public override string ToString ()
+		{
+			return string.Format("[TPM_CreateWrapKey: HashCode '{0}']", GetHashCode());
+		}
+
 	}
 }

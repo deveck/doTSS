@@ -1,5 +1,7 @@
 
 using System;
+using Iaik.Utils.Locking;
+using System.Collections.Generic;
 
 namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 {
@@ -9,6 +11,14 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 	/// </summary>
 	public interface IAuthHandleManager
 	{
+		/// <summary>
+		/// Acquires an exclusive auth handle manager lock
+		/// </summary>
+		/// <returns>
+		/// A <see cref="LockContext"/>
+		/// </returns>
+		LockContext AcquireLock();
+			
 		/// <summary>
 		/// Reserves the number of session slots this command requires on the tpm.
 		/// </summary>
@@ -44,7 +54,15 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		/// <param name="authHandles">
 		/// A <see cref="AuthHandle[]"/>
 		/// </param>
-		void DestroyAuthHandles(params AuthHandle[] authHandles);
+		void DestroyAuthHandles(IAuthorizableCommand cmd, params AuthHandle[] authHandles);
+		
+		/// <summary>
+		/// MArks the specified authhandle as used so it does not get swapped out
+		/// </summary>
+		/// <param name="authHandle">
+		/// A <see cref="AuthHandle"/>
+		/// </param>
+		void MarkAsUsed(IEnumerable<AuthHandle> authHandle);
 		
 		/// <summary>
 		/// Loads the specified authorization handle

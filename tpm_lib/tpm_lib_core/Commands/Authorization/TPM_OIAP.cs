@@ -20,15 +20,14 @@ namespace Iaik.Tc.TPM.Library.Commands
 			requestBlob.WriteCmdHeader(TPMCmdTags.TPM_TAG_RQU_COMMAND, TPMOrdinals.TPM_ORD_OIAP);
 			requestBlob.WriteCmdSize();
 			
-			TPMBlob responseBlob = _tpmProvider.TransmitAndCheck(requestBlob);
+			TPMBlob responseBlob = TransmitMe(requestBlob);
 			responseBlob.SkipHeader();
 			AuthHandleCore authHandle = new AuthHandleCore(AuthHandle.AuthType.OIAP, responseBlob);
 			
-			Parameters parameters = new Parameters();
-			parameters.AddValue("auth_handle", authHandle);
-			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_OIAP, parameters);
+			_responseParameters = new Parameters();
+			_responseParameters.AddValue("auth_handle", authHandle);
+			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_OIAP, _responseParameters);
 		}
-
 		
 		public override void Clear ()
 		{
