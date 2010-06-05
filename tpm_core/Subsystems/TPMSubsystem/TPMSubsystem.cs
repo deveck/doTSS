@@ -105,7 +105,8 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			if (!AssertUserAuthentication (null, requestContext.CreateResponse ()))
 				return;
 
-			//TODO: Do some permission checking here!
+			
+
 
 			TPMContext tpmContext;
 			TPMResponse response;
@@ -122,6 +123,18 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				}
 				
 				tpmContext = _selectedTPMs[requestContext.Request.TPMIdentifier];
+			}
+			
+			//TODO: Do some permission checking here!
+			string commandIdentifier = requestContext.Request.CommandRequest.CommandIdentifier;
+			
+			if(IsAllowedToRunCommand(commandIdentifier, tpmContext) == false)
+			{
+				response = requestContext.CreateResponse();
+				response.Succeeded = false;
+				response.SetKnownCommonError(SubsystemResponse.CommonErrorCodes.NotPermitted);
+				response.Execute();
+				return;
 			}
 			
 			_logger.DebugFormat("Executing {0}", requestContext.Request.CommandRequest.CommandIdentifier);
@@ -294,6 +307,27 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		private bool IsAllowedToUseTPMDevice (string tpmDeviceIdentifier)
 		{
 			return ServerContext.IsCurrentUserAllowed (SubsystemIdentifier, "select_" + tpmDeviceIdentifier);
+		}
+		
+		/// <summary>
+		/// Checks if the current user is allowed to run the specified command on the specified tpm
+		/// </summary>
+		/// <param name="commandIdentifier"></param>
+		/// <param name="tpmContext"></param>
+		/// <returns></returns>
+		private bool IsAllowedToRunCommand(string commandIdentifier, TPMContext tpmContext)
+		{
+			Permission permission = ServerContext.AccessControlList.FindPermission(SubsystemIdentifier, commandIdentifier + "_" + tpmContext.DeviceName);
+			
+			if(permission == null)
+				permission = ServerContext.AccessControlList.FindPermission(SubsystemIdentifier, commandIdentifier);
+			
+			
+			if(permission != null)
+				return permission.IsPermitted(ServerContext.ServerAuthenticationContext.AuthenticatedPermissionMember);
+			
+			return false;
+			
 		}
 	}
 }
