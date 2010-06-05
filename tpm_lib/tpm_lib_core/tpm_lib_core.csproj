@@ -86,6 +86,7 @@
     <Compile Include="Commands\MonotonicCounter\TPM_IncrementCounter.cs" />
     <Compile Include="Commands\MonotonicCounter\TPM_ReleaseCounter.cs" />
     <Compile Include="Commands\CryptographicFunctions\TPM_GetRandom.cs" />
+    <Compile Include="Commands\Integrity\TPM_Extend.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />

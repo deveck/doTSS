@@ -37,6 +37,22 @@ namespace Iaik.Tc.TPM.Context
 			return BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_PCRRead, pcrParams).Parameters.GetValueOf<byte[]>("value");
 		}
 		
+		/// <summary>
+		/// Extends the specified pcr by the specified digest
+		/// </summary>
+		/// <param name="pcrIndex">The pcr to be extended</param>
+		/// <param name="digest"></param>
+		/// <returns>Returns the new value of the extended pcr</returns>
+		public byte[] Extend(uint pcrIndex, byte[] digest)
+		{
+			Parameters extendParameters = new Parameters();
+			extendParameters.AddPrimitiveType("pcr", pcrIndex);
+			extendParameters.AddPrimitiveType("digest", digest);
+			
+			return BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_Extend, extendParameters)
+				.Parameters.GetValueOf<byte[]>("pcr_value");
+		}
+		
 		private TPMCommandResponse BuildDoVerifyRequest (string commandIdentifier, Parameters parameters)
 		{
 			TPMCommandRequest versionRequest = new TPMCommandRequest (commandIdentifier, parameters);

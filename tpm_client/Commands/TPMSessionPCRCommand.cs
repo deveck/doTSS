@@ -5,6 +5,9 @@ using System.Text;
 using Iaik.Tc.TPM.Context;
 using Iaik.Tc.TPM.Library.Common;
 using Iaik.Utils;
+using System.IO;
+using Iaik.Utils.Hash;
+using Iaik.Utils.IO;
 
 namespace Iaik.Tc.TPM.Commands
 {
@@ -18,7 +21,27 @@ namespace Iaik.Tc.TPM.Commands
                 return @"tpm_session_pcr Args: [local_alias] [pcr_subcommand]
     Specify the tpm to use by [local_alias]. These aliases can be defined using the tpm_select command.
 	
-		pcr_report    Reports the status of all platform configuration registers
+        pcr_report    Reports the status of all platform configuration registers
+
+        extend        Extends the specified pcr by the specified data or digest
+           Arguments:
+             pcr=[pcrnum] Specifies the pcr to be extended
+
+             data_input={embedded,file}  Specifies the data input mode for the seal operation
+
+                embedded:
+                   The last argument is interpreted as digest in hex format 
+                   without spaces. Keep in mind that the digest needs to be
+                   exactly 20 bytes
+    
+                file:
+                   The file specified by the 'file' parameter is hashed using
+                   SHA1, this is used as digest.
+          
+                                       
+             [file=filename]  Mandatory argument if using data_input=file. 
+                              Specifies the file to read data to be hashed from
+                              and extended
 		";
 	
             }
@@ -60,6 +83,84 @@ namespace Iaik.Tc.TPM.Commands
 					_console.Out.WriteLine("#{0}: {1}", i, ByteHelper.ByteArrayToHexString(tpmSessions[localAlias].IntegrityClient.PCRValue(i)));
 			
         	}
+			else if(pcrCommand == "extend")
+			{
+				if(commandline.Length < 4)
+				{
+					_console.Out.WriteLine("Error: 'extend' requires some arguments");
+					return;
+				}
+				IDictionary<string, string> arguments =_console.SplitArguments(commandline[3], 0);
+				
+				if(arguments.ContainsKey("pcr") == false)
+				{
+					_console.Out.WriteLine("Error: 'extend' requires parameter 'pcr' to be specified");
+					return;
+				}
+				
+				uint pcr = 0;
+				
+				if(uint.TryParse(arguments["pcr"], out pcr) == false)
+				{
+					_console.Out.WriteLine("Error: 'pcr' could not be parsed, is it a valid pcr specified?");
+					return;
+				}
+				
+				if(arguments.ContainsKey("data_input") == false)
+				{
+					_console.Out.WriteLine("Error: 'extend' requires parameter 'data_input' to be specified");
+					return;
+				}
+				
+				TPMSessionSealCommand.DataInputMode dataInput = 
+					(TPMSessionSealCommand.DataInputMode)Enum.Parse(typeof(TPMSessionSealCommand.DataInputMode), arguments["data_input"], true);
+
+				if(dataInput != TPMSessionSealCommand.DataInputMode.Embedded &&
+				   dataInput != TPMSessionSealCommand.DataInputMode.File)
+				{
+					_console.Out.WriteLine("Error: 'data_input' has an invalid value");
+					return;
+				}
+				
+				byte[] digest;
+				
+				if(dataInput == TPMSessionSealCommand.DataInputMode.File &&
+				   arguments.ContainsKey("file") == false)
+				{
+					_console.Out.WriteLine("Error: file-data_input require 'file' argument to be specified");
+					return;
+				}
+				else if(dataInput == TPMSessionSealCommand.DataInputMode.File)
+				{
+					FileInfo myFile = new FileInfo(arguments["file"]);
+					using(FileStream src = myFile.OpenRead())
+					{
+						digest = new HashProvider().Hash(
+						        new HashStreamDataProvider(src, null, null, false));
+					}
+				}
+				else if(dataInput == TPMSessionSealCommand.DataInputMode.Embedded)
+				{
+					using(Stream src = new HexFilterStream(new TextReaderStream( new StringReader(commandline[4]))))
+					{
+						digest = new byte[20];
+						if(src.Length != 20)
+						{
+							throw new ArgumentException("Error: The embedded digest must be 20 bytes long");
+							return;
+						}
+						
+						src.Read(digest, 0, 20);						
+					}
+				}
+				else
+					throw new ArgumentException(String.Format("data input mode '{0}' is not supported", dataInput));
+				
+				_console.Out.WriteLine("Doing extension with digest: '{0}'", ByteHelper.ByteArrayToHexString(digest));
+				
+				byte[] newDigest = tpmSessions[localAlias].IntegrityClient.Extend(pcr, digest);
+				_console.Out.WriteLine("Extension successful, new pcr value:  {0}", ByteHelper.ByteArrayToHexString(newDigest));
+			}
 			else
         		_console.Out.WriteLine ("Error, unknown pcr_subcommand '{0}'", commandline[1]);
         }
