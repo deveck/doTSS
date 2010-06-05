@@ -114,5 +114,7 @@
     <None Include="TestScripts\tpm_session_ek.txt" />
     <None Include="TestScripts\tpm_session_admin.txt" />
     <None Include="TestScripts\tpm_session_key.txt" />
+    <None Include="TestScripts\tpm_session_counter.txt" />
+    <None Include="TestScripts\tpm_session_seal.txt" />
   </ItemGroup>
 </Project>

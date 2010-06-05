@@ -1,6 +1,6 @@
 # Runs the tpm capability command on the selected tpm device
 
-@exit_on_error 1
+@exit_on_error 0
 @exit_on_finish 0
 
 @include ./authenticated_environment.txt
@@ -9,3 +9,29 @@
 secret_cache tpm add type=owner,secret=owner
 secret_cache tpm add type=counter,secret=counter
 tpm_session_counter tpm create bubu
+tpm_session_counter tpm create bubu
+tpm_session_counter tpm create bubu
+tpm_session_counter tpm create bubu
+
+tpm_session_counter tpm increment 100663296
+tpm_session_counter tpm increment 100663296
+tpm_session_counter tpm increment 100663296
+tpm_session_counter tpm read 100663296
+tpm_session_counter tpm release 100663296
+
+tpm_session_counter tpm increment 100663297
+tpm_session_counter tpm read 100663297
+tpm_session_counter tpm release 100663297
+
+tpm_session_counter tpm increment 100663298
+tpm_session_counter tpm increment 100663298
+tpm_session_counter tpm read 100663298
+tpm_session_counter tpm release 100663298
+
+tpm_session_counter tpm increment 100663299
+tpm_session_counter tpm increment 100663299
+tpm_session_counter tpm increment 100663299
+tpm_session_counter tpm increment 100663299
+tpm_session_counter tpm increment 100663299
+tpm_session_counter tpm read 100663299
+tpm_session_counter tpm release 100663299

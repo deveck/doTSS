@@ -16,20 +16,9 @@ namespace Iaik.Tc.TPM.Library.Commands.MonotonicCounter
 {
 
 
-	[TPMCommands(TPMCommandNames.TPM_CMD_CreateCounter)]
-	public class TPM_CreateCounter : TPMCommandAuthorizable
+	[TPMCommands(TPMCommandNames.TPM_CMD_IncrementCounter)]
+	public class TPM_IncrementCounter : TPMCommandAuthorizable
 	{
-		/// <summary>
-		/// Contains the Secret (encauth) for the counter
-		/// </summary>
-		private byte[] _secret;
-
-		/// <summary>
-		/// Label of the counter, what is this used for?
-		/// </summary>
-		private byte[] _label;
-
-
 		/// <summary>
 		/// The outgoing digest for this command
 		/// </summary>
@@ -49,9 +38,8 @@ namespace Iaik.Tc.TPM.Library.Commands.MonotonicCounter
 				if(_digest == null)
 				{
 					_digest = new HashProvider().Hash(
-						new HashPrimitiveDataProvider(TPMOrdinals.TPM_ORD_CreateCounter),
-						new HashByteDataProvider(_secret),
-						new HashByteDataProvider(_label));
+						new HashPrimitiveDataProvider(TPMOrdinals.TPM_ORD_IncrementCounter),
+						new HashPrimitiveDataProvider(_params.GetValueOf<uint>("counter_id")));
 				}
 				
 				return _digest;
@@ -76,7 +64,7 @@ namespace Iaik.Tc.TPM.Library.Commands.MonotonicCounter
 					      //1S
 					      new HashStreamDataProvider(_responseBlob, offset, 4, false),
 					      //2S
-					      new HashPrimitiveDataProvider(TPMOrdinals.TPM_ORD_CreateCounter),
+					      new HashPrimitiveDataProvider(TPMOrdinals.TPM_ORD_IncrementCounter),
 					      //3S
 					      new HashStreamDataProvider(_responseBlob, offset + 4, _responseBlob.Length - offset - 4 - authHandleSize, false));
 				}
@@ -86,38 +74,14 @@ namespace Iaik.Tc.TPM.Library.Commands.MonotonicCounter
 		}
 
 	
-
-		public override void Init (Parameters param, TPMProvider tpmProvider, TPMWrapper tpmWrapper)
-		{
-			base.Init (param, tpmProvider, tpmWrapper);
-			
-			_secret = _params.GetValueOf<byte[]>("secret");
-			_label = _params.GetValueOf<byte[]>("label");
-		}
-
-		
+	
 		protected override TPMCommandResponse InternalProcess ()
 		{
-			AuthHandle auth1OSAP =_commandAuthHelper.AssureOSAPSharedSecret(this, AuthSessionNum.Auth1);			
-			
-			byte[] xorKey = new HashProvider().Hash(
-					new HashByteDataProvider(auth1OSAP.SharedSecret),
-					new HashByteDataProvider(auth1OSAP.NonceEven));
-					
-			ByteHelper.XORBytes(_secret, xorKey);
-			
-			
-			if(_secret.Length != 20)
-				throw new ArgumentException("secret needs to be 20 bytes long (SHA1 hash)");
-			
-			if(_label.Length != 4)
-				throw new ArgumentException("Label needs to be 4 bytes long");
-			
+						
 			using(TPMBlob requestBlob = new TPMBlob())
 			{
-				requestBlob.WriteCmdHeader(TPMCmdTags.TPM_TAG_RQU_AUTH1_COMMAND, TPMOrdinals.TPM_ORD_CreateCounter);
-				requestBlob.Write(_secret, 0, 20);
-				requestBlob.Write(_label, 0, 4);
+				requestBlob.WriteCmdHeader(TPMCmdTags.TPM_TAG_RQU_AUTH1_COMMAND, TPMOrdinals.TPM_ORD_IncrementCounter);
+				requestBlob.WriteUInt32(_params.GetValueOf<uint>("counter_id"));
 				
 				_responseBlob = AuthorizeMeAndTransmit(requestBlob);				
 			}
@@ -133,27 +97,14 @@ namespace Iaik.Tc.TPM.Library.Commands.MonotonicCounter
 		public override HMACKeyInfo GetKeyInfo (AuthSessionNum authSessionNum)
 		{
 			if(authSessionNum == AuthSessionNum.Auth1)
-				return new HMACKeyInfo(HMACKeyInfo.HMACKeyType.OwnerSecret, new Parameters());
+				return new HMACKeyInfo(HMACKeyInfo.HMACKeyType.CounterSecret, new Parameters());
 				
 			return null;
 		}
 		
 		public override bool SupportsAuthType (AuthHandle.AuthType authType)
 		{
-			return authType == AuthHandle.AuthType.OSAP;
-		}
-
-		public override string GetHandle (AuthSessionNum authSessionNum)
-		{
-			if(authSessionNum == AuthSessionNum.Auth1)
-				return TPMKeyHandles.TPM_KH_OWNER.ToString();
-			
-			return null;
-		}
-
-		public override TPMEntityTypeLSB GetEntityType (AuthSessionNum austhSessionNum)
-		{
-			return TPMEntityTypeLSB.TPM_ET_OWNER;
+			return authType == AuthHandle.AuthType.OIAP;
 		}
 
 

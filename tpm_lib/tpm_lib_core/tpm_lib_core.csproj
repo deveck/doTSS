@@ -82,6 +82,9 @@
     <Compile Include="Commands\StorageFunctions\TPM_Unbind.cs" />
     <Compile Include="Commands\MonotonicCounter\TPM_CreateCounter.cs" />
     <Compile Include="Basic\TPMCounterValueCore.cs" />
+    <Compile Include="Commands\MonotonicCounter\TPM_ReadCounter.cs" />
+    <Compile Include="Commands\MonotonicCounter\TPM_IncrementCounter.cs" />
+    <Compile Include="Commands\MonotonicCounter\TPM_ReleaseCounter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />

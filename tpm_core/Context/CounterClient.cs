@@ -7,6 +7,7 @@ using System;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 using Iaik.Tc.TPM.Library.Common;
 using Iaik.Utils.Hash;
+using Iaik.Tc.TPM.Library.Common.Basic;
 
 namespace Iaik.Tc.TPM.Context
 {
@@ -51,6 +52,16 @@ namespace Iaik.Tc.TPM.Context
 					.Parameters.GetValueOf<uint>("counter_id")
 				);
 		}
+		
+		/// <summary>
+		/// Returns a counter context for the specified counter id
+		/// </summary>
+		/// <param name="counterId"></param>
+		/// <returns></returns>
+		public CounterContext GetCounter(uint counterId)
+		{
+			return new CounterContext(_tpmSession, counterId);
+		}
 	}
 
 
@@ -80,6 +91,42 @@ namespace Iaik.Tc.TPM.Context
 			_counterId = counterId;
 		}
 		
+		
+		/// <summary>
+		/// gets the current counter value
+		/// </summary>
+		public uint CounterValue
+		{
+			get
+			{
+				Parameters readCounterParams = new Parameters();
+				readCounterParams.AddPrimitiveType("counter_id", _counterId);
+				return _tpmSession.DoTPMCommandRequest(new TPMCommandRequest(TPMCommandNames.TPM_CMD_ReadCounter, readCounterParams))
+					.Parameters.GetValueOf<TPMCounterValue>("counter_value").CounterValue;				
+			}
+		}
+		
+		/// <summary>
+		/// Increments the current counter value and returns the new counter value
+		/// </summary>
+		/// <returns></returns>
+		public uint Increment()
+		{
+			Parameters incCounterParams = new Parameters();
+			incCounterParams.AddPrimitiveType("counter_id", _counterId);
+			return _tpmSession.DoTPMCommandRequest(new TPMCommandRequest(TPMCommandNames.TPM_CMD_IncrementCounter, incCounterParams))
+				.Parameters.GetValueOf<TPMCounterValue>("counter_value").CounterValue;		
+		}
+		
+		/// <summary>
+		/// Invalidates the counter
+		/// </summary>
+		public void Release()
+		{
+			Parameters releaseCounterParams = new Parameters();
+			releaseCounterParams.AddPrimitiveType("counter_id", _counterId);
+			_tpmSession.DoTPMCommandRequest(new TPMCommandRequest(TPMCommandNames.TPM_CMD_ReleaseCounter, releaseCounterParams));
+		}
 		
 	}
 }

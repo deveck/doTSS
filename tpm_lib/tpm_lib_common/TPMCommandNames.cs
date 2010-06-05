@@ -56,6 +56,9 @@ namespace Iaik.Tc.TPM.Library.Common
 				
 		#region Monotonic Counter
 		public const string TPM_CMD_CreateCounter = "TPM_CMD_CreateCounter";
+		public const string TPM_CMD_ReadCounter = "TPM_CMD_ReadCounter";
+		public const string TPM_CMD_IncrementCounter = "TPM_CMD_IncrementCounter";
+		public const string TPM_CMD_ReleaseCounter = "TPM_CMD_ReleaseCounter";
 		#endregion
 	}
 }

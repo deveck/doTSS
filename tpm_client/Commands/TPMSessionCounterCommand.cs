@@ -92,6 +92,8 @@ namespace Iaik.Tc.TPM.Commands
 				}
 				
 				uint counterId = uint.Parse(commandline[3]);
+				CounterContext counter = tpmSessions[localAlias].CounterClient.GetCounter(counterId);
+				_console.Out.WriteLine("Value of counter #{0}: {1}", counter.CounterId, counter.CounterValue);
 			}
 			
 			else if (counterCommand == "increment")
@@ -104,6 +106,8 @@ namespace Iaik.Tc.TPM.Commands
 				}
 				
 				uint counterId = uint.Parse(commandline[3]);
+				CounterContext counter = tpmSessions[localAlias].CounterClient.GetCounter(counterId);
+				_console.Out.WriteLine("Incremented counter, new value of counter #{0}: {1}", counter.CounterId, counter.Increment());
 			}
 			
 			else if (counterCommand == "release")
@@ -116,6 +120,9 @@ namespace Iaik.Tc.TPM.Commands
 				}
 				
 				uint counterId = uint.Parse(commandline[3]);
+				CounterContext counter = tpmSessions[localAlias].CounterClient.GetCounter(counterId);
+				counter.Release();
+				_console.Out.WriteLine("Released counter #{0}", counter.CounterId);
 			}
 			else
         		_console.Out.WriteLine ("Error, unknown counter_subcommand '{0}'", counterCommand);
