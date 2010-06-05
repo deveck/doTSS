@@ -60,5 +60,9 @@ namespace Iaik.Tc.TPM.Library.Common
 		public const string TPM_CMD_IncrementCounter = "TPM_CMD_IncrementCounter";
 		public const string TPM_CMD_ReleaseCounter = "TPM_CMD_ReleaseCounter";
 		#endregion
+		
+		#region Cryptographic functions
+		public const string TPM_CMD_GetRandom = "TPM_CMD_GetRandom";
+		#endregion
 	}
 }

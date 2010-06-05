@@ -85,6 +85,7 @@
     <Compile Include="Commands\MonotonicCounter\TPM_ReadCounter.cs" />
     <Compile Include="Commands\MonotonicCounter\TPM_IncrementCounter.cs" />
     <Compile Include="Commands\MonotonicCounter\TPM_ReleaseCounter.cs" />
+    <Compile Include="Commands\CryptographicFunctions\TPM_GetRandom.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />
@@ -107,6 +108,7 @@
     <Folder Include="Storage\" />
     <Folder Include="Commands\MonotonicCounter\" />
     <Folder Include="Basic\" />
+    <Folder Include="Commands\CryptographicFunctions\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_lowlvl\tpm_lowlvl.csproj">

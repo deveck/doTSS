@@ -200,6 +200,16 @@ namespace Iaik.Tc.TPM.Context
 			return response.CommandResponse;
 		}
 
+		/// <summary>
+		/// Creates a new random number generator for this tpm
+		/// </summary>
+		/// <returns></returns>
+		public Random CreateRNG()
+		{
+			return new RNG(this);
+		}
+
+
 		public TPMPCRSelection CreateEmptyPCRSelection()
 		{
 			uint pcrCount = CapabilityClient.GetPCRCount();

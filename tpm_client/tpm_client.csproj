@@ -79,6 +79,7 @@
     <Compile Include="Commands\TPMSessionBindCommand.cs" />
     <Compile Include="Commands\TPMSessionUnBindCommand.cs" />
     <Compile Include="Commands\TPMSessionCounterCommand.cs" />
+    <Compile Include="Commands\TPMSessionRNGCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_core\tpm_core.csproj">

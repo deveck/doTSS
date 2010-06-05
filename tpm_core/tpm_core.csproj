@@ -139,6 +139,7 @@
     <Compile Include="Context\TPMIntegrityClient.cs" />
     <Compile Include="Context\BindBlockCipher.cs" />
     <Compile Include="Context\CounterClient.cs" />
+    <Compile Include="Context\RNG.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">
