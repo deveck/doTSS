@@ -187,7 +187,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			{
 				Parameters parameters = new Parameters();
 				parameters.AddPrimitiveType("entity_msb", TPMEntityTypeMSB.TPM_ET_XOR);
-				parameters.AddPrimitiveType("entity_lsb", TPMEntityTypeLSB.TPM_ET_KEYHANDLE);
+				parameters.AddPrimitiveType("entity_lsb", cmd.GetEntityType(authSession));
 				string identifier = cmd.GetHandle(authSession);
 				
 				if(identifier == null)

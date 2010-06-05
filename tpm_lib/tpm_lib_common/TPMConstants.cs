@@ -412,4 +412,13 @@ namespace Iaik.Tc.TPM.Library.Common
 		/// </summary>
 		TPM_PT_CMK_MIGRATE = 0x08
 	}
+	
+	/// <summary>
+	/// Defines the type of data in a structure
+	/// (not all are defined here see documentation part 2 page 7)	
+	/// </summary>
+	public enum TPMStructureTag : ushort
+	{
+		TPM_TAG_COUNTER_VALUE = 0x000E
+	}
 }

@@ -159,6 +159,16 @@ namespace Iaik.Tc.TPM.Context
 			get{ return _keyClient; }
 		}
 		
+		private CounterClient _counterClient;
+		
+		/// <summary>
+		/// Handles the creation and management of monotonic counters
+		/// </summary>
+		public CounterClient CounterClient
+		{
+			get{ return _counterClient; }
+		}
+		
 		/// <summary>
 		/// Provides a simple way of geting session-unique ids for general purpose
 		/// </summary>
@@ -176,6 +186,7 @@ namespace Iaik.Tc.TPM.Context
 			_administrationClient = new TPMAdministrationClient (this);
 			_keyClient = new TPMKeyClient(this);
 			_integrityClient = new TPMIntegrityClient(this);
+			_counterClient = new CounterClient(this);
 		}
 		
 		internal TPMCommandResponse DoTPMCommandRequest (TPMCommandRequest commandRequest)
@@ -322,6 +333,10 @@ namespace Iaik.Tc.TPM.Context
 				}			
 				
 				dictKey = "seal_" + friendlyName;
+			}
+			else if(keyInfo.KeyType == HMACKeyInfo.HMACKeyType.CounterSecret)
+			{
+				dictKey = "counter";
 			}
 			else
 				throw new NotSupportedException(string.Format("The key type '{0}' is not supported", keyInfo.KeyType));

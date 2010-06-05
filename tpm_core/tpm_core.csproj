@@ -138,6 +138,7 @@
     <Compile Include="Subsystems\TPMSubsystem\KeyInfoRequest.cs" />
     <Compile Include="Context\TPMIntegrityClient.cs" />
     <Compile Include="Context\BindBlockCipher.cs" />
+    <Compile Include="Context\CounterClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">

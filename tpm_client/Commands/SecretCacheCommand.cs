@@ -35,6 +35,8 @@ namespace Iaik.Tc.TPM.Commands
                                type=seal,name=<friendly name>[,secret=<secret>]
                                Adds or changes the usage secret for the key with the supplied friendly name
                                
+                               type=counter
+                               
                          If no secret argument is supplied, the secret is requested from the user (recommended method)
 						
 						 It is not neccessary to add secrets to the cache before they are used by the framework, if
@@ -170,6 +172,11 @@ namespace Iaik.Tc.TPM.Commands
 					dictKey = "seal_" + arguments["name"];
 					hmacKeyInfoParams.AddPrimitiveType("identifier", arguments["name"]);
 					keyInfo = new HMACKeyInfo(HMACKeyInfo.HMACKeyType.SealAuth, hmacKeyInfoParams);
+				}
+				else if(dictKey == "counter")
+				{
+					dictKey = "counter";
+					keyInfo = new HMACKeyInfo(HMACKeyInfo.HMACKeyType.CounterSecret, new Parameters());
 				}
 				else
 				{

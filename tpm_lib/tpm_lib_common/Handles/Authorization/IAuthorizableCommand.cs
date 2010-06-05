@@ -77,4 +77,6 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		
 		
 	}
+	
+	
 }

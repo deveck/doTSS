@@ -92,13 +92,22 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				
 				Parameters paramsSharedSecret = new Parameters();
 				
-				if(cmd.GetHandle(authSessionNum) == KeyHandle.KEY_SRK)
-					request.KeyInfo = new HMACKeyInfo(HMACKeyInfo.HMACKeyType.SrkSecret, new Parameters());
-				else
+				if(cmd.GetEntityType(authSessionNum) == TPMEntityTypeLSB.TPM_ET_KEYHANDLE ||
+					cmd.GetEntityType(authSessionNum) == TPMEntityTypeLSB.TPM_ET_SRK)
 				{
-					paramsSharedSecret.AddPrimitiveType("identifier", cmd.GetHandle(authSessionNum));
-					request.KeyInfo = new HMACKeyInfo(HMACKeyInfo.HMACKeyType.KeyUsageSecret, paramsSharedSecret);
+					if(cmd.GetHandle(authSessionNum) == KeyHandle.KEY_SRK)
+						request.KeyInfo = new HMACKeyInfo(HMACKeyInfo.HMACKeyType.SrkSecret, new Parameters());
+					else
+					{
+						paramsSharedSecret.AddPrimitiveType("identifier", cmd.GetHandle(authSessionNum));
+						request.KeyInfo = new HMACKeyInfo(HMACKeyInfo.HMACKeyType.KeyUsageSecret, paramsSharedSecret);
+					}
 				}
+				else if(cmd.GetEntityType(authSessionNum) == TPMEntityTypeLSB.TPM_ET_OWNER)
+					request.KeyInfo = new HMACKeyInfo(HMACKeyInfo.HMACKeyType.OwnerSecret, new Parameters());
+				else
+					throw new NotSupportedException(string.Format("CommandAuthorizationHelper does not support entity type '{0}'",
+						cmd.GetEntityType(authSessionNum)));
 				
 				GenerateHMACResponse response = request.TypedExecute ();
 				response.AssertResponse();

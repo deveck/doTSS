@@ -75,6 +75,7 @@
     <Compile Include="KeyData\ITPMAlgorithmSpecificKeyParams.cs" />
     <Compile Include="PCRData\TPMPCRComposite.cs" />
     <Compile Include="Storage\TPMBoundData.cs" />
+    <Compile Include="Basic\TPMCounterValue.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="interface\" />
@@ -82,6 +83,7 @@
     <Folder Include="Handles\" />
     <Folder Include="PCRData\" />
     <Folder Include="Storage\" />
+    <Folder Include="Basic\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

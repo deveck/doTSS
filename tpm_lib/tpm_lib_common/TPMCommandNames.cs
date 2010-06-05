@@ -54,5 +54,8 @@ namespace Iaik.Tc.TPM.Library.Common
 		public const string TPM_CMD_Bind = "TPM_CMD_Bind";
 		#endregion
 				
+		#region Monotonic Counter
+		public const string TPM_CMD_CreateCounter = "TPM_CMD_CreateCounter";
+		#endregion
 	}
 }

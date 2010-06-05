@@ -1,0 +1,11 @@
+# Runs the tpm capability command on the selected tpm device
+
+@exit_on_error 1
+@exit_on_finish 0
+
+@include ./authenticated_environment.txt
+@include ./select_tpm.txt
+
+secret_cache tpm add type=owner,secret=owner
+secret_cache tpm add type=counter,secret=counter
+tpm_session_counter tpm create bubu

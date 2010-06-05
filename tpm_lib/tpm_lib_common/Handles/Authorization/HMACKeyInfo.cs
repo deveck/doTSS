@@ -48,6 +48,11 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 			/// Enc Auth value for sealed data
 			/// </summary>
 			SealAuth,
+			
+			/// <summary>
+			/// Specifies the secret of a counter
+			/// </summary>
+			CounterSecret,
 		}
 		
 		[SerializeMe(0)]

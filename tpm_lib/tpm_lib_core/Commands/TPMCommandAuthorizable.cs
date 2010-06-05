@@ -52,7 +52,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 		
 		public virtual TPMEntityTypeLSB GetEntityType (AuthSessionNum austhSessionNum)
 		{
-			throw new NotSupportedException();
+			return TPMEntityTypeLSB.TPM_ET_KEYHANDLE;
 		}
 		
 		

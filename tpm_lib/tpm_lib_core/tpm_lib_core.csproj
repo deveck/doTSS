@@ -80,6 +80,8 @@
     <Compile Include="Commands\StorageFunctions\TPM_Bind.cs" />
     <Compile Include="Storage\TPMBoundDataCore.cs" />
     <Compile Include="Commands\StorageFunctions\TPM_Unbind.cs" />
+    <Compile Include="Commands\MonotonicCounter\TPM_CreateCounter.cs" />
+    <Compile Include="Basic\TPMCounterValueCore.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />
@@ -100,6 +102,8 @@
     <Folder Include="Commands\StorageFunctions\" />
     <Folder Include="PCRDataCore\" />
     <Folder Include="Storage\" />
+    <Folder Include="Commands\MonotonicCounter\" />
+    <Folder Include="Basic\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_lowlvl\tpm_lowlvl.csproj">

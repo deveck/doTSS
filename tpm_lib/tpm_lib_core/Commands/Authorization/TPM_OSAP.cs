@@ -24,7 +24,8 @@ namespace Iaik.Tc.TPM.Library.Commands
 			
 			
 			if( entityLSB != TPMEntityTypeLSB.TPM_ET_KEYHANDLE &&
-				entityLSB != TPMEntityTypeLSB.TPM_ET_SRK)
+				entityLSB != TPMEntityTypeLSB.TPM_ET_SRK &&
+				entityLSB != TPMEntityTypeLSB.TPM_ET_OWNER)
 			{
 				throw new ArgumentException("TPM_OSAP does currently not support entityType: " + entityLSB.ToString());
 			}
@@ -35,9 +36,13 @@ namespace Iaik.Tc.TPM.Library.Commands
 			}
 			
 			
-			//We now know that the current identifier is a key identifier (maybe srk, but then the value is ignored by TPM_OSAP).
-			//So we invoke the key manager to load the key with the specified identifier and establish an OSAP session
-			_keyManager.LoadKey(identifier);
+			if(entityLSB == TPMEntityTypeLSB.TPM_ET_KEYHANDLE ||
+			   entityLSB == TPMEntityTypeLSB.TPM_ET_SRK)
+			{
+				//We now know that the current identifier is a key identifier (maybe srk, but then the value is ignored by TPM_OSAP).
+				//So we invoke the key manager to load the key with the specified identifier and establish an OSAP session
+				_keyManager.LoadKey(identifier);
+			}
 			
 			//handle is not known yet
 			AuthHandle authHandle = new AuthHandle(AuthHandle.AuthType.OSAP, 0);
@@ -51,10 +56,18 @@ namespace Iaik.Tc.TPM.Library.Commands
 				requestBlob.WriteCmdHeader(TPMCmdTags.TPM_TAG_RQU_COMMAND, TPMOrdinals.TPM_ORD_OSAP);
 				requestBlob.WriteUInt16((ushort)(((ushort)entityMSB <<  8) | (ushort)entityLSB));
 				
-				if(identifier == KeyHandle.KEY_SRK)
-					requestBlob.WriteUInt32((uint)TPMKeyHandles.TPM_KH_SRK);
-				else
-					requestBlob.WriteUInt32(_keyManager.IdentifierToHandle(identifier).Handle);
+				if(entityLSB == TPMEntityTypeLSB.TPM_ET_KEYHANDLE ||
+				   entityLSB == TPMEntityTypeLSB.TPM_ET_SRK)
+				{
+					if(identifier == KeyHandle.KEY_SRK)
+						requestBlob.WriteUInt32((uint)TPMKeyHandles.TPM_KH_SRK);
+					else
+						requestBlob.WriteUInt32(_keyManager.IdentifierToHandle(identifier).Handle);
+				}
+				else if(entityLSB == TPMEntityTypeLSB.TPM_ET_OWNER)
+				{
+					requestBlob.WriteUInt32((uint)TPMKeyHandles.TPM_KH_OWNER);
+				}
 				
 				requestBlob.Write(authHandle.NonceOddOSAP, 0, authHandle.NonceOddOSAP.Length);
 				requestBlob.WriteCmdSize();

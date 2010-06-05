@@ -256,6 +256,8 @@ namespace Iaik.Tc.TPM
 					request.KeyInfo.Parameters.GetValueOf<string>("identifier")), this, false);
 			else if(request.KeyInfo.KeyType == HMACKeyInfo.HMACKeyType.SealAuth)
 				request.ProtectedPassword = Utils.ReadPassword(string.Format("Server requests auth for pending seal operation"), this, false);
+			else if(request.KeyInfo.KeyType == HMACKeyInfo.HMACKeyType.CounterSecret)
+				request.ProtectedPassword = Utils.ReadPassword(string.Format("Server requests auth for counter"), this, false);
 			else
 				throw new ArgumentException("Key type not supported by TPM console");
 			
