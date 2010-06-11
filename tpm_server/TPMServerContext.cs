@@ -125,9 +125,9 @@ namespace Iaik.Tc.TPM
 					
 					_logger.InfoFormat ("Successfully setup tpm context '{0}' with type '{1}'", device.TPMName, device.TPMType);
 				}
-				catch (Exception)
+				catch (Exception ex)
 				{
-					_logger.FatalFormat ("Error setting up tpm device '{0}', the device will not be available", device.TPMName);
+					_logger.FatalFormat ("Error setting up tpm device '{0}', the device will not be available ({1})", device.TPMName, ex);
 				}
 				
 			}

@@ -20,6 +20,27 @@ namespace Iaik.Utils
 			
 			return defaultValue;
 		}
+		
+		public static int GetInt(string name, IDictionary<string, string> paramDict, int defaultValue)
+		{
+			if(paramDict.ContainsKey(name) == false)
+				return defaultValue;
+			
+			int val;
+			
+			if(int.TryParse(paramDict[name], out val))
+				return val;
+			
+			return defaultValue;
+		}
 
+		public static string GetString(string name, IDictionary<string, string> paramDict, string defaultValue)
+		{
+			if(paramDict.ContainsKey(name) == false)
+				return defaultValue;
+			
+		
+			return paramDict[name];
+		}
 	}
 }

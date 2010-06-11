@@ -1,4 +1,5 @@
 # Selects the tpm emulator as the tpm device with the alias tpm
 
-tpm_select tpm_emu tpm
+#tpm_select tpm_emu tpm
 #tpm_select tpm0 tpm
+tpm_select ibm0 tpm

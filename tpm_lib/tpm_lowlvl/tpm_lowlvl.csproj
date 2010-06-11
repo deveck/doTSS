@@ -52,10 +52,12 @@
     <Compile Include="TPMProviderException.cs" />
     <Compile Include="TPMResponseException.cs" />
     <Compile Include="TPMErrorCodes.cs" />
+    <Compile Include="backends\General\IbmSwTpm.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />
     <Folder Include="data\" />
+    <Folder Include="backends\General\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
