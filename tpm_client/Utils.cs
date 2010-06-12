@@ -45,14 +45,17 @@ namespace Iaik.Tc.TPM
 						pw.AppendPasswordChar (consoleKeyInfo.KeyChar);
 				}
 			}
-			
-			if (retypePw == false || pws[0].EqualPassword (pws[1]))
-				return pws[0];
-			else
-			{
-				console.Out.WriteLine ("Error: Passwords do not match!");
-				return null;
-			}
+
+            if (retypePw == false || pws[0].EqualPassword(pws[1]))
+            {
+                pws[0].Hash();
+                return pws[0];
+            }
+            else
+            {
+                console.Out.WriteLine("Error: Passwords do not match!");
+                return null;
+            }
 		}
 	}
 }

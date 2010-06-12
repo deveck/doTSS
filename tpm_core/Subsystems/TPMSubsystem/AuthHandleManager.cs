@@ -336,6 +336,25 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				}
 			}
 		}
+
+        public void RemoveAuthHandles(IAuthorizableCommand cmd, AuthHandle authHandle)
+        {
+
+            using (new LockContext(_authHandles, "AuthHandleManager::RemoveAuthHandles2"))
+            {
+                AuthHandleItem item = FindAuthHandleItem(authHandle);
+
+                if (item == null)
+                    return;
+
+                if (item.AssociatedCommand != null && item.AssociatedCommand.Value.Value == cmd)
+                {
+                    InternalRemoveAuthHandle(item);
+                }
+
+            }
+        }
+
 		
 		private void RemoveAuthHandle(AuthHandleItem item)
 		{

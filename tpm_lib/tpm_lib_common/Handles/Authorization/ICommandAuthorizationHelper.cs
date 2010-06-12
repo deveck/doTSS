@@ -93,5 +93,13 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		/// A <see cref="IAuthorizableCommand"/>
 		/// </param>
 		void RemoveAuthorizationHandle(IAuthorizableCommand cmd);
+
+        /// <summary>
+        /// Removes the authorization handle
+        /// </summary>
+        /// <param name="handle">
+        /// A <see cref="AuthHandle"/>
+        /// </param>
+        void RemoveAuthorizationHandle(IAuthorizableCommand cmd, AuthHandle handle);
 	}
 }

@@ -64,8 +64,9 @@ namespace Iaik.Utils.Hash
 		public void Hash (byte[] buffer, int index, params HashDataProvider[] dataProviders)
 		{
 			Array.Copy(Hash(dataProviders), 0, buffer, index, HashBitSize/8);
+            ByteHelper.ClearBytes(_hashAlgorithm.Hash);
 			_hashAlgorithm.Clear();
-			ByteHelper.ClearBytes(_hashAlgorithm.Hash);
+			
 		}
 	}
 }

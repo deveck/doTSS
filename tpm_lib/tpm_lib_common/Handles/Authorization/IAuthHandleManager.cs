@@ -79,5 +79,15 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		/// A <see cref="AuthHandle[]"/>
 		/// </param>
 		void RemoveAuthHandles(IAuthorizableCommand cmd);
+
+        /// <summary>
+        /// Removes the auth handles associated with the specified command
+        /// from the local auth manager (they need to be already  destroyed on the tpm,
+        /// otherwise use DestroyAuthHandles)
+        /// </summary>
+        /// <param name="authHandles">
+        /// A <see cref="AuthHandle[]"/>
+        /// </param>
+        void RemoveAuthHandles(IAuthorizableCommand cmd, AuthHandle handle);
 	}
 }

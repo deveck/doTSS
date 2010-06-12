@@ -340,7 +340,8 @@ namespace Iaik.Tc.TPM
 		private void  InterpretCommand (string commandLine, bool throwOnException, bool sync)
 		{
 			AutoResetEvent evt = null;
-			
+            Exception lastException = null;
+
 			if(sync)
 				evt = new AutoResetEvent(false);
 			
@@ -361,8 +362,11 @@ namespace Iaik.Tc.TPM
 		                    catch (Exception ex)
 		                    {
 								Out.WriteLine ("Error while executing command '{0}': {1}", commandParts[0], ex);
-								if (throwOnException)
-									throw;
+                                if (throwOnException)
+                                {
+                                    lastException = ex;
+                                    return;
+                                }
 		    				}
 							finally
 							{
@@ -388,7 +392,9 @@ namespace Iaik.Tc.TPM
 				
 			if(sync)
 				evt.WaitOne();
-			
+
+            if (lastException != null)
+                throw lastException;
 			
 		}
 		

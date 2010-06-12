@@ -225,7 +225,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 						_currentAuthorizationInfos[i].Handle.UpdateNonceEven(responseAuthHandles[i].NonceEven);
 					}
 					else
-						_commandAuthHelper.DestroyAuthorizationHandle(this, _currentAuthorizationInfos[i].Handle);
+						_commandAuthHelper.RemoveAuthorizationHandle(this, _currentAuthorizationInfos[i].Handle);
 				}
 			}	
 			

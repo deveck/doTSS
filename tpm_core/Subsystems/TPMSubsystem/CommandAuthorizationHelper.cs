@@ -312,8 +312,12 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		{
 			_tpmContext.AuthHandleManager.RemoveAuthHandles(cmd);
 		}
-		
-		
+
+        public void RemoveAuthorizationHandle(IAuthorizableCommand cmd, AuthHandle handle)
+        {
+            _tpmContext.AuthHandleManager.RemoveAuthHandles(cmd, handle);
+        }
+
 		#endregion
 		
 		private AuthHandle[] AuthInfoToAuthHandle(AuthorizationInfo[] authInfos)

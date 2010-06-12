@@ -79,6 +79,9 @@ namespace Iaik.Tc.TPM.Library.Common
 		{
 			try
 			{
+                if (encapsulated_.ContainsKey(key) == false)
+                    return defaultValue;
+
 				return GetValueOf<T> (key);
 			}
 			catch (KeyNotFoundException)
