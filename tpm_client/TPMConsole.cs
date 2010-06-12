@@ -43,7 +43,8 @@ namespace Iaik.Tc.TPM
         /// <summary>
         /// Contains all Commands
         /// </summary>
-        private IDictionary<string, IConsoleCommand> _commands = new SortedDictionary<string, IConsoleCommand>();	
+        private IDictionary<string, IConsoleCommand> _commands = new SortedDictionary<string, IConsoleCommand>();
+	
 
 		/// <summary>
 		/// In script execution mode, the top contains the current script execution path 

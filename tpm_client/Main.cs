@@ -6,7 +6,6 @@ using Iaik.Tc.TPM.Library.Common;
 using System.IO;
 using Iaik.Utils;
 using System.Reflection;
-using Mono.Security.X509;
 
 namespace Iaik.Tc.TPM
 {

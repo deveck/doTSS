@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -46,7 +46,6 @@
     </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Security" />
-    <Reference Include="Mono.Security" />
     <Reference Include="BouncyCastle.Crypto, Version=1.6.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\BouncyCastle.Crypto.dll</HintPath>
@@ -189,8 +188,4 @@
     </MonoDevelop>
     <VisualStudio />
   </ProjectExtensions>
-  <ItemGroup>
-    <Folder Include="Subsystems\TPMSubsystem\" />
-    <Folder Include="Subsystems\TPMClient\" />
-  </ItemGroup>
 </Project>

@@ -32,6 +32,11 @@ namespace Iaik.Connection.ClientConnections
         /// </summary>
         private PipeStream _pipeStream = null;
 
+        public PipeStream PipeStream
+        {
+            get { return _pipeStream; }
+        }
+
         /// <summary>
         /// Contains the pipe name to connect to
         /// </summary>

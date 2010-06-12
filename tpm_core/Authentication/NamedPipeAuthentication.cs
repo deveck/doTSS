@@ -8,6 +8,9 @@ using Iaik.Connection.ClientConnections;
 using Iaik.Tc.TPM.Context;
 using Iaik.Tc.TPM.Subsystems;
 using Iaik.Tc.TPM.Subsystems.Authentication;
+using System.Security.Principal;
+using System.IO.Pipes;
+using Iaik.Tc.TPM.Configuration;
 
 namespace Iaik.Tc.TPM.Authentication
 {
@@ -21,6 +24,11 @@ namespace Iaik.Tc.TPM.Authentication
 	[AuthenticationSettings("named_pipe_auth", typeof(NamedPipeConnection))]
 	public sealed class NamedPipeAuthentication : AuthenticationMechanism
 	{
+        protected ServerContext ServerContext
+        {
+            get { return (ServerContext)_context; }
+        }
+
         public override void Initialize(EndpointContext context)
         {
             if (typeof(NamedPipeConnection).IsAssignableFrom(context.Connection.GetType()) == false)
@@ -31,7 +39,25 @@ namespace Iaik.Tc.TPM.Authentication
 		
 		public override void Authenticate (RequestContext<AuthenticateRequest, AuthenticateResponse> requestContext)
 		{
-			throw new NotImplementedException();
+            string remoteUser = ((NamedPipeServerStream)((NamedPipeConnection)requestContext.Context.Connection).PipeStream).GetImpersonationUserName();
+
+            if (remoteUser == null)
+            {
+                AuthenticateResponse response = requestContext.CreateResponse();
+                response.Succeeded = false;
+                response.CustomErrorMessage = "Could not retrieve credentials from requesting client!";
+                response.Execute();
+            }
+            else
+            {
+                ServerContext.ServerAuthenticationContext.AuthenticatedPermissionMember =
+                    new ExternalUser(remoteUser, null);
+
+
+                AuthenticateResponse response = requestContext.CreateResponse();
+                response.Succeeded = true;
+                response.Execute();
+            }
 		}
 		
 	}
