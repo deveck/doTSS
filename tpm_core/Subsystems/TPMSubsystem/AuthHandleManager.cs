@@ -343,7 +343,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			{
 				foreach(AuthHandleItem handle in FindReservedHandles(cmd))
 				{
-					_authHandles.RemoveAuthHandle(handle);
+                    InternalRemoveAuthHandle(handle);
 				}
 			}
 		}
@@ -551,7 +551,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			{
 				if(item.AuthHandle.Handle == authHandleItem.AuthHandle.Handle)
 				{
-					_authHandles.Remove(item);
+                    RemoveAuthHandle(item);
 					break;
 				}
 			}
