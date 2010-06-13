@@ -320,8 +320,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				
 				if(keyHandleItem == null)
 				{	
-					throw new KeyNotFoundException(string.Format(@"Keymanager could not find loaded key with identifier
-						'{0}'", identifier));
+					throw new KeyNotFoundException(string.Format("Keymanager could not find loaded key with identifier '{0}'", identifier));
 				}
 				
 				if(keyHandleItem.Status == KeyHandleItem.KeyHandleStatus.SwappedOut)

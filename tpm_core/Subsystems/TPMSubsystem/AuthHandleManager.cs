@@ -13,6 +13,7 @@ using log4net;
 using System.Text;
 using System.Threading;
 using Iaik.Utils.Locking;
+using Iaik.Tc.TPM.Library.Common.KeyData;
 
 namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {
@@ -265,6 +266,19 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 					if(handleItem.AuthHandle == authHandle &&
 					   handleItem.Status != AuthHandleItem.AuthHandleStatus.SwappedIn)
 					{
+                        
+                        //If we have an OSAP auth handle, make sure that the corresponding resource is loaded
+                        AuthSessionNum authSession = handleItem.AssociatedCommand.Value.Key;
+                        IAuthorizableCommand cmd = handleItem.AssociatedCommand.Value.Value;
+                        KeyHandle newKeyHandle;
+                        if (cmd.GetEntityType(authSession) == TPMEntityTypeLSB.TPM_ET_KEYHANDLE && cmd.GetHandle(authSession) != KeyHandle.KEY_SRK)
+                        {
+                            cmd.KeyManager.LoadKey(cmd.GetHandle(authSession));
+                            newKeyHandle = cmd.KeyManager.IdentifierToHandle(cmd.GetHandle(authSession));
+
+                            if (handleItem.AuthHandle.EntityValue != newKeyHandle.Handle)
+                                throw new ArgumentException(string.Format("OSAP with entity type={0}, entity value={1} could not be restored", handleItem.AuthHandle.EntityType, handleItem.AuthHandle.EntityValue));
+                        }
 
 						SwapIn(handleItem);
 						_logger.DebugFormat("LoadAuthHandles: Swapped in {0}", handleItem.AuthHandle);

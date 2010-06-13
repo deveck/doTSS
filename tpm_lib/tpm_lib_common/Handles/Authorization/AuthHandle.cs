@@ -93,8 +93,36 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 			get{ return _sharedSecret;}
 			set{ _sharedSecret = value;}
 		}
-		
-		
+
+        [SerializeMe(8)]
+        protected TPMEntityTypeLSB _entityType;
+
+        /// <summary>
+        /// Gets or Sets the type of the associated entity
+        /// </summary>
+        public TPMEntityTypeLSB EntityType
+        {
+            get { return _entityType; }
+            set { _entityType = value; }
+        }
+
+        [SerializeMe(9)]
+        protected uint _entityValue;
+
+        /// <summary>
+        /// Gets or sets the value of the associated entity
+        /// </summary>
+        /// <remarks>
+        /// This value is important for restoring exported context back into the tpm
+        /// especially for OSAP (and DSAP) sessions, because the associated entity 
+        /// need to be available on context loading
+        /// </remarks>
+        public uint EntityValue
+        {
+            get { return _entityValue; }
+            set { _entityValue = value; }
+        }
+
 		protected AuthHandle()
 		{
 			_nonceOdd = new byte[20];

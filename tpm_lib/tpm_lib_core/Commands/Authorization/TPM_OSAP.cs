@@ -46,6 +46,7 @@ namespace Iaik.Tc.TPM.Library.Commands
 			
 			//handle is not known yet
 			AuthHandle authHandle = new AuthHandle(AuthHandle.AuthType.OSAP, 0);
+            authHandle.EntityType = entityLSB;
 			authHandle.NewNonceOddOSAP();	
 		
 			
@@ -59,14 +60,22 @@ namespace Iaik.Tc.TPM.Library.Commands
 				if(entityLSB == TPMEntityTypeLSB.TPM_ET_KEYHANDLE ||
 				   entityLSB == TPMEntityTypeLSB.TPM_ET_SRK)
 				{
-					if(identifier == KeyHandle.KEY_SRK)
-						requestBlob.WriteUInt32((uint)TPMKeyHandles.TPM_KH_SRK);
-					else
-						requestBlob.WriteUInt32(_keyManager.IdentifierToHandle(identifier).Handle);
+                    if (identifier == KeyHandle.KEY_SRK)
+                    {
+                        requestBlob.WriteUInt32((uint)TPMKeyHandles.TPM_KH_SRK);
+                        authHandle.EntityValue = (uint)TPMKeyHandles.TPM_KH_SRK;
+                    }
+                    else
+                    {
+                        KeyHandle keyHandle = _keyManager.IdentifierToHandle(identifier);
+                        requestBlob.WriteUInt32(keyHandle.Handle);
+                        authHandle.EntityValue = keyHandle.Handle;
+                    }
 				}
 				else if(entityLSB == TPMEntityTypeLSB.TPM_ET_OWNER)
 				{
 					requestBlob.WriteUInt32((uint)TPMKeyHandles.TPM_KH_OWNER);
+                    authHandle.EntityValue = (uint)TPMKeyHandles.TPM_KH_OWNER;
 				}
 				
 				requestBlob.Write(authHandle.NonceOddOSAP, 0, authHandle.NonceOddOSAP.Length);
