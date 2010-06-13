@@ -10,6 +10,10 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 	/// </summary>
 	public interface ICommandAuthorizationHelper
 	{
+        /// <summary>
+        /// Ensures that a free auth slot is available
+        /// </summary>
+        void EnsureFreeSlot();
 	
 		/// <summary>
 		/// Acquires an exclusive lock

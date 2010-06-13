@@ -190,9 +190,8 @@ namespace Iaik.Tc.TPM.Library.Commands
 							_log.DebugFormat("Processed {0}", this);
 						}
 					}
-					
 					ReleaseAuthHandles(false, responseBlob);
-					return responseBlob;
+   					return responseBlob;
 				}
 				catch(Exception)
 				{

@@ -19,7 +19,8 @@ namespace Iaik.Tc.TPM.Library.Commands
 			TPMBlob requestBlob = new TPMBlob();
 			requestBlob.WriteCmdHeader(TPMCmdTags.TPM_TAG_RQU_COMMAND, TPMOrdinals.TPM_ORD_OIAP);
 			requestBlob.WriteCmdSize();
-			
+
+            _commandAuthHelper.EnsureFreeSlot();
 			TPMBlob responseBlob = TransmitMe(requestBlob);
 			responseBlob.SkipHeader();
 			AuthHandleCore authHandle = new AuthHandleCore(AuthHandle.AuthType.OIAP, responseBlob);

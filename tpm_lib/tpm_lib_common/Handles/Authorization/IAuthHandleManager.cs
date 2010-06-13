@@ -11,6 +11,12 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 	/// </summary>
 	public interface IAuthHandleManager
 	{
+        /// <summary>
+        /// Ensures that a free auth slot is available.
+        /// Call this only from a locked context
+        /// </summary>
+        void EnsureFreeSlot();
+
 		/// <summary>
 		/// Acquires an exclusive auth handle manager lock
 		/// </summary>

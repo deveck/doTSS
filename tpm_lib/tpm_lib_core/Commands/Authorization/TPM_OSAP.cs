@@ -71,7 +71,8 @@ namespace Iaik.Tc.TPM.Library.Commands
 				
 				requestBlob.Write(authHandle.NonceOddOSAP, 0, authHandle.NonceOddOSAP.Length);
 				requestBlob.WriteCmdSize();
-				
+
+                _commandAuthHelper.EnsureFreeSlot();
 				_responseBlob = TransmitMe(requestBlob);
 			}
 			

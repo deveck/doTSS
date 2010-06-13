@@ -41,7 +41,12 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		}
 		
 		#region ICommandAuthorizationHelper implementation
-		
+
+        public void EnsureFreeSlot()
+        {
+            _tpmContext.AuthHandleManager.EnsureFreeSlot();
+        }
+
 		public ILockContext AcquireLock()
 		{
 			ILockContext keyManager =  _tpmContext.KeyManager.AcquireLock();

@@ -60,7 +60,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			{
 				Parameters parameters = new Parameters ();
 				parameters.AddPrimitiveType ("capArea", CapabilityData.TPMCapabilityArea.TPM_CAP_PROPERTY);
-				parameters.AddPrimitiveType ("subCap", CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_SESSIONS);
+				parameters.AddPrimitiveType ("subCap", CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MAX_AUTHSESS);
 			
 				TPMCommandRequest request = new TPMCommandRequest(TPMCommandNames.TPM_CMD_GetCapability, parameters);
 				TPMCommandResponse response = _tpmContext.TPM.Process(request);
@@ -68,12 +68,13 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				if(response.Status == false)
 					throw new TPMRequestException("Unknown error");
 				
-				return response.Parameters.GetValueOf<uint>(CapabilityData.PARAM_PROP_MAX_SESSIONS);
+				return response.Parameters.GetValueOf<uint>(CapabilityData.PARAM_PROP_MAX_AUTHSESS);
 			}
 		}
 		
 		#region IAuthHandleManager implementation
-		
+
+
 		/// <summary>
 		/// Acquires an exclusive AuthHandle lock
 		/// </summary>
@@ -82,6 +83,17 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		{
 			return new LockContext(_authHandles, "AuthHandleManager");
 		}
+
+        /// <summary>
+        /// Ensures that a free slot is available.
+        /// Be sure that this method is only called with a locked auth handle manager.
+        /// </summary>
+        public void EnsureFreeSlot()
+        {
+            //If no free session slots are available, swap out a single session slot
+            while (AvailableSessionSlots <= LoadedSessions)
+                SwapOut();
+        }
 		
 		/// <summary>
 		/// Reserves the number of session slots the given command requires on the tpm.
@@ -160,12 +172,11 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		
 		private AuthHandleItem CreateAuthHandle(IAuthorizableCommand cmd, AuthSessionNum authSession)
 		{
-			//If no free session slots are available, swap out a single session slot
-			if(AvailableSessionSlots <= LoadedSessions)
-				SwapOut();
-			
+
 			if(cmd.SupportsAuthType(AuthHandle.AuthType.OIAP))
 			{
+
+
 				TPMCommandRequest oiapRequest = new TPMCommandRequest(TPMCommandNames.TPM_CMD_OIAP, new Parameters());
 				TPMCommandResponse oiapResponse = _tpmContext.TPM.Process(oiapRequest, cmd.CommandAuthHelper, cmd.KeyManager);
 				if(oiapResponse.Status == false)
@@ -351,6 +362,8 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
                 {
                     InternalRemoveAuthHandle(item);
                 }
+                else
+                    return;
 
             }
         }
@@ -366,7 +379,9 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 
 		private void InternalRemoveAuthHandle(AuthHandleItem item)
 		{
+            RemoveItem(item);
 			_authHandles.RemoveAuthHandle(item);
+            
 		}
 		
 		#endregion

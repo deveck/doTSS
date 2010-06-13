@@ -40,6 +40,19 @@ namespace Iaik.Utils.SwapUtils
 				_items.Add(newId, item);
 			}
 		}
+
+        /// <summary>
+        /// Adds a new item to the internal cache
+        /// </summary>
+        /// <param name="item"></param>
+        protected void RemoveItem(T item)
+        {
+            lock (_items)
+            {
+                _replacementAlgorithm.Remove(ItemToId(item).Value);
+                _items.Remove(ItemToId(item).Value);
+            }
+        }
 		                          
 		
 		/// <summary>
