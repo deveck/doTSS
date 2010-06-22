@@ -16,6 +16,7 @@ namespace Iaik.Tc.TPM.Library.Common
 		#region Integrity Collection and Reporting
 		public const String TPM_CMD_PCRRead = "TPM_CMD_PCRRead";
 		public const string TPM_CMD_Extend = "TPM_CMD_Extend";
+		public const string TPM_CMD_Quote = "TPM_CMD_Quote";
 		#endregion
 		
 		#region Capability Commands

@@ -8,6 +8,7 @@ using Iaik.Utils;
 using System.IO;
 using Iaik.Utils.Hash;
 using Iaik.Utils.IO;
+using Iaik.Tc.TPM.Library.Common.PCRData;
 
 namespace Iaik.Tc.TPM.Commands
 {
@@ -160,6 +161,41 @@ namespace Iaik.Tc.TPM.Commands
 				
 				byte[] newDigest = tpmSessions[localAlias].IntegrityClient.Extend(pcr, digest);
 				_console.Out.WriteLine("Extension successful, new pcr value:  {0}", ByteHelper.ByteArrayToHexString(newDigest));
+			}
+			else if(pcrCommand == "quote")
+			{
+				if(commandline.Length < 4)
+				{
+					_console.Out.WriteLine("Error: 'quote' requires some arguments");
+					return;
+				}
+				
+				IDictionary<string, string> arguments =_console.SplitArguments(commandline[3], 0);
+				
+				if(arguments.ContainsKey("pcr") == false)
+				{
+					_console.Out.WriteLine("Error: 'quote' requires parameter 'pcr' to be specified");
+					return;
+				}
+				
+				if(arguments.ContainsKey("name") == false)
+				{
+					_console.Out.WriteLine("Error: no key name was specified");
+					return;
+				}
+				
+				string keyName = arguments["name"];
+				
+				TPMPCRSelection pcrSelection = tpmSessions[localAlias].CreateEmptyPCRSelection();
+				
+				foreach(string pcr in arguments["pcr"].Split('|'))
+				{
+					int pcrValue = int.Parse(pcr);				
+					pcrSelection.PcrSelection.SetBit(pcrValue - 1, true);				
+				}
+				
+				TPMPCRComposite quoted = tpmSessions[localAlias].IntegrityClient.Quote(keyName, pcrSelection);
+				
 			}
 			else
         		_console.Out.WriteLine ("Error, unknown pcr_subcommand '{0}'", commandline[1]);
