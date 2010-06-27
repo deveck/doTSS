@@ -148,7 +148,6 @@ namespace Iaik.Tc.TPM.Commands
 						if(src.Length != 20)
 						{
 							throw new ArgumentException("Error: The embedded digest must be 20 bytes long");
-							return;
 						}
 						
 						src.Read(digest, 0, 20);						

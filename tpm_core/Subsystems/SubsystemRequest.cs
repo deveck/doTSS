@@ -14,7 +14,7 @@ using System.Reflection;
 namespace Iaik.Tc.TPM.Subsystems
 {
 	/// <summary>
-	/// Implements request base class for all default subsystem implementations.
+	/// Implements request base class for all default subsystem implementations (BaseSubsystem).
 	/// </summary>
 	public abstract class SubsystemRequest : IStreamSerializable
 	{

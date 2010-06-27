@@ -13,6 +13,13 @@ namespace Iaik.Tc.TPM.Library.Common.KeyData
 	/// Implemented by classes which swap in and swap out key contexts, 
 	/// and load a given key hierachy
 	/// </summary>
+    /// <remarks>
+    /// <para>There is exactly one key manager for each tpm device</para>
+    /// <para>The IKeyManager is invoked on every execution of a command that requires a key handle and takes care that
+    /// the required keys are loaded</para>
+    /// <para>The IKeyManager is the only entity that executes the LoadKey command and with the IAuthHandleManager the only entity
+    /// that executes SaveContext and LoadContext</para>
+    /// </remarks>
 	public interface IKeyManager
 	{	
 		

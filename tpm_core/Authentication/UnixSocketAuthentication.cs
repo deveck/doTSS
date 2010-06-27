@@ -20,6 +20,9 @@ namespace Iaik.Tc.TPM.Authentication
 	/// If the supplied connection is not a <see>UnixSocketConnection</see>
 	/// an <see>ArgumentException</see> is thrown.
 	/// </summary>
+    /// <remarks>
+    /// The authentication is done via unix credential passing, so no extra interaction with the user is neccessary
+    /// </remarks>
 	[AuthenticationSettings("unix_auth", typeof(UnixSocketConnection))]
 	public class UnixSocketAuthentication : AuthenticationMechanism
 	{

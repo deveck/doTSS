@@ -8,9 +8,14 @@ using System.IO;
 
 namespace Iaik.Utils.Locking
 {
-
+    /// <summary>
+    /// Implemented by Lock providers
+    /// </summary>
 	public interface ILockContext : IDisposable
 	{
+        /// <summary>
+        /// Returns the description of this lock context
+        /// </summary>
 		string LockDescription{get;}
 	}
 

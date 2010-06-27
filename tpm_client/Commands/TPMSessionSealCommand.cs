@@ -183,7 +183,6 @@ namespace Iaik.Tc.TPM.Commands
 				}
 			}
 			
-			string file = null;
 			
 			if(dataInputMode == DataInputMode.File && arguments.ContainsKey("file") == false)
 			{
@@ -191,7 +190,6 @@ namespace Iaik.Tc.TPM.Commands
 				return;
 			}
 			
-			string outputFile = null;
 			
 			if(dataOutputMode == DataOutputMode.File && arguments.ContainsKey("output_file") == false)
 			{

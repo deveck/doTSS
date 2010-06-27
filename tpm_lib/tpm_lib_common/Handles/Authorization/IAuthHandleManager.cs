@@ -9,6 +9,12 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 	/// <summary>
 	/// Implemented by classes which swap in/swap out and establish new authorization sessions for commands
 	/// </summary>
+    /// <remarks>
+    /// <para>The IAuthHandleManager works completely transparently and is invoked for each command that needs authorization</para>
+    /// <para>This is the only entity that executes TPM_OIAP and TPM_OSAP commands, and with the key manager the only entity
+    /// that executes the SaveContext and LoadContext command.
+    /// This commands should not be executed directly from the client.</para>
+    /// </remarks>
 	public interface IAuthHandleManager
 	{
         /// <summary>
@@ -26,7 +32,7 @@ namespace Iaik.Tc.TPM.Library.Common.Handles.Authorization
 		LockContext AcquireLock();
 			
 		/// <summary>
-		/// Reserves the number of session slots this command requires on the tpm.
+		/// Reserves the number of session slots this command requires
 		/// </summary>
 		/// <param name="cmd"></param>
 		/// <param name="tpmSession"></param>

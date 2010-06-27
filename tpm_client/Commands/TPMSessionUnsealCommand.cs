@@ -157,7 +157,6 @@ namespace Iaik.Tc.TPM.Commands
 				}
 			}
 			
-			string file = null;
 			
 			if(dataInputMode == TPMSessionSealCommand.DataInputMode.File && arguments.ContainsKey("file") == false)
 			{
@@ -165,7 +164,6 @@ namespace Iaik.Tc.TPM.Commands
 				return;
 			}
 			
-			string outputFile = null;
 			
 			if(dataOutputMode == TPMSessionSealCommand.DataOutputMode.File && arguments.ContainsKey("output_file") == false)
 			{

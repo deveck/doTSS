@@ -18,7 +18,13 @@ using Iaik.Tc.TPM.Library.KeyDataCore;
 namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {
 
-
+    /// <summary>
+    /// Handles all TPM related requests
+    /// </summary>
+    /// <remarks>
+    /// Before a client can use a TPM, it needs to be selected. The client then receives an identifier for the 
+    /// selected TPM, this identifier then can be used to execute tpm commands as long as the tpm device and the connection remains open
+    /// </remarks>
 	public class TPMSubsystem : BaseServerSubsystem<TPMSubsystem.TPMRequestEnum>
 	{
 		

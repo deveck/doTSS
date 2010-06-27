@@ -9,7 +9,10 @@ using System.Globalization;
 namespace Iaik.Utils.IO
 {
 
-
+    /// <summary>
+    /// Converts all written bytes to a hex-string stream and writes it to the underlying stream.
+    /// On read 2 characters are read at once and converted back to a byte stream
+    /// </summary>
 	public class HexFilterStream : Stream
 	{
 		private Stream _baseStream;
@@ -108,7 +111,7 @@ namespace Iaik.Utils.IO
 		}
 
 
-		public void Dispose ()
+        protected override void Dispose(bool disposing)
 		{
 			_baseStream.Dispose();
 		}

@@ -8,6 +8,9 @@ using System.IO;
 
 namespace Iaik.Utils
 {
+    /// <summary>
+    /// Immutable Stream implementation for byte arrays
+    /// </summary>
 	public class ByteStream : Stream
 	{
 		/// <summary>

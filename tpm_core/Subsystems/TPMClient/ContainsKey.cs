@@ -15,7 +15,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMClient
 {
 
 	/// <summary>
-	/// Is sent from the server to the client to request the parent key of the specified key
+	/// Is sent from the server to the client to check if the specified key is contained in the loaded keystore
 	/// </summary>
 	public class ContainsKeyRequest : TypedClientSubsystemRequest<ContainsKeyResponse>
 	{

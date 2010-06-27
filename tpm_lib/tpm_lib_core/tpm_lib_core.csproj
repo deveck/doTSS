@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{3C66F3CE-CDD7-43CB-9847-9CC97715D683}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -20,6 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <DocumentationFile>bin\Debug\tpm_lib.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -88,29 +89,6 @@
     <Compile Include="Commands\CryptographicFunctions\TPM_GetRandom.cs" />
     <Compile Include="Commands\Integrity\TPM_Extend.cs" />
     <Compile Include="Commands\Integrity\TPM_Quote.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="exceptions\" />
-    <Folder Include="Commands\" />
-    <Folder Include="Commands\Capability\" />
-    <Folder Include="Commands\Integrity\" />
-    <Folder Include="Commands\Factory\" />
-    <Folder Include="Commands\EndorsementKey\" />
-    <Folder Include="KeyDataCore\" />
-    <Folder Include="CommonTPMDataTypes\" />
-    <Folder Include="Commands\Authorization\" />
-    <Folder Include="Commands\Eviction\" />
-    <Folder Include="HandlesCore\" />
-    <Folder Include="HandlesCore\Authorization\" />
-    <Folder Include="Commands\AdminOwnership\" />
-    <Folder Include="Hash\" />
-    <Folder Include="Commands\SessionManagement\" />
-    <Folder Include="Commands\StorageFunctions\" />
-    <Folder Include="PCRDataCore\" />
-    <Folder Include="Storage\" />
-    <Folder Include="Commands\MonotonicCounter\" />
-    <Folder Include="Basic\" />
-    <Folder Include="Commands\CryptographicFunctions\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_lowlvl\tpm_lowlvl.csproj">

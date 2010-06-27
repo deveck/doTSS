@@ -7,9 +7,14 @@ using System.Security.Cryptography;
 namespace Iaik.Utils.Hash
 {
 
-
+    /// <summary>
+    /// HashProvider implementation for TPM HMAC generation
+    /// </summary>
 	public class HMACProvider : HashProvider
 	{
+        /// <summary>
+        /// Returns the used HMAC algorithm
+        /// </summary>
 		private HMAC HMACAlgorithm
 		{
 			get{ return (HMAC)_hashAlgorithm; }

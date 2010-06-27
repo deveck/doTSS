@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9AADA320-4FD9-4CB9-A5AE-3ABE2A6BF368}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -20,6 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <DocumentationFile>bin\Debug\tpm_lib_common.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -76,14 +77,6 @@
     <Compile Include="PCRData\TPMPCRComposite.cs" />
     <Compile Include="Storage\TPMBoundData.cs" />
     <Compile Include="Basic\TPMCounterValue.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="interface\" />
-    <Folder Include="KeyData\" />
-    <Folder Include="Handles\" />
-    <Folder Include="PCRData\" />
-    <Folder Include="Storage\" />
-    <Folder Include="Basic\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -57,8 +57,8 @@ namespace Iaik.Tc.TPM.Library.Common
 			/// <summary>
 			/// Deprecated!. Returns the number of DIR, which is now fixed at 1
 			/// </summary>
-			[Obsolete("Deprecated in version 1.2 of TPM")]
-			TPM_CAP_PROP_DIR = 0x000000102,
+			//[Obsolete("Deprecated in version 1.2 of TPM")]
+			//TPM_CAP_PROP_DIR = 0x000000102,
 			
 			/// <summary>
 			/// Returns the vendor ID unique to each TPM manufacturer

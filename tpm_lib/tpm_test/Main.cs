@@ -145,9 +145,9 @@ namespace tpm_test
 				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_PCR:
 					log.InfoFormat("Number of PCRs is {0}", response.Parameters.GetValueOf<uint>(CapabilityData.PARAM_PROP_PCR));
 					break;
-				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_DIR:
-					log.InfoFormat("Number of DIR is {0} and should be 1 because command is deprecated", response.Parameters.GetValueOf<uint>(CapabilityData.PARAM_PROP_DIR));
-					break;
+                //case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_DIR:
+                //    log.InfoFormat("Number of DIR is {0} and should be 1 because command is deprecated", response.Parameters.GetValueOf<uint>(CapabilityData.PARAM_PROP_DIR));
+                //    break;
 				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MANUFACTURER:
 					log.InfoFormat("Manufacturer ID is {0}", response.Parameters.GetValueOf<uint>(CapabilityData.PARAM_PROP_MANUFACTURER));
 					break;

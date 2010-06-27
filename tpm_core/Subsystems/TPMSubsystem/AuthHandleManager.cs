@@ -21,6 +21,12 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 	/// <summary>
 	/// Manages the currently active authorization handles of a single tpm device
 	/// </summary>
+    /// <remarks>
+    /// <para>The AuthHandleManager works completely transparently and is invoked for each command that needs authorization</para>
+    /// <para>This is the only entity that executes TPM_OIAP and TPM_OSAP commands, and with the key manager the only entity
+    /// that executes the SaveContext and LoadContext command.
+    /// This commands should not be executed directly from the client.</para>
+    /// </remarks>
 	public class AuthHandleManager : SwapManager<AuthHandleItem>, IAuthHandleManager
 	{
 
