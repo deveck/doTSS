@@ -43,6 +43,10 @@ namespace Iaik.Tc.TPM.Commands
              [file=filename]  Mandatory argument if using data_input=file. 
                               Specifies the file to read data to be hashed from
                               and extended
+                              
+         quote         Cryptographic reporting of PCR values
+         	Arguments:
+             pcr=[pcr1|pcr2|...|pcrn] Specifies the pcrs to be quoted
 		";
 	
             }

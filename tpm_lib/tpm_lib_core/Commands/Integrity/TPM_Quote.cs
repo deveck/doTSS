@@ -11,12 +11,13 @@ using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 using Iaik.Utils.Nonce;
 using Iaik.Tc.TPM.Library.HandlesCore.Authorization;
 using Iaik.Tc.TPM.Library.Common.PCRData;
+using Iaik.Tc.TPM.Library.Hash;
 
 namespace Iaik.Tc.TPM.Library.Commands.Integrity
 {
 
 	/// <summary>
-	/// Extends the specified PCR value and returns the new pcr value
+	/// Quotes the specified PCR values
 	/// </summary>
 	[TPMCommands(TPMCommandNames.TPM_CMD_Quote)]
 	public class TPM_Quote : TPMCommandAuthorizable
@@ -33,10 +34,13 @@ namespace Iaik.Tc.TPM.Library.Commands.Integrity
 		private byte[] _responseDigest = null;
 	
 		/// <summary>
-		/// contains the PCR constraints for the data to be sealed
+		/// contains the PCRs to quote
 		/// </summary>
-		private TPMPCRInfoCore _pcrInfo = null;
+		private TPMPCRSelectionCore _pcrSelection = null;
 		
+		/// <summary>
+		/// Nonce included in the quote request, against replay attacks
+		/// </summary>
 		private byte[] _nonce = null;
 		
 		public override byte[] Digest 
@@ -45,14 +49,11 @@ namespace Iaik.Tc.TPM.Library.Commands.Integrity
 			{
 				if(_digest == null)
 				{
-					using(TPMBlob tempBlob = new TPMBlob())
-					{
-						TPMBlobWriteableHelper.WriteITPMBlobWritableWithUIntSize(tempBlob, _pcrInfo);
-						
-						_digest = new HashProvider().Hash(
-							new HashPrimitiveDataProvider(TPMOrdinals.TPM_ORD_Quote),
-							new HashStreamDataProvider(tempBlob,0,null,false));
-					}
+
+					_digest = new HashProvider().Hash(
+						new HashPrimitiveDataProvider(TPMOrdinals.TPM_ORD_Quote),
+						new HashByteDataProvider(_nonce),
+						new HashTPMBlobWritableDataProvider(_pcrSelection));
 				}
 				
 				return _digest;
@@ -77,7 +78,7 @@ namespace Iaik.Tc.TPM.Library.Commands.Integrity
 					      //1S
 					      new HashStreamDataProvider(_responseBlob, offset, 4, false),
 					      //2S
-					      new HashPrimitiveDataProvider(TPMOrdinals.TPM_ORD_Seal),
+					      new HashPrimitiveDataProvider(TPMOrdinals.TPM_ORD_Quote),
 					      //3S
 					      new HashStreamDataProvider(_responseBlob, offset + 4, _responseBlob.Length - offset - 4 - authHandleSize, false));
 				}
@@ -94,50 +95,23 @@ namespace Iaik.Tc.TPM.Library.Commands.Integrity
 			
 			_digest = null;
 			_responseDigest = null;
-			_pcrInfo = new TPMPCRInfoCore(new TPMPCRSelectionCore(param.GetValueOf<TPMPCRSelection>("pcr_selection")));
-			
-//			_pcrInfo.CalculateDigests((TPMPCRInfoCore.GetPCRValueDelegate)delegate(uint pcrNum)
-//			{
-//				//TODO: Use TPM_Quote to determine pcr values once it's available
-//				
-//				Parameters pcrParams = new Parameters();
-//				pcrParams.AddPrimitiveType("pcrnum", pcrNum);
-//				TPMCommandResponse pcrResponse = _tpmWrapper.Process(new TPMCommandRequest(TPMCommandNames.TPM_CMD_PCRRead, pcrParams));
-//				if(!pcrResponse.Status)
-//					throw new TPMResponseException("An unknown error occured on performing pcrread");
-//				return pcrResponse.Parameters.GetValueOf<byte[]>("value");
-//			});
-			
+			_nonce = NonceGenerator.GenerateByteNonce(20);
+			object myType = param.GetValueOf<object>("targetPCR");
+			_pcrSelection = param.GetValueOf<TPMPCRSelectionCore>("targetPCR");
+				
 		}
 
 
 		protected override TPMCommandResponse InternalProcess ()
 		{
-			// Unencrypted authorization values, they need to be XOR-Encrypted with
-			// XOR(auth, SHA-1(OSAP shared secret | session nonce))
-			//
-			// OSAP_shared_secret = HMAC(key=usage secret of key handle, nonce even osap | nonce odd osap)
-//			AuthHandle auth1OSAP = _commandAuthHelper.AssureOSAPSharedSecret(this, AuthSessionNum.Auth1);			
-//			
-//			_encAuth = _params.GetValueOf<byte[]> ("data_auth");
-//
-//			byte[] xorKey = new HashProvider().Hash(
-//					new HashByteDataProvider(auth1OSAP.SharedSecret),
-//					new HashByteDataProvider(auth1OSAP.NonceEven));
-//			
-//			ByteHelper.XORBytes(_encAuth, xorKey);
-//			
-//			//Load parent key if not loaded
-//			_keyManager.LoadKey(_params.GetValueOf<string>("key"));
 			
 			TPMBlob requestBlob = new TPMBlob();
-			requestBlob.WriteCmdHeader(TPMCmdTags.TPM_TAG_RQU_AUTH1_COMMAND, TPMOrdinals.TPM_ORD_Seal);
+			requestBlob.WriteCmdHeader(TPMCmdTags.TPM_TAG_RQU_AUTH1_COMMAND, TPMOrdinals.TPM_ORD_Quote);
 			
 			//key handle gets inserted later, it may be not available now
 			requestBlob.WriteUInt32(0);
-			_nonce = NonceGenerator.GenerateByteNonce(20);
 			requestBlob.Write(_nonce, 0, 20);
-			TPMBlobWriteableHelper.WriteITPMBlobWritableWithUIntSize(requestBlob, _pcrInfo);
+			_pcrSelection.WriteToTpmBlob(requestBlob);
 						
 			AuthorizeMe(requestBlob);
 			
@@ -152,11 +126,14 @@ namespace Iaik.Tc.TPM.Library.Commands.Integrity
 		
 			_responseBlob.SkipHeader();
 			
-			//TPMStoredDataCore sealedData = TPMStoredDataCore.CreateFromTPMBlob(_responseBlob);
-			
+						
 			Parameters responseParams = new Parameters();
-			//responseParams.AddPrimitiveType("data", ByteHelper.SerializeToBytes(sealedData)); 
-		
+			responseParams.AddValue("pcrData", TPMPCRCompositeCore.CreateFromTPMBlob(_responseBlob)); 
+			
+			uint sigSize = _responseBlob.ReadUInt32();
+			responseParams.AddPrimitiveType("sig", _responseBlob.ReadBytes((int)sigSize));
+			
+			
 			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_Quote, responseParams);
 		}
 		

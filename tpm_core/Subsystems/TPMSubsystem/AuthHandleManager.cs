@@ -414,7 +414,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		/// <param name="item"></param>
 		protected override void SwappedIn (AuthHandleItem item)
 		{
-			uint oldHandle = item.AuthHandle.Handle;
+			//uint oldHandle = item.AuthHandle.Handle;
 			if(item.Status != AuthHandleItem.AuthHandleStatus.SwappedOut)
 				throw new ArgumentException("Invalid auth handle state for swap in operation");
 			

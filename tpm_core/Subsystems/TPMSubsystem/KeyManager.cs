@@ -24,7 +24,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 	/// </summary>
 	public class KeyManager : SwapManager<KeyHandleItem>, IKeyManager
 	{
-		private ILog _log = LogManager.GetLogger("KeyManager");
+		//private ILog _log = LogManager.GetLogger("KeyManager");
 		
 		/// <summary>
 		/// Contains all auth handle items
@@ -112,7 +112,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			
 			TPMCommandResponse swapInResponse =_tpmContext.TPM.Process(swapInRequest);
 			if(swapInResponse.Status == false)
-				throw new TPMRequestException("^Keymanager: Unknown error while swap in operation");
+				throw new TPMRequestException("Keymanager: Unknown error while swap in operation");
 			
 			item.KeyHandle.Handle = swapInResponse.Parameters.GetValueOf<ITPMHandle>("handle").Handle;
 		}

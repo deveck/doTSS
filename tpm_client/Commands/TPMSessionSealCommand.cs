@@ -108,8 +108,7 @@ namespace Iaik.Tc.TPM.Commands
 				return;
 			}
 			
-			string[] sArguments = commandline[2].Split(',');
-    		IDictionary<string, string> arguments = _console.SplitArguments(commandline[2], 0);    
+			IDictionary<string, string> arguments = _console.SplitArguments(commandline[2], 0);    
 			
 			if(arguments.ContainsKey("name") == false)
 			{

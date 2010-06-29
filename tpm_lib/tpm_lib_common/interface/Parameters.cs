@@ -7,6 +7,7 @@ using Iaik.Utils.Serialization;
 using System.IO;
 using Iaik.Utils;
 using System.Text;
+using System.Reflection;
 
 namespace Iaik.Tc.TPM.Library.Common
 {
@@ -21,6 +22,19 @@ namespace Iaik.Tc.TPM.Library.Common
 		/// </summary>
 		private IDictionary<String, ITypedParameter> encapsulated_ = 
 			new Dictionary<String, ITypedParameter>();
+
+
+		private static Assembly[] _assemblySearchOrder = null;
+
+		/// <summary>
+		/// If typed parameters are defined in multiple assemblies, or in other assemblies than asm(ITypedParameter)
+		/// specify them here. They are considered on loading
+		/// </summary>
+		public static Assembly[] AssemblySearchOrder
+		{
+			get{ return _assemblySearchOrder; }
+			set{ _assemblySearchOrder = value; }
+		}
 
 		/// <summary>
 		/// The standard ctor
@@ -125,7 +139,15 @@ namespace Iaik.Tc.TPM.Library.Common
 			for (int i = 0; i < count; i++)
 			{
 				string key = StreamHelper.ReadString (src);
-				ITypedParameter param = StreamHelper.ReadTypedStreamSerializable<ITypedParameter> (src);
+				
+		
+				ITypedParameter param;
+				
+				if(_assemblySearchOrder == null)				 
+					param = StreamHelper.ReadTypedStreamSerializable<ITypedParameter> (src);
+				else
+					param = (ITypedParameter)StreamHelper.ReadTypedStreamSerializable(src, _assemblySearchOrder);
+				
 				encapsulated_.Add (key, param);
 			}
 		}
