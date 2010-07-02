@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Iaik.Tc.TPM.Library.Common;
@@ -8,6 +8,7 @@ using Iaik.Tc.TPM.Lowlevel;
 using Iaik.Tc.TPM.Lowlevel.Data;
 using Iaik.Tc.TPM.Library.Common.KeyData;
 using Iaik.Tc.TPM.Library.KeyDataCore;
+using Iaik.Tc.TPM.Library.HandlesCore.Authorization;
 
 namespace Iaik.Tc.TPM.Library.Commands.CryptographicFunctions
 {
@@ -47,10 +48,31 @@ namespace Iaik.Tc.TPM.Library.Commands.CryptographicFunctions
             }
         }
 
-        public override byte[] ResponseDigest
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public override byte[] ResponseDigest 
+		{
+			get 
+			{
+				if(_responseDigest == null)
+				{
+					HashProvider hasher = new HashProvider();
+					
+					int offset = 2+4; //tag + paramsize
+					
+					int authHandleSize = ResponseAuthHandleInfoCore.ReadAuthHandleInfos(this, _responseBlob).Length *
+						ResponseAuthHandleInfoCore.SINGLE_AUTH_HANDLE_SIZE;
+					
+					_responseDigest = hasher.Hash(
+					      //1S
+					      new HashStreamDataProvider(_responseBlob, offset, 4, false),
+					      //2S
+					      new HashPrimitiveDataProvider(TPMOrdinals.TPM_ORD_Sign),
+					      //3S
+					      new HashStreamDataProvider(_responseBlob, offset + 4, _responseBlob.Length - offset - 4 - authHandleSize, false));
+				}
+				
+				return _responseDigest;
+			}
+		}
 
         public override bool SupportsAuthType(AuthHandle.AuthType authType)
         {

@@ -80,6 +80,7 @@
     <Compile Include="Commands\TPMSessionUnBindCommand.cs" />
     <Compile Include="Commands\TPMSessionCounterCommand.cs" />
     <Compile Include="Commands\TPMSessionRNGCommand.cs" />
+    <Compile Include="Commands\TPMSessionSignCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_core\tpm_core.csproj">
@@ -106,6 +107,7 @@
   <ItemGroup>
     <None Include="TestScripts\build_named_pipe_connection.txt" />
     <None Include="TestScripts\tpm_session_quote.txt" />
+    <None Include="TestScripts\tpm_session_sign.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

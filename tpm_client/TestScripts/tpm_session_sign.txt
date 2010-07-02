@@ -12,4 +12,4 @@ secret_cache tpm add type=srk,secret=srk
 secret_cache tpm add type=key_usage,name=sign,secret=sign
 tpm_session_key tpm create name=sign,parent=srk,key_length=2048,key_usage=sign
 
-tpm_session_pcr tpm quote name=sign,pcr=1|2|4
+tpm_session_signature tpm generate name=sign,data_input=embedded meine tollen daten

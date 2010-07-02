@@ -276,6 +276,26 @@ namespace Iaik.Tc.TPM.Context
 		}
 		
 		/// <summary>
+		/// Creates a ISigner for this key (if supported)
+		/// </summary>
+		/// <returns>
+		/// A <see cref="ISigner"/>
+		/// </returns>
+		public ISigner CreateSigner()
+		{
+			TPMKey keyInfo = KeyInfo;
+			
+			if(keyInfo.AlgorithmParams.AlgorithmId == TPMAlgorithmId.TPM_ALG_RSA &&
+			   keyInfo.AlgorithmParams.SigScheme == TPMSigScheme.TPM_SS_RSASSAPKCS1v15_SHA1)
+			{
+				return new TPMRSASHA1Signer(_tpmSession, this);
+			}
+			else
+				throw new NotSupportedException(string.Format("Signing not supported for '{0}-{1}'", keyInfo.AlgorithmParams.AlgorithmId,
+				                                              keyInfo.AlgorithmParams.SigScheme));
+		}
+		
+		/// <summary>
 		/// Reads an encrypted block from the stream.
 		/// <see cref="SealBlockCipher"/> for details
 		/// </summary>

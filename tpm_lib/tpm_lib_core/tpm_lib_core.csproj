@@ -94,6 +94,7 @@
     <Compile Include="Commands\Integrity\TPM_Quote.cs" />
     <Compile Include="ContextCore\ContextHandle.cs" />
     <Compile Include="ContextCore\TPMContextBlobCore.cs" />
+    <Compile Include="Commands\CryptographicFunctions\TPM_Sign.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_lowlvl\tpm_lowlvl.csproj">
