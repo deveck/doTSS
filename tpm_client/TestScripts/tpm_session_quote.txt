@@ -1,0 +1,15 @@
+# Runs the tpm capability command on the selected tpm device
+
+@exit_on_error 1
+@exit_on_finish 0
+
+@include ./authenticated_environment.txt
+@include ./select_tpm.txt
+@include ./keystore.txt
+
+
+secret_cache tpm add type=srk,secret=srk
+secret_cache tpm add type=key_usage,name=sign,secret=sign
+tpm_session_key tpm create name=sign,parent=srk,key_length=2048,key_usage=bind
+
+tpm_session_pcr tpm quote name=sign,pcr=1|2|4

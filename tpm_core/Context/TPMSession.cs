@@ -19,8 +19,20 @@ namespace Iaik.Tc.TPM.Context
 
 	/// <summary>
 	/// Combines all operations that can be performed on a tpm.
-	/// To retrieve a tpm session call the select method on the tpm client
 	/// </summary>
+    /// <remarks>
+    /// To retrieve a tpm session call the select method on the tpm client
+    /// </remarks>
+    /// <code>
+    /// ... (Connecto to tpm_server, instantiate keystore)
+    /// ...
+    /// ClientContext ctx = EndpointContext.CreateClientEndpointContext(conn);	
+	///	ctx.AuthClient.SelectAuthentication("named_pipe_auth");
+	/// ctx.AuthClient.Authenticate();
+	/// TPMSession tpmSession = ctx.TPMClient.SelectTPMDevice("tpm_id");
+	/// tpmSession.Keystore = keystore;
+    /// ...
+    /// </code>
 	public class TPMSession : IDisposable
 	{
 	

@@ -64,7 +64,7 @@ namespace Iaik.Tc.TPM.Commands
 			
 			if (counterCommand == "create")
 			{
-				ProtectedPasswordStorage ownerAuth;
+				//ProtectedPasswordStorage ownerAuth;
 				if(commandline.Length < 4)
 				{
 					_console.Out.WriteLine("Error: Could not find label");
@@ -84,7 +84,7 @@ namespace Iaik.Tc.TPM.Commands
 					
 			else if (counterCommand == "read")
 			{
-				ProtectedPasswordStorage ownerAuth;
+				//ProtectedPasswordStorage ownerAuth;
 				if(commandline.Length < 4)
 				{
 					_console.Out.WriteLine("Error: Could not find counter id");
@@ -98,7 +98,7 @@ namespace Iaik.Tc.TPM.Commands
 			
 			else if (counterCommand == "increment")
 			{
-				ProtectedPasswordStorage ownerAuth;
+				//ProtectedPasswordStorage ownerAuth;
 				if(commandline.Length < 4)
 				{
 					_console.Out.WriteLine("Error: Could not find counter id");
@@ -112,7 +112,7 @@ namespace Iaik.Tc.TPM.Commands
 			
 			else if (counterCommand == "release")
 			{
-				ProtectedPasswordStorage ownerAuth;
+				//ProtectedPasswordStorage ownerAuth;
 				if(commandline.Length < 4)
 				{
 					_console.Out.WriteLine("Error: Could not find counter id");

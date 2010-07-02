@@ -21,6 +21,7 @@ using Iaik.Tc.TPM.Subsystems.TPMSubsystem;
 using Iaik.Tc.TPM.Library;
 using Iaik.Tc.TPM.Library.Common;
 using Iaik.Tc.TPM.Library.Common.Handles;
+using System.Reflection;
 
 namespace Iaik.Tc.TPM
 {
@@ -129,6 +130,11 @@ namespace Iaik.Tc.TPM
 				{
 					_logger.FatalFormat ("Error setting up tpm device '{0}', the device will not be available ({1})", device.TPMName, ex);
 				}
+				
+				///Set the Assembly search order for incoming Parameters so that core classes are always at first
+				Parameters.AssemblySearchOrder = new Assembly[]{
+					typeof(TPMWrapper).Assembly, //lib core
+					typeof(ITypedParameter).Assembly};	//lib common
 				
 			}
 		}

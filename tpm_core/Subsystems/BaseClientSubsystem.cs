@@ -15,10 +15,7 @@ namespace Iaik.Tc.TPM.Subsystems
 	/// Adds client specific properties to the BaseSubsystem
 	/// </summary>
 	public abstract class BaseClientSubsystem<TRequest> : BaseSubsystem<TRequest>
-	{
-
-		
-		
+	{		
 		public BaseClientSubsystem (EndpointContext context)
 			: base(context)
 		{

@@ -84,7 +84,7 @@ namespace Iaik.Utils.IO
 		}
 
 
-		public void Dispose ()
+        protected override void Dispose(bool disposing)
 		{
 			Close();
 		}

@@ -18,6 +18,13 @@ namespace Iaik.Connection.ClientConnections
     /// Implements the FrontEndConnection for named pipes.
     /// This can be used on Server and client side
     /// </summary>
+    /// <code>
+    /// ...
+    /// FrontEndConnection conn = GenericClassIdentifierFactory.CreateFromClassIdentifierOrType<FrontEndConnection>("named_pipe", "TPM_csharp");
+    /// conn.Connect();
+    /// ClientContext ctx = EndpointContext.CreateClientEndpointContext(conn);	
+    /// ...
+    /// </code>
 	[FrontEndConnection("named_pipe")]
     public sealed class NamedPipeConnection : FrontEndConnection
     {

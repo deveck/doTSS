@@ -6,6 +6,7 @@
 using System;
 using Iaik.Tc.TPM.Library.Common;
 using Iaik.Tc.TPM.Subsystems.TPMSubsystem;
+using Iaik.Tc.TPM.Library.Common.PCRData;
 
 namespace Iaik.Tc.TPM.Context
 {
@@ -52,6 +53,8 @@ namespace Iaik.Tc.TPM.Context
 			return BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_Extend, extendParameters)
 				.Parameters.GetValueOf<byte[]>("pcr_value");
 		}
+		
+
 		
 		private TPMCommandResponse BuildDoVerifyRequest (string commandIdentifier, Parameters parameters)
 		{

@@ -17,11 +17,11 @@ namespace Iaik.Tc.TPM.Library.HandlesCore
 		/// <summary>
 		/// Identifies the handles that are created for this handle list
 		/// </summary>
-		private TPMResourceType _resourceType;
+		//private TPMResourceType _resourceType;
 		
 		public HandleListCore (TPMBlob blob, TPMResourceType resourceType)
 		{
-			_resourceType = resourceType;
+			//_resourceType = resourceType;
 			ReadFromTpmBlob (blob);
 		}
 		

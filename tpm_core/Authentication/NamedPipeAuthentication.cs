@@ -17,14 +17,17 @@ namespace Iaik.Tc.TPM.Authentication
 
 	/// <summary>
 	/// Defines the implicit authentication mechanism for
-	/// UnixSocketConnections.
-	/// If the supplied connection is not a <see>UnixSocketConnection</see>
+	/// NamedPipeConnections.
+	/// If the supplied connection is not a <see>NamedPipeConnection</see>
 	/// an <see>ArgumentException</see> is thrown.
 	/// </summary>
+    /// <remarks>
+    /// The authentication is done via windows user impersonation, so no extra interaction with the user is neccessary
+    /// </remarks>
 	[AuthenticationSettings("named_pipe_auth", typeof(NamedPipeConnection))]
 	public sealed class NamedPipeAuthentication : AuthenticationMechanism
 	{
-        protected ServerContext ServerContext
+        private ServerContext ServerContext
         {
             get { return (ServerContext)_context; }
         }

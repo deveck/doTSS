@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9AADA320-4FD9-4CB9-A5AE-3ABE2A6BF368}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -20,6 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <DocumentationFile>bin\Debug\tpm_lib_common.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -40,12 +41,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="interface\TPMCommandRequest.cs" />
     <Compile Include="interface\TPMCommandResponse.cs" />
     <Compile Include="interface\Parameters.cs" />
+    <Compile Include="Sign\SignatureVerification.cs" />
+    <Compile Include="Sign\TPMQuoteInfo.cs" />
     <Compile Include="TPMCommandNames.cs" />
     <Compile Include="interface\ITypedParameter.cs" />
     <Compile Include="CapabilityData.cs" />
@@ -77,15 +82,6 @@
     <Compile Include="Storage\TPMBoundData.cs" />
     <Compile Include="Basic\TPMCounterValue.cs" />
     <Compile Include="Context\TPMContextBlob.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="interface\" />
-    <Folder Include="KeyData\" />
-    <Folder Include="Handles\" />
-    <Folder Include="PCRData\" />
-    <Folder Include="Storage\" />
-    <Folder Include="Basic\" />
-    <Folder Include="Context\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

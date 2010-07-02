@@ -178,7 +178,7 @@ namespace Iaik.Tc.TPM.Commands
 				
 				switch(arguments["key_usage"])
 				{
-				case "signing":
+				case "sign":
 					keyUsage = TPMKeyUsage.TPM_KEY_SIGNING;
 					break;
 					
@@ -244,7 +244,7 @@ namespace Iaik.Tc.TPM.Commands
 				}
 				
 				
-				ClientKeyHandle newKey = keyHandle.CreateKey(arguments["name"], keyLength, keyUsage, keyFlags);
+				/*ClientKeyHandle newKey =*/ keyHandle.CreateKey(arguments["name"], keyLength, keyUsage, keyFlags);
 			}
 			else
         		_console.Out.WriteLine ("Error, unknown command '{0}'", commandline[2]);

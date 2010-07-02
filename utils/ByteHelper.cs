@@ -7,7 +7,9 @@ using Iaik.Utils.Serialization;
 namespace Iaik.Utils
 {
 
-
+    /// <summary>
+    /// Static class which provides some byte helper functions
+    /// </summary>
 	public static class ByteHelper
 	{
 

@@ -120,9 +120,9 @@ namespace Iaik.Tc.TPM.Library.Commands
 				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_PCR:
 					parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_PCR, ReadUInt32Response (responseBlob));
 					break;
-				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_DIR:
-					parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_DIR, ReadUInt32Response (responseBlob));
-					break;
+                //case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_DIR:
+                //    parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_DIR, ReadUInt32Response (responseBlob));
+                //    break;
 				case CapabilityData.TPMSubCapProperty.TPM_CAP_PROP_MANUFACTURER:
 					parameters.AddPrimitiveType (CapabilityData.PARAM_PROP_MANUFACTURER, ReadUInt32Response (responseBlob));
 					break;

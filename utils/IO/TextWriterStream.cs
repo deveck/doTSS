@@ -7,7 +7,9 @@ using System.Text;
 
 namespace Iaik.Utils.IO
 {
-
+    /// <summary>
+    /// Stream implementation which writes to a text writer on flush
+    /// </summary>
 	public class TextWriterStream : Stream
 	{
 
@@ -85,8 +87,7 @@ namespace Iaik.Utils.IO
 			_textStream.Dispose();
 		}
 
-
-		public void Dispose ()
+        protected override void Dispose(bool disposing)
 		{
 			Close();
 		}

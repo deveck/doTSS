@@ -3,5 +3,5 @@
 @exit_on_error 1
 @exit_on_finish 0
 
-#@include ./build_unix_socket_connection.txt
-@include ./build_named_pipe_connection.txt
+@include ./build_unix_socket_connection.txt
+#@include ./build_named_pipe_connection.txt

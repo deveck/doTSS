@@ -3,6 +3,7 @@
 
 using System;
 using Iaik.Utils.Serialization;
+using System.IO;
 
 namespace Iaik.Tc.TPM.Library.Common.PCRData
 {
@@ -10,6 +11,7 @@ namespace Iaik.Tc.TPM.Library.Common.PCRData
 	[TypedStreamSerializable("TPMPCRComposite")]
 	public class TPMPCRComposite : AutoStreamSerializable, ITypedParameter
 	{
+        [SerializeMe(0)]
 		protected TPMPCRSelection _pcrSelection;
 		
 		public TPMPCRSelection PCRSelection
@@ -17,7 +19,8 @@ namespace Iaik.Tc.TPM.Library.Common.PCRData
 			get{ return _pcrSelection; }
 			set{ _pcrSelection = value; }
 		}
-		
+
+        [SerializeMe(1)]
 		protected byte[][] _pcrValues;
 		
 		public byte[][] PCRValues
@@ -29,5 +32,10 @@ namespace Iaik.Tc.TPM.Library.Common.PCRData
 		public TPMPCRComposite ()
 		{
 		}
+
+        public TPMPCRComposite(Stream src)
+        {
+            Read(src);
+        }
 	}
 }

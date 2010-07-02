@@ -10,7 +10,12 @@ using Iaik.Utils.CommonAttributes;
 namespace Iaik.Tc.TPM.Authentication
 {
 
-
+    /// <summary>
+    /// Attribute attached to <see>AuthenticationMechanism</see>
+    /// </summary>
+    /// <remarks>
+    /// Every authentication method needs to have this attribute attached. Specify the authentication types that are compatible with this authemtication mechanism
+    /// </remarks>
 	public class AuthenticationSettingsAttribute : ClassIdentifierAttribute
 	{		
 		private Type[] _associatedConnections = null;

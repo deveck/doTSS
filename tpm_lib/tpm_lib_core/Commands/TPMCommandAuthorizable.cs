@@ -72,7 +72,6 @@ namespace Iaik.Tc.TPM.Library.Commands
 		{
 			try
 			{
-				_log.DebugFormat("Running command '{0}'", this);
 				return InternalProcess();
 			}
 			catch(Exception)
@@ -92,7 +91,6 @@ namespace Iaik.Tc.TPM.Library.Commands
 					_commandAuthHelper.ReleaseAuthorizationHandles((IAuthorizableCommand)this);
 				}
 			}
-			_log.DebugFormat("Finished command '{0}'", this);
 		}
 		
 		protected virtual TPMCommandResponse InternalProcess()

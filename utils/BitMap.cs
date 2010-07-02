@@ -79,8 +79,7 @@ namespace Iaik.Utils
 			int byteIndex = index / 8;
 			int bitIndex = index % 8;
 			
-			byte myVal;
-			
+		
 			if(value)
 				_data[byteIndex] = (byte)(_data[byteIndex] | (1<<bitIndex));
 			else

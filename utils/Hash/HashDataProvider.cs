@@ -5,7 +5,10 @@ using Iaik.Utils.Serialization;
 namespace Iaik.Utils.Hash
 {
 
-
+    /// <summary>
+    /// Baseclass for all HashDataProviders, which provides the serialized data (byte stream) of some kind of 
+    /// entity (byte array, stream, primitive type, more complex types,...)
+    /// </summary>
 	public abstract class HashDataProvider : AutoStreamSerializable, IDisposable, ITypedStreamSerializable
 	{
 

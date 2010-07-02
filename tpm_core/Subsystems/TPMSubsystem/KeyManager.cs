@@ -25,7 +25,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 	/// </summary>
 	public class KeyManager : SwapManager<KeyHandleItem>, IKeyManager
 	{
-		private ILog _log = LogManager.GetLogger("KeyManager");
+		//private ILog _log = LogManager.GetLogger("KeyManager");
 		
 		/// <summary>
 		/// Contains all auth handle items

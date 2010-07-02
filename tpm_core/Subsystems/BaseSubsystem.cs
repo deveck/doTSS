@@ -15,18 +15,66 @@ using Iaik.Tc.TPM.Configuration;
 namespace Iaik.Tc.TPM.Subsystems
 {
 
+    /// <summary>
+    /// Specifies a generic, typed delegate for handling default requests.
+    /// </summary>
+    /// <remarks>
+    /// The typed parameters eliminate the need to cast the incoming parameters in the handler method, they come in with the correct
+    /// type for the request
+    /// </remarks>
+    /// <typeparam name="Z">The Type of the subsystem this request belongs to</typeparam>
+    /// <typeparam name="T">The type of request</typeparam>
+    /// <typeparam name="U">The type of response the specified request generates</typeparam>
+    /// <param name="subsystem"></param>
+    /// <param name="requestCtx"></param>
     public delegate void HandleSubsystemRequestDelegate<Z, T, U>(Z subsystem, RequestContext<T, U> requestCtx)
 		where T: SubsystemRequest
 		where U: SubsystemResponse
         where Z: ISubsystem;
+
 	/// <summary>
-	/// Implements a basic subsystem, where all requests are
-	/// build like the standard requests
+	/// Implements a basic subsystem, where all requests follow a predefined request-format.
 	/// </summary>
+    /// <typeparam name="TRequest">Specifies the type used to differentiate between different requests (typically an enum type), 
+    /// needs to be of type ushort or an enum type with ushort base</typeparam>
 	/// <remarks>
 	/// The BaseSubsystem implements a default behaviour and default extraction method
-	/// for packet handling and packet extraction
+	/// for packet handling and packet extraction, it can not be instantiated but eases the way of subsystem implementation
+    /// 
+    /// See the example for a common way of using the BaseSubsystem
 	/// </remarks>
+    /// 
+    /// <code>
+    ///
+    /// public class TestSubsystem : BaseSubsystem<TestSubsystem.TestSubsystemRequests>
+    /// {
+    ///    // Specifies the different requests
+    ///    public enum TestSubsystemRequests : ushort
+    ///    {
+    ///        TestRequest = 0x0001
+    ///    }
+
+    ///    public override string SubsystemIdentifier
+    ///    {
+    ///        get { return "TEST_SUBSYSTEM"; }
+    ///    }
+
+
+    ///    public TestSubsystem(EndpointContext ctx)
+    ///    {
+    ///        _requestExecutionInfos.Add(TestSubsystemRequests.TestRequest,
+    ///              BuildRequestExecutionInfo<TestSubsystem, TestRequest, TestResponse>(HandleTestResponse));
+    ///    }
+
+
+    ///    private void HandleTestResponse(TestSubsystem subsystem,
+    ///            RequestContext<TestRequest, TestResponse> requestCtx)
+    ///    {
+    ///        //Handle request here
+    ///    }
+
+    ///}
+    /// </code>
 	public abstract class BaseSubsystem<TRequest> : ISubsystem
 	{
 		/// <summary>
@@ -46,7 +94,9 @@ namespace Iaik.Tc.TPM.Subsystems
 			new Dictionary<TRequest, RequestExecutionInfo>();
 
         
-
+        /// <summary>
+        /// Returns the associated <see>EndpointContext</see>
+        /// </summary>
         internal EndpointContext EndpointContext
         {
             get { return _context; }
@@ -79,6 +129,10 @@ namespace Iaik.Tc.TPM.Subsystems
 		}
 		
 		#region ISubsystem implementation
+        /// <summary>
+        /// Reads the RequestType from the stream, creates the appropriate request object, populates it and executes the request (calls the handler)
+        /// </summary>
+        /// <param name="packet"></param>
 		public virtual void HandlePacket (DataPacket packet)
 		{
 			_logger.DebugFormat("Handling request in '{0}'", SubsystemIdentifier);

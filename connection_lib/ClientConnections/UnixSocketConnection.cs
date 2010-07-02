@@ -16,6 +16,13 @@ namespace Iaik.Connection.ClientConnections
 	/// Implements the named pipe replacement for unix systems,
 	/// as of Mono 2.6.1 NamedPipes are not yet supported on unix systems
 	/// </summary>
+    /// <code>
+    /// ...
+    /// FrontEndConnection conn = GenericClassIdentifierFactory.CreateFromClassIdentifierOrType<FrontEndConnection>("unix_socket", "/tmp/tpm_socket");
+    /// conn.Connect();
+    /// ClientContext ctx = EndpointContext.CreateClientEndpointContext(conn);	
+    /// ...
+    /// </code>
 	[FrontEndConnection("unix_socket")]
 	public sealed class UnixSocketConnection : FrontEndConnection
 	{

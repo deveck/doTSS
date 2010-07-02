@@ -8,6 +8,7 @@ using Iaik.Utils;
 using System.IO;
 using Iaik.Utils.Hash;
 using Iaik.Utils.IO;
+using Iaik.Tc.TPM.Library.Common.PCRData;
 
 namespace Iaik.Tc.TPM.Commands
 {
@@ -42,6 +43,10 @@ namespace Iaik.Tc.TPM.Commands
              [file=filename]  Mandatory argument if using data_input=file. 
                               Specifies the file to read data to be hashed from
                               and extended
+                              
+         quote         Cryptographic reporting of PCR values
+         	Arguments:
+             pcr=[pcr1|pcr2|...|pcrn] Specifies the pcrs to be quoted
 		";
 	
             }
@@ -147,7 +152,6 @@ namespace Iaik.Tc.TPM.Commands
 						if(src.Length != 20)
 						{
 							throw new ArgumentException("Error: The embedded digest must be 20 bytes long");
-							return;
 						}
 						
 						src.Read(digest, 0, 20);						
@@ -160,6 +164,48 @@ namespace Iaik.Tc.TPM.Commands
 				
 				byte[] newDigest = tpmSessions[localAlias].IntegrityClient.Extend(pcr, digest);
 				_console.Out.WriteLine("Extension successful, new pcr value:  {0}", ByteHelper.ByteArrayToHexString(newDigest));
+			}
+			else if(pcrCommand == "quote")
+			{
+				if(commandline.Length < 4)
+				{
+					_console.Out.WriteLine("Error: 'quote' requires some arguments");
+					return;
+				}
+				
+				IDictionary<string, string> arguments =_console.SplitArguments(commandline[3], 0);
+				
+				if(arguments.ContainsKey("pcr") == false)
+				{
+					_console.Out.WriteLine("Error: 'quote' requires parameter 'pcr' to be specified");
+					return;
+				}
+				
+				if(arguments.ContainsKey("name") == false)
+				{
+					_console.Out.WriteLine("Error: no key name was specified");
+					return;
+				}
+
+                ClientKeyHandle keyHandle = tpmSessions[localAlias].KeyClient.GetKeyHandleByFriendlyName(arguments["name"]);
+				
+				TPMPCRSelection pcrSelection = tpmSessions[localAlias].CreateEmptyPCRSelection();
+				
+				foreach(string pcr in arguments["pcr"].Split('|'))
+				{
+					int pcrValue = int.Parse(pcr);				
+					pcrSelection.PcrSelection.SetBit(pcrValue - 1, true);				
+				}
+				
+				TPMPCRComposite quoted = keyHandle.Quote(pcrSelection);
+
+                IList<int> selectedPCRs = quoted.PCRSelection.SelectedPCRs;
+
+                for (int i = 0; i < selectedPCRs.Count; i++)
+                {
+                    _console.Out.WriteLine("#{0}: {1}", selectedPCRs[i], ByteHelper.ByteArrayToHexString(quoted.PCRValues[i]));
+                }
+				
 			}
 			else
         		_console.Out.WriteLine ("Error, unknown pcr_subcommand '{0}'", commandline[1]);

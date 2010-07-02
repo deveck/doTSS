@@ -72,16 +72,23 @@ namespace Iaik.Utils.Serialization
 					sink.WriteByte ((byte)memberInfo.GetValue (this));
 				else if (curType == typeof(byte[]))
 					StreamHelper.WriteBytesSafe ((byte[])memberInfo.GetValue (this), sink);
-				else if (curType == typeof(int))
-					StreamHelper.WriteInt32 ((int)memberInfo.GetValue (this), sink);
-				else if (curType == typeof(uint))
-					StreamHelper.WriteUInt32 ((uint)memberInfo.GetValue (this), sink);
-				else if (curType == typeof(ushort))
-					StreamHelper.WriteUInt16 ((ushort)memberInfo.GetValue (this), sink);
-				else if(curType == typeof(Stream))
-					StreamHelper.WriteStream((Stream)memberInfo.GetValue(this), sink);
-				else
-					throw new ArgumentException (string.Format ("Type '{0}' is not supported by AutoStreamSerializable", curType));
+                else if (curType == typeof(byte[][]))
+                {
+                    StreamHelper.WriteInt32(((byte[][])memberInfo.GetValue(this)).Length, sink);
+
+                    foreach(byte[] data in (byte[][])memberInfo.GetValue(this))
+                        StreamHelper.WriteBytesSafe(data, sink);
+                }
+                else if (curType == typeof(int))
+                    StreamHelper.WriteInt32((int)memberInfo.GetValue(this), sink);
+                else if (curType == typeof(uint))
+                    StreamHelper.WriteUInt32((uint)memberInfo.GetValue(this), sink);
+                else if (curType == typeof(ushort))
+                    StreamHelper.WriteUInt16((ushort)memberInfo.GetValue(this), sink);
+                else if (curType == typeof(Stream))
+                    StreamHelper.WriteStream((Stream)memberInfo.GetValue(this), sink);
+                else
+                    throw new ArgumentException(string.Format("Type '{0}' is not supported by AutoStreamSerializable", curType));
 			}
 		}
 		
@@ -129,16 +136,26 @@ namespace Iaik.Utils.Serialization
 					memberInfo.SetValue (this, (byte)src.ReadByte ());
 				else if (curType == typeof(byte[]))
 					memberInfo.SetValue (this, StreamHelper.ReadBytesSafe (src));
-				else if (curType == typeof(int))
-					memberInfo.SetValue (this, StreamHelper.ReadInt32 (src)); 
-				else if (curType == typeof(uint))
-					memberInfo.SetValue (this, StreamHelper.ReadUInt32 (src)); 
-				else if (curType == typeof(ushort))
-					memberInfo.SetValue (this, StreamHelper.ReadUInt16 (src));
-				else if(curType == typeof(Stream))
-					memberInfo.SetValue(this, StreamHelper.ReadStream(src));
-				else
-					throw new ArgumentException (string.Format ("Type '{0}' is not supported by AutoStreamSerializable", curType));
+                else if (curType == typeof(byte[][]))
+                {
+                    int length = StreamHelper.ReadInt32(src);
+                    byte[][] val = new byte[length][];
+
+                    for (int i = 0; i < length; i++)
+                        val[i] = StreamHelper.ReadBytesSafe(src);
+
+                    memberInfo.SetValue(this, val);
+                }
+                else if (curType == typeof(int))
+                    memberInfo.SetValue(this, StreamHelper.ReadInt32(src));
+                else if (curType == typeof(uint))
+                    memberInfo.SetValue(this, StreamHelper.ReadUInt32(src));
+                else if (curType == typeof(ushort))
+                    memberInfo.SetValue(this, StreamHelper.ReadUInt16(src));
+                else if (curType == typeof(Stream))
+                    memberInfo.SetValue(this, StreamHelper.ReadStream(src));
+                else
+                    throw new ArgumentException(string.Format("Type '{0}' is not supported by AutoStreamSerializable", curType));
 			}
 		}
 		

@@ -88,7 +88,6 @@ namespace Iaik.Tc.TPM.Commands
 				return;
 			}
 			
-			string[] sArguments = commandline[2].Split(',');
     		IDictionary<string, string> arguments = _console.SplitArguments(commandline[2], 0);    
 			
 			if(arguments.ContainsKey("name") == false)
@@ -157,7 +156,6 @@ namespace Iaik.Tc.TPM.Commands
 				}
 			}
 			
-			string file = null;
 			
 			if(dataInputMode == TPMSessionSealCommand.DataInputMode.File && arguments.ContainsKey("file") == false)
 			{
@@ -165,7 +163,6 @@ namespace Iaik.Tc.TPM.Commands
 				return;
 			}
 			
-			string outputFile = null;
 			
 			if(dataOutputMode == TPMSessionSealCommand.DataOutputMode.File && arguments.ContainsKey("output_file") == false)
 			{

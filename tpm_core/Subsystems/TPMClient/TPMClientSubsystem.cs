@@ -111,12 +111,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMClient
 			HMACProvider hmacProvider = new HMACProvider(pw);
 			response.Succeeded = true;
         	response.TpmAuthData = hmacProvider.Hash(requestContext.Request.HMACDataProviders);
-//			    new HashByteDataProvider(requestContext.Request.Digest),
-//			    new HashByteDataProvider(requestContext.Request.AuthHandle.NonceEven),
-//			    new HashByteDataProvider(requestContext.Request.AuthHandle.NonceOdd),
-//			    new HashPrimitiveDataProvider(requestContext.Request.ContinueAuthSession));
-			
-        	_logger.Debug("Executing response");
+
         	response.Execute();
 		}
 		
