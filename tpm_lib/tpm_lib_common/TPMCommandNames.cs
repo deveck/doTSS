@@ -65,6 +65,7 @@ namespace Iaik.Tc.TPM.Library.Common
 		
 		#region Cryptographic functions
 		public const string TPM_CMD_GetRandom = "TPM_CMD_GetRandom";
+        public const string TPM_CMD_Sign = "TPM_CMD_Sign";
 		#endregion
 	}
 }

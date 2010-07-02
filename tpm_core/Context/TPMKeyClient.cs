@@ -373,6 +373,37 @@ namespace Iaik.Tc.TPM.Context
 
             return BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_Quote, quoteParameters).Parameters.GetValueOf<TPMPCRComposite>("pcrData");
         }
+
+        /// <summary>
+        /// Signs the specified data and returns the resulting digital signature
+        /// </summary>
+        /// <param name="data">Data in no special format, the data is formatted on the server side</param>
+        /// <returns></returns>
+        public byte[] Sign(byte[] data)
+        {
+            Parameters signParameters = new Parameters();
+            signParameters.AddPrimitiveType("key", _keyIdentifier);
+            signParameters.AddPrimitiveType("data", data);
+
+            return BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_Sign, signParameters).Parameters.GetValueOf<byte[]>("sig");
+        }
+
+        /// <summary>
+        /// Signs the specified data, but the data is already in the format the signature format (Attached to the key) requires it to be.
+        /// </summary>
+        /// <remarks>
+        /// Use this for large amount of data, or use the <see>CreateSigner</see> method 
+        /// </remarks>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public byte[] SignWithProperFormat(byte[] data)
+        {
+            Parameters signParameters = new Parameters();
+            signParameters.AddPrimitiveType("key", _keyIdentifier);
+            signParameters.AddPrimitiveType("areaToSign", data);
+
+            return BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_Sign, signParameters).Parameters.GetValueOf<byte[]>("sig");
+        }
 		
 		private TPMCommandResponse BuildDoVerifyRequest (string commandIdentifier, Parameters parameters)
 		{

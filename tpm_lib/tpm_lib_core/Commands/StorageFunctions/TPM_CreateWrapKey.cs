@@ -160,7 +160,6 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 				else
 					requestBlob.WriteUInt32(_keyManager.IdentifierToHandle(_params.GetValueOf<string>("parent")).Handle);
 
-                Console.WriteLine("!!! using handle 0x{0:X}", auth1OSAP.Handle);
 				_responseBlob = TransmitMe(requestBlob);
 			}
 			
