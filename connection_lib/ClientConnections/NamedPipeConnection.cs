@@ -97,7 +97,7 @@ namespace Iaik.Connection.ClientConnections
             }
         }
 
-        public override void Dispose()
+        protected override void Dispose(bool disposing)
         {
             base.Dispose();
             Close();

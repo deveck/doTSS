@@ -99,6 +99,15 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			base.HandlePacket (packet);
 		}
 
+		public override void Dispose ()
+		{
+			base.Dispose ();
+			
+			//Remove all keys of this client from the keystore
+			foreach(KeyValuePair<int, TPMContext> context in _selectedTPMs)
+				context.Value.KeyManager.UnloadKeysOfContext(context.Key);
+		}
+
 		
 		private void HandleTPMRequest (TPMSubsystem subsystem, RequestContext<TPMRequest, TPMResponse> requestContext)
 		{
@@ -124,8 +133,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				
 				tpmContext = _selectedTPMs[requestContext.Request.TPMIdentifier];
 			}
-			
-			//TODO: Do some permission checking here!
+		
 			string commandIdentifier = requestContext.Request.CommandRequest.CommandIdentifier;
 			
 			if(IsAllowedToRunCommand(commandIdentifier, tpmContext) == false)
@@ -329,5 +337,6 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			return false;
 			
 		}
+		
 	}
 }

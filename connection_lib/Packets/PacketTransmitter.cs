@@ -337,7 +337,6 @@ namespace Iaik.Connection.Packets
 		#region IDisposable implementation
 		public void Dispose ()
 		{
-			//TODO: Insert real identifier (from authentication subsystem) here
 #if DEBUG_PACKETTRANSMITTER
 			_logger.DebugFormat("Disposing packettransmitter for {0}", _connection);
 #endif

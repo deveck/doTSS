@@ -21,7 +21,7 @@ namespace Iaik.Tc.TPM.Subsystems
 	/// Nevertheless it is also possible to use a 'predefined-request-format' where extraction methods
 	/// are already available
 	/// </remarks>
-	public interface ISubsystem
+	public interface ISubsystem : IDisposable
 	{
 		/// <summary>
 		/// Gets the unique Subsystem identifier e.g: auth, admin, tpm, ...

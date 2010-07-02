@@ -87,6 +87,8 @@
     <Compile Include="Commands\MonotonicCounter\TPM_ReleaseCounter.cs" />
     <Compile Include="Commands\CryptographicFunctions\TPM_GetRandom.cs" />
     <Compile Include="Commands\Integrity\TPM_Extend.cs" />
+    <Compile Include="ContextCore\TPMContextBlobCore.cs" />
+    <Compile Include="ContextCore\ContextHandle.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="exceptions\" />
@@ -110,6 +112,7 @@
     <Folder Include="Commands\MonotonicCounter\" />
     <Folder Include="Basic\" />
     <Folder Include="Commands\CryptographicFunctions\" />
+    <Folder Include="ContextCore\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\tpm_lowlvl\tpm_lowlvl.csproj">

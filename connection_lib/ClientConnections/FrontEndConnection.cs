@@ -62,11 +62,11 @@ namespace Iaik.Connection.ClientConnections
 
 		
         #region IDisposable Members
+		protected override void Dispose (bool disposing)
+		{
+			base.Dispose (disposing);
+		}
 
-        public new virtual void Dispose()
-        {
-			Close();
-        }		
         #endregion
 
         #region Stream overrides

@@ -24,6 +24,12 @@ namespace Iaik.Tc.TPM.Library.Common.KeyData
 		/// <param name="keyContext">Specifies the context in which an already loaded key can be used.
 		/// If a key has already been loaded in another context it is not allowed to use this key</param>
 		void LoadKey(string identifier, object keyContext, IKeyManagerHelper keymanagerHelper, ICommandAuthorizationHelper commandAuthHelper);
+	
+		/// <summary>
+		/// Unloads all keys that belong to the specified context
+		/// </summary>
+		/// <param name="keyContext">Context of the keys to unload</param>
+		void UnloadKeysOfContext(object keyContext);
 		
 		/// <summary>
 		/// Returns the tpm handle of the given key identifier,

@@ -89,8 +89,20 @@ namespace Iaik.Tc.TPM.Context
 		public EndpointContext(FrontEndConnection connection, PacketTransmitter packetTransmitter)
 		{
 			_connection = connection;
+			connection.Disconnected += HandleConnectionDisconnected;
 			_packetTransmitter = packetTransmitter;
 			_packetTransmitter.RequestPacketReceived += OnRequestPacketReceived;
+		}
+
+		/// <summary>
+		///Is called once the client disconnects 
+		/// </summary>
+		/// <param name="obj">A <see cref="FrontEndConnection"/></param>
+		protected void HandleConnectionDisconnected (FrontEndConnection obj)
+		{
+			foreach(ISubsystem subsystem in _subsystems.Values)
+				subsystem.Dispose();
+			_subsystems.Clear();		
 		}
 
 		/// <summary>

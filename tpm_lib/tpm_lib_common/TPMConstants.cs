@@ -419,6 +419,8 @@ namespace Iaik.Tc.TPM.Library.Common
 	/// </summary>
 	public enum TPMStructureTag : ushort
 	{
+		TPM_TAG_CONTEXT_BLOB = 0x0001,
 		TPM_TAG_COUNTER_VALUE = 0x000E
+		
 	}
 }

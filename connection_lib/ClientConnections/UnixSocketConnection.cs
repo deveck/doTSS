@@ -135,7 +135,10 @@ namespace Iaik.Connection.ClientConnections
 			int read = _socket.Receive(buffer, offset, length, SocketFlags.None);
 			
 			if(read == 0)
+			{
+				RaiseDisconnectedEvent();
 				throw new DisconnectedException();
+			}
 			
 			return read;
 		}

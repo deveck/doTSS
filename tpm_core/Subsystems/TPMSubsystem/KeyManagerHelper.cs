@@ -19,13 +19,13 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 		#region IKeyManagerHelper implementation
 		public void LoadKey (string identifier)
 		{
-			_tpmContext.KeyManager.LoadKey(identifier, _tpmContext, this, _commandAuthHelper);
+			_tpmContext.KeyManager.LoadKey(identifier, _tpmSessionIdentifier, this, _commandAuthHelper);
 		}
 		
 		
 		public KeyHandle IdentifierToHandle (string identifier)
 		{
-			return _tpmContext.KeyManager.IdentifierToHandle(identifier, _tpmContext, this);
+			return _tpmContext.KeyManager.IdentifierToHandle(identifier, _tpmSessionIdentifier, this);
 		}
 		
 		

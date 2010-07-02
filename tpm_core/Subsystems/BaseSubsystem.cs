@@ -169,5 +169,9 @@ namespace Iaik.Tc.TPM.Subsystems
 				_callback = callback;
 			}
 		}
+		
+		public virtual void Dispose()
+		{
+		}
 	}
 }

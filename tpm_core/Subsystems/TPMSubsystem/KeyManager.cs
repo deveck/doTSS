@@ -14,13 +14,14 @@ using Iaik.Tc.TPM.Library.Common.Handles;
 using System.Threading;
 using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 using log4net;
+using Iaik.Tc.TPM.Library.ContextCore;
 
 
 namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 {
 
 	/// <summary>
-	/// Manages the currently active authorization handles of a single tpm device
+	/// Manages the currently loaded keys of a single tpm
 	/// </summary>
 	public class KeyManager : SwapManager<KeyHandleItem>, IKeyManager
 	{
@@ -112,7 +113,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			
 			TPMCommandResponse swapInResponse =_tpmContext.TPM.Process(swapInRequest);
 			if(swapInResponse.Status == false)
-				throw new TPMRequestException("^Keymanager: Unknown error while swap in operation");
+				throw new TPMRequestException("Keymanager: Unknown error while swap in operation");
 			
 			item.KeyHandle.Handle = swapInResponse.Parameters.GetValueOf<ITPMHandle>("handle").Handle;
 		}
@@ -183,6 +184,45 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 				//This would block the entire Keymanager for a long time because the secrets are requested
 				//from the client so it is done here where the keymanager is (normally) not locked
 				IdentifierToHandle(identifier, keyContext, keymanagerHelper);			
+			}
+		}
+		
+		/// <summary>
+		/// Flushes all keys that belong to the specified context
+		/// </summary>
+		/// <param name="keyContext">context to check</param>
+		public void UnloadKeysOfContext(object keyContext)
+		{
+			using(AcquireLock())
+			{
+				List<KeyHandleItem> keysToRemove = new List<KeyHandleItem>();
+				foreach(KeyHandleItem item in _keyHandles)
+				{
+					if(item.KeyContext.Equals(keyContext))
+						keysToRemove.Add(item);
+				}
+				
+				foreach(KeyHandleItem item in keysToRemove)
+				{
+					_keyHandles.RemoveKeyHandle(item);
+					
+					//Flush the key
+					if(item.Status == KeyHandleItem.KeyHandleStatus.SwappedIn)
+					{
+						Parameters flushParams = new Parameters();
+						flushParams.AddValue("handle", item.KeyHandle);
+						TPMCommandRequest flushRequest = new TPMCommandRequest(TPMCommandNames.TPM_CMD_FlushSpecific, flushParams);
+						_tpmContext.TPM.Process(flushRequest);
+					}
+					//Flush the context
+					else if(item.Status == KeyHandleItem.KeyHandleStatus.SwappedOut)
+					{
+						Parameters flushParams = new Parameters();
+						flushParams.AddValue("handle", new ContextHandle(item.KeyHandle.ContextBlob));
+						TPMCommandRequest flushRequest = new TPMCommandRequest(TPMCommandNames.TPM_CMD_FlushSpecific, flushParams);
+						_tpmContext.TPM.Process(flushRequest);
+					}
+				}
 			}
 		}
 		
@@ -394,7 +434,7 @@ namespace Iaik.Tc.TPM.Subsystems.TPMSubsystem
 			foreach(KeyHandleItem keyHandleItem in _keyHandles)
 			{
 				if(keyHandleItem.KeyHandle.Identifier == identifier
-				  && keyHandleItem.KeyContext == keyContext)
+				  && keyHandleItem.KeyContext.Equals(keyContext))
 					return keyHandleItem;
 			}
 			
