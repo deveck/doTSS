@@ -12,6 +12,10 @@ using Iaik.Utils.Nonce;
 using Iaik.Tc.TPM.Library.HandlesCore.Authorization;
 using Iaik.Tc.TPM.Library.Common.PCRData;
 using Iaik.Tc.TPM.Library.Hash;
+using Iaik.Tc.TPM.Library.Sign;
+using Iaik.Tc.TPM.Library.Common.KeyData;
+using Iaik.Tc.TPM.Library.KeyDataCore;
+using Iaik.Tc.TPM.Library.Common.Sign;
 
 namespace Iaik.Tc.TPM.Library.Commands.Integrity
 {
@@ -112,7 +116,9 @@ namespace Iaik.Tc.TPM.Library.Commands.Integrity
 			requestBlob.WriteUInt32(0);
 			requestBlob.Write(_nonce, 0, 20);
 			_pcrSelection.WriteToTpmBlob(requestBlob);
-						
+
+            _keyManager.LoadKey(_params.GetValueOf<string>("key"));
+
 			AuthorizeMe(requestBlob);
 			
 			using(_keyManager.AcquireLock())
@@ -125,14 +131,43 @@ namespace Iaik.Tc.TPM.Library.Commands.Integrity
 			CheckResponseAuthInfo();
 		
 			_responseBlob.SkipHeader();
-			
-						
+
+            TPMPCRCompositeCore pcrComposite = TPMPCRCompositeCore.CreateFromTPMBlob(_responseBlob);
+            uint sigSize = _responseBlob.ReadUInt32();
+            byte[] signature =  _responseBlob.ReadBytes((int)sigSize);
+
+            // Do signature verification
+            TPMQuoteInfoCore quoteInfo = TPMQuoteInfoCore.Create(new HashProvider().Hash(new HashTPMBlobWritableDataProvider(pcrComposite)), _nonce);
+            byte[] signingData;
+            using (TPMBlob blob = new TPMBlob())
+            {
+                quoteInfo.WriteToTpmBlob(blob);
+                signingData = blob.ToArray();
+            }
+
+            Parameters pubKeyParams = new Parameters();
+            pubKeyParams.AddPrimitiveType("key", _params.GetValueOf<string>("key"));
+            TPMCommandRequest pubKeyRequest = new TPMCommandRequest(TPMCommandNames.TPM_CMD_GetPubKey, pubKeyParams);
+            TPMCommandResponse pubKeyResponse = _tpmWrapper.Process(pubKeyRequest,
+                _commandAuthHelper, _keyManager);
+
+            if (pubKeyResponse.Status == false)
+            {
+                _log.FatalFormat("TPM_Quote: Could not retrieve pubkey of key");
+                return new TPMCommandResponse(false, TPMCommandNames.TPM_CMD_Quote, new Parameters());
+            }
+
+            TPMKey keyInfo = TPMKeyCore.CreateFromBytes(_keyManager.GetKeyBlob(_params.GetValueOf<string>("key")));
+            TPMPubkey pubkey = pubKeyResponse.Parameters.GetValueOf<TPMPubkey>("pubkey");
+
+            if (SignatureVerification.VerifySignature(keyInfo, pubkey, signingData, signature) == false)
+            {
+                throw new ArgumentException("The TPM_Quote signature could not be verified");
+            }
+
 			Parameters responseParams = new Parameters();
-			responseParams.AddValue("pcrData", TPMPCRCompositeCore.CreateFromTPMBlob(_responseBlob)); 
-			
-			uint sigSize = _responseBlob.ReadUInt32();
-			responseParams.AddPrimitiveType("sig", _responseBlob.ReadBytes((int)sigSize));
-			
+			responseParams.AddValue("pcrData", pcrComposite); 
+			responseParams.AddPrimitiveType("sig", signature);
 			
 			return new TPMCommandResponse(true, TPMCommandNames.TPM_CMD_Quote, responseParams);
 		}

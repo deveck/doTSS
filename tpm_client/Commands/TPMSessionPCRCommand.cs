@@ -186,8 +186,8 @@ namespace Iaik.Tc.TPM.Commands
 					_console.Out.WriteLine("Error: no key name was specified");
 					return;
 				}
-				
-				string keyName = arguments["name"];
+
+                ClientKeyHandle keyHandle = tpmSessions[localAlias].KeyClient.GetKeyHandleByFriendlyName(arguments["name"]);
 				
 				TPMPCRSelection pcrSelection = tpmSessions[localAlias].CreateEmptyPCRSelection();
 				
@@ -197,7 +197,14 @@ namespace Iaik.Tc.TPM.Commands
 					pcrSelection.PcrSelection.SetBit(pcrValue - 1, true);				
 				}
 				
-				TPMPCRComposite quoted = tpmSessions[localAlias].IntegrityClient.Quote(keyName, pcrSelection);
+				TPMPCRComposite quoted = keyHandle.Quote(pcrSelection);
+
+                IList<int> selectedPCRs = quoted.PCRSelection.SelectedPCRs;
+
+                for (int i = 0; i < selectedPCRs.Count; i++)
+                {
+                    _console.Out.WriteLine("#{0}: {1}", selectedPCRs[i], ByteHelper.ByteArrayToHexString(quoted.PCRValues[i]));
+                }
 				
 			}
 			else

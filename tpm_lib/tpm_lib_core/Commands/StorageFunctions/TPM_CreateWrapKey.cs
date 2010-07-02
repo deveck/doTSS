@@ -105,8 +105,8 @@ namespace Iaik.Tc.TPM.Library.Commands.StorageFunctions
 				TPMAuthDataUsage.TPM_AUTH_ALWAYS,
 				TPMKeyParamsCore.Create (
 					TPMAlgorithmId.TPM_ALG_RSA, 
-					TPMEncScheme.TPM_ES_RSAESOAEP_SHA1_MGF1, 
-					TPMSigScheme.TPM_SS_NONE,
+                    _params.GetValueOf<TPMEncScheme>("enc_scheme"),
+                    _params.GetValueOf<TPMSigScheme>("sig_scheme"),
 					TPMRSAKeyParamsCore.Create (
 						_params.GetValueOf<uint>("key_length"), 
 						_params.GetValueOf<uint>("num_primes"),

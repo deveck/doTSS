@@ -36,7 +36,7 @@ namespace Iaik.Tc.TPM.Library.Common.PCRData
 			_pcrSelection = TPMPCRSelectionCore.CreateFromTPMBlob(blob);
 			
 			uint valueSize = blob.ReadUInt32();
-			_pcrValues = new byte[valueSize][];
+			_pcrValues = new byte[valueSize/20][];
 			
 			for(int i = 0; i<valueSize/20; i++)
 				_pcrValues[i] = blob.ReadBytes(20);

@@ -184,6 +184,17 @@ namespace Iaik.Tc.TPM.Context
 			paramsCreateWrapKey.AddPrimitiveType("key_length", keyLength);
 			paramsCreateWrapKey.AddPrimitiveType("exponent", new byte[0]);
 			paramsCreateWrapKey.AddPrimitiveType("num_primes", (uint)0);
+
+            if (keyUsage == TPMKeyUsage.TPM_KEY_SIGNING)
+            {
+                paramsCreateWrapKey.AddPrimitiveType("enc_scheme", TPMEncScheme.TPM_ES_NONE);
+                paramsCreateWrapKey.AddPrimitiveType("sig_scheme", TPMSigScheme.TPM_SS_RSASSAPKCS1v15_SHA1);
+            }
+            else
+            {
+                paramsCreateWrapKey.AddPrimitiveType("enc_scheme", TPMEncScheme.TPM_ES_RSAESOAEP_SHA1_MGF1);
+                paramsCreateWrapKey.AddPrimitiveType("sig_scheme", TPMSigScheme.TPM_SS_NONE);
+            }
 			
 			Parameters parameters = new Parameters();
 			parameters.AddPrimitiveType("identifierIsFriendlyName", true);
@@ -347,6 +358,21 @@ namespace Iaik.Tc.TPM.Context
 			TPMCommandResponse unbindResponse = BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_Unbind, paramsUnbind);
 			return unbindResponse.Parameters.GetValueOf<byte[]>("data");
 		}
+
+        /// <summary>
+        /// Cryptographically reports the selected PCR values
+        /// </summary>
+        /// <param name="keyName"></param>
+        /// <param name="pcrs"></param>
+        /// <returns></returns>
+        public TPMPCRComposite Quote(TPMPCRSelection pcrs)
+        {
+            Parameters quoteParameters = new Parameters();
+            quoteParameters.AddPrimitiveType("key", _keyIdentifier);
+            quoteParameters.AddValue("targetPCR", pcrs);
+
+            return BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_Quote, quoteParameters).Parameters.GetValueOf<TPMPCRComposite>("pcrData");
+        }
 		
 		private TPMCommandResponse BuildDoVerifyRequest (string commandIdentifier, Parameters parameters)
 		{

@@ -5,6 +5,7 @@ using System;
 using Iaik.Utils.Serialization;
 using System.IO;
 using Iaik.Utils;
+using System.Collections.Generic;
 
 namespace Iaik.Tc.TPM.Library.Common.PCRData
 {
@@ -38,7 +39,27 @@ namespace Iaik.Tc.TPM.Library.Common.PCRData
 		{
 			get{ return _pcrSelection; }
 		}
-		
+
+
+        /// <summary>
+        /// Returns the selected PCRs
+        /// </summary>
+        public IList<int> SelectedPCRs
+        {
+            get
+            {
+                List<int> selectedPCRs = new List<int>();
+
+                for(int i = 0; i<_pcrSelection.BitCount; i++)
+                {
+                    if (_pcrSelection.GetBit(i))
+                        selectedPCRs.Add(i);
+                }
+
+                return selectedPCRs;
+            }
+        }
+
 		protected TPMPCRSelection ()
 		{
 		}

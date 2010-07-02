@@ -13,6 +13,7 @@ using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Math;
 using System.Text;
 using Iaik.Utils.Hash;
+using Org.BouncyCastle.Crypto.Signers;
 
 namespace Iaik.Tc.TPM.Library.Common
 {
@@ -88,10 +89,35 @@ namespace Iaik.Tc.TPM.Library.Common
 				
 				return cipher;       
 			}
-			else
-			 throw new NotSupportedException (string.Format ("Algorithm '{0}' is not supported", _keyParams.AlgorithmId));
+            else
+                throw new NotSupportedException(string.Format("Algorithm '{0}' with '{1}' is not supported", _keyParams.AlgorithmId, _keyParams.EncScheme));
 		}
 
+
+        /// <summary>
+        /// Creates a signature verificator (signature (created on tpm) -> message digest) with the current public key and
+        /// for the current algorithm (RSA)
+        /// </summary>
+        /// <returns></returns>
+        public ISigner CreateSignatureVerificator()
+        {
+            if (_keyParams.AlgorithmId == TPMAlgorithmId.TPM_ALG_RSA && _keyParams.SigScheme == TPMSigScheme.TPM_SS_RSASSAPKCS1v15_SHA1)
+            {
+                ISigner signer = new RsaDigestSigner(new Sha1Digest());
+
+                RsaKeyParameters parameters =
+                    new RsaKeyParameters(false,
+                                         new BigInteger(1, _publicKey.Pubkey),
+                                         new BigInteger(1, ((TPMRSAKeyParams)_keyParams.Params).GetExponent()));
+
+                signer.Init(false, parameters);
+
+                return signer;    
+            }
+            else
+                throw new NotSupportedException(string.Format("SignatureVerificator: Algorithm '{0}' with '{1}' is not supported", _keyParams.AlgorithmId, _keyParams.SigScheme));
+
+        }
 		
 		public override string ToString ()
 		{

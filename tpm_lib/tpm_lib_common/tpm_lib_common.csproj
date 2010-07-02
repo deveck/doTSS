@@ -41,12 +41,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="interface\TPMCommandRequest.cs" />
     <Compile Include="interface\TPMCommandResponse.cs" />
     <Compile Include="interface\Parameters.cs" />
+    <Compile Include="Sign\SignatureVerification.cs" />
+    <Compile Include="Sign\TPMQuoteInfo.cs" />
     <Compile Include="TPMCommandNames.cs" />
     <Compile Include="interface\ITypedParameter.cs" />
     <Compile Include="CapabilityData.cs" />

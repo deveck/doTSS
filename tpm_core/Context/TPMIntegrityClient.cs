@@ -54,20 +54,7 @@ namespace Iaik.Tc.TPM.Context
 				.Parameters.GetValueOf<byte[]>("pcr_value");
 		}
 		
-		/// <summary>
-		/// Cryptographically reports the selected PCR values
-		/// </summary>
-		/// <param name="keyName"></param>
-		/// <param name="pcrs"></param>
-		/// <returns></returns>
-		public TPMPCRComposite Quote(string keyName, TPMPCRSelection pcrs)
-		{
-			Parameters quoteParameters = new Parameters();
-			quoteParameters.AddPrimitiveType("key", keyName);
-			quoteParameters.AddValue("targetPCR", pcrs);
-			
-			return BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_Quote, quoteParameters).Parameters.GetValueOf<TPMPCRComposite>("pcr_selection");
-		}
+
 		
 		private TPMCommandResponse BuildDoVerifyRequest (string commandIdentifier, Parameters parameters)
 		{
