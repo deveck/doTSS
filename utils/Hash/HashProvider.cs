@@ -15,7 +15,17 @@ namespace Iaik.Utils.Hash
 		/// The hash algorithm instance to use
 		/// </summary>
 		protected HashAlgorithm _hashAlgorithm;
-		
+
+        /// <summary>
+        /// Name of the hash algorithm
+        /// </summary>
+        protected string _sHashAlgorithm;
+
+        public string HashAlgorithmName
+        {
+            get { return _sHashAlgorithm; }
+        }
+
 		public int HashBitSize
 		{
 			get { return _hashAlgorithm.HashSize; }
@@ -28,6 +38,7 @@ namespace Iaik.Utils.Hash
 		
 		public HashProvider (string hashAlgorithm)
 		{
+            _sHashAlgorithm = hashAlgorithm;
 			_hashAlgorithm = HashAlgorithm.Create (hashAlgorithm);
 		}
 		
