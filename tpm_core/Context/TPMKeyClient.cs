@@ -276,6 +276,28 @@ namespace Iaik.Tc.TPM.Context
 		}
 		
 		/// <summary>
+		/// Creates a <see>HashAlgorithm</see> object compatible with the operations
+		/// this key provides (e.g. externalData for quoting)
+		/// </summary>
+		/// <returns></returns>
+		public HashAlgorithm CreateCompatibleHashAlgorithm()
+		{
+			return new SHA1Managed();
+		}
+		
+		/// <summary>
+		/// The same as CreateCompatibleHashAlgorithm, but it uses 
+		/// the framework defined HashProvider, for simple hash generation
+		/// </summary>
+		/// <returns>
+		/// A <see cref="HashProvider"/>
+		/// </returns>
+		public HashProvider CreateCompatibleHashProvider()
+		{
+			return new HashProvider();
+		}
+		
+		/// <summary>
 		/// Creates a ISigner for this key (if supported)
 		/// </summary>
 		/// <returns>
@@ -292,6 +314,25 @@ namespace Iaik.Tc.TPM.Context
 			}
 			else
 				throw new NotSupportedException(string.Format("Signing not supported for '{0}-{1}'", keyInfo.AlgorithmParams.AlgorithmId,
+				                                              keyInfo.AlgorithmParams.SigScheme));
+		}
+		
+		/// <summary>
+		/// Creates an ISigner for quoting using this key
+		/// </summary>
+		/// <param name="pcrSelection"></param>
+		/// <returns></returns>
+		public ISigner CreateQuoter(TPMPCRSelection pcrSelection)
+		{
+			TPMKey keyInfo = KeyInfo;
+			
+			if(keyInfo.AlgorithmParams.AlgorithmId == TPMAlgorithmId.TPM_ALG_RSA &&
+			   keyInfo.AlgorithmParams.SigScheme == TPMSigScheme.TPM_SS_RSASSAPKCS1v15_SHA1)
+			{
+				return new QuoteSigner(_tpmSession, this, pcrSelection);
+			}
+			else
+				throw new NotSupportedException(string.Format("Quoter not supported for '{0}-{1}'", keyInfo.AlgorithmParams.AlgorithmId,
 				                                              keyInfo.AlgorithmParams.SigScheme));
 		}
 		
@@ -380,19 +421,40 @@ namespace Iaik.Tc.TPM.Context
 		}
 
         /// <summary>
-        /// Cryptographically reports the selected PCR values
+        /// Cryptographically reports the selected PCR values and returns
+        /// the TPMPCRComposite and the generated signature. If no
+        /// external data is supplied a random nonce is generated on the server.
+        /// The length of externalData is defined by the hashing algorithm used by the TPM
         /// </summary>
-        /// <param name="keyName"></param>
         /// <param name="pcrs"></param>
+        /// <param name="externalData">Nonce used for the quoting operation, 
+        /// use CreateCompatibleHashAlgorithm or CreateCompatibleHashProvider to generate a hash value
+        /// with the correct length</param>
         /// <returns></returns>
-        public TPMPCRComposite Quote(TPMPCRSelection pcrs)
+        public QuoteResponse Quote(TPMPCRSelection pcrs, byte[] externalData)
         {
             Parameters quoteParameters = new Parameters();
             quoteParameters.AddPrimitiveType("key", _keyIdentifier);
             quoteParameters.AddValue("targetPCR", pcrs);
+			
+			if(externalData != null)
+				quoteParameters.AddPrimitiveType("externalData", externalData);
 
-            return BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_Quote, quoteParameters).Parameters.GetValueOf<TPMPCRComposite>("pcrData");
+            TPMCommandResponse response = BuildDoVerifyRequest(TPMCommandNames.TPM_CMD_Quote, quoteParameters);
+			
+			return new QuoteResponse(response.Parameters.GetValueOf<TPMPCRComposite>("pcrData"),
+			                         response.Parameters.GetValueOf<byte[]>("sig"));
         }
+		
+		/// <summary>
+		/// Performs a simple quote operation where only the TPMPCRSelection is returned
+		/// </summary>
+		/// <param name="pcrs"></param>
+		/// <returns></returns>
+		public TPMPCRComposite SimpleQuote(TPMPCRSelection pcrs)
+		{
+			return Quote(pcrs, null).PCRSelection;
+		}
 
         /// <summary>
         /// Signs the specified data and returns the resulting digital signature
@@ -434,6 +496,40 @@ namespace Iaik.Tc.TPM.Context
 				throw new TPMRequestException ("An unknown tpm error occured");
 			
 			return response;
+		}
+	}
+	
+	/// <summary>
+	/// Response to a quote request, combines the TPMPCRSelection data and 
+	/// the generated signature
+	/// </summary>
+	public class QuoteResponse
+	{
+		private TPMPCRComposite _pcrSelection;
+		
+		/// <summary>
+		/// PCR selection, chosen on quote request
+		/// </summary>
+		public TPMPCRComposite PCRSelection
+		{
+			get{ return _pcrSelection; }
+		}
+		
+		
+		private byte[] _signature;
+		
+		/// <summary>
+		/// Signature of the pcr selection structure
+		/// </summary>
+		public byte[] Signature
+		{
+			get{ return _signature; }
+		}
+		
+		public QuoteResponse(TPMPCRComposite pcrSelection, byte[] signature)
+		{
+			_pcrSelection = pcrSelection;
+			_signature = signature;
 		}
 	}
 }

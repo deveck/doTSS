@@ -193,15 +193,37 @@ namespace Iaik.Tc.TPM.Commands
 			
 			
 
-			ISigner signatureGenerator = keyHandle.CreateSigner();
+			ISigner signatureGenerator = null;
+			
 			
 			if(subCommand == "verify")
 			{
+				signatureGenerator = keyHandle.CreateSigner();
 				signatureGenerator.Init(false, null);
 			}
 			else if(subCommand == "generate")
 			{
+				signatureGenerator = keyHandle.CreateSigner();
 				signatureGenerator.Init(true, null);
+			}
+			else if(subCommand == "generate_quote" || subCommand == "verify_quote")
+			{
+				if(arguments.ContainsKey("pcr") == false)
+				{
+					_console.Out.WriteLine("Error: No pcrs specified!");
+					return;
+				}
+				
+				TPMPCRSelection pcrSelection = tpmSessions[localAlias].CreateEmptyPCRSelection();
+				
+				foreach(string pcr in arguments["pcr"].Split('|'))
+				{
+					int pcrValue = int.Parse(pcr);				
+					pcrSelection.PcrSelection.SetBit(pcrValue - 1, true);				
+				}
+				
+				signatureGenerator = keyHandle.CreateQuoter(pcrSelection);
+				signatureGenerator.Init(subCommand == "generate_quote", null);
 			}
 			
 			byte[] buffer = new byte[1024];

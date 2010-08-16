@@ -99,7 +99,12 @@ namespace Iaik.Tc.TPM.Library.Commands.Integrity
 			
 			_digest = null;
 			_responseDigest = null;
-			_nonce = NonceGenerator.GenerateByteNonce(20);
+			
+			if(param.IsDefined<byte[]>("externalData"))
+				_nonce = param.GetValueOf<byte[]>("externalData");
+			else
+				_nonce = NonceGenerator.GenerateByteNonce(20);
+			
 			object myType = param.GetValueOf<object>("targetPCR");
 			_pcrSelection = param.GetValueOf<TPMPCRSelectionCore>("targetPCR");
 				

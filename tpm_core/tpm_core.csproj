@@ -138,6 +138,7 @@
     <Compile Include="Context\CounterClient.cs" />
     <Compile Include="Context\RNG.cs" />
     <Compile Include="Context\TPMRSASHA1Signer.cs" />
+    <Compile Include="Context\QuoteSigner.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">

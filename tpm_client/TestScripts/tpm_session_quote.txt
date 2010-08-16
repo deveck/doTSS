@@ -13,3 +13,9 @@ secret_cache tpm add type=key_usage,name=sign,secret=sign
 tpm_session_key tpm create name=sign,parent=srk,key_length=2048,key_usage=sign
 
 tpm_session_pcr tpm quote name=sign,pcr=1|2|4
+
+tpm_session_signature tpm generate_quote name=sign,pcr=1|2|4,data_input=embedded meine tollen daten
+tpm_session_signature tpm generate_quote name=sign,pcr=1|2|4,data_input=embedded meine tollen daten
+
+tpm_session_pcr tpm extend pcr=3,data_input=embedded 000102030405060708090A0B0C0D0E0F11121415
+tpm_session_signature tpm generate_quote name=sign,pcr=1|2|4,data_input=embedded meine tollen daten

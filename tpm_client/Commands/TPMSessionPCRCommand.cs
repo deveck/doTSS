@@ -197,7 +197,7 @@ namespace Iaik.Tc.TPM.Commands
 					pcrSelection.PcrSelection.SetBit(pcrValue - 1, true);				
 				}
 				
-				TPMPCRComposite quoted = keyHandle.Quote(pcrSelection);
+				TPMPCRComposite quoted = keyHandle.SimpleQuote(pcrSelection);
 
                 IList<int> selectedPCRs = quoted.PCRSelection.SelectedPCRs;
 
