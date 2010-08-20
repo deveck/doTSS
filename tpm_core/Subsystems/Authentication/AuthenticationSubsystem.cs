@@ -89,6 +89,36 @@ namespace Iaik.Tc.TPM.Subsystems.Authentication
 
             return compatibleAuthenticationMethods;
         }
+		
+		/// <summary>
+		///Creates an authentication mechanism 
+		/// </summary>
+		/// <param name="authIdentifier"></param>
+		/// <returns></returns>
+		private AuthenticationMechanism CreateAuthenticationMechanism(string authIdentifier)
+		{
+			IAuthenticationMethod authConfig = null;
+			foreach (IAuthenticationMethod authMethod in ConnectionsConfig.AuthenticationMethods)
+            {
+				//authMethod
+                //AuthenticationMechanismChecker checker = authMethod.AuthChecker;
+
+                //if (checker.IsCompatibleWith(EndpointContext.Connection))
+                //    compatibleAuthenticationMethods.Add(authMethod.AuthIdentifier);
+				if(authMethod.AuthIdentifier.Equals(authIdentifier))
+					authConfig = authMethod;
+            }
+
+			
+			AuthenticationMechanism auth;
+			
+			if(authConfig == null)
+				auth = GenericClassIdentifierFactory.CreateFromClassIdentifierOrType<AuthenticationMechanism>(authIdentifier);
+			else
+				auth = GenericClassIdentifierFactory.CreateFromClassIdentifierOrType<AuthenticationMechanism>(authIdentifier, authConfig);
+			
+			return auth;
+		}
 
         #region Request handlers
         /// <summary>
@@ -106,6 +136,9 @@ namespace Iaik.Tc.TPM.Subsystems.Authentication
             response.Execute();
         }
 
+		
+		
+		
         /// <summary>
         /// Requesthandler
         /// 
@@ -124,7 +157,7 @@ namespace Iaik.Tc.TPM.Subsystems.Authentication
                 {
 					MyServerContext.ServerAuthenticationContext = new ServerAuthenticationContext();
 					MyServerContext.ServerAuthenticationContext.AuthenticationMechanism = 
-						GenericClassIdentifierFactory.CreateFromClassIdentifierOrType<AuthenticationMechanism>(requestCtx.Request.AuthMechanismToSelect);
+						CreateAuthenticationMechanism(requestCtx.Request.AuthMechanismToSelect);
                     
 					MyServerContext.ServerAuthenticationContext.AuthenticationMechanism.Initialize(_context);
                     

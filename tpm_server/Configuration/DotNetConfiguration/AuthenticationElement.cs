@@ -6,15 +6,36 @@
 using System;
 using System.Configuration;
 using Iaik.Tc.TPM.Authentication;
+using System.Collections.Generic;
 
 namespace Iaik.Tc.TPM.Configuration.DotNetConfiguration
 {
 
-
-	public class AuthenticationElement : ConfigurationElement, IAuthenticationMethod
+	[ConfigurationCollection(typeof(Parameter),
+	                         AddItemName="add",
+	                         RemoveItemName="remove",
+	                         ClearItemsName="clear")]
+	public class AuthenticationElement : ConfigurationElementCollection, IAuthenticationMethod
 	{
 		private const string PROP_TYPE = "type";
 		
+		
+		protected override ConfigurationElement CreateNewElement ()
+		{
+			return new Parameter();
+		}
+
+		protected override object GetElementKey (ConfigurationElement element)
+		{
+			return ((Parameter)element).Name;
+		}
+		
+		protected override string ElementName 
+		{
+			get { return "add"; }
+		}
+
+
 		/// <summary>
 		/// Returns 
 		/// </summary>
@@ -30,7 +51,28 @@ namespace Iaik.Tc.TPM.Configuration.DotNetConfiguration
         {
             get { return new AuthenticationMechanismChecker(this); }
         }
+		
+		public bool IsDefined(string name)
+		{
+			foreach(Parameter p in this)
+			{
+				if(p.Name.Equals(name))
+					return true;
+			}
+			
+			return false;
+		}
 
+		public string GetValue(string name)
+		{
+			foreach(Parameter p in this)
+			{
+				if(p.Name.Equals(name))
+					return p.Value;
+			}
+			
+			throw new KeyNotFoundException(string.Format("Key '{0}' not found", name));
+		}
         #endregion
     }
 }

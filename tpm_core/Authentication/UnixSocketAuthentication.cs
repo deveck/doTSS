@@ -31,6 +31,10 @@ namespace Iaik.Tc.TPM.Authentication
 			get{ return (ServerContext)_context;}
 		}
 		
+		public UnixSocketAuthentication(IAuthenticationMethod authConfig)
+		{
+		}
+		
         public override void Initialize(EndpointContext context)
         {
             if (typeof(UnixSocketConnection).IsAssignableFrom(context.Connection.GetType()) == false)

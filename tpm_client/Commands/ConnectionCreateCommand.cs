@@ -35,6 +35,7 @@ namespace Iaik.Tc.TPM.Commands
            // if(arguments.Length > 0)
                 Array.Copy(commandline, 2, arguments, 0, arguments.Length);
 
+		
             FrontEndConnection conn = GenericClassIdentifierFactory.CreateFromClassIdentifierOrType<FrontEndConnection>(commandline[1], arguments);
 
             if (conn == null)

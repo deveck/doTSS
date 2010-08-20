@@ -10,6 +10,7 @@ using Iaik.Tc.TPM.Subsystems.Authentication;
 using Mono.Unix;
 using Iaik.Tc.TPM.Configuration;
 using Iaik.Tc.TPM.Subsystems;
+using Iaik.Tc.TPM.Configuration.DotNetConfiguration.Elements;
 
 namespace Iaik.Tc.TPM.Authentication
 {
@@ -21,39 +22,50 @@ namespace Iaik.Tc.TPM.Authentication
 	[AuthenticationSettings("dummy_auth")]
 	public class DummyAuthentication : AuthenticationMechanism
 	{
+		private string _user;
+		
 		protected ServerContext ServerContext
 		{
 			get{ return (ServerContext)_context;}
 		}
 		
+		public DummyAuthentication(IAuthenticationMethod authConfig)
+		{
+			if(authConfig.IsDefined("user") == false)
+				throw new ArgumentException("Dummy authentication does not define 'user'-value");
+		
+			_user = authConfig.GetValue("user");
+			
+		}
+		
         public override void Initialize(EndpointContext context)
         {
 			if(!(context is ServerContext))
-				throw new ArgumentException("UnixSocketAuthentication expects ServerContext");
+				throw new ArgumentException("DummyAuthentication expects ServerContext");
 			
             base.Initialize(context);
         }
 		
 		public override void Authenticate (RequestContext<AuthenticateRequest, AuthenticateResponse> requestContext)
 		{
-			PeerCred credentials = new PeerCred(((UnixSocketConnection)ServerContext.Connection).UnixSocket);
-			
-			if(credentials == null)
+			foreach(User user in ServerContext.AccessControlList.Users)
 			{
-				AuthenticateResponse response = requestContext.CreateResponse();
-				response.Succeeded = false;
-				response.CustomErrorMessage = "Could not retrieve credentials from requesting client!";
-				response.Execute();				
-			}			
-			else
-			{
-				ServerContext.ServerAuthenticationContext.AuthenticatedPermissionMember =
-					new ExternalUser(credentials.UserID.ToString(), credentials.GroupID.ToString());
+				if(user.Id == _user && user.IdType == IdTypeEnum.User)
+				{
+					ServerContext.ServerAuthenticationContext.AuthenticatedPermissionMember = user;
 				
-				AuthenticateResponse response = requestContext.CreateResponse();
-				response.Succeeded = true;
-				response.Execute();
+					AuthenticateResponse response = requestContext.CreateResponse();
+					response.Succeeded = true;
+					response.Execute();
+					return;
+				}
 			}
+
+			AuthenticateResponse errorResponse = requestContext.CreateResponse();
+			errorResponse.Succeeded = false;
+			errorResponse.CustomErrorMessage = "Could not retrieve credentials from requesting client!";
+			errorResponse.Execute();				
+	
 		}
 
 		

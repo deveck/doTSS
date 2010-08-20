@@ -32,6 +32,10 @@ namespace Iaik.Tc.TPM.Authentication
             get { return (ServerContext)_context; }
         }
 
+		public NamedPipeAuthentication(IAuthenticationMethod authConfig)
+		{
+		}
+		
         public override void Initialize(EndpointContext context)
         {
             if (typeof(NamedPipeConnection).IsAssignableFrom(context.Connection.GetType()) == false)

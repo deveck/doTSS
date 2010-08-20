@@ -199,10 +199,7 @@ namespace Iaik.Utils
 				return null;
 				
 			string identifier = ReadString (src);
-			
-			if(identifier == "TPMPCRSelection")
-				Console.WriteLine("huhu");
-			
+						
 			foreach (Assembly asm in asms)
 			{
 				Type t = TypedStreamSerializableHelper.FindTypedStreamSerializableType (identifier, asm);

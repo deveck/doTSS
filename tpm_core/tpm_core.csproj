@@ -139,6 +139,7 @@
     <Compile Include="Context\RNG.cs" />
     <Compile Include="Context\TPMRSASHA1Signer.cs" />
     <Compile Include="Context\QuoteSigner.cs" />
+    <Compile Include="Authentication\DummyAuthentication.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">

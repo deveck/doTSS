@@ -54,6 +54,8 @@
     <Compile Include="ServerListeners\NamedPipeListener.cs" />
     <Compile Include="ServerListeners\UnixSocketListener.cs" />
     <Compile Include="Configuration\IListenerConfiguration.cs" />
+    <Compile Include="ClientConnections\TcpSocketConnection.cs" />
+    <Compile Include="ServerListeners\TcpSocketListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">
