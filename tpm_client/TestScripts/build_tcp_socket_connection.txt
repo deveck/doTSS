@@ -1,0 +1,10 @@
+# Builds a tcp socket connection to 'localhost:5000'
+# and authenticates the client on the server via dummy auth
+# This should not be used in productional systems, there is no
+# real authentication
+
+connection_create tcp_socket localhost 5000
+auth_list
+auth_select dummy_auth
+auth_do
+connection_info

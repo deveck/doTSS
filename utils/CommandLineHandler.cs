@@ -210,6 +210,24 @@ namespace Iaik.Utils
 				
 				return null;
 			}
+			
+			/// <summary>
+			/// Returns a typed command option argument
+			/// </summary>
+			/// <param name="name">Name of the command option to retrieve</param>
+			/// <returns></returns>
+			public T FindCommandOptionValueByName<T>(string name)
+			{
+				CommandOption cmdOpt = FindCommandOptionByName(name);
+				
+				if(cmdOpt == null)
+					throw new ArgumentException(string.Format("Could not find argument '{0}'", name));
+				
+				if(cmdOpt.Arguments.Length == 0)
+					throw new ArgumentException(string.Format("Argument '{0}' does not have a value!", name));
+					                            
+				return (T)Convert.ChangeType(cmdOpt.Arguments[0], typeof(T));
+			}
 		}
 	}
 }
