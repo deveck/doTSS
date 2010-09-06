@@ -24,6 +24,11 @@ namespace Iaik.Connection.ClientConnections
 	/// authentication is the specified host. For debugging purpose this behaviour can be overridden to match
 	/// the common name specified in the server certificate</description></item>
 	/// </list>
+	///
+	/// To use certificates they need to be in the "Trust" key store, use certmgr to manage the key stores.
+	/// The server certificate needs to have the Netscape Cert Type: SSL Server and the
+	/// client certificate needs to have the Netscape Cert Type: SSL Client attribute,
+	/// otherwise the certificate is rejected
 	///</remarks>
 	[FrontEndConnection("ssl_socket", typeof(SslConnectionBuilder))]
 	public class SslConnection : TcpSocketConnection
