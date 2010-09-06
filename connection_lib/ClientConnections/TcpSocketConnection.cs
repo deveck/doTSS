@@ -9,6 +9,7 @@ using System.Net.Sockets;
 using log4net;
 using Iaik.Utils;
 using System.Net;
+using System.Collections.Generic;
 
 namespace Iaik.Connection.ClientConnections
 {
@@ -25,35 +26,36 @@ namespace Iaik.Connection.ClientConnections
     /// ...
     /// </code>
 	[FrontEndConnection("tcp_socket")]
-	public sealed class TcpSocketConnection : FrontEndConnection
+	public class TcpSocketConnection : FrontEndConnection
 	{
 
 		
 		/// <summary>
 		/// Specifies the remote host to connect to
 		/// </summary>
-		private string _remoteHost;
+		protected string _remoteHost;
 
 		/// <summary>
 		/// Specifies the port to connect to
 		/// </summary>
-		private int _remotePort;
+		protected int _remotePort;
 		
 		/// <summary>
 		/// Specifies the endpoint to use for connecting
 		/// </summary>
-		private IPEndPoint _endpoint;
+		protected IPEndPoint _endpoint;
 		
 		/// <summary>
 		/// The socket
 		/// </summary>
-		private Socket _socket = null;
+		protected Socket _socket = null;
 		
 		/// <summary>
 		/// Indicates if this Connection can be reconnected or if it 
 		/// was created using a preconnected socket
 		/// </summary>
-		private bool _createdFromSocket = false;
+		/// <remarks>Valid arguments: host, port</remarks>
+		protected bool _createdFromSocket = false;
 		
 		
 		public TcpSocketConnection(string remoteHost, string port)
@@ -63,6 +65,9 @@ namespace Iaik.Connection.ClientConnections
 		
 		public TcpSocketConnection (string remoteHost, int port)
 		{
+			if(remoteHost == null)
+				throw new ArgumentException("No remote host specified");
+				
 			_logger.Debug(string.Format("Creating TcpSocketConnection with host={0}, port={1}", remoteHost, port));
 			_remoteHost = remoteHost;
 			_remotePort = port;
@@ -84,9 +89,9 @@ namespace Iaik.Connection.ClientConnections
 			_createdFromSocket = true;
 		}
 		
-		public TcpSocketConnection(CommandLineHandler.CommandLineOptions commandLine)
-			:this(commandLine.FindCommandOptionValueByName<string>("Host"),
-			      commandLine.FindCommandOptionValueByName<int>("Port"))
+		public TcpSocketConnection(IDictionary<string, string> arguments)
+			:this(DictionaryHelper.GetString("host", arguments, null),
+			      DictionaryHelper.GetInt("port", arguments, -1))
 		{				
 		}
 		

@@ -140,6 +140,9 @@
     <Compile Include="Context\TPMRSASHA1Signer.cs" />
     <Compile Include="Context\QuoteSigner.cs" />
     <Compile Include="Authentication\DummyAuthentication.cs" />
+    <Compile Include="Authentication\SslAuthentication.cs" />
+    <Compile Include="Configuration\SslAuthenticationParameters.cs" />
+    <Compile Include="Configuration\DotNetConfiguration\DotNetCfgSslAuthentication.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">

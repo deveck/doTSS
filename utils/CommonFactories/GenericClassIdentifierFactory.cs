@@ -118,7 +118,7 @@ namespace Iaik.Utils.CommonFactories
 			
 		}
 		
-		private static object CreateInstance(Type t, params object[] ctorParams)
+		public static object CreateInstance(Type t, params object[] ctorParams)
 		{
 			List<Type> types = new List<Type>();
 			

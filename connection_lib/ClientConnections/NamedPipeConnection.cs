@@ -25,6 +25,7 @@ namespace Iaik.Connection.ClientConnections
     /// ClientContext ctx = EndpointContext.CreateClientEndpointContext(conn);	
     /// ...
     /// </code>
+    /// <remarks>valid arguments: pipe_name</remarks>
 	[FrontEndConnection("named_pipe")]
     public sealed class NamedPipeConnection : FrontEndConnection
     {
@@ -58,6 +59,8 @@ namespace Iaik.Connection.ClientConnections
 
         public NamedPipeConnection(string pipeName)
         {
+			if(pipeName == null)
+				throw new ArgumentException("No pipe name specified");
             _connectedOnCreation = false;
             _pipeName = pipeName;
         }
@@ -75,6 +78,11 @@ namespace Iaik.Connection.ClientConnections
 				_logger.DebugFormat("Using pipe name '{0}'", _pipeName);
 			}
 				
+		}
+		
+		public NamedPipeConnection(IDictionary<string, string> arguments)
+			:this(DictionaryHelper.GetString("pipe_name", arguments, null))
+		{
 		}
 		
 		public override bool Connected 

@@ -1,7 +1,7 @@
 # Builds a named pipe connection to 'TPM_csharp'
 # and authenticates the client on the server via named_pipe auth
 
-connection_create named_pipe TPM_csharp
+connection_create named_pipe pipe_name=TPM_csharp
 auth_list
 auth_select named_pipe_auth
 auth_do

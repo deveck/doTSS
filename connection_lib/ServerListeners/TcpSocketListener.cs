@@ -26,33 +26,38 @@ namespace Iaik.Connection.ServerListeners
 		/// <summary>
 		/// Logger
 		/// </summary>
-		private ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+		protected ILog _logger;
 		
-		private object _syncLock = new object();
+		protected object _syncLock = new object();
 		
 		/// <summary>
 		/// Specifies the port to listen on
 		/// </summary>
-		private int _port;
+		protected int _port;
 		
 		/// <summary>
 		/// Address used to specify the interface to listen on or 0.0.0.0 for any
 		/// </summary>
-		private string _listeningAddress;
+		protected string _listeningAddress;
 
 		/// <summary>
 		/// Specifies the endpoint to use for connecting
 		/// </summary>
-		private IPEndPoint _endpoint;
+		protected IPEndPoint _endpoint;
 		
 		/// <summary>
 		/// The listening socket
 		/// </summary>
-		private Socket _listeningSocket = null;
+		protected Socket _listeningSocket = null;
+		
+		protected virtual string LogDomain
+		{
+			get{ return "TcpSocketListener"; }
+		}
 		
 		public TcpSocketListener (string listeningAddress, int port)
 		{
-			
+			_logger = LogManager.GetLogger(LogDomain);						
 			_logger.Debug(string.Format("Creating TcpSocketListener with listeningAddress={0} port={1}", listeningAddress, port));
 			_listeningAddress = listeningAddress;
 			_port = port;
@@ -118,11 +123,16 @@ namespace Iaik.Connection.ServerListeners
 				_listeningSocket.BeginAccept(AcceptCallback, null);
 			}
 			
-			_logger.Info("Accepted connection");
-			TcpSocketConnection connection = new TcpSocketConnection(clientSocket);			
+			_logger.Info("Accepted connection");	
+			CreateFrondEndConnection(clientSocket);
+		}
+			   
+		protected virtual void CreateFrondEndConnection(Socket socket)
+		{
+			TcpSocketConnection connection = new TcpSocketConnection(socket);			
 			RaiseClientConnectedEvent(connection);
 		}
-			                             
+		
 		public void SuspendListener ()
 		{
 			lock(_syncLock)
@@ -138,7 +148,7 @@ namespace Iaik.Connection.ServerListeners
 		
 		#endregion
 
-		private void RaiseClientConnectedEvent(FrontEndConnection connection)
+		protected void RaiseClientConnectedEvent(FrontEndConnection connection)
 		{
 			if(ClientConnected != null)
 				ClientConnected(connection);

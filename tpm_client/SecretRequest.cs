@@ -23,6 +23,18 @@ namespace Iaik.Tc.TPM
 			get{ return _keyInfo;}
 		}
 		
+		
+		private string _customHintText;
+		
+		/// <summary>
+		/// Gets the custom hint text to display
+		/// if any other kind of secret is retrieved
+		/// </summary>
+		public string CustomHintText
+		{
+			get{ return _customHintText; }
+		}
+		
 		/// <summary>
 		/// The resulting password
 		/// </summary>
@@ -47,6 +59,13 @@ namespace Iaik.Tc.TPM
 		public SecretRequest (HMACKeyInfo keyInfo)
 		{
 			_keyInfo = keyInfo;
+			_customHintText = null;
+		}
+		
+		public SecretRequest (string customHintText)
+		{
+			_keyInfo = null;
+			_customHintText = customHintText;
 		}
 		
 	}

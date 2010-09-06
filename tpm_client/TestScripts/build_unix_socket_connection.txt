@@ -1,7 +1,7 @@
 # Builds a unix socket connection to /tmp/tpm_server_socket
 # and authenticates the client on the server via unix_auth
 
-connection_create unix_socket /tmp/tpm_server_socket
+connection_create unix_socket socket_file=/tmp/tpm_server_socket
 auth_list
 auth_select unix_auth
 auth_do

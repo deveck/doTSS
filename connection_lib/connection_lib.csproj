@@ -21,6 +21,7 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <DocumentationFile>bin\Debug\connection_lib.XML</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -29,6 +30,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -39,6 +41,7 @@
     <Reference Include="System.Core" />
     <Reference Include="Mono.Posix" />
     <Reference Include="System.Configuration" />
+    <Reference Include="Mono.Security" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
@@ -56,6 +59,12 @@
     <Compile Include="Configuration\IListenerConfiguration.cs" />
     <Compile Include="ClientConnections\TcpSocketConnection.cs" />
     <Compile Include="ServerListeners\TcpSocketListener.cs" />
+    <Compile Include="ClientConnections\SslConnection.cs" />
+    <Compile Include="ClientConnections\IConnectionBuilder.cs" />
+    <Compile Include="ClientConnections\SslConnectionBuilder.cs" />
+    <Compile Include="ClientConnections\ConnectionFactory.cs" />
+    <Compile Include="ClientConnections\ConnectionBuilderSettings.cs" />
+    <Compile Include="ServerListeners\SslListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">

@@ -1,0 +1,7 @@
+# Builds a ssl socket connection to 'localhost:5001'
+
+connection_create ssl_socket host=localhost,port=5001,client_certificate=certs/client1_bundle_no_key.p12,debug_target_host=tpm_server.invalid
+auth_list
+auth_select ssl_auth
+auth_do
+connection_info

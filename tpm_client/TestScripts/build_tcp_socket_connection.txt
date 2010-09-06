@@ -3,7 +3,7 @@
 # This should not be used in productional systems, there is no
 # real authentication
 
-connection_create tcp_socket localhost 5000
+connection_create tcp_socket host=localhost,port=5000
 auth_list
 auth_select dummy_auth
 auth_do

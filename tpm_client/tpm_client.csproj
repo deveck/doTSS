@@ -20,7 +20,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
-    <Commandlineparameters>--script=/home/andi/Repos/TpmCSStack-impl/tpm_client/TestScripts/tpm_session_key.txt</Commandlineparameters>
+    <Commandlineparameters>--script=/home/andi/Repos/IAIK_ITProject/TpmCSStack-impl/tpm_client/TestScripts/authenticated_environment.txt</Commandlineparameters>
     <DocumentationFile>bin\Debug\tpm_client.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -108,6 +108,8 @@
     <None Include="TestScripts\build_named_pipe_connection.txt" />
     <None Include="TestScripts\tpm_session_quote.txt" />
     <None Include="TestScripts\tpm_session_sign.txt" />
+    <None Include="TestScripts\build_tcp_socket_connection.txt" />
+    <None Include="TestScripts\build_ssl_socket_connection.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

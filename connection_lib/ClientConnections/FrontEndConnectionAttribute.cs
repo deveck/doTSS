@@ -14,10 +14,28 @@ namespace Iaik.Connection.ClientConnections
 	/// </summary>
 	public class FrontEndConnectionAttribute : ClassIdentifierAttribute
 	{
+		private Type _connectionBuilder = null;
+		
+		/// <summary>
+		/// If the attribute has an associated connection builder,
+		/// use it to build connection types with a more complex setup process
+		/// </summary>
+		public Type ConnectionBuilder
+		{
+			get{ return _connectionBuilder;}
+		}
+		
 		
 		public FrontEndConnectionAttribute (string connectionName)
 			:base(connectionName)
 		{
 		}
+		
+		public FrontEndConnectionAttribute(string connectionName, Type connectionBuilder)
+			:this(connectionName)
+		{
+			_connectionBuilder = connectionBuilder;
+		}
+		
 	}
 }

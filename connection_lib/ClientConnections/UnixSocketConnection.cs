@@ -8,6 +8,7 @@ using Mono.Unix;
 using System.Net.Sockets;
 using log4net;
 using Iaik.Utils;
+using System.Collections.Generic;
 
 namespace Iaik.Connection.ClientConnections
 {
@@ -23,6 +24,9 @@ namespace Iaik.Connection.ClientConnections
     /// ClientContext ctx = EndpointContext.CreateClientEndpointContext(conn);	
     /// ...
     /// </code>
+    /// <remarks>
+    /// Valid arguments: socket_file
+	/// </remarks>
 	[FrontEndConnection("unix_socket")]
 	public sealed class UnixSocketConnection : FrontEndConnection
 	{
@@ -59,6 +63,9 @@ namespace Iaik.Connection.ClientConnections
 		
 		public UnixSocketConnection (string socketFile)
 		{
+			if(socketFile == null)
+				throw new ArgumentException("No socket file specified");
+				
 			_logger.Debug(string.Format("Creating UnixSocketConnection with socketFile={0}", socketFile));
 			_socketFile = socketFile;
 			_endpoint = new UnixEndPoint(socketFile);
@@ -84,6 +91,11 @@ namespace Iaik.Connection.ClientConnections
 				_logger.DebugFormat("Using socket file '{0}'", _socketFile);
 			}
 				
+		}
+		
+		public UnixSocketConnection(IDictionary<string, string> arguments)
+			:this(DictionaryHelper.GetString("socket_file", arguments, null))
+		{
 		}
 		
 		#region FrontEndConnection overrides

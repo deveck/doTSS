@@ -210,6 +210,12 @@ namespace Iaik.Utils.Hash
 				Marshal.ZeroFreeBSTR (plain2);
 			}
 		}
+		
+		public SecureString ExportSecureString()
+		{
+			_plainPassword.MakeReadOnly();
+			return _plainPassword;
+		}
 
 		
 		

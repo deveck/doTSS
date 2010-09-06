@@ -55,6 +55,19 @@ namespace Iaik.Tc.TPM.Configuration
 			get{ return _authentications.Values; }
 		}
 		
+		/// <summary>
+		/// Returns the user specific settings fo the specified authentication
+		/// </summary>
+		/// <param name="authName"></param>
+		/// <returns></returns>
+		public virtual Authentication GetAuthentication(string authName)
+		{
+			if(SupportsAuthentication(authName))
+				return _authentications[authName];
+			else
+				return null;
+		}
+		
         /// <summary>
         /// Gets the unique id of the user
         /// </summary>
