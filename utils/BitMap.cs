@@ -101,5 +101,17 @@ namespace Iaik.Utils
 			else
 				return false;
 		}
+		
+		public bool this[int index]
+		{
+			get
+			{
+				return GetBit(index);
+			}
+			set
+			{
+				SetBit(index, value);
+			}
+		}
 	}
 }
