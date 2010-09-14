@@ -48,6 +48,7 @@ namespace Iaik.Utils.Hash
 		/// </summary>
 		private byte[] _hash = null;
 		
+		private bool _wellKnown = false;
 		/// <summary>
 		/// Gets the protected hash structure which is populated once the Hash method is called
 		/// </summary>
@@ -91,8 +92,11 @@ namespace Iaik.Utils.Hash
 			if (_protectedHash != null)
 				throw new NotSupportedException ("Cannot hash twice");
 			
-			_plainPassword.MakeReadOnly ();
+			if(_wellKnown)
+				return;
 			
+			_plainPassword.MakeReadOnly ();
+				
 			HashProvider hashProvider = new HashProvider (_hashAlgo);
 			
 			//The array fpr protected memory needs to have multiple size of 16
@@ -116,7 +120,7 @@ namespace Iaik.Utils.Hash
 				foreach (char c in hexString)
 					_protectedHash.AppendChar (c);
 			}
-			
+	
 			
 			//Writes the size of the ahsh value to the start of the hashvalue array
 			//Array.Copy(BitConverter.GetBytes((int)hashProvider.HashBitSize/8), myHashValue, 4);
@@ -133,6 +137,14 @@ namespace Iaik.Utils.Hash
 		/// </summary>
 		public void DecryptHash ()
 		{
+			
+			if(_wellKnown)
+				return;
+			
+			if(_protectedHash == null)
+				Hash();
+				
+				
 			IntPtr hashPtr = Marshal.SecureStringToBSTR (_protectedHash);
 			try
 			{
@@ -183,6 +195,7 @@ namespace Iaik.Utils.Hash
 			ClearHash();
 			
 			_hash = new byte[20];
+			_wellKnown = true;
 		}
 
 		public bool EqualPassword (ProtectedPasswordStorage obj)

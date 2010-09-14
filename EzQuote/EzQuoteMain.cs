@@ -60,7 +60,7 @@ namespace EzQuote
 					Console.WriteLine("random: {0}",	rng.Next());
 				}*/
 				
-				Console.WriteLine(tpm0.EndpointCtx.PacketTransmitter.RequestPacketReceived);
+				//Console.WriteLine(tpm0.EndpointCtx.PacketTransmitter.RequestPacketReceived);
 
 				
 				ClientKeyHandle khsrk = tpm0.KeyClient.GetSrkKeyHandle();			
