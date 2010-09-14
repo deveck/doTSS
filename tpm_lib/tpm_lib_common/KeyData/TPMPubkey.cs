@@ -105,12 +105,12 @@ namespace Iaik.Tc.TPM.Library.Common
             {
                 ISigner signer = new RsaDigestSigner(new Sha1Digest());
 
-                RsaKeyParameters parameters =
+                /*RsaKeyParameters parameters =
                     new RsaKeyParameters(false,
                                          new BigInteger(1, _publicKey.Pubkey),
                                          new BigInteger(1, ((TPMRSAKeyParams)_keyParams.Params).GetExponent()));
-
-                signer.Init(false, parameters);
+				 */
+                signer.Init(false, RsaKeyParameters);
 
                 return signer;    
             }
@@ -118,6 +118,18 @@ namespace Iaik.Tc.TPM.Library.Common
                 throw new NotSupportedException(string.Format("SignatureVerificator: Algorithm '{0}' with '{1}' is not supported", _keyParams.AlgorithmId, _keyParams.SigScheme));
 
         }
+		
+		public RsaKeyParameters RsaKeyParameters
+		{
+			get
+			{
+				return
+                    new RsaKeyParameters(false,
+                        new BigInteger(1, _publicKey.Pubkey),
+                        new BigInteger(1, ((TPMRSAKeyParams)_keyParams.Params).GetExponent()));
+			}
+
+		}
 		
 		public override string ToString ()
 		{
