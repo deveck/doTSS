@@ -176,6 +176,14 @@ namespace Iaik.Utils.Hash
 			
 			_hash = null;
 		}
+		
+		
+		public void WellKnown()
+		{
+			ClearHash();
+			
+			_hash = new byte[20];
+		}
 
 		public bool EqualPassword (ProtectedPasswordStorage obj)
 		{
