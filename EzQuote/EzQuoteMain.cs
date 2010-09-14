@@ -10,6 +10,8 @@ using Iaik.Tc.TPM.Library.Common.Handles.Authorization;
 using Iaik.Tc.TPM.Keystore;
 using System.Collections;
 using System.Collections.Generic;
+using Org.BouncyCastle.Crypto;
+using Iaik.Tc.TPM.Library.Common.PCRData;
 
 namespace EzQuote
 {
@@ -55,37 +57,71 @@ namespace EzQuote
 				tpm0.Keystore = TPMKeystoreProviders.Create("SQLiteKeystore", opts);			
 				tpm0.SetRequestSecretCallback(mycallback);
 				
-				/*Random rng = tpm0.CreateRNG();
-				for (int n = 0; n < 100; ++n) {
-					Console.WriteLine("random: {0}",	rng.Next());
-				}*/
+				/*
+				ProtectedPasswordStorage pws = new ProtectedPasswordStorage();
+				pws.AppendPasswordChar('i');
+				pws.AppendPasswordChar('a');
+				pws.AppendPasswordChar('i');
+				pws.AppendPasswordChar('k');
 				
-				//Console.WriteLine(tpm0.EndpointCtx.PacketTransmitter.RequestPacketReceived);
-
+				tpm0.AdministrationClient.TakeOwnership(pws, pws);
+				*/
 				
-				ClientKeyHandle khsrk = tpm0.KeyClient.GetSrkKeyHandle();			
-				Console.WriteLine("SRK handle {0}", khsrk);
+				ClientKeyHandle kh_srk = tpm0.KeyClient.GetSrkKeyHandle();
+				ClientKeyHandle kh_sig1 = kh_srk.CreateKey("sigkey5" + tpm0.CreateRNG().Next(), 2048, TPMKeyUsage.TPM_KEY_SIGNING,
+				                                           TPMKeyFlags.None);
 				
-				main.ctx_.DebugClient.PrintOnServerConsole("ready to rumble 2");
-				main.ctx_.DebugClient.PrintOnServerConsole("ready to rumble 3 ");
-			
+				TPMPCRSelection pcrs = tpm0.CreateEmptyPCRSelection();
+				pcrs.PcrSelection.SetBit(0, true);
+				pcrs.PcrSelection.SetBit(1, true);
+				pcrs.PcrSelection.SetBit(16, true);
 				
-				ClientKeyHandle khbind = khsrk.CreateKey("mykey", TPMKeyUsage.TPM_KEY_BIND);
-				Console.WriteLine("Bind handle {0}", khsrk);
-				main.ctx_.DebugClient.PrintOnServerConsole("ready to rumble 4");
-									
-				/*Org.BouncyCastle.Crypto.IAsymmetricBlockCipher block = khbind.CreateBindBlockCipher();
-				byte[] outs = block.ProcessBlock(new byte[] { 0xca, 0xfe, 0xba, 0xbe}, 0, 4);
-				Console.WriteLine(outs);*/
+				foreach(int pcr in pcrs.SelectedPCRs)
+				{
+					Console.Write(" PCR {0:D2}: 0x");
+					foreach (byte b in tpm0.IntegrityClient.PCRValue((uint)pcr)) 
+					{
+						Console.Write("{0:X2}", b);
+					}
+					Console.WriteLine();
+				}
 				
+				ISigner signer =  kh_sig1.CreateQuoter(pcrs);
+				signer.Init(true, null);
+				signer.Update((byte)'i');
+				signer.Update((byte)'a');
+				signer.Update((byte)'i');
+				signer.Update((byte)'k');
+				byte[] signature = signer.GenerateSignature();
 				
+				Console.Write("QUOTE: ");
+				foreach (byte b in signature) {
+					Console.Write(" {0:X2}", b);
+				}
+				Console.WriteLine();
+				
+				ISigner verifier = kh_sig1.CreateQuoter(pcrs);
+				verifier.Init(false, null);
+				verifier.Update((byte)'i');
+				verifier.Update((byte)'a');
+				verifier.Update((byte)'i');
+				verifier.Update((byte)'k');
+				if (verifier.VerifySignature(signature)) {
+					Console.WriteLine("JO IT WORKED");
+				} else {
+					Console.WriteLine("NA IT FAILED");
+				}
 			}
 		}
 				                              
 		public static ProtectedPasswordStorage mycallback(HMACKeyInfo keyInfo)
 		{
+			// We use the empty string as password ...
 			ProtectedPasswordStorage pws = new ProtectedPasswordStorage();
-			pws.WellKnown();
+			pws.AppendPasswordChar('i');
+			pws.AppendPasswordChar('a');
+			pws.AppendPasswordChar('i');
+			pws.AppendPasswordChar('k');
 			return pws;
 		}                            
 		
