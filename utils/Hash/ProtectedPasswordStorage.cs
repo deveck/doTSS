@@ -48,13 +48,17 @@ namespace Iaik.Utils.Hash
 		/// </summary>
 		private byte[] _hash = null;
 		
-		private bool _wellKnown = false;
+		/// <summary>
+		/// Hash injected from the outside
+		/// </summary>
+		private byte[] _injectedHash = null;
+		
 		/// <summary>
 		/// Gets the protected hash structure which is populated once the Hash method is called
 		/// </summary>
 		public byte[] HashValue
 		{
-			get { return _hash; }	
+			get { return _injectedHash != null?_injectedHash:_hash; }	
 		}
 		
 		public bool Hashed
@@ -92,7 +96,7 @@ namespace Iaik.Utils.Hash
 			if (_protectedHash != null)
 				throw new NotSupportedException ("Cannot hash twice");
 			
-			if(_wellKnown)
+			if(_injectedHash != null)
 				return;
 			
 			_plainPassword.MakeReadOnly ();
@@ -138,7 +142,7 @@ namespace Iaik.Utils.Hash
 		public void DecryptHash ()
 		{
 			
-			if(_wellKnown)
+			if(_injectedHash != null)
 				return;
 			
 			if(_protectedHash == null)
@@ -190,12 +194,16 @@ namespace Iaik.Utils.Hash
 		}
 		
 		
+		public void InjectHash(byte[] hash)
+		{
+			_injectedHash = new byte[hash.Length];
+			Array.Copy(hash, _injectedHash, hash.Length);
+			ByteHelper.ClearBytes(hash);
+		}
+		
 		public void WellKnown()
 		{
-			ClearHash();
-			
-			_hash = new byte[20];
-			_wellKnown = true;
+			InjectHash(new byte[20]);
 		}
 
 		public bool EqualPassword (ProtectedPasswordStorage obj)
