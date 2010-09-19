@@ -10,3 +10,4 @@ libtddl*
 *.suo
 *.userprefs
 certs
+*#

@@ -110,6 +110,7 @@
     <None Include="TestScripts\tpm_session_sign.txt" />
     <None Include="TestScripts\build_tcp_socket_connection.txt" />
     <None Include="TestScripts\build_ssl_socket_connection.txt" />
+    <None Include="TestScripts\keystore.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

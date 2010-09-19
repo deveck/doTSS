@@ -59,6 +59,8 @@ namespace Iaik.Tc.TPM
 		/// <param name="args">Command line arguments. you can override the default config file by supplying "--config=/path/to/configfile.conf"</param>
 		public static void Main (string[] args)
 		{
+			AppDomain.CurrentDomain.UnhandledException += HandleAppDomainCurrentDomainUnhandledException;
+			
             CommandLineHandler commandLineHandler = new CommandLineHandler();
             commandLineHandler.RegisterCallback("help", OutputHelp);
             commandLineHandler.RegisterCallback("h", OutputHelp);
@@ -69,6 +71,12 @@ namespace Iaik.Tc.TPM
 			ctx.Start();
 			
 			Thread.Sleep(Timeout.Infinite);
+		}
+
+		static void HandleAppDomainCurrentDomainUnhandledException (object sender, UnhandledExceptionEventArgs e)
+		{
+			ILog log = LogManager.GetLogger("UNHANDLED_EXCEPTION");
+			log.FatalFormat("{0}", e.ExceptionObject);
 		}
 	}
 }
