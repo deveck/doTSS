@@ -1,1 +1,67 @@
-<?xml version="1.0" encoding="utf-8"?><Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">  <PropertyGroup>    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>    <ProductVersion>9.0.21022</ProductVersion>    <SchemaVersion>2.0</SchemaVersion>    <ProjectGuid>{273841A7-739A-4716-86EC-2925F202DD36}</ProjectGuid>    <OutputType>Exe</OutputType>    <RootNamespace>EzQuote</RootNamespace>    <AssemblyName>EzQuote</AssemblyName>    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>  </PropertyGroup>  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">    <DebugSymbols>true</DebugSymbols>    <DebugType>full</DebugType>    <Optimize>false</Optimize>    <OutputPath>bin\Debug</OutputPath>    <DefineConstants>DEBUG</DefineConstants>    <ErrorReport>prompt</ErrorReport>    <WarningLevel>4</WarningLevel>  </PropertyGroup>  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">    <DebugType>none</DebugType>    <Optimize>false</Optimize>    <OutputPath>bin\Release</OutputPath>    <ErrorReport>prompt</ErrorReport>    <WarningLevel>4</WarningLevel>  </PropertyGroup>  <ItemGroup>    <ProjectReference Include="..\tpm_lib\tpm_lib_core\tpm_lib_core.csproj">      <Project>{3C66F3CE-CDD7-43CB-9847-9CC97715D683}</Project>      <Name>tpm_lib_core</Name>    </ProjectReference>    <ProjectReference Include="..\connection_lib\connection_lib.csproj">      <Project>{F6681243-5DCF-4B0B-BC85-0F1290CF0334}</Project>      <Name>connection_lib</Name>    </ProjectReference>    <ProjectReference Include="..\tpm_core\tpm_core.csproj">      <Project>{4D1DBB08-821E-44F4-BE21-B9695E4EE8F1}</Project>      <Name>tpm_core</Name>    </ProjectReference>    <ProjectReference Include="..\tpm_keystore\tpm_keystore.csproj">      <Project>{60F8FBD3-BD24-444D-972E-B7BC080EA008}</Project>      <Name>tpm_keystore</Name>    </ProjectReference>    <ProjectReference Include="..\tpm_lib\tpm_lib_common\tpm_lib_common.csproj">      <Project>{9AADA320-4FD9-4CB9-A5AE-3ABE2A6BF368}</Project>      <Name>tpm_lib_common</Name>    </ProjectReference>    <ProjectReference Include="..\utils\utils.csproj">      <Project>{892CAB5C-D501-47B1-82E2-BE8492E7E378}</Project>      <Name>utils</Name>    </ProjectReference>  </ItemGroup>  <ItemGroup>    <Compile Include="EzQuoteMain.cs" />  </ItemGroup>  <ItemGroup>    <Reference Include="BouncyCastle.Crypto, Version=1.6.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">      <SpecificVersion>False</SpecificVersion>      <HintPath>..\BouncyCastle.Crypto.dll</HintPath>    </Reference>  </ItemGroup>  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" /></Project>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{273841A7-739A-4716-86EC-2925F202DD36}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>EzQuote</RootNamespace>
+    <AssemblyName>EzQuote</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\tpm_lib\tpm_lib_core\tpm_lib_core.csproj">
+      <Project>{3C66F3CE-CDD7-43CB-9847-9CC97715D683}</Project>
+      <Name>tpm_lib_core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\connection_lib\connection_lib.csproj">
+      <Project>{F6681243-5DCF-4B0B-BC85-0F1290CF0334}</Project>
+      <Name>connection_lib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\tpm_core\tpm_core.csproj">
+      <Project>{4D1DBB08-821E-44F4-BE21-B9695E4EE8F1}</Project>
+      <Name>tpm_core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\tpm_keystore\tpm_keystore.csproj">
+      <Project>{60F8FBD3-BD24-444D-972E-B7BC080EA008}</Project>
+      <Name>tpm_keystore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\tpm_lib\tpm_lib_common\tpm_lib_common.csproj">
+      <Project>{9AADA320-4FD9-4CB9-A5AE-3ABE2A6BF368}</Project>
+      <Name>tpm_lib_common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\utils\utils.csproj">
+      <Project>{892CAB5C-D501-47B1-82E2-BE8492E7E378}</Project>
+      <Name>utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EzQuoteMain.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.6.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

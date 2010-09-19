@@ -73,10 +73,10 @@ namespace Iaik.Tc.TPM.Keystore.Backends
 			
 			InMemoryKeyInfo myKey = _friendlyNameMapper[friendlyName];
 			
-			if(myKey.ParentFriendlyName == null)
+			if(myKey.ParentFriendlyName == null || myKey.ParentFriendlyName == "srk")
 				return null;
 			
-			if(_friendlyNameMapper.ContainsKey(myKey.ParentFriendlyName))
+			if(_friendlyNameMapper.ContainsKey(myKey.ParentFriendlyName) == false)
 				throw new ArgumentException(string.Format("Key store inconsistency detected, key with friendly name '{0}' not found", myKey.ParentFriendlyName));
 
 			
@@ -92,10 +92,10 @@ namespace Iaik.Tc.TPM.Keystore.Backends
 			
 			InMemoryKeyInfo myKey = _identifierMapper[identifier];
 			
-			if(myKey.ParentFriendlyName == null)
+			if(myKey.ParentFriendlyName == null || myKey.ParentFriendlyName == "srk")
 				return null;
 
-			
+		
 			if(_friendlyNameMapper.ContainsKey(myKey.ParentFriendlyName) == false)
 				throw new ArgumentException(string.Format("Key store inconsistency detected, key with friendly name '{0}' not found", myKey.ParentFriendlyName));
 
