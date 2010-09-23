@@ -17,6 +17,7 @@ using Iaik.Utils.Hash;
 using System.Security.Cryptography;
 using Iaik.Utils.SwapUtils;
 using Iaik.Tc.TPM.Keystore;
+using Iaik.Tc.TPM;
 
 namespace tpm_test
 {
@@ -41,7 +42,7 @@ namespace tpm_test
 //			rsa.ImportParameters (parameters);
 //			rsa.EncryptValue (new byte[] { 0, 1, 2, 3 });
 			
-			SetupLogging();
+//			SetupLogging();
 //			TPMWrapper tpm = new TPMWrapper();
 //			IDictionary<string, string> dict = new Dictionary<string, string>();
 //			dict.Add("DeviceName","/dev/tpm0");
@@ -59,7 +60,18 @@ namespace tpm_test
 		
 			//TestAging();
 			//TestHMAC();
-			TestKeystoreSqlite();
+//			TestKeystoreSqlite();
+			try{
+			TestXmlConfig("ClientConfig.xml");
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+			}
+		}
+		
+		private static void TestXmlConfig(string filename){
+			Utils.XmlConfiguration.EstablischConnection(filename);
 		}
 		
 		private static void ReadPCRs(TPMWrapper tpm){

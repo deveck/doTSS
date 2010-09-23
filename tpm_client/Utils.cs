@@ -1,6 +1,9 @@
 
 using System;
 using Iaik.Utils.Hash;
+using System.Xml;
+using Iaik.Tc.TPM.Context;
+using System.Collections.Generic;
 
 namespace Iaik.Tc.TPM
 {
@@ -57,5 +60,48 @@ namespace Iaik.Tc.TPM
                 return null;
             }
 		}
+		
+		public static class XmlConfiguration
+		{
+			public static ClientContext EstablischConnection(string filename){
+				XmlDocument xdoc = new XmlDocument();
+				xdoc.Load(filename);
+				
+				XmlNode rootNode = xdoc.SelectSingleNode("TPMClientConfiguration");
+				
+				string tpmDevice = rootNode.SelectSingleNode("TPM").Attributes.GetNamedItem("Name").Value;
+				
+				XmlNode node = rootNode.SelectSingleNode("Connection");
+				string connType = node.Attributes.GetNamedItem("Type").Value;
+				
+				IDictionary<string, string> connSpecAttr = GetAttributesDictionary(node.SelectSingleNode(connType));
+				
+				node = rootNode.SelectSingleNode("Authentication");
+				string authType = node.Attributes.GetNamedItem("Type").Value;
+				
+				IDictionary<string, string> authSpecAttr = GetAttributesDictionary(node.SelectSingleNode(authType));
+				
+				Console.WriteLine(tpmDevice);
+				Console.WriteLine(connType);
+				foreach(KeyValuePair<string, String> p in connSpecAttr)
+					Console.WriteLine(p.Key +"="+ p.Value);
+				Console.WriteLine(authType);
+				foreach(KeyValuePair<string, String> p in authSpecAttr)
+					Console.WriteLine(p.Key +"="+ p.Value);
+				
+				return null;
+			}
+			
+			private static IDictionary<string, string> GetAttributesDictionary(XmlNode node)
+			{
+				Dictionary<string, string> dict = new Dictionary<string, string>();
+				
+				foreach(XmlNode attr in node.Attributes)
+					dict.Add(attr.Name, attr.Value);
+				
+				return dict;
+			}
+		}
+		
 	}
 }

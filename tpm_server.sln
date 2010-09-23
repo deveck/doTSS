@@ -97,11 +97,11 @@ Global
 		{60F8FBD3-BD24-444D-972E-B7BC080EA008} = {CB1AAF7C-612A-4ACC-AB2D-1E35E95A8256}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = EzQuote\EzQuote.csproj
+		StartupItem = tpm_lib\tpm_test\tpm_test.csproj
 		Policies = $0
 		$0.StandardHeader = $1
 		$1.Text = @Author: Andreas Reiter <andreas.reiter@student.tugraz.at>\nAuthor: Georg Neubauer <georg.neubauer@student.tugraz.at>
-		$1.inheritsSet = MITX11License
+		$1.inheritsSet = Apache2License
 		$0.VersionControlPolicy = $2
 		$2.inheritsSet = Mono
 		$0.ChangeLogPolicy = $3

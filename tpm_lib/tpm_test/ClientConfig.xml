@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE  TPMClientConfiguration>
+
+<TPMClientConfiguration>
+    <Connection Type="ssl">
+    	<tcp a="1" b="2"></tcp>
+    	<ssl a="1"></ssl>
+    </Connection>
+    <TPM Name="test"> </TPM>
+    <Authentication Type="dummy">
+      <unix_auth a="2" b="3"></unix_auth>
+      <dummy a="5"></dummy>
+    </Authentication>
+</TPMClientConfiguration>
+

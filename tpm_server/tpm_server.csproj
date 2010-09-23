@@ -136,7 +136,7 @@
     <MonoDevelop>
       <Properties>
         <Policies>
-          <StandardHeader Text="&#xA;&#xA;Author: Andreas Reiter &lt;andreas.reiter@student.tugraz.at&gt;&#xA;Author: Georg Neubauer &lt;georg.neubauer@student.tugraz.at&gt;" inheritsSet="MITX11License" />
+          <StandardHeader Text="&#xA;&#xA;Author: Andreas Reiter &lt;andreas.reiter@student.tugraz.at&gt;&#xA;Author: Georg Neubauer &lt;georg.neubauer@student.tugraz.at&gt;" inheritsSet="Apache2License" />
         </Policies>
       </Properties>
     </MonoDevelop>

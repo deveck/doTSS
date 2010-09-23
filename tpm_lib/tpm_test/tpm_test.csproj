@@ -60,5 +60,9 @@
       <Project>{60F8FBD3-BD24-444D-972E-B7BC080EA008}</Project>
       <Name>tpm_keystore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\tpm_client\tpm_client.csproj">
+      <Project>{4299FAC7-1E40-4530-AB1E-EA1CC963F913}</Project>
+      <Name>tpm_client</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
