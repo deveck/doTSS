@@ -19,6 +19,7 @@
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -64,5 +65,12 @@
       <Project>{4299FAC7-1E40-4530-AB1E-EA1CC963F913}</Project>
       <Name>tpm_client</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\tpm_core\tpm_core.csproj">
+      <Project>{4D1DBB08-821E-44F4-BE21-B9695E4EE8F1}</Project>
+      <Name>tpm_core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClientConfig.xml" />
   </ItemGroup>
 </Project>

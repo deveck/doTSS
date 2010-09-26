@@ -18,6 +18,7 @@ using System.Security.Cryptography;
 using Iaik.Utils.SwapUtils;
 using Iaik.Tc.TPM.Keystore;
 using Iaik.Tc.TPM;
+using Iaik.Tc.TPM.Context;
 
 namespace tpm_test
 {
@@ -62,7 +63,7 @@ namespace tpm_test
 			//TestHMAC();
 //			TestKeystoreSqlite();
 			try{
-			TestXmlConfig("ClientConfig.xml");
+			TestXmlConfig("../../ClientConfig.xml");
 			}
 			catch (Exception e)
 			{
@@ -71,7 +72,7 @@ namespace tpm_test
 		}
 		
 		private static void TestXmlConfig(string filename){
-			Utils.XmlConfiguration.EstablischConnection(filename);
+			IDictionary<string, TPMSession> sessions = Utils.XmlConfiguration.EstablischConnection(filename);
 		}
 		
 		private static void ReadPCRs(TPMWrapper tpm){

@@ -4,6 +4,7 @@ using Iaik.Utils.Hash;
 using System.Xml;
 using Iaik.Tc.TPM.Context;
 using System.Collections.Generic;
+using Iaik.Connection.ClientConnections;
 
 namespace Iaik.Tc.TPM
 {
@@ -63,33 +64,35 @@ namespace Iaik.Tc.TPM
 		
 		public static class XmlConfiguration
 		{
-			public static ClientContext EstablischConnection(string filename){
+			public static IDictionary<string, TPMSession> EstablischConnection(string filename){
+				IDictionary<string, TPMSession> sessions = new Dictionary<string, TPMSession>();
+				
 				XmlDocument xdoc = new XmlDocument();
 				xdoc.Load(filename);
 				
 				XmlNode rootNode = xdoc.SelectSingleNode("TPMClientConfiguration");
 				
-				string tpmDevice = rootNode.SelectSingleNode("TPM").Attributes.GetNamedItem("Name").Value;
+				XmlNodeList clientNodes = rootNode.SelectNodes("Context");
 				
-				XmlNode node = rootNode.SelectSingleNode("Connection");
-				string connType = node.Attributes.GetNamedItem("Type").Value;
+				foreach(XmlNode node in clientNodes)
+				{
+					string connType = node.SelectSingleNode("Connection").Attributes.GetNamedItem("Type").Value;
+					IDictionary<string, string> connSpecAttr = GetAttributesDictionary(node.SelectSingleNode("Connection").SelectSingleNode(connType));
+					ConnectionBuilderSettings settings = new ConnectionBuilderSettings(RequestSecret);
+					FrontEndConnection conn = ConnectionFactory.CreateFrontEndConnection(connType, settings, connSpecAttr);
+					conn.Connect();
+					ClientContext ctx = EndpointContext.CreateClientEndpointContext(conn);
+					string auth = node.SelectSingleNode("Authentication").Attributes.GetNamedItem("Type").Value;
+					ctx.AuthClient.SelectAuthentication(auth);
+					ctx.AuthClient.Authenticate();
+					foreach(XmlNode dev in node.SelectNodes("TPM"))
+					{
+						TPMSession tpm = ctx.TPMClient.SelectTPMDevice(dev.Attributes.GetNamedItem("device").Value);
+						sessions.Add(dev.Attributes.GetNamedItem("alias").Value, tpm);
+					}
+				}
 				
-				IDictionary<string, string> connSpecAttr = GetAttributesDictionary(node.SelectSingleNode(connType));
-				
-				node = rootNode.SelectSingleNode("Authentication");
-				string authType = node.Attributes.GetNamedItem("Type").Value;
-				
-				IDictionary<string, string> authSpecAttr = GetAttributesDictionary(node.SelectSingleNode(authType));
-				
-				Console.WriteLine(tpmDevice);
-				Console.WriteLine(connType);
-				foreach(KeyValuePair<string, String> p in connSpecAttr)
-					Console.WriteLine(p.Key +"="+ p.Value);
-				Console.WriteLine(authType);
-				foreach(KeyValuePair<string, String> p in authSpecAttr)
-					Console.WriteLine(p.Key +"="+ p.Value);
-				
-				return null;
+				return sessions;
 			}
 			
 			private static IDictionary<string, string> GetAttributesDictionary(XmlNode node)
@@ -100,6 +103,11 @@ namespace Iaik.Tc.TPM
 					dict.Add(attr.Name, attr.Value);
 				
 				return dict;
+			}
+			
+			private static ProtectedPasswordStorage RequestSecret(string hintText)
+			{
+							return null;
 			}
 		}
 		
