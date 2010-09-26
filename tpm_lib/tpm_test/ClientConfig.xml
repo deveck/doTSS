@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE  TPMClientConfiguration>
 
+<!--Defines the collection of all TPMSessions to establish-->
 <TPMClientConfiguration>
+    <!--Defines on connection to one specified server-->
 	<Context>
+	    <!--Information about connection settings-->
 		<Connection Type="unix_socket">
 			<unix_socket socket_file="/tmp/tpm.socket"></unix_socket>
 		</Connection>
+		<!--Information about authentication-->
 		<Authentication Type="unix_auth"></Authentication>
+		<!--Add on TPM-node for each TPMSession that should be created within this context/connection-->
 		<TPM device="tpm0" alias="tpm0"></TPM>
+		<!--<TPM device="tpm1" alias="tpm1"></TPM>-->
 	</Context>
+	<!--Maybe add another context-->
+	<!--<Context>
+		<Connection Type="unix_socket">
+			<unix_socket socket_file="/tmp/other.socket"></unix_socket>
+		</Connection>
+		<Authentication Type="unix_auth"></Authentication>
+		<TPM device="tpm1" alias="tpm0"></TPM>
+	</Context>-->
 </TPMClientConfiguration>
