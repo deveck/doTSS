@@ -80,14 +80,20 @@ namespace Iaik.Tc.TPM
 					IDictionary<string, string> connSpecAttr = GetAttributesDictionary(node.SelectSingleNode("Connection").SelectSingleNode(connType));
 					ConnectionBuilderSettings settings = new ConnectionBuilderSettings(RequestSecret);
 					FrontEndConnection conn = ConnectionFactory.CreateFrontEndConnection(connType, settings, connSpecAttr);
+					if(conn == null)
+						throw new Exception(string.Format("Could not establish connection off type {0}", connType));
 					conn.Connect();
 					ClientContext ctx = EndpointContext.CreateClientEndpointContext(conn);
 					string auth = node.SelectSingleNode("Authentication").Attributes.GetNamedItem("Type").Value;
 					ctx.AuthClient.SelectAuthentication(auth);
-					ctx.AuthClient.Authenticate();
+					if(ctx.AuthClient.Authenticate().Succeeded == false)
+						throw new Exception(string.Format("Could not authenticate via {0}", auth));
 					foreach(XmlNode dev in node.SelectNodes("TPM"))
 					{
-						TPMSession tpm = ctx.TPMClient.SelectTPMDevice(dev.Attributes.GetNamedItem("device").Value);
+						string device = dev.Attributes.GetNamedItem("device").Value;
+						if(sessions.ContainsKey(device))
+							throw new Exception(string.Format("TPMSession {0} already established", device));
+						TPMSession tpm = ctx.TPMClient.SelectTPMDevice(device);
 						sessions.Add(dev.Attributes.GetNamedItem("alias").Value, tpm);
 					}
 				}
