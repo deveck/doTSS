@@ -19,6 +19,7 @@ using Iaik.Utils.SwapUtils;
 using Iaik.Tc.TPM.Keystore;
 using Iaik.Tc.TPM;
 using Iaik.Tc.TPM.Context;
+using Iaik.Tc.TPM.Configuration.ClientConfiguration;
 
 namespace tpm_test
 {
@@ -72,7 +73,7 @@ namespace tpm_test
 		}
 		
 		private static void TestXmlConfig(string filename){
-			IDictionary<string, TPMSession> sessions = Utils.XmlConfiguration.EstablischConnection(filename);
+			IDictionary<string, TPMSession> sessions = XMLConfiguration.EstablischConnection(filename);
 		}
 		
 		private static void ReadPCRs(TPMWrapper tpm){

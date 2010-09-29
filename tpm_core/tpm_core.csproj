@@ -143,6 +143,7 @@
     <Compile Include="Authentication\SslAuthentication.cs" />
     <Compile Include="Configuration\SslAuthenticationParameters.cs" />
     <Compile Include="Configuration\DotNetConfiguration\DotNetCfgSslAuthentication.cs" />
+    <Compile Include="Configuration\ClientConfiguration\XMLConfiguration.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\utils\utils.csproj">
@@ -182,10 +183,13 @@
     <MonoDevelop>
       <Properties>
         <Policies>
-          <StandardHeader Text="&#xA;&#xA; Author: Andreas Reiter &lt;andreas.reiter@student.tugraz.at&gt;&#xA; Author: Georg Neubauer &lt;georg.neubauer@student.tugraz.at&gt;" inheritsSet="Apache2License" />
+          <StandardHeader Text="&#xA;&#xA; Author: Andreas Reiter &lt;andreas.reiter@student.tugraz.at&gt;&#xA; Author: Georg Neubauer &lt;georg.neubauer@student.tugraz.at&gt;" inheritsSet="MITX11License" />
         </Policies>
       </Properties>
     </MonoDevelop>
     <VisualStudio />
   </ProjectExtensions>
+  <ItemGroup>
+    <Folder Include="Configuration\ClientConfiguration\" />
+  </ItemGroup>
 </Project>

@@ -33,12 +33,39 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tpm_keystore", "tpm_keystor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzQuote", "EzQuote\EzQuote.csproj", "{273841A7-739A-4716-86EC-2925F202DD36}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{CEA0C17E-0C4F-4C78-8680-E1BC2DED2B66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quote", "Examples\Quote\Quote.csproj", "{0122C611-4F5B-4122-88B5-9D57F8738158}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignVerify", "Examples\SignVerify\SignVerify.csproj", "{98C9CD7F-D430-4134-A0CC-71990208F5E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Keys", "Examples\Keys\Keys.csproj", "{A5BE7595-5033-4A79-AB53-2C67CCE63C37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BindUnbind", "Examples\BindUnbind\BindUnbind.csproj", "{6FE4575A-FD39-47B1-855F-90CDC236C38B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SealUnseal", "Examples\SealUnseal\SealUnseal.csproj", "{16606E97-87DA-4E53-B81D-DC4A45777046}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientConfigXml", "ClientConfigXml", "{AD089DC4-1AAE-42F9-B451-1C7100339232}"
+	ProjectSection(MonoDevelopProperties) = preProject
+		BaseDirectory = Examples\ClientConfigXml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin", "Examples\Admin\Admin.csproj", "{CFEE0057-2568-4122-9E7C-B61AC55ED883}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0122C611-4F5B-4122-88B5-9D57F8738158}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0122C611-4F5B-4122-88B5-9D57F8738158}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0122C611-4F5B-4122-88B5-9D57F8738158}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0122C611-4F5B-4122-88B5-9D57F8738158}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16606E97-87DA-4E53-B81D-DC4A45777046}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16606E97-87DA-4E53-B81D-DC4A45777046}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16606E97-87DA-4E53-B81D-DC4A45777046}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16606E97-87DA-4E53-B81D-DC4A45777046}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1C051352-0BC4-4EE2-A5FF-C694C197A3AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1C051352-0BC4-4EE2-A5FF-C694C197A3AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C051352-0BC4-4EE2-A5FF-C694C197A3AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -67,10 +94,18 @@ Global
 		{60F8FBD3-BD24-444D-972E-B7BC080EA008}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60F8FBD3-BD24-444D-972E-B7BC080EA008}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60F8FBD3-BD24-444D-972E-B7BC080EA008}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FE4575A-FD39-47B1-855F-90CDC236C38B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FE4575A-FD39-47B1-855F-90CDC236C38B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FE4575A-FD39-47B1-855F-90CDC236C38B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FE4575A-FD39-47B1-855F-90CDC236C38B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{892CAB5C-D501-47B1-82E2-BE8492E7E378}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{892CAB5C-D501-47B1-82E2-BE8492E7E378}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{892CAB5C-D501-47B1-82E2-BE8492E7E378}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{892CAB5C-D501-47B1-82E2-BE8492E7E378}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98C9CD7F-D430-4134-A0CC-71990208F5E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98C9CD7F-D430-4134-A0CC-71990208F5E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98C9CD7F-D430-4134-A0CC-71990208F5E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98C9CD7F-D430-4134-A0CC-71990208F5E3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9AADA320-4FD9-4CB9-A5AE-3ABE2A6BF368}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9AADA320-4FD9-4CB9-A5AE-3ABE2A6BF368}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AADA320-4FD9-4CB9-A5AE-3ABE2A6BF368}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -79,6 +114,14 @@ Global
 		{A13F9848-D20F-4551-86D7-A53CED2BCAF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A13F9848-D20F-4551-86D7-A53CED2BCAF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A13F9848-D20F-4551-86D7-A53CED2BCAF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5BE7595-5033-4A79-AB53-2C67CCE63C37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5BE7595-5033-4A79-AB53-2C67CCE63C37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5BE7595-5033-4A79-AB53-2C67CCE63C37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5BE7595-5033-4A79-AB53-2C67CCE63C37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFEE0057-2568-4122-9E7C-B61AC55ED883}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFEE0057-2568-4122-9E7C-B61AC55ED883}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFEE0057-2568-4122-9E7C-B61AC55ED883}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFEE0057-2568-4122-9E7C-B61AC55ED883}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F6681243-5DCF-4B0B-BC85-0F1290CF0334}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F6681243-5DCF-4B0B-BC85-0F1290CF0334}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6681243-5DCF-4B0B-BC85-0F1290CF0334}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -95,13 +138,20 @@ Global
 		{9AADA320-4FD9-4CB9-A5AE-3ABE2A6BF368} = {AABB2FB3-5027-4D97-A178-F6A6E1B6CAE0}
 		{3C66F3CE-CDD7-43CB-9847-9CC97715D683} = {AABB2FB3-5027-4D97-A178-F6A6E1B6CAE0}
 		{60F8FBD3-BD24-444D-972E-B7BC080EA008} = {CB1AAF7C-612A-4ACC-AB2D-1E35E95A8256}
+		{0122C611-4F5B-4122-88B5-9D57F8738158} = {CEA0C17E-0C4F-4C78-8680-E1BC2DED2B66}
+		{98C9CD7F-D430-4134-A0CC-71990208F5E3} = {CEA0C17E-0C4F-4C78-8680-E1BC2DED2B66}
+		{A5BE7595-5033-4A79-AB53-2C67CCE63C37} = {CEA0C17E-0C4F-4C78-8680-E1BC2DED2B66}
+		{6FE4575A-FD39-47B1-855F-90CDC236C38B} = {CEA0C17E-0C4F-4C78-8680-E1BC2DED2B66}
+		{16606E97-87DA-4E53-B81D-DC4A45777046} = {CEA0C17E-0C4F-4C78-8680-E1BC2DED2B66}
+		{AD089DC4-1AAE-42F9-B451-1C7100339232} = {CEA0C17E-0C4F-4C78-8680-E1BC2DED2B66}
+		{CFEE0057-2568-4122-9E7C-B61AC55ED883} = {CEA0C17E-0C4F-4C78-8680-E1BC2DED2B66}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = tpm_lib\tpm_test\tpm_test.csproj
+		StartupItem = Examples\Quote\Quote.csproj
 		Policies = $0
 		$0.StandardHeader = $1
 		$1.Text = @Author: Andreas Reiter <andreas.reiter@student.tugraz.at>\nAuthor: Georg Neubauer <georg.neubauer@student.tugraz.at>
-		$1.inheritsSet = Apache2License
+		$1.inheritsSet = MITX11License
 		$0.VersionControlPolicy = $2
 		$2.inheritsSet = Mono
 		$0.ChangeLogPolicy = $3
