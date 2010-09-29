@@ -16,7 +16,7 @@ namespace Quote
 {
 	class MainClass
 	{
-		const string base_path = "/home/andi/Repos/IAIK_ITProject/TpmCSStack-impl/";
+		const string base_path = "/home/nn/TPM/IAIK/src/";
 		
 		public static void Main (string[] args)
 		{
@@ -31,12 +31,12 @@ namespace Quote
 			foreach (TPMSession tpmSes in sessions.Values)
 				tpmSes.Keystore = new InMemoryKeystore();
 			
-			TPMSession sessionToUse = sessions["local1"];
+			TPMSession sessionToUse = sessions["local0"];
 			
 			sessionToUse.SetRequestSecretCallback(RequestSecret);
 			
 			ClientKeyHandle myFirstQuoteKey = 
-				sessionToUse.KeyClient.GetSrkKeyHandle().CreateKey("my_first_storage_key", TPMKeyUsage.TPM_KEY_SIGNING);
+				sessionToUse.KeyClient.GetSrkKeyHandle().CreateKey("my_first_quote_key", TPMKeyUsage.TPM_KEY_SIGNING);
 			
 			sessionToUse.IntegrityClient.Extend(0, new byte[]{0,1,2,3,4,5,6,7,8,9,9,8,7,6,5,4,3,2,1,0});
 			sessionToUse.IntegrityClient.Extend(1, new byte[]{0,1,2,3,4,5,6,7,8,9,9,8,7,6,5,4,3,2,1,0});

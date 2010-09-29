@@ -13,7 +13,7 @@
 		<Authentication Type="unix_auth"></Authentication>
 		<!--Add on TPM-node for each TPMSession that should be created within this context/connection-->
 		<TPM device="tpm0" alias="tpm0"></TPM>
-		<TPM device="tpm1" alias="tpm1"></TPM>
+		<!--<TPM device="tpm1" alias="tpm1"></TPM>-->
 		<!--<TPM device="tpm1" alias="tpm1"></TPM>-->
 	</Context>
 	<!--Maybe add another context-->

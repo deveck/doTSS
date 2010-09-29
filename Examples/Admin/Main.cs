@@ -11,7 +11,7 @@ namespace Admin
 {
 	class MainClass
 	{
-		const string base_path = "/home/andi/Repos/IAIK_ITProject/TpmCSStack-impl/";
+		const string base_path = "/home/nn/TPM/IAIK/src/";
 		
 		public static void Main (string[] args)
 		{
@@ -23,7 +23,7 @@ namespace Admin
 			//foreach (TPMSession tpmSes in sessions.Values)
 			//	tpmSes.Keystore = new InMemoryKeystore();
 			
-			TPMSession sessionToUse = sessions["local1"];
+			TPMSession sessionToUse = sessions["local0"];
 			
 		//	sessionToUse.SetRequestSecretCallback(RequestSecret);
 			
