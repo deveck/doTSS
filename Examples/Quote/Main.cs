@@ -16,7 +16,7 @@ namespace Quote
 {
 	class MainClass
 	{
-		const string base_path = "/home/nn/TPM/IAIK/src/";
+		const string base_path = "/home/nn/git-repos/TU/TPM/IAIK-Repos/src/";
 		
 		public static void Main (string[] args)
 		{
@@ -25,13 +25,13 @@ namespace Quote
 			
 			// Establish Connections
 			IDictionary<string, TPMSession> sessions =
-				XMLConfiguration.EstablischConnection(base_path + "Examples/ClientConfigXml/UnixSocketDeviceLin.xml"); 
+				XMLConfiguration.EstablischConnection(base_path + "Examples/ClientConfigXml/DualUnixTcpDeviceLin.xml"); 
 			
 			// Create one keystore per opened session
 			foreach (TPMSession tpmSes in sessions.Values)
 				tpmSes.Keystore = new InMemoryKeystore();
 			
-			TPMSession sessionToUse = sessions["local0"];
+			TPMSession sessionToUse = sessions["local1"];
 			
 			sessionToUse.SetRequestSecretCallback(RequestSecret);
 			

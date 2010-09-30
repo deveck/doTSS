@@ -15,20 +15,20 @@ namespace Keys
 {
 	class MainClass
 	{
-		const string base_path = "/home/andi/Repos/IAIK_ITProject/TpmCSStack-impl/";
+		const string base_path = "/home/nn/git-repos/TU/TPM/IAIK-Repos/src/";
 		
 		public static void Main (string[] args)
 		{
 			// Establish Connections
 			IDictionary<string, TPMSession> sessions =
-				XMLConfiguration.EstablischConnection(base_path + "Examples/ClientConfigXml/UnixSocketDeviceLin.xml"); 
+				XMLConfiguration.EstablischConnection(base_path + "Examples/ClientConfigXml/DualUnixTcpDeviceLin.xml"); 
 			
 			// Create one keystore per opened session
-			foreach (TPMSession tpmSes in sessions.Values)
+ 			foreach (TPMSession tpmSes in sessions.Values)
 				tpmSes.Keystore = new InMemoryKeystore();
+
 			
 			TPMSession sessionToUse = sessions["local1"];
-			
 			sessionToUse.SetRequestSecretCallback(RequestSecret);
 			
 			

@@ -18,11 +18,12 @@
 		<!--<TPM device="tpm1" alias="tpm1"></TPM>-->
 	</Context>
 	<!--Maybe add another context-->
-	<!--<Context>
-		<Connection Type="unix_socket">
-			<unix_socket socket_file="/tmp/other.socket"></unix_socket>
+	<Context>
+		<Connection Type="tcp_socket">
+			<!--<unix_socket socket_file="/tmp/other.socket"></unix_socket>-->
+			<tcp_socket host="178.191.207.163" port="1234"></tcp_socket>
 		</Connection>
-		<Authentication Type="unix_auth"></Authentication>
-		<TPM device="tpm1" alias="tpm0"></TPM>
-	</Context>-->
+		<Authentication Type="dummy_auth"></Authentication>
+		<TPM device="tpm0" alias="local1"></TPM>
+	</Context>
 </TPMClientConfiguration>

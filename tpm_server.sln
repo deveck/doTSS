@@ -48,6 +48,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientConfigXml", "ClientConfigXml", "{AD089DC4-1AAE-42F9-B451-1C7100339232}"
 	ProjectSection(SolutionItems) = preProject
 		Examples\ClientConfigXml\UnixSocketDeviceLin.xml = Examples\ClientConfigXml\UnixSocketDeviceLin.xml
+		Examples\ClientConfigXml\DualUnixTcpDeviceLin.xml = Examples\ClientConfigXml\DualUnixTcpDeviceLin.xml
 	EndProjectSection
 	ProjectSection(MonoDevelopProperties) = preProject
 		BaseDirectory = Examples\ClientConfigXml
@@ -150,7 +151,7 @@ Global
 		{CFEE0057-2568-4122-9E7C-B61AC55ED883} = {CEA0C17E-0C4F-4C78-8680-E1BC2DED2B66}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Examples\SignVerify\SignVerify.csproj
+		StartupItem = Examples\Keys\Keys.csproj
 		Policies = $0
 		$0.StandardHeader = $1
 		$1.Text = @Author: Andreas Reiter <andreas.reiter@student.tugraz.at>\nAuthor: Georg Neubauer <georg.neubauer@student.tugraz.at>
