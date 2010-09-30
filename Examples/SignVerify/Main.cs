@@ -16,7 +16,7 @@ namespace SignVerify
 {
 	class MainClass
 	{
-		const string base_path = "/home/nn/TPM/IAIK/src/";
+		const string base_path = "/home/nn/git-repos/TU/TPM/IAIK-Repos/src/";
 		
 		public static void Main (string[] args)
 		{
@@ -35,10 +35,10 @@ namespace SignVerify
 			
 			sessionToUse.SetRequestSecretCallback(RequestSecret);
 			
-			ClientKeyHandle myFirstQuoteKey = 
+			ClientKeyHandle myFirstSignKey = 
 				sessionToUse.KeyClient.GetSrkKeyHandle().CreateKey("my_first_sign_key", TPMKeyUsage.TPM_KEY_SIGNING);
 
-			ISigner signer = myFirstQuoteKey.CreateSigner();
+			ISigner signer = myFirstSignKey.CreateSigner();
 			
 			signer.Init(true, null);
 			signer.BlockUpdate(quoteMeBytes, 0, quoteMeBytes.Length);

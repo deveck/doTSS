@@ -151,7 +151,7 @@ Global
 		{CFEE0057-2568-4122-9E7C-B61AC55ED883} = {CEA0C17E-0C4F-4C78-8680-E1BC2DED2B66}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Examples\Keys\Keys.csproj
+		StartupItem = Examples\BindUnbind\BindUnbind.csproj
 		Policies = $0
 		$0.StandardHeader = $1
 		$1.Text = @Author: Andreas Reiter <andreas.reiter@student.tugraz.at>\nAuthor: Georg Neubauer <georg.neubauer@student.tugraz.at>

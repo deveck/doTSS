@@ -17,13 +17,13 @@ namespace Admin
 		{
 			// Establish Connections
 			IDictionary<string, TPMSession> sessions =
-				XMLConfiguration.EstablischConnection(base_path + "Examples/ClientConfigXml/DualUnixTcpDeviceLin.xml"); 
+				XMLConfiguration.EstablischConnection(base_path + "Examples/ClientConfigXml/UnixSocketDeviceLin.xml"); 
 			
 			// Create one keystore per opened session
 			//foreach (TPMSession tpmSes in sessions.Values)
 			//	tpmSes.Keystore = new InMemoryKeystore();
 			
-			TPMSession sessionToUse = sessions["local1"];
+			TPMSession sessionToUse = sessions["local0"];
 			
 		//	sessionToUse.SetRequestSecretCallback(RequestSecret);
 			
