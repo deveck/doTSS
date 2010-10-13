@@ -16,7 +16,7 @@ namespace BindUnbind
 {
 	class MainClass
 	{
-		const string base_path = "/home/nn/git-repos/TU/TPM/IAIK-Repos/src/";
+		const string base_path = "../../../";
 		
 		public static void Main (string[] args)
 		{
@@ -24,7 +24,7 @@ namespace BindUnbind
 						
 			// Establish Connections
 			IDictionary<string, TPMSession> sessions =
-				XMLConfiguration.EstablischConnection(base_path + "Examples/ClientConfigXml/UnixSocketDeviceLin.xml"); 
+				XMLConfiguration.EstablischConnection(base_path + "ClientConfigXml/UnixSocketDeviceLin.xml"); 
 			
 			// Create one keystore per opened session
 			foreach (TPMSession tpmSes in sessions.Values)
