@@ -6,11 +6,11 @@
     <!--Defines on connection to one specified server-->
 	<Context>
 	    <!--Information about connection settings-->
-		<Connection Type="unix_socket">
-			<unix_socket socket_file="/tmp/dotss.socket" />
+		<Connection Type="named_pipe">
+			<unix_socket pipe_name="dotss" />
 		</Connection>
 		<!--Information about authentication-->
-		<Authentication Type="unix_auth" />
+		<Authentication Type="named_pipe_auth" />
 
 		<!--Add on TPM-node for each TPMSession that should be created within this context/connection-->
 		<TPM device="tpm0" alias="local0" />

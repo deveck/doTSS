@@ -6,11 +6,17 @@
     <!--Defines on connection to one specified server-->
 	<Context>
 	    <!--Information about connection settings-->
-		<Connection Type="unix_socket">
-			<unix_socket socket_file="/tmp/dotss.socket" />
+
+	    <!-- The simple xml configuration framework only
+	         supports unprotected client certificates 
+		 (not encrypted with a secret)-->
+		<Connection Type="ssl_socket">
+			<ssl_socket host="127.0.0.1"
+				    port="5001"
+				    client_certificate="/path/to/cert" />
 		</Connection>
 		<!--Information about authentication-->
-		<Authentication Type="unix_auth" />
+		<Authentication Type="ssl_auth" />
 
 		<!--Add on TPM-node for each TPMSession that should be created within this context/connection-->
 		<TPM device="tpm0" alias="local0" />

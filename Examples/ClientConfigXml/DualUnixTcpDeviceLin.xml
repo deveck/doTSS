@@ -7,12 +7,12 @@
 	<Context>
 	    <!--Information about connection settings-->
 		<Connection Type="unix_socket">
-			<unix_socket socket_file="/tmp/dotss.socket"></unix_socket>
+			<unix_socket socket_file="/tmp/dotss.socket" />
 		</Connection>
 		<!--Information about authentication-->
-		<Authentication Type="unix_auth"></Authentication>
-		<!--Add on TPM-node for each TPMSession that should be created within this context/connection-->
-		<TPM device="tpm0" alias="local0"></TPM>
+		<Authentication Type="unix_auth" />
+		<!--Add an TPM-node for each TPMSession that should be created within this context/connection-->
+		<TPM device="tpm0" alias="local0" />
 		<!--<TPM device="ibm0" alias="local1"></TPM>-->
 		<!--<TPM device="tpm1" alias="tpm1"></TPM>-->
 		<!--<TPM device="tpm1" alias="tpm1"></TPM>-->
@@ -21,9 +21,9 @@
 	<Context>
 		<Connection Type="tcp_socket">
 			<!--<unix_socket socket_file="/tmp/other.socket"></unix_socket>-->
-			<tcp_socket host="178.191.207.163" port="1234"></tcp_socket>
+			<tcp_socket host="127.0.0.1" port="1234" />
 		</Connection>
-		<Authentication Type="dummy_auth"></Authentication>
-		<TPM device="tpm0" alias="local1"></TPM>
+		<Authentication Type="dummy_auth" />
+		<TPM device="tpm0" alias="local1"/>
 	</Context>
 </TPMClientConfiguration>

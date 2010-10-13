@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+	
+	@author: Andreas Reiter <andreas.reiter@student.tugraz.at>
+	@author: Georg Neubauer <georg.neubauer@student.tugraz.at>
+	 
+	This file supports .net configuration merging. 
+	A base config can be provided with the ApplicationExeSettings, and specialized settings
+	in the user specific setting.
+	
+-->
+<configuration>
+	<configSections>
+		<section name="accessControlList" type="Iaik.Tc.TPM.Configuration.DotNetConfiguration.Elements.AccessControlListSection, tpm_core"/>
+		<section name="connections" type="Iaik.Tc.TPM.Configuration.DotNetConfiguration.Connections, tpm_server" />
+	</configSections>
+
+	<!-- Controls access to various functions on the tpm server 
+	-->		 
+	<accessControlList>
+	
+		<!-- Defines all intern (virtual) user groups. -->
+		<groups>
+			<add gid="1" name="Group 1"/>
+			<add gid="2" name="Group 2"/>
+			<add gid="3" name="Group 3"/>
+		</groups>
+		
+	
+		<!-- Defines all intern (virtual) users with their group memberships -->	
+		<users>
+			<add uid="1" name="Internal user 1">
+        
+				<!-- Defines to which groups the user belongs to-->
+				<membership>
+						  <memberOf gid="1" />
+						  <memberOf gid="3" />
+				</membership>
+
+				<!-- Defines the various authentication methods with data for this user-->
+				<authenticationTypes>
+				  
+				  <authenticationType type="cleartext_password">
+					<addAuthParam name="password" value="1234" />
+				  </authenticationType>
+				  
+				  <!--<authenticationType type="ssl_auth">
+				    <addAuthParam name="cert_hash" value="A434F82B637768A805F3D88167DF1C67A1E56CA8"/>
+				  </authenticationType>-->
+				  
+				  <!-- ... -->
+				</authenticationTypes>
+			</add>
+			
+			<add uid="1_1" name="Internal user 1_1">
+				<membership>
+					<memberOf gid="1" />
+				</membership>
+			</add>
+			<add uid="2" name="Internal user 2">
+				<membership>
+					<memberOf gid="2" />
+				</membership>
+			</add>
+			
+			<add uid="3" name="Internal user 3">
+				
+				<membership>
+					<memberOf gid="3" />
+				</membership>
+			</add>
+			
+			<add uid="4" name="Internal user 4" />
+		</users>
+		
+		
+		<!-- Defines all permissions. 
+			 The permissions are processed from front to back and the first matching permission is chosen, e.g.:
+			 	<add type="meta"			id="allow_all"/>
+			 	...
+			 All following permissions are not taken into account, because allow_all matches for all
+		
+			 Add user or group permissions to authorize them.
+			 access: allow|deny tells the permission processor to allow or deny access for the identified user/group
+		     type: can have one of the following values
+		     		* user		
+		     		    supply an intern user id 
+		     		    
+		     		* group		
+		     		    supply an intern group id
+		     		    
+		     		* user_extern 
+		     		    supply an extern (os dependent) user id. This is only used by 
+		     			transparent authorization mechanisms (credential passing )
+		     			
+		     		* group_extern
+		     			supply an extern (os dependent) group id. see user_extern
+		     			
+		     		* meta
+		     			Several 'meta-permissions' are possible.
+		     			id==all: All users are permitted/denied
+		     			id==all:  No users are permitted/denied
+		     			
+		     	To only deny access for one user of a group (supposing user 2 is member of group 1:
+		     	...
+		     	<add idType="user"			access="deny"	id="2" />
+				<add idType="group"			access="allow"	id="1" />
+				...
+		   -->
+		<permissions>
+			
+			<!-- BEGIN TPM Command permissions -->
+			<!-- Remarks: 
+					Permission checking happens in the tpm_subsystem. So it affects only the commands that are
+					called by the client. Commands like Loadkey, LoadContext, SaveContext,... which are used 
+					internally e.g. in the KeyManager are not affected by these permissions. This means that even 
+					if a user does not have the LoadKey permission, he can use keys because the LoadKey command
+					is never called directly
+			-->
+					
+			<!-- The available commands names are listed in tpm_lib/tpm_lib_common/TPMCommandNames.cs -->
+			<!-- Append _<tpm identifier> to the permission id to only apply the permission to the specified tpm
+			     e.g. TPM_CMD_CreateWrapKey_tpm0
+			     
+			     The permissions are evaluated in the following order:
+			      *) tpm specific command permission
+			      *) general command permission 
+			-->
+			
+			<permission subsystem="tpm" pid="TPM_CMD_CreateWrapKey">
+				<add idType="meta" access="allow" id="all"/>
+			</permission>
+			
+			<permission subsystem="tpm" pid="TPM_CMD_TakeOwnership">
+				<add idType="meta" access="allow" id="all"/>
+			</permission>
+			
+			<permission subsystem="tpm" pid="TPM_CMD_ReadPubek">
+				<add idType="meta" access="allow" id="all"/>
+			</permission>
+			
+			<permission subsystem="tpm" pid="TPM_CMD_GetCapability">
+				<add idType="meta" access="allow" id="all"/>
+			</permission>
+			
+			<permission subsystem="tpm" pid="TPM_CMD_GetRandom">
+				<add idType="meta" access="allow" id="all"/>
+			</permission>
+			
+			<permission subsystem="tpm" pid="TPM_CMD_Extend">
+				<add idType="meta" access="allow" id="all"/>
+			</permission>
+			
+			<permission subsystem="tpm" pid="TPM_CMD_PCRRead">
+				<add idType="meta" access="allow" id="all"/>
+			</permission>
+			
+			<permission subsystem="tpm" pid="TPM_CMD_Quote">
+				<add idType="meta" access="allow" id="all"/>
+			</permission>
+
+      <permission subsystem="tpm" pid="TPM_CMD_Sign">
+        <add idType="meta" access="allow" id="all"/>
+      </permission>
+      
+			<permission subsystem="tpm" pid="TPM_CMD_CreateCounter">
+				<add idType="meta" access="allow" id="all"/>
+			</permission>
+			
+			<permission subsystem="tpm" pid="TPM_CMD_IncrementCounter">
+				<add idType="meta" access="allow" id="all"/>
+			</permission>
+			
+			<permission subsystem="tpm" pid="TPM_CMD_ReadCounter">
+				<add idType="meta" access="allow" id="all"/>
+			</permission>
+			
+			<permission subsystem="tpm" pid="TPM_CMD_ReleaseCounter">
+				<add idType="meta" access="allow" id="all"/>
+			</permission>
+			
+			<permission subsystem="tpm" pid="TPM_CMD_Bind">
+				<add idType="meta" access="allow" id="all"/>
+			</permission>
+			
+			<permission subsystem="tpm" pid="TPM_CMD_Unbind">
+				<add idType="meta" access="allow" id="all"/>
+			</permission>
+			
+			<permission subsystem="tpm" pid="TPM_CMD_Seal">
+				<add idType="meta" access="allow" id="all"/>
+			</permission>
+			
+			<permission subsystem="tpm" pid="TPM_CMD_Unseal">
+				<add idType="meta" access="allow" id="all"/>
+			</permission>
+			
+			<permission subsystem="tpm" pid="TPM_CMD_CreateWrapKey">
+				<add idType="meta" access="allow" id="all"/>
+			</permission>
+			
+			<permission subsystem="tpm" pid="TPM_CMD_GetPubKey">
+				<add idType="meta" access="allow" id="all"/>
+			</permission>
+			<!-- END TPM Command permissions -->
+			
+			<!-- Specify the users that are allowed to use the tpm identified by 'tpm_emu'
+				 without this permission entry no one could use (select) the 'tpm_emu' device
+			-->
+			<permission subsystem="tpm" pid="select_tpm_emu">
+				<add idType="meta" access="allow" id="all" />
+			</permission>
+			
+			<!-- Allows all users to retrieve the key informations 
+			-->
+			<permission subsystem="tpm" pid="key_info_tpm_emu">
+				<add idType="meta" access="allow" id="all" />
+			</permission>
+					
+			<permission subsystem="tpm" pid="select_tpm0">
+				<add idType="meta" access="allow" id="all" />
+			</permission>
+		
+		
+			<permission subsystem="tpm" pid="key_info_tpm0">
+				<add idType="meta" access="allow" id="all" />
+			</permission>
+
+			<permission subsystem="tpm" pid="key_info_ibm0">
+				<add idType="meta" access="allow" id="all" />
+			</permission>
+
+			<permission subsystem="tpm" pid="select_ibm0">
+				<add idType="meta" access="allow" id="all" />
+			</permission>
+		</permissions>
+	</accessControlList>
+
+
+	<!-- Defines connection specific settings -->
+	<connections>
+	
+		<!-- Defines all listeners the server listens on.
+			 Most of the listeners require some parameters to be passed in, these
+			 parameters are specified on a name-value base
+		-->
+		
+		<!-- Currently valid Listeners:
+		
+		   * Iaik.Connection.ServerListeners.UnixSocketListener, connection_lib
+		      Defined Parameters:
+		         :> socket_file, defines the unix socket file. All clients need to know this file 
+		            to be able to connect
+		            
+		   * Iaik.Connection.ServerListeners.NamedPipeListener, connection_lib
+		      Defined Parameters:
+		         :> pipe_name, defines the windows pipe name, . All clients neet to know this
+		            name to be able to connect
+		-->
+		
+		<!-- Every listener/connection class also has a short name. If the listener is located inside
+			 the connection_lib the short name can also be used instead of the long type name
+		-->
+		<listeners>
+			<!--<addListener type="Iaik.Connection.ServerListeners.UnixSocketListener, connection_lib">
+				<add name="socket_file" value="/tmp/tpm_server_socket" />
+			</addListener>	
+			-->
+			
+			<!-- Short way of adding a listener 
+			-->
+			
+        
+      	        <addListener type="unix_socket">
+			<add name="socket_file" value="/tmp/dotss.socket" />
+		</addListener>
+		<addListener type="tcp_socket">
+			<add name="address" value="0.0.0.0" />
+			<add name="port" value="1234" />
+		</addListener>
+		
+		<!--<addListener type="ssl_socket">
+			<add name="address" value="0.0.0.0" />>
+			<add name="port" value="5001" />>
+			<add name="server_certificate" value="certs/server_bundle.p12" />
+		</addListener>-->
+			
+		<!--	<addListener type="named_pipe">
+				<add name="pipe_name" value="TPM_csharp" />
+			</addListener>
+		-->
+								
+		</listeners>
+		
+		<!-- Defines all available authentication methods. 
+		     Keep in mind that not all authentication
+		     methods are compatible with all connections/listeners.
+		     Local connection types (named pipe/unix socket connection) need their local transparent
+		     authentication method. If this authentication method is not defined here the connection type
+		     is not usable (because a connected user cannot authenticate)
+		-->
+		
+		<!-- Every authentication method class also has an internal/short name which is used to 
+			 reference the specific methods in the user section.
+			 If the authentication method is part of the tpm_core assembly, it can also be added using
+			 this short name
+		-->			 
+		<authenticationMethods>
+		
+			<!-- Adding with long, type name. Also supports external assemblies -->
+			<!--<addAuth type="Iaik.Tc.Tpm.Authentication.UnixSocketAuthentication, tpm_core" />
+			-->
+			
+			<!-- Adding with short name. Only supports authentication methods provided in the tpm_core
+				 assembly (for security reasons)
+			-->
+			<addAuth type="unix_auth" />
+      			<addAuth type="named_pipe_auth" />
+      			<addAuth type="dummy_auth">
+      			  <add name="user" value="4" />
+      			</addAuth>
+      			<addAuth type="ssl_auth"/>
+		</authenticationMethods>
+		
+		
+		<!-- Defines all available tpm devices. It is possible to define more than one device with the same type,
+			 but with unique names.
+			 
+			 To pass configuration values to the tpm devices do this by adding
+			 <add name="key1" value="value1" />
+			 tags
+		-->
+		<tpmDevices>
+			<!--<addTpmDevice type="linux/tddl" name="tpm_emu" />-->
+			
+			<!--<addTpmDevice type="linux/device" name="tpm0">
+				<add name="DeviceName" value="/dev/tpm0" />
+				<add name="debug" value="True" />
+			</addTpmDevice>
+			-->
+
+			<!--<addTpmDevice type="linux/device" name="tpm1">
+				<add name="DeviceName" value="/dev/tpm1" />
+				<add name="debug" value="True" />
+			</addTpmDevice>-->
+			
+			<addTpmDevice type="general/ibmswtpm" name="tpm0">
+				<add name="port" value="1235" />
+				<add name="host" value="127.0.0.1" />
+				<add name="debug" value="True" />
+			</addTpmDevice>
+			<!--<addTpmDevice type="win32/tbs" name="tpm0" />-->
+		</tpmDevices>
+	</connections>
+</configuration>

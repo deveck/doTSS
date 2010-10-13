@@ -65,7 +65,7 @@ namespace Iaik.Tc.TPM.Configuration.ClientConfiguration
 			
 			private static ProtectedPasswordStorage RequestSecret(string hintText)
 			{
-							return null;
+				return null;
 			}
 		}
 }

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<configuration>
+  <configSections>
+    <section name="accessControlList" type="Iaik.Tc.TPM.Configuration.DotNetConfiguration.Elements.AccessControlListSection, tpm_core"/>
+    <section name="connections" type="Iaik.Tc.TPM.Configuration.DotNetConfiguration.Connections, tpm_server" />
+  </configSections>
+
+  <connections>	
+    <listeners>
+      <addListener type="unix_socket">
+	<add name="socket_file" value="/tmp/dotss.socket" />
+      </addListener>
+    </listeners>
+		
+    <authenticationMethods>
+      <addAuth type="unix_auth" />
+    </authenticationMethods>
+		
+    <tpmDevices>
+      <addTpmDevice type="linux/device" name="tpm0">
+	<add name="DeviceName" value="/dev/tpm0" />
+	<add name="debug" value="True" />
+      </addTpmDevice>
+    </tpmDevices>
+  </connections>
+
+  <accessControlList>
+    <permissions>
+      <permission subsystem="tpm" pid="TPM_CMD_CreateWrapKey">
+	<add idType="meta" access="allow" id="all"/>
+      </permission>
+			
+      <permission subsystem="tpm" pid="TPM_CMD_TakeOwnership">
+	<add idType="meta" access="allow" id="all"/>
+      </permission>
+
+      <permission subsystem="tpm" pid="TPM_CMD_ReadPubek">
+	<add idType="meta" access="allow" id="all"/>
+      </permission>
+			
+      <permission subsystem="tpm" pid="TPM_CMD_GetCapability">
+	<add idType="meta" access="allow" id="all"/>
+      </permission>
+			
+      <permission subsystem="tpm" pid="TPM_CMD_GetRandom">
+	<add idType="meta" access="allow" id="all"/>
+      </permission>
+			
+      <permission subsystem="tpm" pid="TPM_CMD_Extend">
+	<add idType="meta" access="allow" id="all"/>
+      </permission>
+			
+      <permission subsystem="tpm" pid="TPM_CMD_PCRRead">
+	<add idType="meta" access="allow" id="all"/>
+      </permission>
+			
+      <permission subsystem="tpm" pid="TPM_CMD_Quote">
+	<add idType="meta" access="allow" id="all"/>
+      </permission>
+
+      <permission subsystem="tpm" pid="TPM_CMD_Sign">
+	<add idType="meta" access="allow" id="all"/>
+      </permission>
+      
+      <permission subsystem="tpm" pid="TPM_CMD_CreateCounter">
+	<add idType="meta" access="allow" id="all"/>
+      </permission>
+			
+      <permission subsystem="tpm" pid="TPM_CMD_IncrementCounter">
+	<add idType="meta" access="allow" id="all"/>
+      </permission>
+			
+      <permission subsystem="tpm" pid="TPM_CMD_ReadCounter">
+	<add idType="meta" access="allow" id="all"/>
+      </permission>
+			
+      <permission subsystem="tpm" pid="TPM_CMD_ReleaseCounter">
+	<add idType="meta" access="allow" id="all"/>
+      </permission>
+			
+      <permission subsystem="tpm" pid="TPM_CMD_Bind">
+	<add idType="meta" access="allow" id="all"/>
+      </permission>
+			
+      <permission subsystem="tpm" pid="TPM_CMD_Unbind">
+	<add idType="meta" access="allow" id="all"/>
+      </permission>
+			
+      <permission subsystem="tpm" pid="TPM_CMD_Seal">
+	<add idType="meta" access="allow" id="all"/>
+      </permission>
+			
+      <permission subsystem="tpm" pid="TPM_CMD_Unseal">
+	<add idType="meta" access="allow" id="all"/>
+      </permission>
+			
+      <permission subsystem="tpm" pid="TPM_CMD_CreateWrapKey">
+	<add idType="meta" access="allow" id="all"/>
+      </permission>
+			
+      <permission subsystem="tpm" pid="TPM_CMD_GetPubKey">
+	<add idType="meta" access="allow" id="all"/>
+      </permission>
+
+      <permission subsystem="tpm" pid="select_tpm_emu">
+	<add idType="meta" access="allow" id="all" />
+      </permission>
+			
+      <permission subsystem="tpm" pid="key_info_tpm_emu">
+	<add idType="meta" access="allow" id="all" />
+      </permission>
+					
+      <permission subsystem="tpm" pid="select_tpm0">
+	<add idType="meta" access="allow" id="all" />
+      </permission>
+		
+		
+      <permission subsystem="tpm" pid="key_info_tpm0">
+	<add idType="meta" access="allow" id="all" />
+      </permission>
+
+      <permission subsystem="tpm" pid="key_info_ibm0">
+	<add idType="meta" access="allow" id="all" />
+      </permission>
+
+      <permission subsystem="tpm" pid="select_ibm0">
+	<add idType="meta" access="allow" id="all" />
+      </permission>
+    </permissions>
+  </accessControlList>
+
+
+</configuration>
