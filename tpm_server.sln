@@ -31,8 +31,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Keystore", "Keystore", "{CB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tpm_keystore", "tpm_keystore\tpm_keystore.csproj", "{60F8FBD3-BD24-444D-972E-B7BC080EA008}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzQuote", "EzQuote\EzQuote.csproj", "{273841A7-739A-4716-86EC-2925F202DD36}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{CEA0C17E-0C4F-4C78-8680-E1BC2DED2B66}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quote", "Examples\Quote\Quote.csproj", "{0122C611-4F5B-4122-88B5-9D57F8738158}"
@@ -55,6 +53,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientConfigXml", "ClientCo
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Admin", "Examples\Admin\Admin.csproj", "{CFEE0057-2568-4122-9E7C-B61AC55ED883}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzQuote", "EzQuote\EzQuote.csproj", "{273841A7-739A-4716-86EC-2925F202DD36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -149,9 +149,10 @@ Global
 		{16606E97-87DA-4E53-B81D-DC4A45777046} = {CEA0C17E-0C4F-4C78-8680-E1BC2DED2B66}
 		{AD089DC4-1AAE-42F9-B451-1C7100339232} = {CEA0C17E-0C4F-4C78-8680-E1BC2DED2B66}
 		{CFEE0057-2568-4122-9E7C-B61AC55ED883} = {CEA0C17E-0C4F-4C78-8680-E1BC2DED2B66}
+		{273841A7-739A-4716-86EC-2925F202DD36} = {CEA0C17E-0C4F-4C78-8680-E1BC2DED2B66}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Examples\SealUnseal\SealUnseal.csproj
+		StartupItem = tpm_server\tpm_server.csproj
 		Policies = $0
 		$0.StandardHeader = $1
 		$1.Text = @Author: Andreas Reiter <andreas.reiter@student.tugraz.at>\nAuthor: Georg Neubauer <georg.neubauer@student.tugraz.at>

@@ -22,6 +22,7 @@ using Iaik.Tc.TPM.Library;
 using Iaik.Tc.TPM.Library.Common;
 using Iaik.Tc.TPM.Library.Common.Handles;
 using System.Reflection;
+using System.Xml;
 
 namespace Iaik.Tc.TPM
 {
@@ -176,10 +177,17 @@ namespace Iaik.Tc.TPM
 		/// </summary>
 		private void SetupLogging()
 		{
-			log4net.Appender.ConsoleAppender appender = new log4net.Appender.ConsoleAppender();
-			appender.Name = "ConsoleAppender";
-			appender.Layout = new log4net.Layout.PatternLayout("[%date{dd.MM.yyyy HH:mm:ss,fff}]-%-5level-%t-[%c]: %message%newline");
-			log4net.Config.BasicConfigurator.Configure(appender);
+			if(ConfigurationManager.GetSection("log4net") == null)			
+			{
+				log4net.Appender.ConsoleAppender appender = new log4net.Appender.ConsoleAppender();	
+				appender.Name = "ConsoleAppender";
+				appender.Layout = new log4net.Layout.PatternLayout("[%date{dd.MM.yyyy HH:mm:ss,fff}]-%-5level-%t-[%c]: %message%newline");
+				log4net.Config.BasicConfigurator.Configure(appender);
+			}
+			else
+			{
+				log4net.Config.XmlConfigurator.Configure((XmlElement)ConfigurationManager.GetSection("log4net"));
+			}
 			
 			_logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 		}
